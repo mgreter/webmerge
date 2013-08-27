@@ -40,7 +40,7 @@ sub spritesets
 {
 
 	# get input variables
-	my ($data, $config) = @_;
+	my ($data, $config, $output) = @_;
 
 	my $from = sub
 	{
@@ -86,7 +86,7 @@ sub spritesets
 					${*$_}{'io_atomicfile_temp'}
 				}
 				@{$rv->[1]->{$program}}
-			
+
 			], $program . ' sprites');
 		}
 		# EO each program

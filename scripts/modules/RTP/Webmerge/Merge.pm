@@ -90,7 +90,7 @@ sub mergeWrite
 	my $checksum_path = $output->{'checksumpath'};
 
 	# call processors (will return if nothing is set)
-	callProcessor($output->{'process'}, $data, $config);
+	callProcessor($output->{'process'}, $data, $config, $output);
 
 	# assertion if the paths have been defined
 	die "no output path given to write merged file" unless $output_path;
@@ -226,7 +226,7 @@ sub mergeCollect
 					my $md5sum = md5sum($data) or die "could not get md5sum from data: $!";
 
 					# call processors (will return if nothing is set)
-					callProcessor($item->{'process'}, $data, $config);
+					callProcessor($item->{'process'}, $data, $config, $item);
 
 					# put all informations
 					# on to our data array
@@ -451,7 +451,7 @@ sub mergeEntry
 		{
 
 			printf "creating %s joined <%s>\n", $type, $output->{'path'};
-			callProcessor($output->{'preprocess'}, \$joined, $config);
+			callProcessor($output->{'preprocess'}, \$joined, $config, $output);
 			my $rv = mergeWrite($type, $config, $output, \$joined, $collection);
 			printf " created %s joined <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
 
@@ -503,7 +503,7 @@ sub mergeEntry
 			my $minify = join($joiner, map { ${$_->{'data'}} } $collect->('input'));
 
 			# call processors (will return if nothing is set)
-			callProcessor($output->{'preprocess'}, \$minify, $config);
+			callProcessor($output->{'preprocess'}, \$minify, $config, $output);
 
 			printf "creating %s minified <%s>\n", $type, $output->{'path'};
 
@@ -538,7 +538,7 @@ sub mergeEntry
 			my $compile = join($joiner, map { ${$_->{'data'}} } $collect->('input'));
 
 			# call processors (will return if nothing is set)
-			callProcessor($output->{'preprocess'}, \$compile, $config);
+			callProcessor($output->{'preprocess'}, \$compile, $config, $output);
 
 			# should we pretty print the compiled code
 			$config->{'pretty'} = $output->{'pretty'};

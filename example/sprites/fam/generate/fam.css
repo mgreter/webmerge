@@ -1,0 +1,9002 @@
+
+ /* sprite: fam; sprite-image: url(fam.png); */
+
+.control-repeat-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_repeat_blue.png');
+}
+
+.feed-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_error.png');
+}
+
+.award-star-bronze-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_bronze_1.png');
+}
+
+.page-white-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_delete.png');
+}
+
+.cd-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd_edit.png');
+}
+
+.award-star-bronze-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_bronze_2.png');
+}
+
+.award-star-bronze-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_bronze_3.png');
+}
+
+.folder-picture
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_picture.png');
+}
+
+.book-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_go.png');
+}
+
+.table-sort
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_sort.png');
+}
+
+.page-white-code
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_code.png');
+}
+
+.bullet-black
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_black.png');
+}
+
+.text-horizontalrule
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_horizontalrule.png');
+}
+
+.table-save
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_save.png');
+}
+
+.text-linespacing
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_linespacing.png');
+}
+
+.user-female
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_female.png');
+}
+
+.film-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_key.png');
+}
+
+.tag-pink
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_pink.png');
+}
+
+.folder-wrench
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_wrench.png');
+}
+
+.picture-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_go.png');
+}
+
+.shape-square-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_go.png');
+}
+
+.bug-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug_add.png');
+}
+
+.spellcheck
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/spellcheck.png');
+}
+
+.application-view-detail
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_view_detail.png');
+}
+
+.script-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_delete.png');
+}
+
+.joystick-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/joystick_error.png');
+}
+
+.paintcan
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/paintcan.png');
+}
+
+.report-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_magnify.png');
+}
+
+.image-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/image_link.png');
+}
+
+.bullet-white
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_white.png');
+}
+
+.error-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/error_add.png');
+}
+
+.cog
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cog.png');
+}
+
+.database-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_link.png');
+}
+
+.control-eject-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_eject_blue.png');
+}
+
+.shape-move-front
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_move_front.png');
+}
+
+.application-form-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_form_edit.png');
+}
+
+.table-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_go.png');
+}
+
+.comments-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comments_add.png');
+}
+
+.application-view-columns
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_view_columns.png');
+}
+
+.dvd-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_add.png');
+}
+
+.award-star-silver-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_silver_1.png');
+}
+
+.cup-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_error.png');
+}
+
+.arrow-redo
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_redo.png');
+}
+
+.award-star-silver-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_silver_2.png');
+}
+
+.award-star-silver-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_silver_3.png');
+}
+
+.page-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_edit.png');
+}
+
+.text-allcaps
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_allcaps.png');
+}
+
+.bullet-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_error.png');
+}
+
+.xhtml
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/xhtml.png');
+}
+
+.mouse-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/mouse_add.png');
+}
+
+.keyboard
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/keyboard.png');
+}
+
+.building-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_go.png');
+}
+
+.car-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/car_add.png');
+}
+
+.flag-yellow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_yellow.png');
+}
+
+.controller-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/controller_error.png');
+}
+
+.application
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application.png');
+}
+
+.table-refresh
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_refresh.png');
+}
+
+.page-white-camera
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_camera.png');
+}
+
+.text-align-left
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_align_left.png');
+}
+
+.text-signature
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_signature.png');
+}
+
+.tag-green
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_green.png');
+}
+
+.control-fastforward-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_fastforward_blue.png');
+}
+
+.page-white-picture
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_picture.png');
+}
+
+.drink
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drink.png');
+}
+
+.page-white-find
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_find.png');
+}
+
+.contrast-decrease
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/contrast_decrease.png');
+}
+
+.table-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_gear.png');
+}
+
+.control-start-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_start_blue.png');
+}
+
+.book-previous
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_previous.png');
+}
+
+.application-get
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_get.png');
+}
+
+.image-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/image_edit.png');
+}
+
+.bullet-purple
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_purple.png');
+}
+
+.folder-user
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_user.png');
+}
+
+.briefcase
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/briefcase.png');
+}
+
+.database-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_edit.png');
+}
+
+.database-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_delete.png');
+}
+
+.tag-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_blue.png');
+}
+
+.shading
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shading.png');
+}
+
+.exclamation
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/exclamation.png');
+}
+
+.cup-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_link.png');
+}
+
+.building-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_delete.png');
+}
+
+.flag-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_red.png');
+}
+
+.computer-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_delete.png');
+}
+
+.lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightning.png');
+}
+
+.key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/key.png');
+}
+
+.printer-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/printer_error.png');
+}
+
+.server-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_error.png');
+}
+
+.page-white-office
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_office.png');
+}
+
+.money-pound
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money_pound.png');
+}
+
+.folder-database
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_database.png');
+}
+
+.lock-break
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock_break.png');
+}
+
+.shape-rotate-anticlockwise
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_rotate_anticlockwise.png');
+}
+
+.page-white-text
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_text.png');
+}
+
+.mouse
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/mouse.png');
+}
+
+.server-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_lightning.png');
+}
+
+.layout-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_error.png');
+}
+
+.rss-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rss_add.png');
+}
+
+.webcam
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/webcam.png');
+}
+
+.tab-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tab_delete.png');
+}
+
+.door
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/door.png');
+}
+
+.tag-purple
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_purple.png');
+}
+
+.lorry
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry.png');
+}
+
+.css
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/css.png');
+}
+
+.user-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_add.png');
+}
+
+.printer-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/printer_delete.png');
+}
+
+.drink-empty
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drink_empty.png');
+}
+
+.transmit-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit_edit.png');
+}
+
+.page-white-get
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_get.png');
+}
+
+.book-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_add.png');
+}
+
+.book-addresses
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_addresses.png');
+}
+
+.sport-golf
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_golf.png');
+}
+
+.chart-line
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_line.png');
+}
+
+.chart-curve-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve_go.png');
+}
+
+.text-padding-right
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_padding_right.png');
+}
+
+.application-xp-terminal
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_xp_terminal.png');
+}
+
+.bullet-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_key.png');
+}
+
+.bullet-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_red.png');
+}
+
+.text-padding-bottom
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_padding_bottom.png');
+}
+
+.style-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/style_delete.png');
+}
+
+.drive-user
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_user.png');
+}
+
+.drive-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_key.png');
+}
+
+.pilcrow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pilcrow.png');
+}
+
+.vector
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vector.png');
+}
+
+.arrow-rotate-clockwise
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_rotate_clockwise.png');
+}
+
+.page-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_lightning.png');
+}
+
+.server-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_delete.png');
+}
+
+.date
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date.png');
+}
+
+.page-white-paint
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_paint.png');
+}
+
+.cup-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_edit.png');
+}
+
+.joystick
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/joystick.png');
+}
+
+.note
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/note.png');
+}
+
+.images
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/images.png');
+}
+
+.package-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/package_go.png');
+}
+
+.cup
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup.png');
+}
+
+.server-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_go.png');
+}
+
+.drive-burn
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_burn.png');
+}
+
+.script-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_go.png');
+}
+
+.text-lowercase
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_lowercase.png');
+}
+
+.plugin-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_delete.png');
+}
+
+.calculator-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calculator_error.png');
+}
+
+.application-side-contract
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_side_contract.png');
+}
+
+.rainbow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rainbow.png');
+}
+
+.cut
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cut.png');
+}
+
+.shape-align-middle
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_align_middle.png');
+}
+
+.table-row-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_row_delete.png');
+}
+
+.tag-blue-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_blue_delete.png');
+}
+
+.layout-content
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_content.png');
+}
+
+.arrow-undo
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_undo.png');
+}
+
+.money-dollar
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money_dollar.png');
+}
+
+.webcam-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/webcam_delete.png');
+}
+
+.shape-ungroup
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_ungroup.png');
+}
+
+.medal-gold-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_gold_add.png');
+}
+
+.map-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/map_delete.png');
+}
+
+.image-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/image_add.png');
+}
+
+.bullet-green
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_green.png');
+}
+
+.chart-line-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_line_delete.png');
+}
+
+.television
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/television.png');
+}
+
+.control-stop-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_stop_blue.png');
+}
+
+.text-letter-omega
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_letter_omega.png');
+}
+
+.arrow-out
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_out.png');
+}
+
+.shape-move-forwards
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_move_forwards.png');
+}
+
+.shape-move-back
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_move_back.png');
+}
+
+.lorry-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry_link.png');
+}
+
+.chart-line-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_line_add.png');
+}
+
+.application-view-tile
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_view_tile.png');
+}
+
+.brick-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick_go.png');
+}
+
+.chart-line-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_line_link.png');
+}
+
+.font-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/font_delete.png');
+}
+
+.chart-pie-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_pie_delete.png');
+}
+
+.drive
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive.png');
+}
+
+.chart-curve-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve_error.png');
+}
+
+.folder-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_add.png');
+}
+
+.application-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_add.png');
+}
+
+.calendar-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_link.png');
+}
+
+.group-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_error.png');
+}
+
+.chart-curve
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve.png');
+}
+
+.script-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_lightning.png');
+}
+
+.world-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/world_go.png');
+}
+
+.camera-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_go.png');
+}
+
+.report-word
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_word.png');
+}
+
+.anchor
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/anchor.png');
+}
+
+.style
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/style.png');
+}
+
+.picture-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_add.png');
+}
+
+.css-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/css_add.png');
+}
+
+.control-equalizer-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_equalizer_blue.png');
+}
+
+.page-white
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white.png');
+}
+
+.shield-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shield_go.png');
+}
+
+.plugin-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_error.png');
+}
+
+.cup-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_go.png');
+}
+
+.money-euro
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money_euro.png');
+}
+
+.package
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/package.png');
+}
+
+.control-end
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_end.png');
+}
+
+.cart-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_delete.png');
+}
+
+.rss-valid
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rss_valid.png');
+}
+
+.chart-curve-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve_add.png');
+}
+
+.page-attach
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_attach.png');
+}
+
+.page-white-paintbrush
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_paintbrush.png');
+}
+
+.cog-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cog_add.png');
+}
+
+.html
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/html.png');
+}
+
+.page-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_error.png');
+}
+
+.arrow-switch
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_switch.png');
+}
+
+.script-palette
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_palette.png');
+}
+
+.basket-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_edit.png');
+}
+
+.status-online
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/status_online.png');
+}
+
+.table-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_lightning.png');
+}
+
+.map-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/map_magnify.png');
+}
+
+.page-white-copy
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_copy.png');
+}
+
+.arrow-right
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_right.png');
+}
+
+.shape-square-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_add.png');
+}
+
+.chart-line-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_line_edit.png');
+}
+
+.link-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link_delete.png');
+}
+
+.cog-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cog_go.png');
+}
+
+.page-white-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_add.png');
+}
+
+.female
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/female.png');
+}
+
+.cd-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd_delete.png');
+}
+
+.timeline-marker
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/timeline_marker.png');
+}
+
+.page-white-wrench
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_wrench.png');
+}
+
+.page-white-acrobat
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_acrobat.png');
+}
+
+.layout-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_delete.png');
+}
+
+.calendar-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_edit.png');
+}
+
+.medal-gold-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_gold_delete.png');
+}
+
+.lightning-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightning_go.png');
+}
+
+.flag-purple
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_purple.png');
+}
+
+.film-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_link.png');
+}
+
+.calendar
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar.png');
+}
+
+.text-list-numbers
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_list_numbers.png');
+}
+
+.map-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/map_go.png');
+}
+
+.paintbrush
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/paintbrush.png');
+}
+
+.page
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page.png');
+}
+
+.feed-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_key.png');
+}
+
+.vcard
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vcard.png');
+}
+
+.house-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/house_link.png');
+}
+
+.page-white-width
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_width.png');
+}
+
+.textfield-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/textfield_delete.png');
+}
+
+.pill-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pill_delete.png');
+}
+
+.server-uncompressed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_uncompressed.png');
+}
+
+.feed-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_magnify.png');
+}
+
+.note-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/note_go.png');
+}
+
+.date-previous
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_previous.png');
+}
+
+.page-white-tux
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_tux.png');
+}
+
+.table-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_delete.png');
+}
+
+.html-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/html_go.png');
+}
+
+.page-save
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_save.png');
+}
+
+.ipod
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ipod.png');
+}
+
+.text-superscript
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_superscript.png');
+}
+
+.sitemap-color
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sitemap_color.png');
+}
+
+.textfield-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/textfield_key.png');
+}
+
+.resultset-first
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/resultset_first.png');
+}
+
+.page-white-visualstudio
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_visualstudio.png');
+}
+
+.heart-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/heart_delete.png');
+}
+
+.sport-tennis
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_tennis.png');
+}
+
+.clock-play
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_play.png');
+}
+
+.bullet-arrow-bottom
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_arrow_bottom.png');
+}
+
+.email-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_error.png');
+}
+
+.sitemap
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sitemap.png');
+}
+
+.feed-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_delete.png');
+}
+
+.page-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_delete.png');
+}
+
+.date-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_magnify.png');
+}
+
+.page-white-word
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_word.png');
+}
+
+.page-white-freehand
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_freehand.png');
+}
+
+.clock-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_error.png');
+}
+
+.package-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/package_link.png');
+}
+
+.film-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_edit.png');
+}
+
+.basket-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_add.png');
+}
+
+.folder-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_link.png');
+}
+
+.page-white-actionscript
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_actionscript.png');
+}
+
+.application-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_link.png');
+}
+
+.asterisk-orange
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/asterisk_orange.png');
+}
+
+.lightning-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightning_add.png');
+}
+
+.database-save
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_save.png');
+}
+
+.bell-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bell_delete.png');
+}
+
+.text-replace
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_replace.png');
+}
+
+.house
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/house.png');
+}
+
+.lock-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock_add.png');
+}
+
+.page-refresh
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_refresh.png');
+}
+
+.tab-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tab_add.png');
+}
+
+.report-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_go.png');
+}
+
+.lightbulb-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightbulb_add.png');
+}
+
+.page-white-cplusplus
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_cplusplus.png');
+}
+
+.time-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/time_add.png');
+}
+
+.plugin-disabled
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_disabled.png');
+}
+
+.dvd
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd.png');
+}
+
+.contrast-increase
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/contrast_increase.png');
+}
+
+.world-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/world_delete.png');
+}
+
+.webcam-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/webcam_add.png');
+}
+
+.disk
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/disk.png');
+}
+
+.group-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_link.png');
+}
+
+.page-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_gear.png');
+}
+
+.ruby
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby.png');
+}
+
+.clock-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_add.png');
+}
+
+.text-indent-remove
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_indent_remove.png');
+}
+
+.email-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_link.png');
+}
+
+.application-side-boxes
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_side_boxes.png');
+}
+
+.phone-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/phone_add.png');
+}
+
+.font
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/font.png');
+}
+
+.text-italic
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_italic.png');
+}
+
+.arrow-down
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_down.png');
+}
+
+.folder-heart
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_heart.png');
+}
+
+.folder-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_edit.png');
+}
+
+.application-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_edit.png');
+}
+
+.lock-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock_edit.png');
+}
+
+.mouse-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/mouse_error.png');
+}
+
+.map-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/map_add.png');
+}
+
+.report
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report.png');
+}
+
+.drive-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_link.png');
+}
+
+.page-white-text-width
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_text_width.png');
+}
+
+.folder-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_go.png');
+}
+
+.text-align-justify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_align_justify.png');
+}
+
+.rss
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rss.png');
+}
+
+.page-green
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_green.png');
+}
+
+.text-padding-left
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_padding_left.png');
+}
+
+.text-strikethrough
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_strikethrough.png');
+}
+
+.bug-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug_error.png');
+}
+
+.textfield-rename
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/textfield_rename.png');
+}
+
+.photo-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/photo_link.png');
+}
+
+.ipod-cast-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ipod_cast_delete.png');
+}
+
+.layout-header
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_header.png');
+}
+
+.book-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_delete.png');
+}
+
+.basket-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_delete.png');
+}
+
+.text-dropcaps
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_dropcaps.png');
+}
+
+.sound-low
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sound_low.png');
+}
+
+.database-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_gear.png');
+}
+
+.arrow-inout
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_inout.png');
+}
+
+.time-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/time_delete.png');
+}
+
+.book-open
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_open.png');
+}
+
+.map
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/map.png');
+}
+
+.group-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_edit.png');
+}
+
+.controller-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/controller_add.png');
+}
+
+.award-star-gold-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_gold_1.png');
+}
+
+.ruby-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_go.png');
+}
+
+.email
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email.png');
+}
+
+.award-star-gold-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_gold_2.png');
+}
+
+.page-white-c
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_c.png');
+}
+
+.award-star-gold-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_gold_3.png');
+}
+
+.shape-square
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square.png');
+}
+
+.email-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_edit.png');
+}
+
+.note-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/note_error.png');
+}
+
+.shape-move-backwards
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_move_backwards.png');
+}
+
+.lightbulb-off
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightbulb_off.png');
+}
+
+.tab
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tab.png');
+}
+
+.sport-raquet
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_raquet.png');
+}
+
+.cd-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd_add.png');
+}
+
+.tab-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tab_edit.png');
+}
+
+.report-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_key.png');
+}
+
+.color-wheel
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/color_wheel.png');
+}
+
+.page-white-h
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_h.png');
+}
+
+.date-next
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_next.png');
+}
+
+.link-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link_go.png');
+}
+
+.tag
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag.png');
+}
+
+.database-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_add.png');
+}
+
+.drive-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_edit.png');
+}
+
+.page-white-vector
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_vector.png');
+}
+
+.arrow-refresh
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_refresh.png');
+}
+
+.page-white-coldfusion
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_coldfusion.png');
+}
+
+.zoom
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/zoom.png');
+}
+
+.textfield
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/textfield.png');
+}
+
+.mouse-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/mouse_delete.png');
+}
+
+.monitor-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_link.png');
+}
+
+.shape-handles
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_handles.png');
+}
+
+.drive-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_error.png');
+}
+
+.computer-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_key.png');
+}
+
+.camera-small
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_small.png');
+}
+
+.error-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/error_delete.png');
+}
+
+.text-align-center
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_align_center.png');
+}
+
+.status-away
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/status_away.png');
+}
+
+.telephone-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_key.png');
+}
+
+.application-side-tree
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_side_tree.png');
+}
+
+.television-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/television_delete.png');
+}
+
+.calendar-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_add.png');
+}
+
+.emoticon-smile
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_smile.png');
+}
+
+.world
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/world.png');
+}
+
+.drive-network
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_network.png');
+}
+
+.server-connect
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_connect.png');
+}
+
+.picture-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_link.png');
+}
+
+.page-white-compressed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_compressed.png');
+}
+
+.package-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/package_add.png');
+}
+
+.application-side-list
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_side_list.png');
+}
+
+.telephone-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_error.png');
+}
+
+.overlays
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/overlays.png');
+}
+
+.bin-empty
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bin_empty.png');
+}
+
+.page-white-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_error.png');
+}
+
+.feed-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_link.png');
+}
+
+.music
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/music.png');
+}
+
+.telephone-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_go.png');
+}
+
+.thumb-down
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/thumb_down.png');
+}
+
+.weather-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/weather_lightning.png');
+}
+
+.pencil-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pencil_go.png');
+}
+
+.monitor-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_add.png');
+}
+
+.layout-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_add.png');
+}
+
+.arrow-turn-right
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_turn_right.png');
+}
+
+.key-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/key_go.png');
+}
+
+.date-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_go.png');
+}
+
+.layout-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_link.png');
+}
+
+.plugin-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_go.png');
+}
+
+.cart-put
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_put.png');
+}
+
+.page-code
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_code.png');
+}
+
+.chart-pie-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_pie_error.png');
+}
+
+.book-next
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_next.png');
+}
+
+.brick-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick_delete.png');
+}
+
+.layers
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layers.png');
+}
+
+.cart-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_error.png');
+}
+
+.shape-group
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_group.png');
+}
+
+.rss-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rss_delete.png');
+}
+
+.clock-stop
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_stop.png');
+}
+
+.application-view-icons
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_view_icons.png');
+}
+
+.monitor-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_edit.png');
+}
+
+.ruby-get
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_get.png');
+}
+
+.server-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_add.png');
+}
+
+.heart
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/heart.png');
+}
+
+.award-star-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_delete.png');
+}
+
+.film
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film.png');
+}
+
+.page-white-star
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_star.png');
+}
+
+.page-white-swoosh
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_swoosh.png');
+}
+
+.script-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_add.png');
+}
+
+.control-play
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_play.png');
+}
+
+.html-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/html_delete.png');
+}
+
+.arrow-branch
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_branch.png');
+}
+
+.picture-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_edit.png');
+}
+
+.note-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/note_add.png');
+}
+
+.male
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/male.png');
+}
+
+.group-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_key.png');
+}
+
+.report-picture
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_picture.png');
+}
+
+.vcard-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vcard_add.png');
+}
+
+.lorry-flatbed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry_flatbed.png');
+}
+
+.arrow-rotate-anticlockwise
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_rotate_anticlockwise.png');
+}
+
+.feed-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_edit.png');
+}
+
+.arrow-left
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_left.png');
+}
+
+.application-view-list
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_view_list.png');
+}
+
+.find
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/find.png');
+}
+
+.user-orange
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_orange.png');
+}
+
+.bug-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug_delete.png');
+}
+
+.database-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_go.png');
+}
+
+.table-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_add.png');
+}
+
+.layout-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_edit.png');
+}
+
+.cake
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cake.png');
+}
+
+.html-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/html_add.png');
+}
+
+.bell
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bell.png');
+}
+
+.cursor
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cursor.png');
+}
+
+.emoticon-evilgrin
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_evilgrin.png');
+}
+
+.weather-sun
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/weather_sun.png');
+}
+
+.sport-shuttlecock
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_shuttlecock.png');
+}
+
+.arrow-refresh-small
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_refresh_small.png');
+}
+
+.shield
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shield.png');
+}
+
+.report-user
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_user.png');
+}
+
+.page-find
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_find.png');
+}
+
+.date-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_error.png');
+}
+
+.emoticon-grin
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_grin.png');
+}
+
+.control-equalizer
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_equalizer.png');
+}
+
+.bell-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bell_go.png');
+}
+
+.page-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_add.png');
+}
+
+.cog-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cog_error.png');
+}
+
+.resultset-previous
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/resultset_previous.png');
+}
+
+.application-osx
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_osx.png');
+}
+
+.heart-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/heart_add.png');
+}
+
+.bullet-orange
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_orange.png');
+}
+
+.film-save
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_save.png');
+}
+
+.brick-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick_link.png');
+}
+
+.flag-pink
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_pink.png');
+}
+
+.sound-none
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sound_none.png');
+}
+
+.email-open-image
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_open_image.png');
+}
+
+.shape-square-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_delete.png');
+}
+
+.film-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_error.png');
+}
+
+.house-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/house_go.png');
+}
+
+.shape-align-left
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_align_left.png');
+}
+
+.joystick-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/joystick_delete.png');
+}
+
+.money-yen
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money_yen.png');
+}
+
+.sport-soccer
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_soccer.png');
+}
+
+.cross
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cross.png');
+}
+
+.keyboard-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/keyboard_magnify.png');
+}
+
+.cd
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd.png');
+}
+
+.css-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/css_delete.png');
+}
+
+.arrow-merge
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_merge.png');
+}
+
+.page-excel
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_excel.png');
+}
+
+.server-chart
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_chart.png');
+}
+
+.control-pause
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_pause.png');
+}
+
+.pill
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pill.png');
+}
+
+.magifier-zoom-out
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/magifier_zoom_out.png');
+}
+
+.printer-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/printer_add.png');
+}
+
+.printer
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/printer.png');
+}
+
+.disconnect
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/disconnect.png');
+}
+
+.tag-orange
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_orange.png');
+}
+
+.sum
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sum.png');
+}
+
+.chart-curve-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve_link.png');
+}
+
+.eye
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/eye.png');
+}
+
+.page-white-php
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_php.png');
+}
+
+.phone-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/phone_delete.png');
+}
+
+.control-end-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_end_blue.png');
+}
+
+.html-valid
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/html_valid.png');
+}
+
+.bug-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug_go.png');
+}
+
+.chart-pie-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_pie_add.png');
+}
+
+.cup-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_key.png');
+}
+
+.server-compressed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_compressed.png');
+}
+
+.clock-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_link.png');
+}
+
+.vector-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vector_add.png');
+}
+
+.medal-bronze-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_bronze_delete.png');
+}
+
+.plugin
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin.png');
+}
+
+.brick-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick_edit.png');
+}
+
+.page-white-code-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_code_red.png');
+}
+
+.folder-image
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_image.png');
+}
+
+.ruby-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_add.png');
+}
+
+.arrow-in
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_in.png');
+}
+
+.telephone
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone.png');
+}
+
+.calculator-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calculator_add.png');
+}
+
+.chart-organisation-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_organisation_add.png');
+}
+
+.chart-pie-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_pie_link.png');
+}
+
+.folder-page
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_page.png');
+}
+
+.image-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/image_delete.png');
+}
+
+.hourglass-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/hourglass_link.png');
+}
+
+.wand
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/wand.png');
+}
+
+.script-code-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_code_red.png');
+}
+
+.clock-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_go.png');
+}
+
+.page-paste
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_paste.png');
+}
+
+.application-double
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_double.png');
+}
+
+.medal-silver-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_silver_add.png');
+}
+
+.cd-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd_go.png');
+}
+
+.weather-snow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/weather_snow.png');
+}
+
+.creditcards
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/creditcards.png');
+}
+
+.shield-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shield_delete.png');
+}
+
+.calculator
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calculator.png');
+}
+
+.newspaper
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/newspaper.png');
+}
+
+.photos
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/photos.png');
+}
+
+.flag-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_blue.png');
+}
+
+.database-refresh
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_refresh.png');
+}
+
+.bullet-arrow-top
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_arrow_top.png');
+}
+
+.folder-lightbulb
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_lightbulb.png');
+}
+
+.chart-curve-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve_edit.png');
+}
+
+.building-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_add.png');
+}
+
+.picture-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_delete.png');
+}
+
+.page-white-cd
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_cd.png');
+}
+
+.phone-sound
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/phone_sound.png');
+}
+
+.clock-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_edit.png');
+}
+
+.accept
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/accept.png');
+}
+
+.bell-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bell_link.png');
+}
+
+.cart
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart.png');
+}
+
+.chart-pie-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_pie_edit.png');
+}
+
+.text-align-right
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_align_right.png');
+}
+
+.control-stop
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_stop.png');
+}
+
+.cog-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cog_edit.png');
+}
+
+.emoticon-surprised
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_surprised.png');
+}
+
+.new
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/new.png');
+}
+
+.database-table
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_table.png');
+}
+
+.control-rewind
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_rewind.png');
+}
+
+.chart-bar-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_bar_error.png');
+}
+
+.hourglass-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/hourglass_go.png');
+}
+
+.font-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/font_add.png');
+}
+
+.world-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/world_link.png');
+}
+
+.film-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_add.png');
+}
+
+.emoticon-unhappy
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_unhappy.png');
+}
+
+.text-bold
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_bold.png');
+}
+
+.dvd-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_key.png');
+}
+
+.sound
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sound.png');
+}
+
+.photo-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/photo_add.png');
+}
+
+.shape-align-top
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_align_top.png');
+}
+
+.clock
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock.png');
+}
+
+.pill-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pill_add.png');
+}
+
+.database-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_error.png');
+}
+
+.folder-bug
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_bug.png');
+}
+
+.monitor
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor.png');
+}
+
+.server-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_link.png');
+}
+
+.sound-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sound_add.png');
+}
+
+.cart-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_go.png');
+}
+
+.page-paintbrush
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_paintbrush.png');
+}
+
+.group-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_gear.png');
+}
+
+.page-copy
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_copy.png');
+}
+
+.paste-word
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/paste_word.png');
+}
+
+.xhtml-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/xhtml_add.png');
+}
+
+.xhtml-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/xhtml_delete.png');
+}
+
+.user-suit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_suit.png');
+}
+
+.bell-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bell_add.png');
+}
+
+.bullet-disk
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_disk.png');
+}
+
+.application-form-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_form_delete.png');
+}
+
+.css-valid
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/css_valid.png');
+}
+
+.image
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/image.png');
+}
+
+.user-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_go.png');
+}
+
+.tag-blue-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_blue_add.png');
+}
+
+.package-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/package_delete.png');
+}
+
+.flag-orange
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_orange.png');
+}
+
+.text-heading-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_heading_1.png');
+}
+
+.picture-save
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_save.png');
+}
+
+.calendar-view-week
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_view_week.png');
+}
+
+.text-heading-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_heading_2.png');
+}
+
+.world-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/world_edit.png');
+}
+
+.text-heading-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_heading_3.png');
+}
+
+.shape-flip-vertical
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_flip_vertical.png');
+}
+
+.text-heading-4
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_heading_4.png');
+}
+
+.page-world
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_world.png');
+}
+
+.page-white-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_go.png');
+}
+
+.text-heading-5
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_heading_5.png');
+}
+
+.ipod-sound
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ipod_sound.png');
+}
+
+.text-heading-6
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_heading_6.png');
+}
+
+.link-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link_add.png');
+}
+
+.date-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_link.png');
+}
+
+.lock-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock_go.png');
+}
+
+.tab-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tab_go.png');
+}
+
+.coins-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/coins_add.png');
+}
+
+.style-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/style_add.png');
+}
+
+.medal-silver-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_silver_delete.png');
+}
+
+.folder-explore
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_explore.png');
+}
+
+.folder-page-white
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_page_white.png');
+}
+
+.server-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_edit.png');
+}
+
+.drive-disk
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_disk.png');
+}
+
+.monitor-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_go.png');
+}
+
+.vcard-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vcard_delete.png');
+}
+
+.calculator-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calculator_delete.png');
+}
+
+.server
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server.png');
+}
+
+.lightbulb-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightbulb_delete.png');
+}
+
+.emoticon-waii
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_waii.png');
+}
+
+.page-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_go.png');
+}
+
+.ruby-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_link.png');
+}
+
+.report-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_link.png');
+}
+
+.page-word
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_word.png');
+}
+
+.tag-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_red.png');
+}
+
+.application-form
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_form.png');
+}
+
+.arrow-divide
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_divide.png');
+}
+
+.user-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_red.png');
+}
+
+.tag-blue-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_blue_edit.png');
+}
+
+.bricks
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bricks.png');
+}
+
+.add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/add.png');
+}
+
+.shape-align-center
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_align_center.png');
+}
+
+.pill-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pill_go.png');
+}
+
+.application-put
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_put.png');
+}
+
+.application-form-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_form_add.png');
+}
+
+.book-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_key.png');
+}
+
+.weather-clouds
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/weather_clouds.png');
+}
+
+.user-green
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_green.png');
+}
+
+.emoticon-tongue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_tongue.png');
+}
+
+.style-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/style_go.png');
+}
+
+.television-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/television_add.png');
+}
+
+.shape-square-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_link.png');
+}
+
+.cup-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_delete.png');
+}
+
+.bullet-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_go.png');
+}
+
+.bullet-arrow-up
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_arrow_up.png');
+}
+
+.disk-multiple
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/disk_multiple.png');
+}
+
+.weather-cloudy
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/weather_cloudy.png');
+}
+
+.script-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_link.png');
+}
+
+.page-white-excel
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_excel.png');
+}
+
+.user-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_delete.png');
+}
+
+.book-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_link.png');
+}
+
+.date-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_edit.png');
+}
+
+.control-repeat
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_repeat.png');
+}
+
+.coins
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/coins.png');
+}
+
+.text-padding-top
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_padding_top.png');
+}
+
+.tux
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tux.png');
+}
+
+.feed-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_go.png');
+}
+
+.flag-green
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/flag_green.png');
+}
+
+.medal-bronze-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_bronze_add.png');
+}
+
+.user-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_edit.png');
+}
+
+.application-side-expand
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_side_expand.png');
+}
+
+.control-fastforward
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_fastforward.png');
+}
+
+.transmit-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit_blue.png');
+}
+
+.lorry-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry_go.png');
+}
+
+.bullet-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_add.png');
+}
+
+.email-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_add.png');
+}
+
+.drive-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_add.png');
+}
+
+.computer-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_go.png');
+}
+
+.pencil
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pencil.png');
+}
+
+.report-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_edit.png');
+}
+
+.transmit-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit_go.png');
+}
+
+.door-open
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/door_open.png');
+}
+
+.group-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_go.png');
+}
+
+.drive-cd
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_cd.png');
+}
+
+.arrow-up
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_up.png');
+}
+
+.page-white-put
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_put.png');
+}
+
+.calculator-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calculator_link.png');
+}
+
+.bullet-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_delete.png');
+}
+
+.text-indent
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_indent.png');
+}
+
+.shape-square-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_edit.png');
+}
+
+.chart-bar
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_bar.png');
+}
+
+.picture-empty
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_empty.png');
+}
+
+.lightbulb
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightbulb.png');
+}
+
+.drive-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_magnify.png');
+}
+
+.link-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link_error.png');
+}
+
+.feed-disk
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_disk.png');
+}
+
+.chart-organisation-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_organisation_delete.png');
+}
+
+.page-white-database
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_database.png');
+}
+
+.comments-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comments_delete.png');
+}
+
+.page-white-paste
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_paste.png');
+}
+
+.script-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_edit.png');
+}
+
+.folder
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder.png');
+}
+
+.map-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/map_edit.png');
+}
+
+.book-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_edit.png');
+}
+
+.rss-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rss_go.png');
+}
+
+.bug-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug_link.png');
+}
+
+.server-database
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_database.png');
+}
+
+.folder-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_magnify.png');
+}
+
+.palette
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/palette.png');
+}
+
+.application-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_go.png');
+}
+
+.page-white-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_link.png');
+}
+
+.shape-flip-horizontal
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_flip_horizontal.png');
+}
+
+.folder-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_key.png');
+}
+
+.application-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_key.png');
+}
+
+.folder-find
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_find.png');
+}
+
+.text-uppercase
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_uppercase.png');
+}
+
+.comments
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comments.png');
+}
+
+.ruby-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_delete.png');
+}
+
+.chart-organisation
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_organisation.png');
+}
+
+.basket-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_go.png');
+}
+
+.text-smallcaps
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_smallcaps.png');
+}
+
+.picture-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_key.png');
+}
+
+.database-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_lightning.png');
+}
+
+.bin-closed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bin_closed.png');
+}
+
+.folder-bell
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_bell.png');
+}
+
+.calculator-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calculator_edit.png');
+}
+
+.note-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/note_delete.png');
+}
+
+.wrench-orange
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/wrench_orange.png');
+}
+
+.money-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money_delete.png');
+}
+
+.basket-put
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_put.png');
+}
+
+.contrast-high
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/contrast_high.png');
+}
+
+.key-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/key_delete.png');
+}
+
+.text-subscript
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_subscript.png');
+}
+
+.arrow-join
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_join.png');
+}
+
+.bullet-toggle-plus
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_toggle_plus.png');
+}
+
+.comment-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comment_edit.png');
+}
+
+.door-out
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/door_out.png');
+}
+
+.control-start
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_start.png');
+}
+
+.rosette
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/rosette.png');
+}
+
+.medal-gold-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_gold_1.png');
+}
+
+.shape-square-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_key.png');
+}
+
+.bug-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug_edit.png');
+}
+
+.medal-gold-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_gold_2.png');
+}
+
+.medal-gold-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_gold_3.png');
+}
+
+.zoom-out
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/zoom_out.png');
+}
+
+.magnifier
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/magnifier.png');
+}
+
+.note-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/note_edit.png');
+}
+
+.folder-brick
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_brick.png');
+}
+
+.page-white-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_key.png');
+}
+
+.feed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed.png');
+}
+
+.dvd-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_error.png');
+}
+
+.page-white-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_edit.png');
+}
+
+.date-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_delete.png');
+}
+
+.drive-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_go.png');
+}
+
+.cart-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_edit.png');
+}
+
+.email-attach
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_attach.png');
+}
+
+.table-relationship
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_relationship.png');
+}
+
+.script
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script.png');
+}
+
+.application-form-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_form_magnify.png');
+}
+
+.page-white-magnify
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_magnify.png');
+}
+
+.computer-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_link.png');
+}
+
+.star
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/star.png');
+}
+
+.picture
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture.png');
+}
+
+.controller-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/controller_delete.png');
+}
+
+.newspaper-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/newspaper_go.png');
+}
+
+.lock
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock.png');
+}
+
+.ipod-cast
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ipod_cast.png');
+}
+
+.application-home
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_home.png');
+}
+
+.tick
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tick.png');
+}
+
+.shape-rotate-clockwise
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_rotate_clockwise.png');
+}
+
+.application-osx-terminal
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_osx_terminal.png');
+}
+
+.user-comment
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_comment.png');
+}
+
+.link-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link_edit.png');
+}
+
+.feed-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/feed_add.png');
+}
+
+.shape-align-right
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_align_right.png');
+}
+
+.application-tile-horizontal
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_tile_horizontal.png');
+}
+
+.page-white-world
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_world.png');
+}
+
+.brick-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick_add.png');
+}
+
+.plugin-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_link.png');
+}
+
+.cut-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cut_red.png');
+}
+
+.hourglass-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/hourglass_add.png');
+}
+
+.page-white-cup
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_cup.png');
+}
+
+.dvd-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_go.png');
+}
+
+.textfield-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/textfield_add.png');
+}
+
+.page-white-horizontal
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_horizontal.png');
+}
+
+.control-rewind-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_rewind_blue.png');
+}
+
+.bell-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bell_error.png');
+}
+
+.group
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group.png');
+}
+
+.drive-cd-empty
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_cd_empty.png');
+}
+
+.asterisk-yellow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/asterisk_yellow.png');
+}
+
+.vcard-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vcard_edit.png');
+}
+
+.database
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database.png');
+}
+
+.award-star-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/award_star_add.png');
+}
+
+.attach
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/attach.png');
+}
+
+.computer-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_edit.png');
+}
+
+.text-underline
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_underline.png');
+}
+
+.telephone-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_link.png');
+}
+
+.email-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_delete.png');
+}
+
+.cog-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cog_delete.png');
+}
+
+.bullet-pink
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_pink.png');
+}
+
+.user-gray
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user_gray.png');
+}
+
+.shape-square-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_square_error.png');
+}
+
+.table-row-insert
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_row_insert.png');
+}
+
+.hourglass
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/hourglass.png');
+}
+
+.chart-bar-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_bar_add.png');
+}
+
+.clock-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_red.png');
+}
+
+.plugin-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_edit.png');
+}
+
+.phone
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/phone.png');
+}
+
+.pencil-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pencil_delete.png');
+}
+
+.chart-pie
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_pie.png');
+}
+
+.newspaper-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/newspaper_add.png');
+}
+
+.style-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/style_edit.png');
+}
+
+.brick
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick.png');
+}
+
+.application-split
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_split.png');
+}
+
+.telephone-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_edit.png');
+}
+
+.pictures
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pictures.png');
+}
+
+.printer-empty
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/printer_empty.png');
+}
+
+.comment
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comment.png');
+}
+
+.dvd-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_delete.png');
+}
+
+.text-list-bullets
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_list_bullets.png');
+}
+
+.door-in
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/door_in.png');
+}
+
+.zoom-in
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/zoom_in.png');
+}
+
+.lorry-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry_add.png');
+}
+
+.sound-mute
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sound_mute.png');
+}
+
+.computer
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer.png');
+}
+
+.delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/delete.png');
+}
+
+.table-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_link.png');
+}
+
+.application-tile-vertical
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_tile_vertical.png');
+}
+
+.page-white-medal
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_medal.png');
+}
+
+.monitor-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_error.png');
+}
+
+.page-white-flash
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_flash.png');
+}
+
+.calendar-view-month
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_view_month.png');
+}
+
+.connect
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/connect.png');
+}
+
+.script-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_error.png');
+}
+
+.user
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/user.png');
+}
+
+.cd-burn
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd_burn.png');
+}
+
+.sport-football
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_football.png');
+}
+
+.emoticon-wink
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_wink.png');
+}
+
+.bullet-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_blue.png');
+}
+
+.clock-pause
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_pause.png');
+}
+
+.webcam-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/webcam_error.png');
+}
+
+.lorry-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry_delete.png');
+}
+
+.database-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_key.png');
+}
+
+.bin
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bin.png');
+}
+
+.drive-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_delete.png');
+}
+
+.cart-remove
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_remove.png');
+}
+
+.script-save
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_save.png');
+}
+
+.folder-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_delete.png');
+}
+
+.comment-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comment_delete.png');
+}
+
+.world-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/world_add.png');
+}
+
+.text-columns
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_columns.png');
+}
+
+.controller
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/controller.png');
+}
+
+.page-white-csharp
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_csharp.png');
+}
+
+.book-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book_error.png');
+}
+
+.basket-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_error.png');
+}
+
+.contrast-low
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/contrast_low.png');
+}
+
+.report-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_add.png');
+}
+
+.bullet-wrench
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_wrench.png');
+}
+
+.table-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_edit.png');
+}
+
+.css-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/css_go.png');
+}
+
+.shape-align-bottom
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shape_align_bottom.png');
+}
+
+.brick-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/brick_error.png');
+}
+
+.drive-web
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_web.png');
+}
+
+.time
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/time.png');
+}
+
+.camera
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera.png');
+}
+
+.resultset-next
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/resultset_next.png');
+}
+
+.table-multiple
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_multiple.png');
+}
+
+.computer-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_add.png');
+}
+
+.monitor-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_lightning.png');
+}
+
+.link-break
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link_break.png');
+}
+
+.telephone-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_add.png');
+}
+
+.building
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building.png');
+}
+
+.medal-bronze-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_bronze_1.png');
+}
+
+.medal-bronze-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_bronze_2.png');
+}
+
+.medal-bronze-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_bronze_3.png');
+}
+
+.chart-bar-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_bar_link.png');
+}
+
+.clock-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/clock_delete.png');
+}
+
+.ruby-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_gear.png');
+}
+
+.transmit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit.png');
+}
+
+.report-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_delete.png');
+}
+
+.layout
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout.png');
+}
+
+.control-pause-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_pause_blue.png');
+}
+
+.bomb
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bomb.png');
+}
+
+.camera-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_add.png');
+}
+
+.folder-table
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_table.png');
+}
+
+.paste-plain
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/paste_plain.png');
+}
+
+.photo
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/photo.png');
+}
+
+.car
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/car.png');
+}
+
+.server-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/server_key.png');
+}
+
+.pencil-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/pencil_add.png');
+}
+
+.lightning-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lightning_delete.png');
+}
+
+.folder-camera
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_camera.png');
+}
+
+.dvd-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_link.png');
+}
+
+.font-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/font_go.png');
+}
+
+.application-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_delete.png');
+}
+
+.script-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_key.png');
+}
+
+.color-swatch
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/color_swatch.png');
+}
+
+.text-kerning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_kerning.png');
+}
+
+.keyboard-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/keyboard_add.png');
+}
+
+.bullet-arrow-down
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_arrow_down.png');
+}
+
+.transmit-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit_delete.png');
+}
+
+.script-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_gear.png');
+}
+
+.transmit-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit_add.png');
+}
+
+.page-white-dvd
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_dvd.png');
+}
+
+.report-disk
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/report_disk.png');
+}
+
+.lorry-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lorry_error.png');
+}
+
+.folder-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_error.png');
+}
+
+.application-xp
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_xp.png');
+}
+
+.medal-silver-1
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_silver_1.png');
+}
+
+.status-busy
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/status_busy.png');
+}
+
+.medal-silver-2
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_silver_2.png');
+}
+
+.sport-basketball
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_basketball.png');
+}
+
+.calendar-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_delete.png');
+}
+
+.medal-silver-3
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/medal_silver_3.png');
+}
+
+.application-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_error.png');
+}
+
+.transmit-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/transmit_error.png');
+}
+
+.camera-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_link.png');
+}
+
+.building-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_link.png');
+}
+
+.table-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_key.png');
+}
+
+.stop
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/stop.png');
+}
+
+.calendar-view-day
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/calendar_view_day.png');
+}
+
+.chart-bar-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_bar_edit.png');
+}
+
+.camera-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_error.png');
+}
+
+.cd-eject
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cd_eject.png');
+}
+
+.group-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_add.png');
+}
+
+.book
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/book.png');
+}
+
+.ruby-put
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_put.png');
+}
+
+.hourglass-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/hourglass_delete.png');
+}
+
+.vector-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/vector_delete.png');
+}
+
+.building-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_error.png');
+}
+
+.computer-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/computer_error.png');
+}
+
+.drive-rename
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/drive_rename.png');
+}
+
+.chart-bar-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_bar_delete.png');
+}
+
+.page-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_key.png');
+}
+
+.page-red
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_red.png');
+}
+
+.dvd-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/dvd_edit.png');
+}
+
+.money
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money.png');
+}
+
+.chart-line-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_line_error.png');
+}
+
+.lock-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock_delete.png');
+}
+
+.box
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/box.png');
+}
+
+.application-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_lightning.png');
+}
+
+.bullet-yellow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_yellow.png');
+}
+
+.weather-rain
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/weather_rain.png');
+}
+
+.error-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/error_go.png');
+}
+
+.table-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table_error.png');
+}
+
+.status-offline
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/status_offline.png');
+}
+
+.database-connect
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/database_connect.png');
+}
+
+.joystick-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/joystick_add.png');
+}
+
+.ipod-cast-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ipod_cast_add.png');
+}
+
+.money-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/money_add.png');
+}
+
+.page-white-zip
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_zip.png');
+}
+
+.key-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/key_add.png');
+}
+
+.date-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/date_add.png');
+}
+
+.camera-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_edit.png');
+}
+
+.page-white-gear
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_gear.png');
+}
+
+.building-edit
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_edit.png');
+}
+
+.bullet-toggle-minus
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_toggle_minus.png');
+}
+
+.xhtml-valid
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/xhtml_valid.png');
+}
+
+.comment-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/comment_add.png');
+}
+
+.text-letterspacing
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/text_letterspacing.png');
+}
+
+.cart-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cart_add.png');
+}
+
+.page-white-powerpoint
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_powerpoint.png');
+}
+
+.application-cascade
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_cascade.png');
+}
+
+.application-view-gallery
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/application_view_gallery.png');
+}
+
+.emoticon-happy
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/emoticon_happy.png');
+}
+
+.sport-8ball
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sport_8ball.png');
+}
+
+.time-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/time_go.png');
+}
+
+.newspaper-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/newspaper_link.png');
+}
+
+.plugin-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/plugin_add.png');
+}
+
+.picture-error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/picture_error.png');
+}
+
+.tag-yellow
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/tag_yellow.png');
+}
+
+.basket-remove
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket_remove.png');
+}
+
+.contrast
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/contrast.png');
+}
+
+.page-white-ruby
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_ruby.png');
+}
+
+.control-eject
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_eject.png');
+}
+
+.monitor-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/monitor_delete.png');
+}
+
+.shield-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/shield_add.png');
+}
+
+.table
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/table.png');
+}
+
+.lock-open
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/lock_open.png');
+}
+
+.arrow-turn-left
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/arrow_turn_left.png');
+}
+
+.page-white-stack
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_stack.png');
+}
+
+.car-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/car_delete.png');
+}
+
+.folder-feed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_feed.png');
+}
+
+.package-green
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/package_green.png');
+}
+
+.folder-palette
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_palette.png');
+}
+
+.chart-curve-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/chart_curve_delete.png');
+}
+
+.film-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_go.png');
+}
+
+.layout-sidebar
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/layout_sidebar.png');
+}
+
+.ruby-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/ruby_key.png');
+}
+
+.xhtml-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/xhtml_go.png');
+}
+
+.script-code
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/script_code.png');
+}
+
+.control-play-blue
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/control_play_blue.png');
+}
+
+.error
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/error.png');
+}
+
+.email-go
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_go.png');
+}
+
+.cup-add
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cup_add.png');
+}
+
+.bug
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bug.png');
+}
+
+.magnifier-zoom-in
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/magnifier_zoom_in.png');
+}
+
+.folder-star
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/folder_star.png');
+}
+
+.film-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/film_delete.png');
+}
+
+.thumb-up
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/thumb_up.png');
+}
+
+.bullet-feed
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_feed.png');
+}
+
+.sound-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/sound_delete.png');
+}
+
+.camera-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/camera_delete.png');
+}
+
+.bullet-picture
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_picture.png');
+}
+
+.coins-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/coins_delete.png');
+}
+
+.photo-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/photo_delete.png');
+}
+
+.email-open
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/email_open.png');
+}
+
+.group-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/group_delete.png');
+}
+
+.link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/link.png');
+}
+
+.keyboard-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/keyboard_delete.png');
+}
+
+.bullet-star
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/bullet_star.png');
+}
+
+.building-key
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/building_key.png');
+}
+
+.cancel
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/cancel.png');
+}
+
+.wrench
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/wrench.png');
+}
+
+.information
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/information.png');
+}
+
+.page-white-lightning
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_white_lightning.png');
+}
+
+.help
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/help.png');
+}
+
+.basket
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/basket.png');
+}
+
+.telephone-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/telephone_delete.png');
+}
+
+.newspaper-delete
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/newspaper_delete.png');
+}
+
+.resultset-last
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/resultset_last.png');
+}
+
+.page-link
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/page_link.png');
+}
+
+.compress
+{
+	/* sprite-ref: fam; */
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 16px; height: 16px;
+	background-image: url('../sprites/compress.png');
+}

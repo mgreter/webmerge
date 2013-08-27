@@ -493,7 +493,7 @@ sub callProcessor
 {
 
 	# get input variables
-	my ($processors, $data, $config) = @_;
+	my ($processors, $data, $config, $item) = @_;
 
 	# do nothing on void input
 	return unless $processors;
@@ -506,7 +506,7 @@ sub callProcessor
 		die "unknown processor $processor" unless $processors{$processor};
 
 		# call the processor with the given data to alter
-		$processors{$processor}->($data, $config) or die "processor failed";
+		$processors{$processor}->($data, $config, $item) or die "processor failed";
 
 	}
 	# EO each processor
