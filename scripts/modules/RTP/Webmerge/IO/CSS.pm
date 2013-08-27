@@ -140,7 +140,8 @@ sub importCSS
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
 
 	# change all relative urls in this css to absolute paths
-	${$data} =~ s/$re_url/importURI($1, $cssfile)/egm;
+	# also look for comments, but do not change them in the function
+	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || importURI($2, $cssfile)/egm;
 
 	# resolve all css imports and include in data
 	${$data} =~ s/\@import\s+$re_url/${importCSS($1)}/gme;
@@ -163,7 +164,8 @@ sub exportCSS
 	my ($path, $data, $config) = @_;
 
 	# change all absolute urls in this css to relative paths
-	${$data} =~ s/$re_url/exportURI($1, $path, $config)/egm;
+	# also look for comments, but do not change them in the function
+	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || exportURI($2, $path, $config)/egm;
 
 	# call io function to write the file atomically
 	return writefile($path, $data, $config->{'atomic'})
