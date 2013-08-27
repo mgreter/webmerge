@@ -250,7 +250,7 @@ sub layout
 	);
 
 	# sub snap { $_[0] += 20 - $_[0] % (20); }
-	sub snap { $_[0] += $_[1] - $_[0] % ($_[1]); }
+	sub snap { my $rest = $_[0] % $_[1]; $_[0] += $rest ? $_[1] - $rest : 0; }
 
 	##########################################################
 	# GET LIMITS FROM SNAPPED ELEMENTS
@@ -391,7 +391,7 @@ sub layout
 	$width = $self->width = $col4_x + $col_last_w;
 	$height = $self->height = $row4_y + $row_last_h;
 
-	snap ($width, 10);
+	snap ($width, $col_snap_w);
 	snap ($height, $row_snap_h);
 
 	##########################################################
@@ -410,7 +410,6 @@ sub layout
 	##########################################################
 	# LAYOUT ALL WIDGETS
 	##########################################################
-# die "ja";
 	if (0)
 	{
 
