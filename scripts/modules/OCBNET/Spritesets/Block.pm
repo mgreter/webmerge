@@ -60,24 +60,24 @@ sub new
 
 # getter and setter methods
 # ***************************************************************************************
-sub left : lvalue { return $_[0]->{'x'} }
-sub top : lvalue { return $_[0]->{'y'} }
-sub width : lvalue { return $_[0]->{'w'} }
-sub height : lvalue { return $_[0]->{'h'} }
+sub left : lvalue { $_[0]->{'x'} }
+sub top : lvalue { $_[0]->{'y'} }
+sub width : lvalue { $_[0]->{'w'} }
+sub height : lvalue { $_[0]->{'h'} }
 
 # getter and setter methods
 # ***************************************************************************************
-sub marginTop : lvalue { return $_[0]->{'margin-top'} }
-sub marginLeft : lvalue { return $_[0]->{'margin-left'} }
-sub marginRight : lvalue { return $_[0]->{'margin-right'} }
-sub marginBottom : lvalue { return $_[0]->{'margin-bottom'} }
+sub marginTop : lvalue { $_[0]->{'margin-top'} }
+sub marginLeft : lvalue { $_[0]->{'margin-left'} }
+sub marginRight : lvalue { $_[0]->{'margin-right'} }
+sub marginBottom : lvalue { $_[0]->{'margin-bottom'} }
 
 # getter and setter methods
 # ***************************************************************************************
-sub paddingTop : lvalue { return $_[0]->{'padding-top'} }
-sub paddingLeft : lvalue { return $_[0]->{'padding-left'} }
-sub paddingRight : lvalue { return $_[0]->{'padding-right'} }
-sub paddingBottom : lvalue { return $_[0]->{'padding-bottom'} }
+sub paddingTop : lvalue { $_[0]->{'padding-top'} }
+sub paddingLeft : lvalue { $_[0]->{'padding-left'} }
+sub paddingRight : lvalue { $_[0]->{'padding-right'} }
+sub paddingBottom : lvalue { $_[0]->{'padding-bottom'} }
 
 # getter for combined results
 # ***************************************************************************************
@@ -178,9 +178,6 @@ sub draw
 {
 	# return the image instance
 	return $_[0]->{'image'};
-
-	# die "implem,ent draw";
-	#return $_[1];
 }
 
 sub repeat

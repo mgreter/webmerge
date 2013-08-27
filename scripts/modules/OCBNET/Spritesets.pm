@@ -280,7 +280,7 @@ sub step1
 		my $padding_right = fromPx($options->get('sprite-padding-right') || $styles->get('padding-right') || 0);
 		my $padding_bottom = fromPx($options->get('sprite-padding-bottom') || $styles->get('padding-bottom') || 0);
 
-		$sprite = new OCBNET::Spritesets::Sprite(
+		$sprite = new OCBNET::Spritesets::Sprite({
 			'filename' => fromUrl($url),
 			'repeat-x' => $styles->get('background-repeat-x') || 0,
 			'repeat-y' => $styles->get('background-repeat-y') || 0,
@@ -290,7 +290,7 @@ sub step1
 			'enclosed-y' => $styles->get('background-enclosed-y') || 0,
 			'padding-right' => 0, # ($padding_left || 0) + ($padding_right || 0),
 			'padding-bottom' => 0 # ($padding_top || 0) + ($padding_bottom || 0)
-		);
+		});
 
 		# if the sprite is bottom aligned
 		# we do not need a padding top from height
