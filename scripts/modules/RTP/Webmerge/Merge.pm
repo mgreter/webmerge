@@ -182,7 +182,7 @@ sub mergeCollect
 
 			# maybe get input from a script
 			# the script output should be static
-			if ($item->{'script'} && $item->{'path'})
+			if (ref $item && $item->{'script'} && $item->{'path'})
 			{
 
 				# create absolute path to store the script output
@@ -209,7 +209,7 @@ sub mergeCollect
 			# EO if script && path
 
 			# input from path
-			if ($item->{'path'})
+			elsif (ref $item && $item->{'path'})
 			{
 
 				# resolve the path via glob (allow filename expansion)
@@ -248,7 +248,7 @@ sub mergeCollect
 
 			# include webmerge id
 			# use other merge as input
-			elsif ($item->{'id'})
+			elsif (ref $item && $item->{'id'})
 			{
 
 				# get the id to include
@@ -264,6 +264,15 @@ sub mergeCollect
 
 			}
 			# EO if id
+
+			elsif (defined $item)
+			{
+
+				# get the md5sum of the unaltered data (otherwise crc may not be correct)
+				my $md5sum = md5sum(\$item) or die "could not get md5sum for item: $!";
+				push(@{$data{$kind}}, { 'data' => \$item, 'md5sum' => $md5sum });
+
+			}
 
 			# we have no valid options
 			else
