@@ -19,6 +19,9 @@ BEGIN { push @INC, "$Bin/modules"; }
 
 ################################################################################
 
+# load spriteset library
+use OCBNET::Spritesets;
+
 # load local modules
 use RTP::Webmerge;
 use RTP::Webmerge::IO;
