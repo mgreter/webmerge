@@ -31,7 +31,7 @@ BEGIN { our @EXPORT_OK = qw($re_url wrapURL); }
 ###################################################################################################
 
 # load perl core file functions
-use File::Basename qw(dirname);
+use File::Basename qw(dirname basename);
 use File::Spec::Functions qw(rel2abs abs2rel canonpath);
 
 # load webmerge file reader
@@ -56,6 +56,10 @@ sub wrapURL
 	# escape apostrophes
 	$uri =~ s/\'/\\\'/g;
 
+	# replace windows backslashed
+	# with correct forward slashes
+	$uri =~ s/\\/\//g if ($^O eq "MSWin32");
+
 	# wrap and return escaped uri
 	return sprintf("url('%s')", $uri);
 
@@ -79,11 +83,17 @@ sub importURI
 	# why is this needed for a static file?
 	my $append = $url =~ s/([\?\#].*?)$// ? $1 : '';
 
-	# create an absolute path from the url
-	my $path = realpath(rel2abs($url, dirname($cssfile)));
+	# create the path relative first
+	# my $path = join('', dirname($cssfile), $url);
+
+	# create absolute path from the url if exists
+	my $path = realpath(rel2abs(dirname($url), dirname($cssfile)));
 
 	# check path on filesystem and
 	die "CSS url($url) in <$cssfile> not found\n" unless ($path && -e $path);
+
+	# now re attach the file name for the resource
+	$path = join('/', $path, basename($url));
 
 	# return the wrapped url
 	return wrapURL($path . $append);

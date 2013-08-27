@@ -34,13 +34,13 @@ sub importJS
 {
 
 	# get input variables
-	my ($cssfile) = @_;
+	my ($jsfile) = @_;
 
 	# read complete css file
-	my $data = readfile($cssfile);
+	my $data = readfile($jsfile);
 
 	# die with an error message that css file is not found
-	die "js file <$cssfile> could not be read: $!\n" unless $data;
+	die "js file <$jsfile> could not be read: $!\n" unless $data;
 
 	# return as string
 	return $data;
