@@ -375,98 +375,110 @@ sub callProgram ($$$$)
 	# make array items unqiue
 	@{$files} = uniq(@{$files});
 
-	# children files
-	my (@files);
-
-	# create an array with all indexes
-	my @indexes = (0 .. $#{$files});
-
-	# return immediately if nothing to do
-	return if scalar @indexes == 0;
-
-	# loop all jobs to distribute files
-	for(my $j = 0; $j < $config->{'jobs'}; $j ++)
+	if ($^O eq "MSWin32")
 	{
-		# distribute files accross all available jobs
-		$files[$j] = [ @{$files}[grep { $_ % $config->{'jobs'} == $j } @indexes] ];
+
+			# run the program with a subset of files
+			runProgram($config, $program, $files, $pattern);
+
 	}
-
-	# do not wait for children
-	# local $SIG{CHLD} = 'IGNORE';
-
-	my $parent_pid = $$;
-
-	# hook into termination signal
-	# this is the default sent by kill
-	local $SIG{INT} =
-	local $SIG{TERM} =
-	sub
+	else
 	{
 
-		# print a debug message
-		if ($parent_pid == $$)
+		# children files
+		my (@files);
+
+		# create an array with all indexes
+		my @indexes = (0 .. $#{$files});
+
+		# return immediately if nothing to do
+		return if scalar @indexes == 0;
+
+		# loop all jobs to distribute files
+		for(my $j = 0; $j < $config->{'jobs'}; $j ++)
 		{
-			print "\n";
-			print "ABORT EXTERNAL PROGRAM \n";
-			print "WAITING FOR CHILDREN\n";
+			# distribute files accross all available jobs
+			$files[$j] = [ @{$files}[grep { $_ % $config->{'jobs'} == $j } @indexes] ];
 		}
+
+		# do not wait for children
+		# local $SIG{CHLD} = 'IGNORE';
+
+		my $parent_pid = $$;
+
+		# hook into termination signal
+		# this is the default sent by kill
+		local $SIG{INT} =
+		local $SIG{TERM} =
+		sub
+		{
+
+			# print a debug message
+			if ($parent_pid == $$)
+			{
+				print "\n";
+				print "ABORT EXTERNAL PROGRAM \n";
+				print "WAITING FOR CHILDREN\n";
+			}
+
+			# wait for all jobs to finish
+			foreach (@pids)
+			{
+				next unless $_;
+				kill 'TERM', $_;
+				waitpid ($_, 0);
+				$_ = undef;
+			}
+
+			# exit now
+			exit;
+
+		};
+
+		# loop all jobs to start commands on files
+		for(my $j = 0; $j < $config->{'jobs'}; $j ++)
+		{
+
+			# fork a child
+			my $pid = fork();
+
+			# os error
+			if (not defined $pid)
+			{
+				die "resources not avilable for fork";
+			}
+			# this is the child
+			elsif ($pid == 0)
+			{
+
+				# set process group
+				setpgrp(0,0);
+
+				# run the program with a subset of files
+				runProgram($config, $program, $files[$j], $pattern);
+
+				# stop child
+				exit(0);
+
+			}
+			# this is the parrent
+			else
+			{
+				# add child pid
+				push @pids, $pid;
+			}
+
+		}
+		# EO forking jobs
 
 		# wait for all jobs to finish
 		foreach (@pids)
 		{
 			next unless $_;
-			kill 'TERM', $_;
 			waitpid ($_, 0);
 			$_ = undef;
 		}
 
-		# exit now
-		exit;
-
-	};
-
-	# loop all jobs to start commands on files
-	for(my $j = 0; $j < $config->{'jobs'}; $j ++)
-	{
-
-		# fork a child
-		my $pid = fork();
-
-		# os error
-		if (not defined $pid)
-		{
-			die "resources not avilable for fork";
-		}
-		# this is the child
-		elsif ($pid == 0)
-		{
-
-			# set process group
-			setpgrp(0,0);
-
-			# run the program with a subset of files
-			runProgram($config, $program, $files[$j], $pattern);
-
-			# stop child
-			exit(0);
-
-		}
-		# this is the parrent
-		else
-		{
-			# add child pid
-			push @pids, $pid;
-		}
-
-	}
-	# EO forking jobs
-
-	# wait for all jobs to finish
-	foreach (@pids)
-	{
-		next unless $_;
-		waitpid ($_, 0);
-		$_ = undef;
 	}
 
 }
