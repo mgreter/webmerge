@@ -451,6 +451,7 @@ sub mergeEntry
 		{
 
 			printf "creating %s joined <%s>\n", $type, $output->{'path'};
+			callProcessor($output->{'preprocess'}, \$joined, $config);
 			my $rv = mergeWrite($type, $config, $output, \$joined, $collection);
 			printf " created %s joined <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
 
@@ -501,6 +502,9 @@ sub mergeEntry
 			# get content to be minified
 			my $minify = join($joiner, map { ${$_->{'data'}} } $collect->('input'));
 
+			# call processors (will return if nothing is set)
+			callProcessor($output->{'preprocess'}, \$minify, $config);
+
 			printf "creating %s minified <%s>\n", $type, $output->{'path'};
 
 			# create a header for this output file
@@ -532,6 +536,9 @@ sub mergeEntry
 			# get the code to be compiled from already readed data
 			# we will only compile the stuff registered as input items
 			my $compile = join($joiner, map { ${$_->{'data'}} } $collect->('input'));
+
+			# call processors (will return if nothing is set)
+			callProcessor($output->{'preprocess'}, \$compile, $config);
 
 			# should we pretty print the compiled code
 			$config->{'pretty'} = $output->{'pretty'};
