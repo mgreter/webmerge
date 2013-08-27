@@ -21,11 +21,14 @@ BEGIN { our @EXPORT = qw(inlinedata); }
 
 ###################################################################################################
 
+# wrap as IO Object
+use IO::Scalar;
+
 # use perl default base64 converter
 use MIME::Base64 qw(encode_base64);
 
 # use mimeinfo to detect mimetypes
-use File::MimeInfo qw(mimetype);
+use File::MimeInfo::Magic qw(mimetype);
 
 ###################################################################################################
 
@@ -230,7 +233,11 @@ sub process_url
 		{ return 'url(' . $original . ')'; }
 
 		# get the filesize
-		my $size = -s $url;
+		my $size = 0;
+
+		# check if the file has already been written
+		unless (exists $config->{'atomic'}->{$url}) { $size = -s $url; }
+		else { $size = length(${$config->{'atomic'}->{$url}->[0]}); }
 
 		# if size is not given
 		unless (defined $size)
@@ -256,10 +263,12 @@ sub process_url
 		$info->{'seen'} = $seen;
 
 		# read the linked url locally
-		$dataref = readfile($url);
+		$dataref = readfile($url, $config->{'atomic'});
+
+		my $io_scalar = new IO::Scalar $dataref;
 
 		# get mimetype from file
-		$mimetype = mimetype($url);
+		$mimetype = mimetype($io_scalar);
 
 	}
 
