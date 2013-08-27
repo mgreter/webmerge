@@ -30,6 +30,9 @@ use MIME::Base64 qw(encode_base64);
 # use mimeinfo to detect mimetypes
 use File::MimeInfo::Magic qw(mimetype);
 
+# load spriteset preprocessor (experimental)
+use RTP::Webmerge::Process::CSS::Spritesets qw();
+
 ###################################################################################################
 
 # import functions from IO module
