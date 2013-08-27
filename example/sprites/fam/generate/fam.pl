@@ -5,14 +5,16 @@ use warnings;
 
 use Image::Size;
 
-opendir(my $dh, "fam") or die "opendir fam: $!";
+my $root = '../sprites';
+
+opendir(my $dh, $root) or die "opendir fam: $!";
 
 open(my $css, ">", "fam.css") or die "open fam.css: $!";
 open(my $html, ">", "fam.html") or die "open fam.html: $!";
 
-my @files = grep { -f join('/', 'fam', $_) } readdir($dh);
+my @files = grep { -f join('/', $root, $_) } sort readdir($dh);
 
-print $css "\n /* sprite: fam; sprite-image: url(fam.png); */ \n\n";
+print $css "\n /* sprite: fam; sprite-image: url(../generated/fam.png); */ \n\n";
 
 print $html "<html>\n";
 print $html "<head><title>FAM Spriteset</title></head>\n";
@@ -24,7 +26,7 @@ print $html "<body>\n";
 foreach my $file (@files)
 {
 
-	my ($w, $h) = imgsize(join('/', 'fam', $file));
+	my ($w, $h) = imgsize(join('/', $root, $file));
 
 	next unless $w && $h;
 
@@ -42,9 +44,8 @@ foreach my $file (@files)
 	printf $css "	background-repeat: no-repeat;\n";
 	printf $css "	background-position: left top;\n";
 	printf $css "	width: %spx; height: %spx;\n", $w, $h;
-	printf $css "	background-image: url('fam/%s');\n", $file;
+	printf $css "	background-image: url('%s/%s');\n", $root, $file;
 	printf $css "}\n\n";
-
 
 	printf $html "<div class=\"%s\"></div>\n", $name;
 
