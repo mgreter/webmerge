@@ -79,9 +79,11 @@ sub spritesets
 
 				map {
 					# sync to disk
-					$_->sync;
-					# releast locks
+					$_->sync if $^O ne "MSWin32";
+					# release locks
 					flock($_, LOCK_UN);
+					# close immediately on windows
+					close($_) if $^O eq "MSWin32";
 					# optimize the temp path
 					${*$_}{'io_atomicfile_temp'}
 				}
