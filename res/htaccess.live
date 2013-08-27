@@ -1,0 +1,18 @@
+
+# enable caching of urls
+
+<FilesMatch "\.(js|css)$">
+
+	# set the expires date in 1 year
+	ExpiresDefault "now plus 1 year"
+
+	# Turn off the ETags
+	# Header unset ETag
+	# FileETag None
+
+	# Turn off the Last Modified header
+	# Last-Modified is auto set for static resources
+	# Header unset Last-Modified
+
+</FilesMatch>
+
