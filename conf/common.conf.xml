@@ -1,0 +1,106 @@
+<xml>
+
+	<!-- common configuration -->
+	<config>
+
+		<!-- doctype to render includes -->
+		<doctype>html5</doctype>
+
+		<!-- where is you htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<!-- path to the htdocs root -->
+		<!-- <webroot>{CONF}/../..</webroot> -->
+
+		<!-- define a current working directory -->
+		<!-- you can adjust this also in the xml config -->
+		<!-- it's also possible to change it only for a block -->
+		<directory>{WWW}</directory>
+
+		<!-- templates for embeder generating -->
+		<!-- paths are relative to config file -->
+		<tmpl-embed-php>{EXT}/templates/embeder.tmpl.php</tmpl-embed-php>
+		<!-- <tmpl-embed-js>{EXT}/templates/embeder.tmpl.js</tmpl-embed-js> -->
+		<!-- <tmpl-embed-perl>{EXT}/templates/embeder.tmpl.pl</tmpl-embed-perl> -->
+
+		<!-- run operations by default -->
+		<merge>1</merge>
+		<prepare>1</prepare>
+		<headinc>1</headinc>
+		<embeder>1</embeder>
+		<optimize>0</optimize>
+
+		<!-- max file size to inline -->
+		<inlinedatamax>4KB</inlinedatamax>
+		<!-- extensions of files to be inlined -->
+		<inlinedataexts>gif,jpg,jpeg,png</inlinedataexts>
+
+		<!-- enable fingerprints -->
+		<fingerprint>1</fingerprint>
+		<!-- file fingerprint techniques -->
+		<fingerprint-dev>query</fingerprint-dev>
+		<fingerprint-live>query</fingerprint-live>
+
+	</config>
+
+	<!-- feature detection for dev context -->
+	<feature id="dev-context" disabled="false" >
+
+		<test type="env,server,cookie" key="WEBMERGE_CONTEXT" mode="whitelist" disabled="false" >
+
+			<!-- enabling patterns -->
+			<enable>dev.*</enable>
+			<!-- disabling patterns -->
+			<disable>live</disable>
+
+		</test>
+
+	</feature>
+
+
+	<!-- feature detection for private ip -->
+	<feature id="private-ip" disabled="false" >
+
+		<!-- check if remote ip address is a private one -->
+		<test type="server" key="REMOTE_ADDR" mode="whitelist" >
+
+			<!-- enabling patterns -->
+			<enable>127\.0\.0\.1</enable>
+			<enable>192\.168\.\d{1,3}\.\d{1,3}</enable>
+			<enable>10\.\d{1,3}\.\d{1,3}\.\d{1,3}</enable>
+			<enable>172\.(?:1[6-9]|[2][0-9]|3[01])\.\d{1,3}\.\d{1,3}</enable>
+
+		</test>
+
+	</feature>
+
+
+	<!-- feature detection for inline data -->
+	<feature id="inline-data" disabled="false" >
+
+		<!-- check user agent string if feature is supported -->
+		<test type="server" key="HTTP_USER_AGENT" mode="whitelist" >
+
+			<!-- enabling patterns -->
+			<enable>.*?Android.*?</enable>
+			<enable>.*?Chrome\/.*?</enable>
+			<enable>.*?Firefox\/.*?</enable>
+			<enable>.*?iPad.*?</enable>
+			<enable>.*?iPhone.*?</enable>
+			<enable>.*?iPod.*?</enable>
+			<enable>.*?itouch.*?</enable>
+			<enable>.*?MSIE .*?</enable>
+			<enable>.*?Opera.*?</enable>
+			<enable>.*?Safari.*?</enable>
+			<enable>.*?Wget.*?</enable>
+
+			<!-- disabling patterns -->
+			<disable>.*?Firefox\/[12]\..*?</disable>
+			<disable>.*?MSIE [567]\..*?</disable>
+			<disable>.*?Opera?[56].*?</disable>
+
+		</test>
+
+	</feature>
+
+</xml>
