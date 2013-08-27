@@ -1,6 +1,11 @@
 #!/usr/bin/perl
 
 ###################################################################################################
+# more ideas:
+# - make selectors uppercase for gzip
+# - make all declarations lowercase for gzip
+# - add more logic to optimize one selector (like paddings)
+###################################################################################################
 package RTP::Webmerge::Compile::CSS;
 ###################################################################################################
 
@@ -25,7 +30,7 @@ BEGIN { our @EXPORT = qw(compileCSS); }
 
 # regular expression to find color doublets (like #CC3399)
 my $re_color_doublet = qr/(?:00|11|22|33|44|55|66|77|88|99|AA|BB|CC|DD|EE|FF)/i;
-my $re_color = qr/\#($re_color_doublet)($re_color_doublet)($re_color_doublet)/i;
+my $re_colors_doublet = qr/\#($re_color_doublet)($re_color_doublet)($re_color_doublet)/i;
 
 # create regulare expression to match css selectors
 my $re_css_name = qr/[_a-zA-Z][_a-zA-Z0-9\-]*/;
@@ -105,7 +110,7 @@ sub compileCSS
 
 		# compress colors doublets whenever possible
 		# example: #CC3399 -> #C39
-		s/$re_color/'#'.substr($1,1).substr($2,1).substr($3,1)/gemi;
+		s/$re_colors_doublet/'#'.substr($1,1).substr($2,1).substr($3,1)/gemi;
 
 		# normalize colors to lowercase (good for gzip compression)
 		s/\#([0-9A-Fa-f]{6})(?=\s|\Z|;|,)/'#' . lc($1)/egm;
@@ -140,21 +145,21 @@ sub compileCSS
 	my %selectors; $selectors{$1} = 1 while($content =~ m/($re_css_selectors)\s*{/g);
 
 	# try to merge same selectors that fallow each other
-	foreach my $selector (keys %selectors)
-	{
-		1 while
-		(
-			$content =~
-			s/
-				(?:(?<=})|\A)\s*
-				\Q$selector\E\s*{([^\}]+)}
-				\s*
-				\Q$selector\E\s*{([^\}]+)}
-			/
-				$selector . '{' . $1 . ';' . $2 . '}'
-			/egx
-		);
-	}
+	# foreach my $selector (keys %selectors)
+	# {
+	# 	1 while
+	# 	(
+	# 		$content =~
+	# 		s/
+	# 			(?:(?<=})|\A)\s*
+	# 			\Q$selector\E\s*{([^\}]+)}
+	# 			\s*
+	# 			\Q$selector\E\s*{([^\}]+)}
+	# 		/
+	# 			$selector . '{' . $1 . ';' . $2 . '}'
+	# 		/egx
+	# 	);
+	# }
 
 	#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
