@@ -30,7 +30,7 @@ BEGIN { $RTP::Webmerge::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(initConfig checkConfig callProgram callProcessor); }
+BEGIN { our @EXPORT = qw(initConfig checkConfig callProgram runProgram callProcessor); }
 
 # define our functions that can be exported
 BEGIN { our @EXPORT_OK = qw(%programs %executables %processors @initers @checkers); }
@@ -141,7 +141,7 @@ sub collectExecutables
 	{
 
 		# get the bin path and the exec template
-		my ($program, $tmpl) = @{$executables{$executable}};
+		my ($program, $tmpl, $prio) = @{$executables{$executable}};
 
 		# create an array if not yet available
 		$programs{$program} = [] unless exists $programs{$program};
@@ -162,14 +162,23 @@ sub collectExecutables
 			if (scalar(@files) == 1 && -e $files[0] && -x $files[0] && ! -d $files[0])
 			{
 				# finally store the info and found absolute path
-				push(@{$programs{$program}}, [$tmpl, $files[0]]);
+				push(@{$programs{$program}}, [$tmpl, $files[0], $prio]);
 			}
 
 		}
 
-
 	}
 	# EO each executable
+
+	# process all collected programs
+	foreach my $program (keys %programs)
+	{
+
+		# sort the programs by priority so they can run in given order
+		@{$programs{$program}} = sort { $a->[2] - $b->[2] } @{$programs{$program}};
+
+	}
+	# EO each program
 
 }
 # EO sub collectExecutables
@@ -188,6 +197,9 @@ sub checkPrograms
 	{
 		if (scalar(@{$programs{$program}}) == 0)
 		{
+			# we should tell te user which programs
+			# he could install to solve to problem
+			# for gifopt this would be gifsicle
 			die "program $program has no executables";
 		}
 	}
@@ -369,6 +381,9 @@ sub callProgram ($$$$)
 	# create an array with all indexes
 	my @indexes = (0 .. $#{$files});
 
+	# return immediately if nothing to do
+	return if scalar @indexes == 0;
+
 	# loop all jobs to distribute files
 	for(my $j = 0; $j < $config->{'jobs'}; $j ++)
 	{
@@ -392,7 +407,7 @@ sub callProgram ($$$$)
 		if ($parent_pid == $$)
 		{
 			print "\n";
-			print "ABORT WEBMERGE OPTIMIZER\n";
+			print "ABORT EXTERNAL PROGRAM \n";
 			print "WAITING FOR CHILDREN\n";
 		}
 

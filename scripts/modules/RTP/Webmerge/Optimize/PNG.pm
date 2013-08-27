@@ -65,9 +65,9 @@ push @checkers, sub
 	return unless $config->{'optimize-png'};
 
 	# define executables to optimize pngs
-	$executables{'optipng'} = ['pngopt', '-o3 --quiet "%s"'] if $ENV{'WEBMERGE_OPTIPNG'};
-	$executables{'advdef'}  = ['pngopt', '-z -4 --quiet "%s"'] if $ENV{'WEBMERGE_ADVDEF'};
-	$executables{'advpng'}  = ['pngopt', '-z -4 --quiet "%s"'] if $ENV{'WEBMERGE_ADVPNG'};
+	$executables{'optipng'} = ['pngopt', '-o3 --quiet "%s"', 1] if $ENV{'WEBMERGE_OPTIPNG'};
+	$executables{'advpng'}  = ['pngopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVPNG'};
+	$executables{'advdef'}  = ['pngopt', '-z -4 --quiet "%s"', 3] if $ENV{'WEBMERGE_ADVDEF'};
 
 };
 # EO push checker
