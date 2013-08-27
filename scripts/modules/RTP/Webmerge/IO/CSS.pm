@@ -141,7 +141,7 @@ sub importCSS
 
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
-	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || importURI($2, $cssfile)/egm;
+	${$data} =~ s/$re_url/importURI($1, $cssfile)/egm;
 
 	# resolve all css imports and include in data
 	${$data} =~ s/\@import\s+$re_url/${importCSS($1)}/gme;

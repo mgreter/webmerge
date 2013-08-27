@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Image::Size;
+
+opendir(my $dh, "fam") or die "opendir fam: $!";
+
+open(my $css, ">", "fam.css") or die "open fam.css: $!";
+open(my $html, ">", "fam.html") or die "open fam.html: $!";
+
+my @files = grep { -f join('/', 'fam', $_) } readdir($dh);
+
+print $css "\n /* sprite: fam; sprite-image: url(fam.png); */ \n\n";
+
+print $html "<html>\n";
+print $html "<head><title>FAM Spriteset</title></head>\n";
+print $html "<link rel=\"stylesheet\" href=\"fam.css\">\n";
+
+print $html "<style>DIV { float: left; margin: 5px; }</style>\n";
+print $html "<body>\n";
+
+foreach my $file (@files)
+{
+
+	my ($w, $h) = imgsize(join('/', 'fam', $file));
+
+	next unless $w && $h;
+
+	my $name = $file;
+
+	$name=~s/\.[^\.]+$/-/g;
+	$name=~s/\W+/-/g;
+	$name=~s/_/-/g;
+	$name=~s/^\-+//g;
+	$name=~s/\-+$//g;
+
+	printf $css ".%s\n", $name;
+	printf $css "{\n";
+	printf $css "	/* sprite-ref: fam; */ \n";
+	printf $css "	background-repeat: no-repeat;\n";
+	printf $css "	background-position: left top;\n";
+	printf $css "	width: %spx; height: %spx;\n", $w, $h;
+	printf $css "	background-image: url('fam/%s');\n", $file;
+	printf $css "}\n\n";
+
+
+	printf $html "<div class=\"%s\"></div>\n", $name;
+
+
+}
+
+print $html "</body>\n";
+print $html "</html>\n";
