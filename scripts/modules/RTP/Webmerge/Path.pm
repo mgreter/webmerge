@@ -86,7 +86,7 @@ sub resolve_path ($)
 	$path =~ s/\{CONF\}/$confroot/gm if $confroot;
 
 	# return if path is already absolute
-	return $path if $path =~m /^\//;
+	return $path if $path =~m /^(?:\/|[a-zA-Z]:)/;
 
 	# prepended current directory and return
 	return join('/', $directory || '.', $path);

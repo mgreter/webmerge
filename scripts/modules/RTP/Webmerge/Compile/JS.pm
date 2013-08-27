@@ -38,6 +38,10 @@ sub compileJS
 	# make these configurable again
 	my $java_bin = '/usr/bin/java';
 
+	# hotfix for windows operating system
+	# all windows (even x64) report MSWin32!
+	$java_bin = "java" if ($^O eq "MSWin32");
+	
 	# create the command to execute the closure compiler
 	my $command = $java_bin . ' -jar ' .
 			# reference the closure compiler relative from extension
