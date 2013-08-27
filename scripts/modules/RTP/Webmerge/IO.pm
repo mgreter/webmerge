@@ -24,11 +24,14 @@ BEGIN { our @EXPORT_OK = qw(processfile filelist); }
 
 ###################################################################################################
 
+# resolve filepath
+use File::Basename;
+
 # override core glob (case insensitive)
 use File::Glob qw(:globally :nocase);
 
 # load flags for the system file operation calls
-use Fcntl qw(O_RDWR O_RDONLY LOCK_EX SEEK_SET);
+use Fcntl qw(O_RDWR O_RDONLY LOCK_EX SEEK_SET LOCK_UN);
 
 # load webmerge core path module
 use RTP::Webmerge::Path qw(res_path);
@@ -99,8 +102,31 @@ sub readfile ($;$)
 	# get input variables
 	my ($file, $atomic) = @_;
 
-	# resolve path and make absolute
-	$file = res_path($file) || $file;
+	# check if file has already beed written
+	if ($atomic && exists $atomic->{$file})
+	{ return $atomic->{$file}->[0]; }
+
+	# check if file does exist
+	# res_path may bail otherwise
+	if (-e $file)
+	{
+
+		# resolve path and make absolute
+		$file = res_path($file) || $file;
+
+	} else {
+
+		# parse into filename and path
+		# the path must exists at this point
+		my ($name, $path) = fileparse($file);
+
+		# resolve path and make absolute
+		$path = res_path($path) || $path;
+
+		# re-join the complete file uri
+		$file = join('/', $path, $name);
+
+	}
 
 	# check if file has already beed written
 	if ($atomic && exists $atomic->{$file})
@@ -126,6 +152,9 @@ sub readfile ($;$)
 	croak "could not close input file: $!" unless close $fh;
 
 	# remove unwanted utf8 boms
+	# this must not be protected
+	# we seldomly use the data again
+	# if it is not a text type
 	$data =~ s/^\xEF\xBB\xBF//;
 
 	# return a data ref
@@ -138,14 +167,35 @@ sub readfile ($;$)
 ###################################################################################################
 
 # write data to a file (flocked)
-sub writefile ($$;$)
+sub writefile ($$;$$)
 {
 
-	# get input variables
-	my ($file, $out, $atomic) = @_;
+	my $fh;
 
-	# resolve path and make absolute
-	$file = res_path($file) || $file;
+	# get input variables
+	my ($file, $out, $atomic, $binary) = @_;
+
+	# check if file does exist
+	# res_path may bail otherwise
+	if (-e $file)
+	{
+
+		# resolve path and make absolute
+		$file = res_path($file) || $file;
+
+	} else {
+
+		# parse into filename and path
+		# the path must exists at this point
+		my ($name, $path) = fileparse($file);
+
+		# resolve path and make absolute
+		$path = res_path($path) || $path;
+
+		# re-join the complete file uri
+		$file = join('/', $path, $name);
+
+	}
 
 	# declare local variables
 	my $rv = undef;
@@ -154,10 +204,47 @@ sub writefile ($$;$)
 	my $data = \(my $foo = ${$out});
 
 	# convert from mac/win newlines to unix newlines
-	${$data} =~ s/(?:\r\n|\n\r)/\n/gm;
+	${$data} =~ s/(?:\r\n|\n\r)/\n/gm unless $binary;
 
 	# open the file via atomic interface
-	my $fh = IO::AtomicFile->open($file, 'w');
+	# my $fh = IO::AtomicFile->open($file, 'w');
+
+	my $dir = dirname $file;
+	
+	die "directory does not exist: ", $dir unless -d $dir;
+	
+	# looks like we already written this file
+	# truncate, sync and unlock, then write again
+	if (exists $atomic->{$file})
+	{
+	
+		# get the stored old handle
+		$fh = $atomic->{$file}->[1];
+		# set the position to start
+		$fh->seek(0, SEEK_SET);
+		$fh->sysseek(0, SEEK_SET);
+		# make the file empty
+		$fh->truncate(0);
+		# write out changes
+		$fh->flush;
+		# release file locks
+		flock($fh, LOCK_UN);
+	}
+	else
+	{
+		# open the file via atomic interface
+		$fh = IO::AtomicFile->new;
+		# append another suffix as some optimizers
+		# already use the same, be on the save side
+		${*$fh}{'io_atomicfile_suffix'} = '.webmerge';
+		# open the file via atomic interface
+		$fh->open($file, 'w');
+	}
+	
+	die "could not open file: $file: $!" unless defined $fh;
+
+	# use binmode
+	$fh->binmode;
 
 	# error out if there was an error opening the file
 	croak "could not open $file: $!" unless $fh;
@@ -165,8 +252,16 @@ sub writefile ($$;$)
 	# aquire exclusive lock on the file (will block)
 	croak "could not lock $file: $!" unless lock_file($fh, LOCK_EX, 4);
 
+	# $file = ${*$fh}{'io_atomicfile_temp'} if ${*$fh}{'io_atomicfile_temp'};
+	
 	# only store if atomic is given
 	$atomic->{$file} = [$out, $fh] if $atomic;
+
+	if (defined(my $temp = ${*$fh}{'io_atomicfile_temp'}))
+	{
+		# only store if atomic is given
+		$atomic->{$temp} = [$out, $fh] if $atomic;
+	}
 
 	# write the whole file buffer by buffer
 	while($rv = syswrite($fh, ${$data}, 4096)) { substr(${$data}, 0, $rv, ''); }
@@ -175,6 +270,8 @@ sub writefile ($$;$)
 	croak "write error: $!" unless defined $rv;
 	croak "unknown write error: $!" unless $rv == 0;
 
+	flock($fh, LOCK_UN);
+	
 	# return file handle
 	# store to block file
 	return $fh
