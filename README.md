@@ -17,14 +17,14 @@ Tested versions:
 - strawberry-perl-5.14.4.1-64bit.msi
 - GraphicsMagick-1.3.18-Q16-win64-dll.exe
 
-* The latest Graphics Magick may not support the latest Strawberry Perl!
+The latest Graphics Magick may not support the latest Strawberry Perl!
 
 Installing Perl Modules
 =======================
-perl -MCPAN -e "install CSS::Minifier"
-perl -MCPAN -e "install JavaScript::Minifier"
-perl -MCPAN -e "install Data::Dump::PHP"
-perl -MCPAN -e "install File::MimeInfo"
+    perl -MCPAN -e "install CSS::Minifier"
+    perl -MCPAN -e "install JavaScript::Minifier"
+    perl -MCPAN -e "install Data::Dump::PHP"
+    perl -MCPAN -e "install File::MimeInfo"
 
 Credits
 =======
