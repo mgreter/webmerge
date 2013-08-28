@@ -220,7 +220,7 @@ sub mergeCollect
 					my $web_path = web_url $local_path;
 
 					# readfile will return a string reference (pointer to the file content)
-					my $data = $reader{$type}->($local_path) or die "could not read <$local_path>: $!";
+					my $data = $reader{$type}->($local_path, $config) or die "could not read <$local_path>: $!";
 
 					# get the md5sum of the unaltered data (otherwise crc may not be correct)
 					my $md5sum = md5sum($data) or die "could not get md5sum from data: $!";

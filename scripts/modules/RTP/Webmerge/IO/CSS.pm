@@ -74,7 +74,14 @@ sub importURI
 {
 
 	# get the url and css path
-	my ($url, $cssfile) = @_;
+	my ($url, $cssfile, $config) = @_;
+
+	# check if url is absolute -> resolve from our webroot
+	if ($url =~ m/^\// && $config && $config->{'webroot'})
+	{
+		use RTP::Webmerge::Path qw(resolve_path);	
+		$url = join('/', resolve_path($config->{'webroot'}), $url);
+	}
 
 	# check if the url is actually
 	return wrapURL($url) if ($url =~ m/^(?:[a-zA-Z]+\:)?\/\//);
@@ -131,7 +138,7 @@ sub importCSS
 {
 
 	# get input variables
-	my ($cssfile) = @_;
+	my ($cssfile, $config) = @_;
 
 	# read complete css file
 	my $data = readfile($cssfile);
@@ -141,7 +148,7 @@ sub importCSS
 
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
-	${$data} =~ s/$re_url/importURI($1, $cssfile)/egm;
+	${$data} =~ s/$re_url/importURI($1, $cssfile, $config)/egm;
 
 	# resolve all css imports and include in data
 	${$data} =~ s/\@import\s+$re_url/${importCSS($1)}/gme;
