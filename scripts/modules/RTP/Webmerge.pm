@@ -155,9 +155,15 @@ sub collectExecutables
 		# look for external program
 		else
 		{
-
+			
+			# get name of executable
+			my $exec = $executable;
+			
+			# remove optional suffix
+			$exec =~ s/\[[a-zA-Z]+\]$//;
+			
 			# glob finds the executable
-			my @files = which($executable) || glob($executable);
+			my @files = which($exec) || glob($exec);
 
 			if (scalar(@files) == 1 && -e $files[0] && -x $files[0] && ! -d $files[0])
 			{

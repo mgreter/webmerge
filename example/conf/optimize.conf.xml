@@ -1,0 +1,83 @@
+<xml>
+
+	<!-- include default configuration file (relative to this file) -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- default configuration -->
+	<config>
+
+		<!-- where is you htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<webroot>{CONF}/../optimize</webroot>
+
+		<!-- define a current working directory -->
+		<!-- you can adjust this also in the xml config -->
+		<directory>{WWW}</directory>
+
+		<!-- disable headers -->
+		<headtmpl></headtmpl>
+
+		<!-- disable crc file -->
+		<crc-file>0</crc-file>
+
+		<!-- disable comments -->
+		<crc-comment>0</crc-comment>
+		<head-comment>0</head-comment>
+
+		<!-- maximum size to inline data -->
+		<inlinedatamax>160KB</inlinedatamax>
+
+	</config>
+
+	<!-- prepare operations - commit right after block -->
+	<prepare id="prepare" step="prepare" disabled="false" commit="after" >
+		<!-- create neccessary paths -->
+		<mkdir path="dst" />
+		<!-- create neccessary paths -->
+		<copy src="src/creative-commons.png" dst="dst/01-creative-commons.opt.png" />
+		<copy src="src/creative-commons.jpg" dst="dst/02-creative-commons.opt.jpg" />
+	</prepare>
+
+	<!-- prepare operations - do not commit these files -->
+	<prepare id="originals" step="prepare" disabled="false" commit="false" >
+		<!-- create neccessary paths -->
+		<mkdir path="dst" />
+		<!-- create neccessary paths -->
+		<copy src="src/creative-commons.png" dst="dst/01-creative-commons.org.png" />
+		<copy src="src/creative-commons.jpg" dst="dst/02-creative-commons.org.jpg" />
+	</prepare>
+
+	<!-- optimize operations (id needed to overwrite) -->
+	<optimize id="optimize" step="optimize" disabled="false">
+
+		<!-- clean/fix text files -->
+		<txt disabled="false">
+			<!-- clean all js and css files -->
+			<file path="dst" file="*.md" recursive="true" />
+			<file path="dst" file="*.css" recursive="true" />
+			<file path="dst" file="*.txt" recursive="true" />
+			<file path="dst" file="*.html" recursive="true" />
+		</txt>
+
+		<!-- best gif compression -->
+		<gif disabled="false">
+			<!-- recursively improve gif compression -->
+			<file path="dst" file="*.gif" recursive="true" />
+		</gif>
+
+		<!-- best jpg compression -->
+		<jpg disabled="false">
+			<!-- recursively improve jpg compression -->
+			<file path="dst" file="*.jpg" recursive="true" />
+		</jpg>
+
+		<!-- best png compression -->
+		<png disabled="false">
+			<!-- recursively improve png compression -->
+			<file path="dst" file="*.png" recursive="true" />
+		</png>
+
+	</optimize>
+
+</xml>

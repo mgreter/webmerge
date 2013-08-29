@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 ###################################################################################################
-# advdef: .png, .mng, .gz, .tgz and .svgz
+# If you need to optimize other files, you may use this software
+# http://nikkhokkho.sourceforge.net/static.php?page=FileOptimizer
 ###################################################################################################
 package RTP::Webmerge::Optimize;
 ###################################################################################################
@@ -42,6 +43,12 @@ sub optimize
 	# check for configuration option
 	return unless $config->{'optimize'};
 
+	# should we commit filesystem changes?
+	my $commit = $optimize->{'commit'} || 0;
+
+	# commit all changes to the filesystem if configured
+	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
+
 	# do not process if disabled attribute is given and set to true
 	unless ($optimize->{'disabled'} && lc $optimize->{'disabled'} eq 'true')
 	{
@@ -60,6 +67,9 @@ sub optimize
 
 	}
 	# EO unless disabled
+
+	# commit all changes to the filesystem if configured
+	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|af)/i;
 
 }
 # EO sub optimize

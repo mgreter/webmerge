@@ -45,6 +45,9 @@ use RTP::Webmerge::Optimize::TXT qw();
 use RTP::Webmerge::Optimize::GIF qw();
 use RTP::Webmerge::Optimize::JPG qw();
 use RTP::Webmerge::Optimize::PNG qw();
+use RTP::Webmerge::Optimize::MNG qw();
+use RTP::Webmerge::Optimize::ZIP qw();
+use RTP::Webmerge::Optimize::GZ qw();
 
 ################################################################################
 # declare and init configuration options
