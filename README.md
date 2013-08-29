@@ -34,7 +34,9 @@ The latest Graphics Magick may not support the latest Strawberry Perl!
 Installing on Linux/Mac
 =======================
 Perl should already be installed and ready. You should be able
-to find a package for Graphics-Magick with your distribution.
+to find a package for Graphics-Magick with your distribution. All
+perl modules are perl code only and could also be downloaded from
+www.cpan.org and then be put into the script/modules directory.
 
 Installing Perl Modules
 =======================
