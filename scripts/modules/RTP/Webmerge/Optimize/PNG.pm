@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 
 ###################################################################################################
+# http://optipng.sourceforge.net/pngtech/optipng.html
+# pngrewrite, pngcrush, OptiPNG, AdvanceCOMP (advpng), PNGOut 
+###################################################################################################
 package RTP::Webmerge::Optimize::PNG;
 ###################################################################################################
 
@@ -67,7 +70,7 @@ push @checkers, sub
 	# define executables to optimize pngs
 	$executables{'optipng'} = ['pngopt', '-o3 --quiet "%s"', 1] if $ENV{'WEBMERGE_OPTIPNG'};
 	$executables{'advpng'}  = ['pngopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVPNG'};
-	$executables{'advdef'}  = ['pngopt', '-z -4 --quiet "%s"', 3] if $ENV{'WEBMERGE_ADVDEF'};
+	$executables{'advdef'}  = ['pngopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVDEF'} && !$ENV{'WEBMERGE_ADVPNG'};
 
 };
 # EO push checker
