@@ -604,9 +604,15 @@ sub merge
 
 	# get input variables
 	my ($config, $merges) = @_;
+	
+	# should we commit filesystem changes?
+	my $commit = $merges->{'commit'} || 0;
 
 	# change directory (restore previous state after this block)
 	my $dir = RTP::Webmerge::Path->chdir($merges->{'chdir'});
+
+	# commit all changes to the filesystem if configured
+	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
 
 	# do not process if disabled attribute is given and set to true
 	unless ($merges->{'disabled'} && lc $merges->{'disabled'} eq 'true')
@@ -619,6 +625,9 @@ sub merge
 		{ mergeEntry($config, $merge, 'js'); }
 
 	}
+
+	# commit all changes to the filesystem if configured
+	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|af)/i;
 
 }
 

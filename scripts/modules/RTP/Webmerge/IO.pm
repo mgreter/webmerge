@@ -96,11 +96,11 @@ sub lock_file
 ###################################################################################################
 
 # read file and return data (flocked)
-sub readfile ($;$)
+sub readfile ($;$$)
 {
 
 	# get input variables
-	my ($file, $atomic) = @_;
+	my ($file, $atomic, $binary) = @_;
 
 	# check if file has already beed written
 	if ($atomic && exists $atomic->{$file})
@@ -155,7 +155,7 @@ sub readfile ($;$)
 	# this must not be protected
 	# we seldomly use the data again
 	# if it is not a text type
-	$data =~ s/^\xEF\xBB\xBF//;
+	$data =~ s/^\xEF\xBB\xBF// unless $binary;
 
 	# return a data ref
 	# this will safe memory
