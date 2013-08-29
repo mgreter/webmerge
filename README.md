@@ -1,4 +1,4 @@
-WebMerge
+Webmerge
 ========
 Asset Manager for Front End Development (JS, CSS, Images)
 
@@ -49,7 +49,11 @@ Other external optimizers
 - http://www.lcdf.org/gifsicle/ (gifsicle)
 - http://optipng.sourceforge.net/ (optipng)
 - http://advancemame.sourceforge.net/comp-readme.html (advdef & advpng)
-	
+
+Using Webmerge
+==============
+You need to create a config file (documentation not yet done). See example directory for hints.
+
 Credits
 =======
 Developement was mostly done while working at http://www.rtp.ch.
