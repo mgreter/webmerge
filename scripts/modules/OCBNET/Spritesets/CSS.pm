@@ -351,10 +351,10 @@ sub read
 			'enclosed-y' => fromPx($selector->style('height') || 0) || 0
 		});
 
-		#snap($sprite->{'w'}, $sprite->scaleX);
-		#snap($sprite->{'h'}, $sprite->scaleY);
-		#snap($sprite->{'width'}, $sprite->scaleX);
-		#snap($sprite->{'height'}, $sprite->scaleY);
+		snap($sprite->{'w'}, $sprite->scaleX);
+		snap($sprite->{'h'}, $sprite->scaleY);
+		snap($sprite->{'width'}, $sprite->scaleX);
+		snap($sprite->{'height'}, $sprite->scaleY);
 
 		# normalize left/top position to px
 		# only special case is right/bottom

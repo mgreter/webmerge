@@ -198,3 +198,10 @@ A:focus, A:hover
 {
 	text-decoration: underline;
 }
+
+.toggle A
+{
+	color: #FF0000;
+	text-transform: uppercase;
+	text-decoration: underline;
+}
