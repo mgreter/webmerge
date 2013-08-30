@@ -60,6 +60,7 @@ sub fromPosition
 		return 'right';
 	}
 
+	return $position;
 }
 
 sub isNumber
