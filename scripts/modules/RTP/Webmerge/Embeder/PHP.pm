@@ -12,9 +12,6 @@ BEGIN { $RTP::Webmerge::Embeder::PHP::VERSION = "0.70" }
 
 ###################################################################################################
 
-# use cwd module to normalize paths
-use Cwd qw(abs_path fast_abs_path);
-
 # use module to dump php data
 use Data::Dump::PHP qw(dump_php);
 

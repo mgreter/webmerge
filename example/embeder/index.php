@@ -42,6 +42,7 @@
 			Go to page:
 			<a href="<?php print($_SERVER['SCRIPT_NAME']); ?>/sub/page">sub page</a>
 			<a href="<?php print($_SERVER['SCRIPT_NAME']); ?>/home/page">home page</a>
+			<a href="<?php print($_SERVER['SCRIPT_NAME']); ?>/other/page">other page</a>
 		</p>
 
 		CSS: <ul>
