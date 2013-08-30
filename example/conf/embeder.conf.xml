@@ -18,9 +18,6 @@
 		<!-- you can adjust this also in the xml config -->
 		<directory>{WWW}/webmerge/example/embeder</directory>
 
-		<!-- enable external sources per domain and configure referer -->
-		<!-- <external href="http://fast.fonts.com/" referer="http://www.tamedia.ch/" /> -->
-
 	</config>
 
 	<!-- prepare operations -->
