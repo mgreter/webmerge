@@ -320,7 +320,12 @@ sub read
 	# step 0 - create spritesets to fill in sprites
 	# step 1 - parse all sprites and fill spritesets
 	# step 2 - adjust background css for sprite blocks
-	# sub snap { $_[0] += $_[1]*$_[1] - $_[0] % ($_[1]*$_[1]); }
+	sub snap
+	{
+			return unless defined $_[0];
+			my $rest = $_[0] % $_[1];
+			$_[0] += $_[1] - $rest if $rest;
+		}
 
 	# now process each selector and setup sprites
 	foreach my $selector (@{$self->{'selectors'}})
@@ -386,14 +391,6 @@ sub read
 		my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
 		my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
 
-		#snap($dim{'width'}->{'val'}, $sprite->scaleX);
-		#snap($dim{'height'}->{'val'}, $sprite->scaleY);
-
-		#snap($padding_top, $sprite->scaleY);
-		#snap($padding_left, $sprite->scaleX);
-		#snap($padding_right, $sprite->scaleX);
-		#snap($padding_bottom, $sprite->scaleY);
-
 		my $isSmaller = {
 			'width' => $sprite->width < $dim{'width'}->{'val'},
 			'height' => $sprite->height < $dim{'height'}->{'val'}
@@ -415,17 +412,7 @@ sub read
 		{
 			$sprite->{'position2-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 			$sprite->{'padding-left'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
-			# $sprite->{'padding-top'} = 0;
 		}
-		# have fixed x, so define padding right
-		if ($sprite->isFixedX)
-		{
-			#print $sprite->width, "\n";
-			#print $dim{'width'}->{'val'}, "\n";
-			#print "=> ", $dim{'width'}->{'val'} - $sprite->width, "\n";
-			#$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX;
-		}
-
 		unless ($sprite->{'position2-y'} =~ m/^bottom$/i)
 		{
 			# add some padding to fill the empty space
@@ -438,33 +425,11 @@ sub read
 			$sprite->{'position2-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 			$sprite->{'padding-top'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 		}
-		# have fixed x, so define padding bottom
-		if ($sprite->isFixedY)
-		{
-			#$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height - $sprite->{'padding-top'};
-		}
 
-#die "neg left" if $sprite->{'padding-left'} < 0;
-#die "neg right" if $sprite->{'padding-right'} < 0;
 		$sprite->{'padding-top'} *= $sprite->scaleY;
 		$sprite->{'padding-left'} *= $sprite->scaleX;
 		$sprite->{'padding-right'} *= $sprite->scaleX;
 		$sprite->{'padding-bottom'} *= $sprite->scaleY;
-
-		$sprite->{'padding-top'} += 1; # if $sprite->scaleY > 1;
-		$sprite->{'padding-left'} += 1; # if $sprite->scaleX > 1;
-		# $sprite->{'padding-right'} += 1; # if $sprite->scaleX > 1;
-		# $sprite->{'padding-bottom'} += 1; # if $sprite->scaleY > 1;
-
-		#$sprite->{'padding-top'} += 1 if $sprite->scaleY > 1;
-		#$sprite->{'padding-left'} += 1 if $sprite->scaleX > 1;
-		#$sprite->{'padding-right'} += 1 if $sprite->scaleX > 1;
-		#$sprite->{'padding-bottom'} += 1 if $sprite->scaleY > 1;
-
-		#snap($sprite->{'padding-top'}, $sprite->scaleY);
-		#snap($sprite->{'padding-left'}, $sprite->scaleX);
-		#snap($sprite->{'padding-right'}, $sprite->scaleX);
-		#snap($sprite->{'padding-bottom'}, $sprite->scaleY);
 
 		$sprite->{'padding-top'} = 0 if $sprite->{'padding-top'} < 0;
 		$sprite->{'padding-left'} = 0 if $sprite->{'padding-left'} < 0;
