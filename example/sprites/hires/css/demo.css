@@ -96,7 +96,7 @@ BODY .head DIV.box
 {
 	margin-left: 0px;
 	margin-right: 0px;
-	padding-right: 40px;
+	padding-right: 45px;
 }
 
 .cf .flex-y
@@ -109,7 +109,7 @@ BODY .head DIV.box
 {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	padding-bottom: 40px;
+	padding-bottom: 45px;
 }
 
 .cf .flex-xy
@@ -124,10 +124,10 @@ BODY .head DIV.box
 {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	padding-bottom: 40px;
+	padding-bottom: 45px;
 	margin-left: 0px;
 	margin-right: 0px;
-	padding-right: 40px;
+	padding-right: 45px;
 }
 
 
