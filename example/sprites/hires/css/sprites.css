@@ -7,24 +7,28 @@
 
 .cf .box
 {
+	padding: 5px;
 	/* css-id: box; */
 	width: 45px; height: 45px;
 }
 
 .cf .flex-x
 {
+	padding: 5px;
 	/* css-id: flex-x; */
 	width: 45px; min-height: 45px;
 }
 
 .cf .flex-y
 {
+	padding: 5px;
 	/* css-id: flex-y; */
 	min-width: 45px; height: 45px;
 }
 
 .cf .flex-xy
 {
+	padding: 5px;
 	/* css-id: flex-xy; */
 	min-height: 45px; min-width: 45px;
 }
