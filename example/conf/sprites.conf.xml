@@ -31,11 +31,16 @@
 	</config>
 
 	<!-- prepare operations -->
-	<prepare id="prepare" step="prepare" disabled="false" >
-
+	<prepare id="prepare" step="fam" disabled="false" >
 		<!-- create neccessary paths -->
 		<mkdir path="fam/generated" />
+	</prepare>
 
+	<!-- prepare operations -->
+	<prepare id="prepare" step="hires" disabled="false" >
+		<!-- create neccessary paths -->
+		<mkdir path="hires/generated" />
+		<mkdir path="hires/generated/img" />
 	</prepare>
 
 	<!-- optimize operations (id needed to overwrite) -->
@@ -76,16 +81,38 @@
 		<!-- build fam spriteset -->
 		<css id="fam" step="fam" >
 
+			<!-- change directory -->
+			<chdir>fam</chdir>
+
 			<!-- use generated css as input file -->
-			<input path="fam/generate/fam.css" />
+			<input path="generate/fam.css" />
 
 			<!-- create output css files and the spriteset image -->
-			<output path="fam/generated/inline.join.css" target="join" process="inlinedata" />
-			<output path="fam/generated/inline.pack.css" target="compile" process="inlinedata" />
-			<output path="fam/generated/spritesets.join.css" preprocess="spritesets" target="join" />
-			<output path="fam/generated/spritesets.pack.css" preprocess="spritesets" target="compile" />
-			<output path="fam/generated/spritesets.inline.join.css" preprocess="spritesets" target="join" process="inlinedata" />
-			<output path="fam/generated/spritesets.inline.pack.css" preprocess="spritesets" target="compile" process="inlinedata" />
+			<output path="generated/inline.join.css" target="join" process="inlinedata" />
+			<output path="generated/inline.pack.css" target="compile" process="inlinedata" />
+			<output path="generated/spritesets.join.css" preprocess="spritesets" target="join" />
+			<output path="generated/spritesets.pack.css" preprocess="spritesets" target="compile" />
+			<output path="generated/spritesets.inline.join.css" preprocess="spritesets" target="join" process="inlinedata" />
+			<output path="generated/spritesets.inline.pack.css" preprocess="spritesets" target="compile" process="inlinedata" />
+
+		</css>
+
+				<!-- build fam spriteset -->
+		<css id="hires" step="hires" >
+
+			<!-- change directory -->
+			<chdir>hires</chdir>
+
+			<!-- use generated css as input file -->
+			<input path="css/sprites.css" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="generated/inline.join.css" target="join" process="inlinedata" />
+			<output path="generated/inline.pack.css" target="compile" process="inlinedata" />
+			<output path="generated/spritesets.join.css" preprocess="spritesets" target="join" />
+			<output path="generated/spritesets.pack.css" preprocess="spritesets" target="compile" />
+			<output path="generated/spritesets.inline.join.css" preprocess="spritesets" target="join" process="inlinedata" />
+			<output path="generated/spritesets.inline.pack.css" preprocess="spritesets" target="compile" process="inlinedata" />
 
 		</css>
 

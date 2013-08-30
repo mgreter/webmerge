@@ -48,10 +48,10 @@ sub web_url ($)
 	my ($path) = @_;
 
 	# resolve path to absolute
-	$path = abs_path($path);
+	$path = join("/", abs_path(dirname($path)), basename($path));
 
 	# resolve the webroot absolute
-	my $root = abs_path($webroot);
+	my $root = join("/", abs_path(dirname($webroot)), basename($webroot));
 
 	# remove docroot directory
 	# should leave an absolute url
@@ -105,14 +105,14 @@ sub resolve_path ($)
 }
 
 ###################################################################################################
-	
+
 # pass through abs_path function
 sub res_path ($)
 {
-	
+
 	# resolve the path string
 	my $path = &resolve_path;
-	
+
 	# create absolute path for the directory and re-add filename
 	return join('/', abs_path(dirname($path)), basename($path));
 
@@ -124,7 +124,7 @@ sub fast_res_path ($)
 
 	# resolve the path string
 	my $path = &resolve_path;
-	
+
 	# create absolute path for the directory and re-add filename
 	return join('/', fast_abs_path(dirname($path)), basename($path));
 
