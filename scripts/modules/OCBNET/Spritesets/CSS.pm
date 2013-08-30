@@ -226,6 +226,8 @@ sub write
 	foreach my $set (keys %{$self->{'spritesets'}})
 	{ $self->{'spritesets'}->{$set}->debug(); }
 
+	return \%written;
+
 }
 
 ####################################################################################################
@@ -233,7 +235,7 @@ sub write
 sub read
 {
 
-	my ($self, $data) = @_;
+	my ($self, $data, $atomic) = @_;
 
 	# parse all blocks and end when all is parsed
 	$parse_blocks->($data, $self, qr/\A\z/);
@@ -468,29 +470,16 @@ sub read
 		$sprite->{'padding-right'} = 0 if $sprite->{'padding-right'} < 0;
 		$sprite->{'padding-bottom'} = 0 if $sprite->{'padding-bottom'} < 0;
 
-		die "no : ", $id unless $self->{'spritesets'}->{$id};
-
 		# add this sprite to the given spriteset
-		$self->{'spritesets'}->{$id}->add($sprite);
+		unless ($self->{'spritesets'}->{$id})
+		{ warn sprintf "unknown sprite id <%s>\n", $id; }
+		else { $self->{'spritesets'}->{$id}->add($sprite); }
+
 	}
 	# EO each selector
 
 	# return object
 	return $self;
-
-}
-
-####################################################################################################
-
-sub parse
-{
-	# get passed arguments
-	my ($self) = @_;
-
-	# now process each selector and setup sprites
-	foreach my $selector (@{$self->{'selectors'}})
-	{
-	}
 
 }
 
