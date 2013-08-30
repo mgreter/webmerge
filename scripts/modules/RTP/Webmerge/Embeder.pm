@@ -25,9 +25,6 @@ use RTP::Webmerge::Path qw(res_path);
 
 ###################################################################################################
 
-# use cwd module to normalize paths
-use Cwd qw(abs_path fast_abs_path);
-
 # use core mdoules for path handling
 use File::Basename qw(dirname);
 use File::Spec::Functions qw(abs2rel);

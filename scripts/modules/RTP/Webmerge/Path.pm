@@ -35,6 +35,9 @@ BEGIN { our @EXPORT = qw(resolve_path res_path fast_res_path web_url web_path); 
 # use cwd to normalize paths
 use Cwd qw(abs_path fast_abs_path);
 
+# use to parse path and filename
+use File::Basename qw(dirname basename);
+
 ###################################################################################################
 
 # return url for web from path
@@ -44,8 +47,16 @@ sub web_url ($)
 	# get path string
 	my ($path) = @_;
 
+	# resolve path to absolute
+	$path = abs_path($path);
+
+	# resolve the webroot absolute
+	my $root = abs_path($webroot);
+
 	# remove docroot directory
-	$path =~ s/^\Q$webroot\E//;
+	# should leave an absolute url
+	# relative to the given webroot
+	$path =~ s/^\Q$root\E//;
 
 	# return web url
 	return $path;
@@ -60,10 +71,10 @@ sub web_path ($)
 {
 
 	# get path string
-	my ($path) = @_;
+	my ($abs_webpath) = @_;
 
 	# return web path
-	return join('/', $webroot, $path);
+	return join('/', $webroot, $abs_webpath);
 
 }
 
@@ -94,12 +105,30 @@ sub resolve_path ($)
 }
 
 ###################################################################################################
-
+	
 # pass through abs_path function
-sub res_path ($) { return abs_path(&resolve_path) }
+sub res_path ($)
+{
+	
+	# resolve the path string
+	my $path = &resolve_path;
+	
+	# create absolute path for the directory and re-add filename
+	return join('/', abs_path(dirname($path)), basename($path));
+
+}
 
 # pass through fast_abs_path function
-sub fast_res_path ($) { return fast_abs_path(&resolve_path) }
+sub fast_res_path ($)
+{
+
+	# resolve the path string
+	my $path = &resolve_path;
+	
+	# create absolute path for the directory and re-add filename
+	return join('/', fast_abs_path(dirname($path)), basename($path));
+
+}
 
 ###################################################################################################
 
@@ -126,7 +155,7 @@ sub chdir
 	foreach my $chdir (@{$chdirs || []})
 	{
 		# now change our current directory variable
-		if ($chdir =~ m/^\//) { $directory = $chdir; }
+		if ($chdir =~ m/^(?:\/|[a-zA-Z]:)/) { $directory = $chdir; }
 		else { $directory = join('/', $directory, $chdir); }
 	}
 

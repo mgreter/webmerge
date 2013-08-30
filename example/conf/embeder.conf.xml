@@ -12,11 +12,11 @@
 		<!-- where is you htdocs root directory -->
 		<!-- this is needed to create absolute urls -->
 		<!-- default is relative to the config file -->
-		<webroot>{CONF}/../../../..</webroot>
+		<webroot>{CONF}/../../..</webroot>
 
 		<!-- define a current working directory -->
 		<!-- you can adjust this also in the xml config -->
-		<directory>{WWW}/rtp_webmerge/example</directory>
+		<directory>{WWW}/webmerge/example/embeder</directory>
 
 		<!-- enable external sources per domain and configure referer -->
 		<!-- <external href="http://fast.fonts.com/" referer="http://www.tamedia.ch/" /> -->
@@ -26,8 +26,10 @@
 	<!-- prepare operations -->
 	<prepare id="prepare" step="prepare" disabled="false" >
 		<!-- create neccessary paths -->
-		<mkdir path="global/merged" />
+		<mkdir path="admin" />
+		<mkdir path="admin/webmerge" />
 		<mkdir path="admin/webmerge/generated" />
+		<mkdir path="global/merged" />
 		<!-- create/copy some files -->
 		<copy src="{EXT}/res/htaccess.dev" dst="global/js/.htaccess" />
 		<copy src="{EXT}/res/htaccess.dev" dst="global/css/.htaccess" />
