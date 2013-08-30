@@ -73,7 +73,8 @@ BODY .head DIV.box
 	float: left;
 	margin: 20px;
 	cursor: pointer;
-	padding: 5px;
+	/* padding: 5px; */
+	/* padding still buggy */
 	border: 3px solid #339999;
 	width: 35px; height: 35px;
 	background-color: rgba(192, 192, 192, 0.75);
