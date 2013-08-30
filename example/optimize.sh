@@ -1,1 +1,1 @@
-perl ../scripts/webmerge.pl -f conf/optimize.conf.xml -o -jpg -png
+perl ../scripts/webmerge.pl -f conf/optimize.conf.xml -o -jpg -png "$@"
