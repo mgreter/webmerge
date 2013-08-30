@@ -53,6 +53,9 @@ sub web_url ($)
 	# resolve the webroot absolute
 	my $root = abs_path($webroot);
 
+	# remove trailing slash
+	$root =~ s/\/+$//;
+
 	# remove docroot directory
 	# should leave an absolute url
 	# relative to the given webroot
