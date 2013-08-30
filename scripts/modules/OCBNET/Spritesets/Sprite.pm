@@ -28,7 +28,7 @@ sub debug
 	# debug filename
 	return sprintf(
 		'%s %s',
-		substr(File::Spec->abs2rel( $self->{'filename'}, '.' ), - 20),
+		substr(File::Spec->abs2rel( $self->{'filename'}, '.' ), - 16),
 		$self->SUPER::debug
 	);
 

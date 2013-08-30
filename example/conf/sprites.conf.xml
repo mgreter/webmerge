@@ -79,7 +79,7 @@
 	<merge id="default" disabled="false">
 
 		<!-- build fam spriteset -->
-		<css id="fam" step="fam" >
+		<css id="fam" step="fam" disabled="false" >
 
 			<!-- change directory -->
 			<chdir>fam</chdir>
@@ -98,7 +98,7 @@
 		</css>
 
 				<!-- build fam spriteset -->
-		<css id="hires" step="hires" >
+		<css id="hires" step="hires" disabled="false" >
 
 			<!-- change directory -->
 			<chdir>hires</chdir>
