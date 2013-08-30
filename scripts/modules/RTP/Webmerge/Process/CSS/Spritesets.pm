@@ -29,7 +29,7 @@ use RTP::Webmerge::IO qw(readfile);
 
 use RTP::Webmerge::IO::CSS qw($re_url wrapURL);
 
-use OCBNET::Spritesets qw(parseSpritesets);
+use OCBNET::Spritesets::CSS;
 
 ###################################################################################################
 
