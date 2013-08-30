@@ -470,6 +470,8 @@ sub read
 		$sprite->{'padding-right'} = 0 if $sprite->{'padding-right'} < 0;
 		$sprite->{'padding-bottom'} = 0 if $sprite->{'padding-bottom'} < 0;
 
+		die "no : ", $id unless $self->{'spritesets'}->{$id};
+
 		# add this sprite to the given spriteset
 		$self->{'spritesets'}->{$id}->add($sprite);
 	}

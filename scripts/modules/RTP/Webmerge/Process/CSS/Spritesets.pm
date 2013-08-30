@@ -56,15 +56,37 @@ sub spritesets
 	# parse spritesets and insert bg styles
 	# ${$data} = ${ parseSpritesets($data, $from, $to, $config->{'atomic'}) };
 
+	my $css = OCBNET::Spritesets::CSS->new();
+
+	my $rv = 0;
+
+	$css->read($data);
+
+	# parse selectors
+	# split declarations
+	$css->parse();
+
+	# write spritesets
+	$css->write();
+
+	# process spriteset
+	# sets sprite positions
+	$css->process();
+
+	# render resulting css
+	${$data} = $css->render;
+
+# die length($$data);
+
 	# parse spritesets and insert bg styles
-	my $rv = parseSpritesets($config, $data, $from, $to, $config->{'atomic'});
+	# my $rv = parseSpritesets($config, $data, $from, $to, $config->{'atomic'});
 
 	# assign the new css code
-	${$data} = ${$rv->[0]};
+	# ${$data} = ${$rv->[0]};
 
 	# check if we are optimizing
 	# if so we may should optimize images
-	if ($config->{'optimize'})
+	if (0 || $config->{'optimize'})
 	{
 		# load function from main module
 		use RTP::Webmerge qw(runProgram);
