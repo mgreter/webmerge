@@ -79,7 +79,7 @@ sub importURI
 	# check if url is absolute -> resolve from our webroot
 	if ($url =~ m/^\// && $config && $config->{'webroot'})
 	{
-		use RTP::Webmerge::Path qw(resolve_path);	
+		use RTP::Webmerge::Path qw(resolve_path);
 		$url = join('/', resolve_path($config->{'webroot'}), $url);
 	}
 
@@ -172,7 +172,7 @@ sub exportCSS
 
 	# change all absolute urls in this css to relative paths
 	# also look for comments, but do not change them in the function
-	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || exportURI($2, $path, $config)/egm;
+	${$data} =~ s/$re_url/exportURI($1, $path, $config)/egm;
 
 	# call io function to write the file atomically
 	return writefile($path, $data, $config->{'atomic'})
