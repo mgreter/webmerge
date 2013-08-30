@@ -31,13 +31,14 @@
 	</config>
 
 	<!-- prepare operations -->
-	<prepare id="prepare" step="fam" disabled="false" >
+	<prepare step="fam" disabled="false" >
 		<!-- create neccessary paths -->
 		<mkdir path="fam/generated" />
+	<mkdir path="fam/generated/img" />
 	</prepare>
 
 	<!-- prepare operations -->
-	<prepare id="prepare" step="hires" disabled="false" >
+	<prepare step="hires" disabled="false" >
 		<!-- create neccessary paths -->
 		<mkdir path="hires/generated" />
 		<mkdir path="hires/generated/img" />

@@ -14,7 +14,7 @@ open(my $html, ">", "fam.html") or die "open fam.html: $!";
 
 my @files = grep { -f join('/', $root, $_) } sort readdir($dh);
 
-print $css "\n /* sprite-id: fam; sprite-image: url(../generated/fam.png); */ \n\n";
+print $css "\n /* sprite-id: fam; sprite-image: url(../generated/img/fam.png); */ \n\n";
 
 print $html "<html>\n";
 print $html "<head><title>FAM Spriteset</title></head>\n";
