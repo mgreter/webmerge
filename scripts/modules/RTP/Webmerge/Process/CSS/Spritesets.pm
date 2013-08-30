@@ -60,14 +60,9 @@ sub spritesets
 
 	my $rv = 0;
 
-	$css->read($data);
+	$css->read($data, $config->{'atomic'});
 
-	# parse selectors
-	# split declarations
-	$css->parse();
-
-	# write spritesets
-	$css->write();
+	my $written = $css->write($config->{'atomic'});
 
 	# process spriteset
 	# sets sprite positions
@@ -86,12 +81,12 @@ sub spritesets
 
 	# check if we are optimizing
 	# if so we may should optimize images
-	if (0 || $config->{'optimize'})
+	if ($config->{'optimize'})
 	{
 		# load function from main module
 		use RTP::Webmerge qw(runProgram);
 		# call all possible optimizers
-		foreach my $program (keys %{$rv->[1]})
+		foreach my $program (keys %{$written})
 		{
 			# check if this program should run or not
 			next unless $config->{'optimize-' . $program};
@@ -109,7 +104,7 @@ sub spritesets
 					# optimize the temp path
 					${*$_}{'io_atomicfile_temp'}
 				}
-				@{$rv->[1]->{$program}}
+				@{$written->{$program}}
 
 			], $program . ' sprites');
 		}
