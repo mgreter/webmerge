@@ -51,7 +51,7 @@ sub web_url ($)
 	$path = join("/", abs_path(dirname($path)), basename($path));
 
 	# resolve the webroot absolute
-	my $root = join("/", abs_path(dirname($webroot)), basename($webroot));
+	my $root = abs_path($webroot);
 
 	# remove docroot directory
 	# should leave an absolute url
