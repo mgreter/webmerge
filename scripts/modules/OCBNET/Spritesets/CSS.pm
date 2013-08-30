@@ -337,10 +337,10 @@ sub read
 			'size-y' => fromPx($selector->style('background-size-y')) || undef,
 			'repeat-x' => $selector->style('background-repeat-x') || 0,
 			'repeat-y' => $selector->style('background-repeat-y') || 0,
-			'position-x' => $selector->style('background-position-x') || 0,
-			'position-y' => $selector->style('background-position-y') || 0,
-			'position2-x' => $selector->style('background-position-x') || 0,
-			'position2-y' => $selector->style('background-position-y') || 0,
+			'position-x' => fromPosition($selector->style('background-position-x') || 0),
+			'position-y' => fromPosition($selector->style('background-position-y') || 0),
+			'position2-x' => fromPosition($selector->style('background-position-x') || 0),
+			'position2-y' => fromPosition($selector->style('background-position-y') || 0),
 			'enclosed-x' => fromPx($selector->style('width') || 0) || 0,
 			'enclosed-y' => fromPx($selector->style('height') || 0) || 0
 		});
