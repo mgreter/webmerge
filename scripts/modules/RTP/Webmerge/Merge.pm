@@ -39,7 +39,7 @@ use RTP::Webmerge::Compile::CSS;
 ###################################################################################################
 
 # module for atomic ops
-use IO::AtomicFile;
+use RTP::IO::AtomicFile;
 
 # store atomic file handles
 # commit/revert all at the end
@@ -109,6 +109,8 @@ sub mergeWrite
 			# $item->{'md5sum'} = md5sum($item->{'data'}) unless ($item->{'md5sum'});
 			# create a relative path from the current checksum file
 			my $rel_path = abs2rel($item->{'local_path'}, dirname($checksum_path));
+			# normalize windows paths and other anomalies
+			$rel_path =~ s/\\+/\//g; $rel_path =~ s/\/+/\//g;
 			# append checksum for every input file to be appended to our crc file
 			$crc_listning .= join(': ', $rel_path, $item->{'md5sum'}) . "\n";
 			# concatenate md5sums of all items

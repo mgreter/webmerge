@@ -15,7 +15,7 @@ use FindBin qw($Bin);
 
 # insert our module directory to lib search directory
 # we want to keep our modules local and not install global
-BEGIN { push @INC, "$Bin/modules"; }
+BEGIN { unshift @INC, "$Bin/modules"; }
 
 ################################################################################
 
@@ -416,6 +416,9 @@ $config->{'temps'} = [];
 # setup teardown handlers before main program
 ################################################################################
 
+# get the mother pid
+my $pid = $$;
+
 # exit on ctrl+c, this make sure
 # that the end handler is called
 local $SIG{'INT'} = sub { exit; };
@@ -424,10 +427,15 @@ local $SIG{'INT'} = sub { exit; };
 # when the main script exists
 END
 {
-	# delete all temporarily created files
-	foreach (@{$config->{'temps'} || []}) { unlink $_ if -e $_; }
-	# delete all atomic temporarily files (struct: [data, blessed])
-	foreach (values %{$config->{'atomic'} || {}}) { $_->[1]->delete; }
+	# only mother takes care of this
+	if ($pid == $$)
+	{
+		# delete all temporarily created files
+		foreach (@{$config->{'temps'} || []}) { unlink $_ if -e $_; }
+		# delete all atomic temporarily files (struct: [data, blessed])
+		foreach (values %{$config->{'atomic'} || {}}) { $_->[1]->delete; }
+	}
+	# EO if mother
 }
 
 
