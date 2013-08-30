@@ -41,6 +41,9 @@
 		<fingerprint-dev>query</fingerprint-dev>
 		<fingerprint-live>query</fingerprint-live>
 
+		<!-- enable external sources per domain and configure referer for download -->
+		<!-- <external href="http://fast.fonts.com/" referer="http://www.domain.com/" /> -->
+
 	</config>
 
 	<!-- feature detection for dev context -->
