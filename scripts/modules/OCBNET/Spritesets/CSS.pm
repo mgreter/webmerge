@@ -36,7 +36,7 @@ my $re_options = qr/$re_option(?:\s*$re_option)*/m;
 
 # import functions from IO module
 use RTP::Webmerge::IO qw(writefile);
-use IO::AtomicFile;
+use RTP::IO::AtomicFile;
 
 sub fromPosition
 {

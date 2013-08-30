@@ -56,6 +56,13 @@ sub web_url ($)
 	# remove trailing slash
 	$root =~ s/\/+$//;
 
+	# replace backward slashes
+	# replace multiple slashes
+	$path =~ s/\\+/\//g;
+	$path =~ s/\/+/\//g;
+	$root =~ s/\\+/\//g;
+	$root =~ s/\/+/\//g;
+
 	# remove docroot directory
 	# should leave an absolute url
 	# relative to the given webroot
@@ -76,8 +83,18 @@ sub web_path ($)
 	# get path string
 	my ($abs_webpath) = @_;
 
+	# resolve the webroot absolute
+	my $root = abs_path($webroot);
+
+	# replace backward slashes
+	# replace multiple slashes
+	$abs_webpath =~ s/\\+/\//g;
+	$abs_webpath =~ s/\/+/\//g;
+	$root =~ s/\\+/\//g;
+	$root =~ s/\/+/\//g;
+
 	# return web path
-	return join('/', $webroot, $abs_webpath);
+	return join('/', $root, $abs_webpath);
 
 }
 

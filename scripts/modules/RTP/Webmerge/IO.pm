@@ -207,7 +207,7 @@ sub writefile ($$;$$)
 	${$data} =~ s/(?:\r\n|\n\r)/\n/gm unless $binary;
 
 	# open the file via atomic interface
-	# my $fh = IO::AtomicFile->open($file, 'w');
+	# my $fh = RTP::IO::AtomicFile->open($file, 'w');
 
 	my $dir = dirname $file;
 	
@@ -233,7 +233,7 @@ sub writefile ($$;$$)
 	else
 	{
 		# open the file via atomic interface
-		$fh = IO::AtomicFile->new;
+		$fh = RTP::IO::AtomicFile->new;
 		# append another suffix as some optimizers
 		# already use the same, be on the save side
 		${*$fh}{'io_atomicfile_suffix'} = '.webmerge';
