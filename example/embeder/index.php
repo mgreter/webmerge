@@ -8,8 +8,11 @@
 			// declare path and rootline array
 			$path = ''; $rootline =  array();
 
+			// get the path info without issuing a warning and sensible default
+			$pathinfo = isset ($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+
 			// process each directory in full path
-			foreach (explode('/', $_SERVER['PATH_INFO']) as $pid) {
+			foreach (explode('/', $pathinfo) as $pid) {
 
 				// prepend full path into our rootline
 				array_unshift($rootline, $path .= $pid . '/');

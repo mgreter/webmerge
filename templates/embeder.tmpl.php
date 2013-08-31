@@ -34,7 +34,9 @@ class tx_rtpwebmerge_embed_data {
 
 		}
 
-		return end(array_values($rootline));
+		$array = array_values($rootline);
+
+		return end($array);
 
 	}
 
@@ -66,6 +68,10 @@ class tx_rtpwebmerge_embed_data {
 
 			// get the include files for domain and context
 		$incfiles = self::$includes[$did][$context];
+
+			// avoid php warnings
+		if (!isset($incfiles))
+		{ $incfiles = array(); }
 
 			// no debug message by default
 		$debugmsg = '';
