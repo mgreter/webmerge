@@ -76,11 +76,11 @@ sub _importURI
 	my ($url, $cssfile, $config) = @_;
 
 	# check if url is absolute -> resolve from our webroot
-	if ($url =~ m/^\// && $config && $config->{'webroot'})
-	{
-		use RTP::Webmerge::Path qw(resolve_path);
-		$url = join('/', resolve_path($config->{'webroot'}), $url);
-	}
+	# if ($url =~ m/^\// && $config && $config->{'webroot'})
+	# {
+	# 	use RTP::Webmerge::Path qw(resolve_path);
+	# 	$url = join('/', resolve_path($config->{'webroot'}), $url);
+	# }
 
 	# check if the url is actually
 	return $url if ($url =~ m/^(?:[a-zA-Z]+\:)?\/\//);
