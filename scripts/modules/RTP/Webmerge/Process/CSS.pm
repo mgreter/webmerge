@@ -28,7 +28,7 @@ use IO::Scalar;
 use MIME::Base64 qw(encode_base64);
 
 # use mimeinfo to detect mimetypes
-use File::MimeInfo::Magic qw(mimetype);
+use File::MimeInfo::Simple qw(mimetype);
 
 # load spriteset preprocessor (experimental)
 use RTP::Webmerge::Process::CSS::Spritesets qw();
@@ -266,12 +266,10 @@ sub process_url
 		$info->{'seen'} = $seen;
 
 		# read the linked url locally
-		$dataref = readfile($url, $config->{'atomic'});
-
-		my $io_scalar = new IO::Scalar $dataref;
+		# $dataref = readfile($url, $config->{'atomic'});
 
 		# get mimetype from file
-		$mimetype = mimetype($io_scalar);
+		$mimetype = mimetype($url);
 
 	}
 
