@@ -102,6 +102,8 @@ sub readfile ($;$$)
 	# get input variables
 	my ($file, $atomic, $binary) = @_;
 
+	$file =~ s/[\/\\]+/\//g;
+
 	# check if file has already beed written
 	if ($atomic && exists $atomic->{$file})
 	{ return $atomic->{$file}->[0]; }
@@ -128,6 +130,8 @@ sub readfile ($;$$)
 
 	}
 
+	$file =~ s/[\/\\]+/\//g;
+
 	# check if file has already beed written
 	if ($atomic && exists $atomic->{$file})
 	{ return $atomic->{$file}->[0]; }
@@ -136,10 +140,13 @@ sub readfile ($;$$)
 	my $rv, my $data = '';
 
 	# open the file
-	croak "could not open $file: $!" unless sysopen(my $fh, $file, O_RDONLY);
+	croak "could not open $file: $!" unless sysopen(my $fh, $file, O_RDWR);
 
 	# aquire exclusive lock on the file (will block)
 	croak "could not lock $file: $!" unless lock_file($fh, LOCK_EX, 4);
+
+	# use binmode
+	$fh->binmode;
 
 	# read the whole file buffer by buffer
 	while($rv = sysread($fh, my $buffer, 4096)) { $data .= $buffer; }
@@ -197,6 +204,8 @@ sub writefile ($$;$$)
 
 	}
 
+	$file =~ s/[\/\\]+/\//g;
+
 	# declare local variables
 	my $rv = undef;
 
@@ -210,16 +219,18 @@ sub writefile ($$;$$)
 	# my $fh = RTP::IO::AtomicFile->open($file, 'w');
 
 	my $dir = dirname $file;
-	
+
 	die "directory does not exist: ", $dir unless -d $dir;
-	
+
 	# looks like we already written this file
 	# truncate, sync and unlock, then write again
 	if (exists $atomic->{$file})
 	{
-	
+
 		# get the stored old handle
 		$fh = $atomic->{$file}->[1];
+		# enable autoflush
+		# $fh->autoflush(1);
 		# set the position to start
 		$fh->seek(0, SEEK_SET);
 		$fh->sysseek(0, SEEK_SET);
@@ -240,7 +251,7 @@ sub writefile ($$;$$)
 		# open the file via atomic interface
 		$fh->open($file, 'w');
 	}
-	
+
 	die "could not open file: $file: $!" unless defined $fh;
 
 	# use binmode
@@ -253,7 +264,7 @@ sub writefile ($$;$$)
 	croak "could not lock $file: $!" unless lock_file($fh, LOCK_EX, 4);
 
 	# $file = ${*$fh}{'io_atomicfile_temp'} if ${*$fh}{'io_atomicfile_temp'};
-	
+
 	# only store if atomic is given
 	$atomic->{$file} = [$out, $fh] if $atomic;
 
@@ -271,7 +282,7 @@ sub writefile ($$;$$)
 	croak "unknown write error: $!" unless $rv == 0;
 
 	flock($fh, LOCK_UN);
-	
+
 	# return file handle
 	# store to block file
 	return $fh

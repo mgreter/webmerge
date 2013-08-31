@@ -34,9 +34,6 @@ our $re_number = qr/[+-]?[0-9]*\.?[0-9]+/s;
 my $re_option = qr/\w(?:\w|-)*\s*:\s*[^;]+;/;
 my $re_options = qr/$re_option(?:\s*$re_option)*/m;
 
-# import functions from IO module
-use RTP::Webmerge::IO qw(writefile);
-use RTP::IO::AtomicFile;
 
 sub fromPosition
 {
@@ -166,7 +163,7 @@ sub write
 	my %written;
 
 	# get passed arguments
-	my ($self, $atomic) = @_;
+	my ($self, $writer) = @_;
 
 	foreach my $name (keys %{$self->{'spritesets'}})
 	{
@@ -188,37 +185,7 @@ sub write
 			$image->Set(magick => 'png');
 			my $blob = $image->ImageToBlob();
 			my $file = fromUrl($url);
-			if ($atomic->{$file})
-			{
-				# file has already been written
-				if (${$atomic->{$file}->[0]} ne $blob)
-				{
-
-					# open(my $fh1, ">", 'out1.tst');
-					# open(my $fh2, ">", 'out2.tst');
-
-					# print $fh1 ${$atomic->{$file}->[0]};
-					# print $fh2 $blob;
-
-					# die "cannot write same file with different content: $file";
-
-					# strange enough this can happen with spritesets
-					# the differences are very subtile, but no idea why
-					warn "writing same file with different content: $file\n";
-
-				}
-				else
-				{
-					warn "writing same file more than once: $file\n";
-				}
-			}
-			else
-			{
-				my $handle = writefile($file, \$blob, $atomic, 1);
-				unless (exists $written{'png'})
-				{ $written{'png'} = []; }
-				push(@{$written{'png'}}, $handle);
-			}
+			$writer->($file, $blob, \%written);
 
 		}
 

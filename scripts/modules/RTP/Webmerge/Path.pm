@@ -92,6 +92,7 @@ sub web_path ($)
 	$abs_webpath =~ s/\/+/\//g;
 	$root =~ s/\\+/\//g;
 	$root =~ s/\/+/\//g;
+	$root =~ s/\/$//g;
 
 	# return web path
 	return join('/', $root, $abs_webpath);
@@ -119,6 +120,8 @@ sub resolve_path ($)
 	# return if path is already absolute
 	return $path if $path =~m /^(?:\/|[a-zA-Z]:)/;
 
+	$path =~ s/[\/\\]+/\//g;
+
 	# prepended current directory and return
 	return join('/', $directory || '.', $path);
 
@@ -132,7 +135,7 @@ sub res_path ($)
 
 	# resolve the path string
 	my $path = &resolve_path;
-
+	$path =~ s/[\/\\]+/\//g;
 	# create absolute path for the directory and re-add filename
 	return join('/', abs_path(dirname($path)), basename($path));
 
@@ -144,6 +147,7 @@ sub fast_res_path ($)
 
 	# resolve the path string
 	my $path = &resolve_path;
+	$path =~ s/[\/\\]+/\//g;
 
 	# create absolute path for the directory and re-add filename
 	return join('/', fast_abs_path(dirname($path)), basename($path));

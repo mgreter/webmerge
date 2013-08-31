@@ -22,12 +22,18 @@ BEGIN { our @EXPORT = qw(spritesets); }
 ###################################################################################################
 
 # load some constants
-use Fcntl qw(LOCK_UN);
+use Fcntl qw(LOCK_UN O_RDWR);
 
 # import functions from IO module
 use RTP::Webmerge::IO qw(readfile);
 
-use RTP::Webmerge::IO::CSS qw($re_url wrapURL);
+use RTP::Webmerge::IO::CSS qw($re_url wrapURL exportURI);
+
+use RTP::Webmerge::Path qw(web_url web_path);
+
+use RTP::Webmerge::Path qw($webroot);
+
+use RTP::Webmerge::IO qw(writefile);
 
 use OCBNET::Spritesets::CSS;
 
@@ -62,7 +68,50 @@ sub spritesets
 
 	$css->read($data, $config->{'atomic'});
 
-	my $written = $css->write($config->{'atomic'});
+	my $written = $css->write(sub
+	{
+
+		my ($file, $blob, $written) = @_;
+
+		$file =~ s/[\/\\]+/\//g;
+
+		my $atomic = $config->{'atomic'};
+
+			if ($atomic->{$file})
+			{
+				# file has already been written
+				if (${$atomic->{$file}->[0]} ne $blob)
+				{
+
+					# open(my $fh1, ">", 'out1.tst');
+					# open(my $fh2, ">", 'out2.tst');
+
+					# print $fh1 ${$atomic->{$file}->[0]};
+					# print $fh2 $blob;
+
+					# die "cannot write same file with different content: $file";
+
+					# strange enough this can happen with spritesets
+					# the differences are very subtile, but no idea why
+					warn "writing same file with different content: $file\n";
+
+				}
+				else
+				{
+					warn "writing same file more than once: $file\n";
+				}
+			}
+			else
+			{
+				$file = web_path(web_url($file));
+
+				my $handle = writefile($file, \$blob, $atomic, 1);
+				die "error write $file" unless $handle;
+				unless (exists $written->{'png'})
+				{ $written->{'png'} = []; }
+				push(@{$written->{'png'}}, $handle);
+			}
+	});
 
 	# process spriteset
 	# sets sprite positions
@@ -90,23 +139,27 @@ sub spritesets
 		{
 			# check if this program should run or not
 			next unless $config->{'optimize-' . $program};
+
+			foreach (@{$written->{$program}})
+			{
+				CORE::close($_);
+			}
+
 			# call the external program on all files
 			runProgram($config, $program . 'opt',
 			[
-
 				map {
-					# sync to disk
-					$_->sync if $^O ne "MSWin32";
-					# release locks
-					flock($_, LOCK_UN);
-					# close immediately on windows
-					close($_) if $^O eq "MSWin32";
 					# optimize the temp path
 					${*$_}{'io_atomicfile_temp'}
 				}
 				@{$written->{$program}}
-
 			], $program . ' sprites');
+
+			foreach (@{$written->{$program}})
+			{
+				sysopen($_, ${*$_}{'io_atomicfile_temp'}, O_RDWR)
+			}
+
 		}
 		# EO each program
 	}
