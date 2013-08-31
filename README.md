@@ -31,6 +31,10 @@ Tested versions:
 
 The latest Graphics Magick may not support the latest Strawberry Perl!
 
+Installing Closure Compiler
+===========================
+Go into the scripts/closure-compiler directory and execute the update script.
+
 Installing on Linux/Mac
 =======================
 Perl should already be installed and ready. You should be able
@@ -40,10 +44,10 @@ www.cpan.org and then be put into the script/modules directory.
 
 Installing Perl Modules
 =======================
-    perl -MCPAN -e "install File::MimeInfo"
     perl -MCPAN -e "install CSS::Minifier"
     perl -MCPAN -e "install JavaScript::Minifier"
     perl -MCPAN -e "install Data::Dump::PHP"
+    perl -MCPAN -e "install File::MimeInfo::Simple"
     # modules are only needed for watcher
 	perl -MCPAN -e "install IPC::Run3"
     perl -MCPAN -e "install Filesys::Notify::Simple"
@@ -54,11 +58,11 @@ Installing on Gentoo Linux
     USE="perl png jpeg q16" \
     emerge -u media-gfx/graphicsmagick
 	# install needed perl modules
-    emerge -u dev-perl/File-MimeInfo
     emerge -u dev-perl/CSS-Minifier
     emerge -u dev-perl/JavaScript-Minifier
     # Data::Dump::PHP has no ebuild yet
     perl -MCPAN -e "install Data::Dump::PHP"
+    perl -MCPAN -e "install File::MimeInfo::Simple"
     # modules are only needed for watcher
     emerge -u dev-perl/IPC-Run3
     emerge -u dev-perl/Filesys-Notify-Simple
