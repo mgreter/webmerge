@@ -18,7 +18,6 @@ To Do
 - Integrate a SASS processor
 - Add additional Optimizers (pngcrush, advzip, advmng)
 
-
 Installing on Windows
 =====================
 You need to install Strawberry Perl and GraphicsMagick:
@@ -30,10 +29,6 @@ Tested versions:
 - GraphicsMagick-1.3.18-Q16-win64-dll.exe
 
 The latest Graphics Magick may not support the latest Strawberry Perl!
-
-Installing Closure Compiler
-===========================
-Go into the scripts/closure-compiler directory and execute the update script.
 
 Installing on Linux/Mac
 =======================
@@ -66,6 +61,10 @@ Installing on Gentoo Linux
     # modules are only needed for watcher
     emerge -u dev-perl/IPC-Run3
     emerge -u dev-perl/Filesys-Notify-Simple
+
+Installing Closure Compiler
+===========================
+Go into the scripts/closure-compiler directory and execute the update script.
 
 Other external optimizers
 =========================
