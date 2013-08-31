@@ -77,6 +77,12 @@ Using Webmerge
 ==============
 Documentation not yet done. See example directory for hints.
 
+Demo Examples
+=============
+- http://webmerge.ocbnet.ch/webmerge/example/embeder/
+- http://webmerge.ocbnet.ch/webmerge/example/sprites/fam/
+- http://webmerge.ocbnet.ch/webmerge/example/sprites/hires/
+
 Credits
 =======
 Developement was mostly done while working at http://www.rtp.ch.
