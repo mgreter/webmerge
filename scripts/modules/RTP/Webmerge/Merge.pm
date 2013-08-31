@@ -66,13 +66,23 @@ use RTP::Webmerge::IO::JS;
 use RTP::Webmerge::IO::CSS;
 
 my %reader = (
+	'js' => \&readJS,
+	'css' => \&readCSS
+);
+
+my %importer = (
 	'js' => \&importJS,
 	'css' => \&importCSS
 );
 
-my %writer = (
+my %exporter = (
 	'js' => \&exportJS,
 	'css' => \&exportCSS
+);
+
+my %writer = (
+	'js' => \&writeJS,
+	'css' => \&writeCSS
 );
 
 ###################################################################################################
@@ -117,6 +127,10 @@ sub mergeWrite
 			$crc_joined .= $item->{'md5sum'};
 		}
 	}
+
+	# write the real output file ...
+	$exporter{$type}->($output_path, $data, $config)
+		or die "could not export <$output_path>: $!";
 
 	# calculate md5sum of joined md5sums
 	my $md5_joined = md5sum(\$crc_joined);
@@ -226,6 +240,9 @@ sub mergeCollect
 
 					# get the md5sum of the unaltered data (otherwise crc may not be correct)
 					my $md5sum = md5sum($data) or die "could not get md5sum from data: $!";
+
+					# importer can alter the data after the checksum has been taken
+					$importer{$type}->($data, $local_path, $config) or die "could not import <$local_path>: $!";
 
 					# call processors (will return if nothing is set)
 					callProcessor($item->{'process'}, $data, $config, $item);
@@ -606,7 +623,7 @@ sub merge
 
 	# get input variables
 	my ($config, $merges) = @_;
-	
+
 	# should we commit filesystem changes?
 	my $commit = $merges->{'commit'} || 0;
 

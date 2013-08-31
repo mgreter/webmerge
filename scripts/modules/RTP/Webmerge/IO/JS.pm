@@ -17,7 +17,7 @@ BEGIN { $RTP::Webmerge::IO::JS::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(importJS exportJS); }
+BEGIN { our @EXPORT = qw(readJS importJS exportJS writeJS); }
 
 # define our functions to be exported
 BEGIN { our @EXPORT_OK = qw(); }
@@ -30,7 +30,7 @@ use RTP::Webmerge::IO qw(readfile writefile);
 ###################################################################################################
 
 # read a js file from the disk
-sub importJS
+sub readJS
 {
 
 	# get input variables
@@ -48,10 +48,24 @@ sub importJS
 }
 # EO importJS
 
+# mangle JS
+sub importJS
+{
+	return 1;
+}
+# EO importJS
+
+# mangle JS
+sub exportJS
+{
+	return 1;
+}
+# EO exportJS
+
 ###################################################################################################
 
 # write a js file to the disk
-sub exportJS
+sub writeJS
 {
 
 	# get input variables
@@ -61,7 +75,7 @@ sub exportJS
 	return writefile($path, $data, $config->{'atomic'})
 
 }
-# EO exportJS
+# EO writeJS
 
 ###################################################################################################
 ###################################################################################################

@@ -23,10 +23,10 @@ BEGIN { $RTP::Webmerge::IO::CSS::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(importCSS exportCSS); }
+BEGIN { our @EXPORT = qw(readCSS importCSS exportCSS writeCSS); }
 
 # define our functions to be exported
-BEGIN { our @EXPORT_OK = qw($re_url wrapURL); }
+BEGIN { our @EXPORT_OK = qw($re_url wrapURL exportURI importURI _importURI); }
 
 ###################################################################################################
 
@@ -39,7 +39,7 @@ use RTP::Webmerge::IO qw(readfile writefile);
 
 use RTP::Webmerge::Path qw($webroot);
 
-use RTP::Webmerge::Path qw(web_url);
+use RTP::Webmerge::Path qw(web_url web_path);
 
 use Cwd qw(realpath);
 
@@ -70,9 +70,8 @@ sub wrapURL
 
 # check if url is available
 # and make the path absolute
-sub importURI
+sub _importURI
 {
-
 	# get the url and css path
 	my ($url, $cssfile, $config) = @_;
 
@@ -84,7 +83,7 @@ sub importURI
 	}
 
 	# check if the url is actually
-	return wrapURL($url) if ($url =~ m/^(?:[a-zA-Z]+\:)?\/\//);
+	return $url if ($url =~ m/^(?:[a-zA-Z]+\:)?\/\//);
 
 	# remove hash tag and query string
 	# why is this needed for a static file?
@@ -103,7 +102,14 @@ sub importURI
 	$path = join('/', $path, basename($url));
 
 	# return the wrapped url
-	return wrapURL($path . $append);
+	return $path . $append;
+}
+
+sub importURI
+{
+
+	# return the wrapped url
+	return wrapURL(&_importURI);
 
 }
 # EO importURI
@@ -130,11 +136,8 @@ sub exportURI
 
 ###################################################################################################
 
-
 # read a css file from the disk
-# resolve all file paths absolute
-# http://www.w3.org/TR/CSS21/syndata.html#uri
-sub importCSS
+sub incCSS
 {
 
 	# get input variables
@@ -146,12 +149,51 @@ sub importCSS
 	# die with an error message that css file is not found
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
 
+	# resolve all css imports and include the data (also resolve the path)
+	${$data} =~ s/\@import\s+$re_url/${incCSS(_importURI($1, $cssfile, $config))}/gme;
+
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
 	${$data} =~ s/$re_url/importURI($1, $cssfile, $config)/egm;
 
-	# resolve all css imports and include in data
-	${$data} =~ s/\@import\s+$re_url/${importCSS($1)}/gme;
+	# return as string
+	return $data;
+
+}
+
+# read a css file from the disk
+sub readCSS
+{
+
+	# get input variables
+	my ($cssfile, $config) = @_;
+
+	# read complete css file
+	my $data = incCSS($cssfile, $config);
+
+	# change all relative urls in this css to absolute paths
+	# also look for comments, but do not change them in the function
+	# ${$data} =~ s/$re_url/die wrapURL(web_path(web_url($1)))/egm;
+	${$data} =~ s/$re_url/exportURI($1, $webroot, $config)/egm;
+
+	# return as string
+	return $data;
+
+}
+# EO importCSS
+
+# read a css file from the disk
+# resolve all file paths absolute
+# http://www.w3.org/TR/CSS21/syndata.html#uri
+sub importCSS
+{
+
+	# get input variables
+	my ($data, $cssfile, $config) = @_;
+
+	# change all relative urls in this css to absolute paths
+	# also look for comments, but do not change them in the function
+	# ${$data} =~ s/$re_url/importURI($1, $webroot, $config)/egm;
 
 	# return as string
 	return $data;
@@ -164,6 +206,19 @@ sub importCSS
 # write a css file to the disk
 # resolve all file paths relative
 # http://www.w3.org/TR/CSS21/syndata.html#uri
+sub writeCSS
+{
+
+	# get input variables
+	my ($path, $data, $config) = @_;
+
+	# call io function to write the file atomically
+	return writefile($path, $data, $config->{'atomic'})
+
+}
+# EO writeCSS
+
+# mangle CSS
 sub exportCSS
 {
 
@@ -174,8 +229,7 @@ sub exportCSS
 	# also look for comments, but do not change them in the function
 	${$data} =~ s/$re_url/exportURI($1, $path, $config)/egm;
 
-	# call io function to write the file atomically
-	return writefile($path, $data, $config->{'atomic'})
+	return 1;
 
 }
 # EO exportCSS

@@ -100,7 +100,7 @@ sub inlinedata
 	my $info = {};
 
 	# start search and replace
-	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || &process_url($config, $info, $2)/gme;
+	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || &inline_url($config, $info, $2)/gme;
 
 	# create lexical variables
 	my @duplicates, my $replaced = 0;
@@ -134,7 +134,7 @@ sub inlinedata
 
 # process a local url
 # return inline data
-sub process_url
+sub inline_url
 {
 
 	# get input variables
@@ -226,6 +226,11 @@ sub process_url
 		# remove any query string
 		$url =~ s/\?.*?$//;
 
+use RTP::Webmerge::Path qw($webroot);
+
+use RTP::Webmerge::IO::CSS qw(_importURI);
+		$url = _importURI($url, $webroot, $config);
+
 		# create pattern to decide which files to embed
 		my @exts = map { quotemeta } split(/\s*,\s*/, $config->{'inlinedataexts'});
 		my $embed_pattern = '\.(?:' . join('|', @exts) . ')$';
@@ -237,6 +242,8 @@ sub process_url
 
 		# get the filesize
 		my $size = 0;
+
+		$url =~ s/[\/\\]+/\//g;
 
 		# check if the file has already been written
 		unless (exists $config->{'atomic'}->{$url}) { $size = -s $url; }
@@ -266,7 +273,7 @@ sub process_url
 		$info->{'seen'} = $seen;
 
 		# read the linked url locally
-		# $dataref = readfile($url, $config->{'atomic'});
+		$dataref = readfile($url, $config->{'atomic'});
 
 		# get mimetype from file
 		$mimetype = mimetype($url);
@@ -280,7 +287,7 @@ sub process_url
 	return sprintf('url(data:%s;base64,%s)', $mimetype, encode_base64(${$dataref}, ''));
 
 }
-# EO sub process_url
+# EO sub inline_url
 
 ###################################################################################################
 
