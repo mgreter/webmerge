@@ -89,6 +89,9 @@
 			<input path="generate/fam.css" />
 
 			<!-- create output css files and the spriteset image -->
+			<output path="generated/dev.css" target="dev" />
+			<output path="generated/join.css" target="join" />
+			<output path="generated/pack.css" target="compile" />
 			<output path="generated/inline.join.css" target="join" process="inlinedata" />
 			<output path="generated/inline.pack.css" target="compile" process="inlinedata" />
 			<output path="generated/spritesets.join.css" preprocess="spritesets" target="join" />
@@ -108,6 +111,9 @@
 			<input path="css/sprites.css" />
 
 			<!-- create output css files and the spriteset image -->
+			<output path="generated/dev.css" target="dev" />
+			<output path="generated/join.css" target="join" />
+			<output path="generated/pack.css" target="compile" />
 			<output path="generated/inline.join.css" target="join" process="inlinedata" />
 			<output path="generated/inline.pack.css" target="compile" process="inlinedata" />
 			<output path="generated/spritesets.join.css" preprocess="spritesets" target="join" />
