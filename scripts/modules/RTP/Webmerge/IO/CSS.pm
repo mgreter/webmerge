@@ -71,7 +71,7 @@ sub wrapURL
 sub _importURI
 {
 	# get the url and css path
-	my ($url, $cssfile, $config) = @_;
+	my ($url, $csspath, $config) = @_;
 
 	# check if url is absolute -> resolve from our webroot
 	# if ($url =~ m/^\// && $config && $config->{'webroot'})
@@ -88,13 +88,13 @@ sub _importURI
 	my $append = $url =~ s/([\?\#].*?)$// ? $1 : '';
 
 	# create the path relative first
-	# my $path = join('', dirname($cssfile), $url);
+	# my $path = join('', $csspath, $url);
 
 	# create absolute path from the url if exists
-	my $path = realpath(rel2abs(dirname($url), dirname($cssfile)));
+	my $path = realpath(rel2abs(dirname($url), $csspath));
 
 	# check path on filesystem and
-	die "CSS url($url) in <$cssfile> not found\n" unless ($path && -e $path);
+	die "CSS url($url) in <$csspath> not found\n" unless ($path && -e $path);
 
 	# now re attach the file name for the resource
 	$path = join('/', $path, basename($url));
@@ -119,12 +119,12 @@ sub exportURI
 {
 
 	# get input variables
-	my ($url, $cssfile, $config) = @_;
+	my ($url, $csspath, $config) = @_;
 
 	# get absolute or relative path
 	my $path = $config->{'absoluteurls'}
 	           ? '/' . abs2rel($url, $webroot)
-	           : abs2rel($url, dirname($cssfile));
+	           : abs2rel($url, $csspath);
 
 	# return the wrapped url
 	return wrapURL($path);
@@ -148,11 +148,11 @@ sub incCSS
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
 
 	# resolve all css imports and include the data (also resolve the path)
-	${$data} =~ s/\@import\s+$re_url/${incCSS(_importURI($1, $cssfile, $config))}/gme if $config->{'import-css'};
+	${$data} =~ s/\@import\s+$re_url/${incCSS(_importURI($1, dirname($cssfile), $config))}/gme if $config->{'import-css'};
 
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
-	${$data} =~ s/$re_url/importURI($1, $cssfile, $config)/egm;
+	${$data} =~ s/$re_url/importURI($1, dirname($cssfile), $config)/egm;
 
 	# return as string
 	return $data;
@@ -221,11 +221,11 @@ sub exportCSS
 {
 
 	# get input variables
-	my ($path, $data, $config) = @_;
+	my ($file, $data, $config) = @_;
 
 	# change all absolute urls in this css to relative paths
 	# also look for comments, but do not change them in the function
-	${$data} =~ s/$re_url/exportURI($1, $path, $config)/egm;
+	${$data} =~ s/$re_url/exportURI($1, dirname($file), $config)/egm;
 
 	return 1;
 
