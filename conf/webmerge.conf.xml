@@ -10,8 +10,9 @@
 		<txt disabled="false">
 			<!-- clean all js and css files -->
 			<file path="." file="*.sh" recursive="true" type="linux" />
-			<file path="." file="*.js" recursive="true" type="linux" />
-			<file path="." file="*.css" recursive="true" type="linux" />
+			<file path="." file="*.js" recursive="true" type="auto" />
+			<file path="." file="*.css" recursive="true" type="auto" />
+			<file path="." file="*.html" recursive="true" type="auto" />
 			<file path="." file="*.md" recursive="true" type="auto" />
 			<file path="." file="*.pm" recursive="true" type="auto" />
 			<file path="." file="*.pl" recursive="true" type="auto" />
