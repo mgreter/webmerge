@@ -187,15 +187,11 @@ push @initers, sub
 	my ($config) = @_;
 
 	# assign default value to variable
-	# $config->{'inlinedatamax'} = 4096;
-
-	# extensions to be embeded in css
-	# $config->{'inlinedataexts'} = 'gif,jpg,jpeg,png';
+	# $config->{'option'} = 0;
 
 	# return additional get options attribute
 	return (
-		# 'inlinedatamax=i' => \ $config->{'cmd_inlinedatamax'},
-		# 'inlinedataexts=s' => \ $config->{'cmd_inlinedataexts'}
+		# 'option=s' => \ $config->{'option'}
 	);
 
 };
