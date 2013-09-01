@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 ###################################################################################################
 # http://optipng.sourceforge.net/pngtech/optipng.html
 # pngrewrite, pngcrush, OptiPNG, AdvanceCOMP (advpng), PNGOut
