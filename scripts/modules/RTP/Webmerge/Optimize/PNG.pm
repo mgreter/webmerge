@@ -2,7 +2,7 @@
 
 ###################################################################################################
 # http://optipng.sourceforge.net/pngtech/optipng.html
-# pngrewrite, pngcrush, OptiPNG, AdvanceCOMP (advpng), PNGOut 
+# pngrewrite, pngcrush, OptiPNG, AdvanceCOMP (advpng), PNGOut
 ###################################################################################################
 package RTP::Webmerge::Optimize::PNG;
 ###################################################################################################

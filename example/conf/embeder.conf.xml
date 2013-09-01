@@ -1,4 +1,4 @@
-﻿<xml>
+<xml>
 
 	<!-- include default configuration file (relative to this file) -->
 	<include src="{EXT}/conf/common.conf.xml" />

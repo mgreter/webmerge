@@ -1,4 +1,4 @@
-﻿# from http://www.perlmonks.org/?node_id=49335
+# from http://www.perlmonks.org/?node_id=49335
 # 26.06.2012 added can_dequeue function (mgr@rtp.ch)
 package Fork::Queue;
 use IO::Socket;

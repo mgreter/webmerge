@@ -35,13 +35,13 @@ sub prepare
 
 	# get input variables
 	my ($config, $prepare) = @_;
-	
+
 	# should we commit filesystem changes?
 	my $commit = $prepare->{'commit'} || 0;
 
 	# commit all changes to the filesystem if configured
 	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
-	
+
 	# do not process if disabled attribute is given and set to true
 	unless ($prepare->{'disabled'} && lc $prepare->{'disabled'} eq 'true')
 	{
@@ -81,7 +81,7 @@ sub prepare
 
 			# check if we do not copy a text file
 			my $bin = ($copy->{'text'} || '') ne "true";
-			
+
 			# copy the file binary if text is not set to true
 			my $data = readfile($src, $config->{'atomic'}, $bin);
 			writefile($dst, $data, $config->{'atomic'}, $bin);
