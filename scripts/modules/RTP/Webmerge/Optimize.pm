@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 ###################################################################################################
 # If you need to optimize other files, you may use this software
 # http://nikkhokkho.sourceforge.net/static.php?page=FileOptimizer
