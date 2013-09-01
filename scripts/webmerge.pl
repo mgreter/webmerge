@@ -743,6 +743,7 @@ webmerge [options] [steps]
    -w, --watchdog      start the watchdog process (quit with ctrl+c)
 
    --webroot           webroot directory to render absolute urls
+   --import-css        inline imported css files into stylesheet
    --absoluteurls      export urls as absolute urls (from webroot)
 
    --referer           optional referer url for external downloads

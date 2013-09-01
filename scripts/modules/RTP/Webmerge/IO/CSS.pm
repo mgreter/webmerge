@@ -148,7 +148,7 @@ sub incCSS
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
 
 	# resolve all css imports and include the data (also resolve the path)
-	${$data} =~ s/\@import\s+$re_url/${incCSS(_importURI($1, $cssfile, $config))}/gme;
+	${$data} =~ s/\@import\s+$re_url/${incCSS(_importURI($1, $cssfile, $config))}/gme if $config->{'import-css'};
 
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
@@ -211,7 +211,7 @@ sub writeCSS
 	my ($path, $data, $config) = @_;
 
 	# call io function to write the file atomically
-	return writefile($path, $data, $config->{'atomic'})
+	return writefile($path, $data, $config->{'atomic'}, 1)
 
 }
 # EO writeCSS
@@ -244,13 +244,19 @@ push @initers, sub
 	# get input variables
 	my ($config) = @_;
 
+	# include imported css files
+	$config->{'import-css'} = 1;
+
 	# should we use absolute urls
 	# otherwise includes will be relative
 	# for this option we need to webroot path
 	$config->{'absoluteurls'} = 0;
 
 	# return additional get options attribute
-	return ('absoluteurls=i' => \ $config->{'cmd_absoluteurls'});
+	return (
+		'import-css!' => \ $config->{'cmd_import-css'}
+		'absoluteurls=i' => \ $config->{'cmd_absoluteurls'}
+	);
 
 };
 # EO plugin initer
