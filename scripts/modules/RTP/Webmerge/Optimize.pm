@@ -119,14 +119,17 @@ sub fileOptimizer ($)
 				# declare lexical variables
 				my $file = $entry->{'file'};
 				my $path = $entry->{'path'} || '.';
-				my $disabled = $entry->{'disabled'};
-				my $recursive = $entry->{'recursive'};
+				my $disabled = $entry->{'disabled'} || 'false';
+				my $recursive = $entry->{'recursive'} || 'false';
 
 				# do not process if entry has been disabled
 				return if $disabled && lc $disabled eq 'true';
 
 				# create pattern for logging
 				my $pattern = join('/', $path, $file);
+
+				# make sure we pass a boolean value
+				$recursive = 0 if $recursive eq 'false';
 
 				# get all files for the resolved path and pattern
 				my $files = filelist(res_path($path), $file, $recursive);
