@@ -1,5 +1,7 @@
 @echo off
 
+cd "%~dp0"
+
 REM You need to have the unix utils installed
 REM http://unxutils.sourceforge.net/UnxUtils.zip
 
