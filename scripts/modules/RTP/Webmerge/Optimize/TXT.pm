@@ -53,11 +53,11 @@ sub cleantxt ($$;$)
 
 	# trim trailing whitespace
 	if ($config->{'txt-trim-trailing'})
-	{ ${$data} =~ s/(?:\s|\t)+$//g; }
+	{ ${$data} =~ s/[ \f\t]+(?=[\n\r])//gm; }
 
 	# convert newlines to desired type
 	if ($config->{'txt-normalize-eol'})
-	{ ${$data} =~ s/(?:\r\n|\n\r|\n|\r)/$eol/g; }
+	{ ${$data} =~ s/(?:\r\n|\n\r|\n|\r)/$eol/gm; }
 
 	# return success
 	return 1;
