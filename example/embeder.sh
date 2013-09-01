@@ -1,7 +1,7 @@
 #!/bin/sh
 
-pushd `dirname $0`
+pushd `dirname $0` > /dev/null
 
 ../webmerge.sh -f conf/embeder.conf.xml "$@"
 
-popd
+popd > /dev/null
