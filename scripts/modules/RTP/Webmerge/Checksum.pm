@@ -26,7 +26,7 @@ use File::Spec::Functions qw(abs2rel);
 # load our local modules
 use RTP::Webmerge::IO;
 use RTP::Webmerge::Path;
-
+use RTP::Webmerge::IO::CSS qw(readCSS);
 use RTP::Webmerge::Fingerprint qw(md5sum);
 
 ###################################################################################################
@@ -86,11 +86,12 @@ sub crcCheckEntry
 			# check if the generated content changed
 			if (md5sum($content) ne $checksum_result)
 			{
-				printf "FAIL - dst: %s\n", web_url $result_path;
+				printf "sFAIL - src: %s\n", substr(web_url($result_path), - 45);
+				printf "=> %s vs %s\n", md5sum($content), $checksum_result;
 			}
 			else
 			{
-				printf "PASS - dst: %s\n", web_url $result_path;
+				printf "PASS - dst: %s\n", substr(web_url($result_path), - 45);
 			}
 
 			# declare local variable
@@ -106,16 +107,22 @@ sub crcCheckEntry
 				# source_path is always relative from the readed checksum file
 				$source_path = res_path(join('/', dirname($checksum_path), $source_path));
 
-				$crcs_joined .= my $source_md5 = md5sum(readfile($source_path)) || 'na';
+				# read the previously created file
+				my $subcontent = $type ne 'css' ?
+				                 readfile($source_path) :
+				                 readCSS($source_path, $config);
+
+				$crcs_joined .= my $source_md5 = md5sum($subcontent) || 'na';
 
 				# check against stored value
 				if ($source_md5 ne $source_crc)
 				{
-					printf "  FAIL - src: %s - %s - %s\n", web_url $source_path, $source_md5, $source_crc;
+					printf "  FAIL - src: %s\n", substr(web_url($source_path), - 45);
+					printf "  => %s vs %s\n", $source_md5, $source_crc;
 				}
 				else
 				{
-					printf "  PASS - src: %s\n", web_url $source_path;
+					printf "  PASS - src: %s\n", substr(web_url($source_path), - 45);
 				}
 
 			}
@@ -124,12 +131,11 @@ sub crcCheckEntry
 
 			if ($crc_joined ne $checksum_joined)
 			{
-				# die $crc_joined . " - " . $checksum_joined;
-				printf "FAIL - tst: %s\n", web_url res_path $result_path;
+				printf "FAIL - tst: %s\n", substr(web_url(res_path($result_path)), - 45);
 			}
 			else
 			{
-				printf "PASS - tst: %s\n", web_url res_path $result_path;
+				printf "PASS - tst: %s\n", substr(web_url(res_path($result_path)), - 45);
 			}
 
 
