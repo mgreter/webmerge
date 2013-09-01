@@ -156,7 +156,7 @@ sub mergeWrite
 	return $rv unless $config->{'crc-file'};
 
 	# ... and then write the md5 checksum file
-	return $rv && writefile($checksum_path, \$crc, $config->{'atomic'})
+	return $rv && writefile($checksum_path, \$crc, $config->{'atomic'}, 1)
 		or die "could not write <$checksum_path>: $!";
 
 }
@@ -218,6 +218,9 @@ sub mergeCollect
 
 				# execute the script and open the stdout for us
 				open my $fh_in, "-|", $shebang . $script or die 'could not execute generator script - ' . $script;
+
+				# always read/write in bin mode
+				binmode $fh_in; binmode $fh_out;
 
 				# read script output and write to output file
 				while(defined(my $line = <$fh_in>)) { print $fh_out $line; }

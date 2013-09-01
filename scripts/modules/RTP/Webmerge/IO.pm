@@ -211,7 +211,7 @@ sub writefile ($$;$$)
 	my $data = \(my $foo = ${$out});
 
 	# convert from mac/win newlines to unix newlines
-	${$data} =~ s/(?:\r\n|\n\r)/\n/gm unless $binary;
+	# ${$data} =~ s/(?:\r\n|\n\r)/\n/gm unless $binary;
 
 	# open the file via atomic interface
 	# my $fh = RTP::IO::AtomicFile->open($file, 'w');
