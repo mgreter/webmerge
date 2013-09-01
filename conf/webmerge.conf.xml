@@ -9,8 +9,17 @@
 		<!-- clean/fix text files -->
 		<txt disabled="false">
 			<!-- clean all js and css files -->
-			<file path="." file="*.pm" recursive="true" />
-			<file path="." file="*.pl" recursive="true" />
+			<file path="." file="*.sh" recursive="true" type="linux" />
+			<file path="." file="*.js" recursive="true" type="linux" />
+			<file path="." file="*.css" recursive="true" type="linux" />
+			<file path="." file="*.md" recursive="true" type="auto" />
+			<file path="." file="*.pm" recursive="true" type="auto" />
+			<file path="." file="*.pl" recursive="true" type="auto" />
+			<file path="." file="*.xml" recursive="true" type="auto" />
+			<file path="." file="*.php" recursive="true" type="auto" />
+			<file path="." file="*.dev" recursive="true" type="auto" />
+			<file path="." file="*.live" recursive="true" type="auto" />
+			<file path="." file="*.bat" recursive="true" type="windows" />
 		</txt>
 
 	</optimize>
