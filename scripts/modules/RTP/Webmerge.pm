@@ -11,6 +11,9 @@ use warnings;
 # load 3rd party module
 use File::Which qw(which);
 
+# override core glob (case insensitive)
+use File::Glob qw(:globally :nocase bsd_glob);
+
 # define uniq inline (copied from List::MoreUtils)
 sub uniq (@) { my %seen = (); grep { not $seen{$_}++ } @_; }
 
@@ -161,7 +164,7 @@ sub collectExecutables
 			$exec =~ s/\[[a-zA-Z]+\]$//;
 
 			# glob finds the executable
-			my @files = which($exec) || glob($exec);
+			my @files = which($exec) || bsd_glob($exec);
 
 			if (scalar(@files) == 1 && -e $files[0] && -x $files[0] && ! -d $files[0])
 			{

@@ -26,7 +26,7 @@ BEGIN { our @EXPORT_OK = qw(processfile filelist); }
 use File::Basename;
 
 # override core glob (case insensitive)
-use File::Glob qw(:globally :nocase);
+use File::Glob qw(:globally :nocase bsd_glob);
 
 # load flags for the system file operation calls
 use Fcntl qw(O_RDWR O_RDONLY LOCK_EX SEEK_SET LOCK_UN);
@@ -366,7 +366,7 @@ sub filelist
 		# use glob function to match the files
 		# could implement my own regex match, but
 		# glob is much simpler and securer to use
-		push(@files, glob(join('/', $root, $file)));
+		push(@files, bsd_glob(join('/', $root, $file)));
 
 		# open the directory to read all entries
 		opendir(my $dh, $root) or die "could not opendir $root: $!";

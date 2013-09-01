@@ -48,6 +48,9 @@ use RTP::IO::AtomicFile;
 use File::Basename qw(dirname);
 use File::Spec::Functions qw(abs2rel rel2abs);
 
+# override core glob (case insensitive)
+use File::Glob qw(:globally :nocase bsd_glob);
+
 ###################################################################################################
 
 # load flags for file functions
@@ -227,7 +230,7 @@ sub mergeCollect
 			{
 
 				# resolve the path via glob (allow filename expansion)
-				foreach my $local_path (glob resolve_path $item->{'path'})
+				foreach my $local_path (bsd_glob(resolve_path $item->{'path'}))
 				{
 
 					# create absolute path from the web root
