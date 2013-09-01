@@ -12,9 +12,11 @@ opendir(my $dh, $root) or die "opendir fam: $!";
 open(my $css, ">", "fam.css") or die "open fam.css: $!";
 open(my $html, ">", "fam.html") or die "open fam.html: $!";
 
+binmode $css; binmode $html;
+
 my @files = grep { -f join('/', $root, $_) } sort readdir($dh);
 
-print $css "\n /* sprite-id: fam; sprite-image: url(../generated/img/fam.png); */ \n\n";
+print $css "\n /* sprite-id: fam; sprite-image: url(../generated/img/fam.png); */\n";
 
 print $html "<html>\n";
 print $html "<head><title>FAM Spriteset</title></head>\n";
@@ -38,14 +40,14 @@ foreach my $file (@files)
 	$name=~s/^\-+//g;
 	$name=~s/\-+$//g;
 
-	printf $css ".%s\n", $name;
+	printf $css "\n.%s\n", $name;
 	printf $css "{\n";
-	printf $css "	/* sprite-ref: fam; */ \n";
+	printf $css "	/* sprite-ref: fam; */\n";
 	printf $css "	background-repeat: no-repeat;\n";
 	printf $css "	background-position: left top;\n";
 	printf $css "	width: %spx; height: %spx;\n", $w, $h;
 	printf $css "	background-image: url('%s/%s');\n", $root, $file;
-	printf $css "}\n\n";
+	printf $css "}\n";
 
 	printf $html "<div class=\"%s\"></div>\n", $name;
 
@@ -53,4 +55,4 @@ foreach my $file (@files)
 }
 
 print $html "</body>\n";
-print $html "</html>\n";
+print $html "</html>";
