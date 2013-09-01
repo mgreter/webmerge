@@ -254,7 +254,7 @@ push @initers, sub
 
 	# return additional get options attribute
 	return (
-		'import-css!' => \ $config->{'cmd_import-css'}
+		'import-css!' => \ $config->{'cmd_import-css'},
 		'absoluteurls=i' => \ $config->{'cmd_absoluteurls'}
 	);
 
