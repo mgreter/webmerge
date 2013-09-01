@@ -12,7 +12,7 @@ opendir(my $dh, $root) or die "opendir fam: $!";
 open(my $css, ">", "fam.css") or die "open fam.css: $!";
 open(my $html, ">", "fam.html") or die "open fam.html: $!";
 
-binmode $css; binmode $html;
+# binmode $css; binmode $html;
 
 my @files = grep { -f join('/', $root, $_) } sort readdir($dh);
 
