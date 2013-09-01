@@ -1,1 +1,1 @@
-perl ../scripts/webmerge.pl -f conf/embeder.conf.xml "$@"
+../webmerge.sh -f conf/embeder.conf.xml "$@"

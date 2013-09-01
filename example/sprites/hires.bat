@@ -1,1 +1,1 @@
-perl ..\..\scripts\webmerge.pl -f ..\conf\sprites.conf.xml -o -png hires %*
+..\..\webmerge.bat -f ..\conf\sprites.conf.xml -o -png hires %*

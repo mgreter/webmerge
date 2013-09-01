@@ -34,6 +34,6 @@ SET PATH=%PERLPATH%\c\bin;%PATH%
 
 :noLocalPerl
 
-perl scripts\webmerge.pl %*
+perl %DRIVEPWD%\scripts\webmerge.pl %*
 
 ENDLOCAL
