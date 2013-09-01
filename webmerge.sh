@@ -1,7 +1,7 @@
 #!/bin/sh
 
-pushd `dirname $0`
+pushd `dirname $0` > /dev/null
 
 perl scripts/webmerge.pl "$@"
 
-popd
+popd > /dev/null
