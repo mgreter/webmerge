@@ -155,13 +155,13 @@ sub collectExecutables
 		# look for external program
 		else
 		{
-			
+
 			# get name of executable
 			my $exec = $executable;
-			
+
 			# remove optional suffix
 			$exec =~ s/\[[a-zA-Z]+\]$//;
-			
+
 			# glob finds the executable
 			my @files = which($exec) || glob($exec);
 
@@ -295,11 +295,11 @@ sub checkConfig
 
 # call a program with a file
 # also accept files array ref
-sub runProgram ($$$$)
+sub runProgram ($$$$;$)
 {
 
 	# get input variables
-	my ($config, $program, $files, $pattern) = @_;
+	my ($config, $program, $files, $pattern, $options) = @_;
 
 	# get the collected executables
 	my $executables = $programs{$program};
@@ -326,7 +326,7 @@ sub runProgram ($$$$)
 			{
 
 				# execute the function
-				my $rv = $tmpl->($file);
+				my $rv = $tmpl->($file, $config, $options);
 
 				# give a warning if the executable returned an error
 				warn "$program execution did not complete successfully\n"
@@ -372,11 +372,11 @@ my @pids;
 
 # call a program with a file
 # also accept files array ref
-sub callProgram ($$$$)
+sub callProgram ($$$$;$)
 {
 
 	# get input variables
-	my ($config, $program, $files, $pattern) = @_;
+	my ($config, $program, $files, $pattern, $options) = @_;
 
 	# make array items unqiue
 	@{$files} = uniq(@{$files});
@@ -385,7 +385,7 @@ sub callProgram ($$$$)
 	{
 
 			# run the program with a subset of files
-			runProgram($config, $program, $files, $pattern);
+			runProgram($config, $program, $files, $pattern, $options);
 
 	}
 	else
@@ -461,7 +461,7 @@ sub callProgram ($$$$)
 				setpgrp(0,0);
 
 				# run the program with a subset of files
-				runProgram($config, $program, $files[$j], $pattern);
+				runProgram($config, $program, $files[$j], $pattern, $options);
 
 				# stop child
 				exit(0);

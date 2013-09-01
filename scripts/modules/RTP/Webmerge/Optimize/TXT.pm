@@ -28,16 +28,36 @@ sub cleantxt
 {
 
 	# get input variables
-	my ($data) = @_;
+	my ($data, $config, $options) = @_;
 
-	# trim trailing whitespace
-	${$data} =~ s/(?:\s|\t)+$//g;
+	# options are really optional
+	$options = {} unless $options;
+
+	# defined end of line characters
+	# only auto switch between win and linux
+	my $eol = $^O eq "MSWin32" ? "\r\n" : "\n";
+
+	# get the end of line type
+	my $type = $options->{'type'}
+	         || $config->{'txt-type'}
+	         || 'auto';
+
+	# check for other forced types
+	$eol = "\r\n" if $type =~ m/w/i; # win
+	$eol = "\r" if $type =~ m/c/i; # mac
+	$eol = "\n" if $type =~ m/x/i; # nix
 
 	# remove unwanted utf8 boms
-	${$data} =~ s/^\xEF\xBB\xBF//;
+	if ($config->{'txt-remove-bom'})
+	{ ${$data} =~ s/^\xEF\xBB\xBF//; }
 
-	# convert newlines from mac/win to unix
-	${$data} =~ s/(?:\r\n|\n\r)/\n/g;
+	# trim trailing whitespace
+	if ($config->{'txt-trim-trailing'})
+	{ ${$data} =~ s/(?:\s|\t)+$//g; }
+
+	# convert newlines to desired type
+	if ($config->{'txt-normalize-eol'})
+	{ ${$data} =~ s/(?:\r\n|\n\r|\n|\r)/$eol/g; }
 
 	# return success
 	return 1;
@@ -47,7 +67,7 @@ sub cleantxt
 
 ###################################################################################################
 
-# load webmberge module variables to hook into
+# load webmberge module variables to hook
 use RTP::Webmerge qw(@initers @checkers %executables);
 
 # load functions from webmerge io library
@@ -91,8 +111,8 @@ push @checkers, sub
 	# define executables to optimize txts
 	$executables{'txtopt'} = ['txtopt', sub {
 
-		# process that file via cleantxt
-		return processfile($_[0], \&cleantxt);
+		# process that file via cleantxt (pass options)
+		return processfile($_[0], \&cleantxt, $_[1], $_[2]);
 
 	}];
 
@@ -101,7 +121,7 @@ push @checkers, sub
 
 ###################################################################################################
 
-# now create a new file optimizer subroutine and hook it into our optimizers
+# now create a new file optimizer subroutine and hook it  our optimizers
 $RTP::Webmerge::Optimize::optimizer{'txt'} = RTP::Webmerge::Optimize::fileOptimizer('txt');
 
 ###################################################################################################
