@@ -2,30 +2,35 @@
 
 SETLOCAL
 
-SET GMPATH=..\gm
-SET IMPATH=..\im
-SET PERLPATH=..\perl
+SET TERM=dumb
+
+SET DRIVE=%~dp0
+SET DRIVEPWD=%drive%
+
+SET GMPATH=%DRIVEPWD%\..\gm
+SET IMPATH=%DRIVEPWD%\..\im
+SET PERLPATH=%DRIVEPWD%\..\perl
 
 IF NOT EXIST %GMPATH% GOTO noLocalGM
 
 REM add local gm to global path
-SET PATH=%PATH%;%GMPATH%
+SET PATH=%GMPATH%;%PATH%
 
 :noLocalGM
 
 IF NOT EXIST %IMPATH% GOTO noLocalIM
 
 REM add local im to global path
-SET PATH=%PATH%;%IMPATH%
+SET PATH=%IMPATH%;%PATH%
 
 :noLocalIM
 
 IF NOT EXIST %PERLPATH% GOTO noLocalPerl
 
 REM add local perl to global path
-SET PATH=%PATH%;%PERLPATH%\c\bin
-SET PATH=%PATH%;%PERLPATH%\perl\site\bin
-SET PATH=%PATH%;%PERLPATH%\perl\bin
+SET PATH=%PERLPATH%\perl\site\bin;%PATH%
+SET PATH=%PERLPATH%\perl\bin;%PATH%
+SET PATH=%PERLPATH%\c\bin;%PATH%
 
 :noLocalPerl
 
