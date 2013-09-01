@@ -737,54 +737,59 @@ webmerge - Asset manager for js/css and related files
 webmerge [options] [steps]
 
  Options:
-   -f, --configfile   main xml configuration
-   -d, --doctype      how to render includes [html/xhtml/html5]
-   -j, --jobs         number of jobs (commands) to run simultaneously
+   -f, --configfile    main xml configuration
+   -d, --doctype       how to render includes [html|xhtml|html5]
+   -j, --jobs          number of jobs (commands) to run simultaneously
 
-   -w, --watchdog     start the watchdog process (quit with ctrl+c)
+   -w, --watchdog      start the watchdog process (quit with ctrl+c)
 
-   --webroot          webroot directory to render absolute urls
-   --absoluteurls     export urls as absolute urls (from webroot)
+   --webroot           webroot directory to render absolute urls
+   --absoluteurls      export urls as absolute urls (from webroot)
 
-   --referer          optional referer url for external downloads
-   --inlinedataexts   file extensions to inline (comma separated)
-   --inlinedatamax    maximum file sizes to inline into stylesheets
+   --referer           optional referer url for external downloads
+   --inlinedataexts    file extensions to inline (comma separated)
+   --inlinedatamax     maximum file sizes to inline into stylesheets
 
-   --crc-check        run crc check before exiting
-   --crc-file         write crc file beside generated files
-   --crc-comment      append crc comment into generated files
+   --crc-check         run crc check before exiting
+   --crc-file          write crc file beside generated files
+   --crc-comment       append crc comment into generated files
 
-   --fingerprint      add fingerprints to includes (--fp)
-   --fingerprint-dev  for dev context [query/directory/file] (--fp-dev)
-   --fingerprint-live for live context [query/directory/file] (--fp-live)
+   --fingerprint       add fingerprints to includes (--fp)
+   --fingerprint-dev   for dev context [query|directory|file] (--fp-dev)
+   --fingerprint-live  for live context [query|directory|file] (--fp-live)
 
-   --headtmpl         text to prepend to generated files
-   --jsdeferer        javascript loader for defered loading
-   --tmpl-embed-php   embeder template for php embeder generator
+   --txt-type          text type [nix|mac|win]
+   --txt-remove-bom    remove superfluous utf boms
+   --txt-normalize-eol normalize line endings to given type
+   --txt-trim-trailing trim trailing whitespace in text files
 
-   -p, --prepare      enable/disable prepare steps
-   -o, --optimize     enable/disable optimize steps
-   -m, --merge        enable/disable merge steps
-   -i, --headinc      enable/disable headinc steps
-   -e, --embeder      enable/disable embeder steps
+   --headtmpl          text to prepend to generated files
+   --jsdeferer         javascript loader for defered loading
+   --tmpl-embed-php    embeder template for php embeder generator
 
-   --dev              enable/disable dev targets
-   --join             enable/disable join targets
-   --minify           enable/disable minify targets
-   --compile          enable/disable compile targets
-   --license          enable/disable license targets
+   -p, --prepare       enable/disable prepare steps
+   -o, --optimize      enable/disable optimize steps
+   -m, --merge         enable/disable merge steps
+   -i, --headinc       enable/disable headinc steps
+   -e, --embeder       enable/disable embeder steps
 
-   --optimize-txt     enable/disable optimizer for text files (--txt)
-   --optimize-jpg     enable/disable optimizer for jpg images (--jpg)
-   --optimize-gif     enable/disable optimizer for gif images (--gif)
-   --optimize-png     enable/disable optimizer for png images (--png)
-   --optimize-mng     enable/disable optimizer for mng images (--mng)
-   --optimize-zip     enable/disable optimizer for zip archives (--zip)
-   --optimize-gz      enable/disable optimizer for gz archive files (--gz)
+   --dev               enable/disable dev targets
+   --join              enable/disable join targets
+   --minify            enable/disable minify targets
+   --compile           enable/disable compile targets
+   --license           enable/disable license targets
 
-   --man              full documentation
-   --opts             list command line options
-   -?, --help         brief help message with options
+   --optimize-txt      enable/disable optimizer for text files (--txt)
+   --optimize-jpg      enable/disable optimizer for jpg images (--jpg)
+   --optimize-gif      enable/disable optimizer for gif images (--gif)
+   --optimize-png      enable/disable optimizer for png images (--png)
+   --optimize-mng      enable/disable optimizer for mng images (--mng)
+   --optimize-zip      enable/disable optimizer for zip archives (--zip)
+   --optimize-gz       enable/disable optimizer for gz archive files (--gz)
+
+   --man               full documentation
+   --opts              list command line options
+   -?, --help          brief help message with options
 
  Steps:
    Just process certain steps in configuration

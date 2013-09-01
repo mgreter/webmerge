@@ -24,7 +24,7 @@ BEGIN { our @EXPORT = qw(cleantxt); }
 # safe text cleaning
 # for html, css and js
 # changes source files
-sub cleantxt
+sub cleantxt ($$;$)
 {
 
 	# get input variables
@@ -58,6 +58,7 @@ sub cleantxt
 	# convert newlines to desired type
 	if ($config->{'txt-normalize-eol'})
 	{ ${$data} =~ s/(?:\r\n|\n\r|\n|\r)/$eol/g; }
+
 	# return success
 	return 1;
 
@@ -85,8 +86,23 @@ push @initers, sub
 	# create config variable to be available
 	$config->{'cmd_optimize-txt'} = 1;
 
+	# text file type [nix|mac|win]
+	$config->{'cmd_txt-type'} = 1;
+	# remove superfluous utf boms
+	$config->{'cmd_txt-remove-bom'} = 1;
+	# normalize line endings to given type
+	$config->{'cmd_txt-normalize-eol'} = 1;
+	# trim trailing whitespace in text files
+	$config->{'cmd_txt-trim-trailing'} = 1;
+
 	# connect each tmpl variable with the getOpt option
-	return ('optimize-txt|txt!', \ $config->{'cmd_optimize-txt'});
+	return (
+		'optimize-txt|txt!', \ $config->{'cmd_optimize-txt'},
+		'txt-type=s', \ $config->{'cmd_txt-type'},
+		'txt-remove-bom!', \ $config->{'cmd_txt-remove-bom'},
+		'txt-normalize-eol!', \ $config->{'cmd_txt-normalize-eol'},
+		'txt-trim-trailing!', \ $config->{'cmd_txt-trim-trailing'},
+	);
 
 };
 # EO push initer
@@ -104,16 +120,13 @@ push @checkers, sub
 	unless ($config->{'optimize'})
 	{ $config->{'optimize-txt'} = 0; }
 
-	# do nothing if feature is disabled
-	return unless $config->{'optimize-txt'};
-
 	# define executables to optimize txts
 	$executables{'txtopt'} = ['txtopt', sub {
 
 		# process that file via cleantxt (pass options)
 		return processfile($_[0], \&cleantxt, $_[1], $_[2]);
 
-	}];
+	}, 1];
 
 };
 # EO push checker
