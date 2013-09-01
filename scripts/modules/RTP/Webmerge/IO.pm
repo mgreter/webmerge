@@ -304,7 +304,7 @@ sub processfile
 {
 
 	# get input variables
-	my ($file, $processor) = @_;
+	my ($file, $processor, $config, $options) = @_;
 
 	# resolve path
 	$file = res_path($file);
@@ -325,8 +325,9 @@ sub processfile
 	croak "read error: $!" unless defined $rv;
 	croak "unknown read error: $!" unless $rv == 0;
 
-	# call the processor to change the content (check return value)
-	croak "could not process content: $!" unless &{$processor}(\$data);
+	# call the processor to change the content
+	unless (&{$processor}(\$data, $config, $options))
+	{ croak "could not process content: $!"; }
 
 	# seek to the file begining after processing is done
 	croak "could not seek $file: $!" unless sysseek($fh, 0, SEEK_SET);
