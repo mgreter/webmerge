@@ -1,0 +1,18 @@
+<xml>
+
+	<!-- include default configuration file -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- optimize operations (id needed to overwrite) -->
+	<optimize id="optimize" step="optimize" disabled="false">
+
+		<!-- clean/fix text files -->
+		<txt disabled="false">
+			<!-- clean all js and css files -->
+			<file path="." file="*.pm" recursive="true" />
+			<file path="." file="*.pl" recursive="true" />
+		</txt>
+
+	</optimize>
+
+</xml>
