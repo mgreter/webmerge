@@ -58,7 +58,6 @@ sub cleantxt
 	# convert newlines to desired type
 	if ($config->{'txt-normalize-eol'})
 	{ ${$data} =~ s/(?:\r\n|\n\r|\n|\r)/$eol/g; }
-
 	# return success
 	return 1;
 

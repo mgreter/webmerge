@@ -315,6 +315,9 @@ sub processfile
 	# open the file in read write mode
 	croak "could not open $file: $!" unless sysopen(my $fh, $file, O_RDWR);
 
+	# put all file into binary mode for eol handling
+	croak "could not binmode $file: $!" unless binmode($fh);
+
 	# aquire exclusive lock on the file (will block)
 	croak "could not lock $file: $!" unless lock_file($fh, LOCK_EX, 1000);
 
