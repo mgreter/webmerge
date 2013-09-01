@@ -92,8 +92,8 @@ remove these downloads.
 Download the appropriate versions (either x32 or x64) and
 extract the archives beside the main webmerge directory.
 You should finally get this folder structure:
-_tools\gm_, _tools\perl_, _tools\webmerge_. Then you can
-use the run script c:\tools\webmerge\webmerge.bat
+__tools\gm__, __tools\perl__, __tools\webmerge__. Then you
+can use the run script __tools\webmerge\webmerge.bat__
 
 
 Demo Examples
