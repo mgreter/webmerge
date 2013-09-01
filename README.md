@@ -83,16 +83,19 @@ I created some archives with pre packed binaries for perl and
 GraphicsMagick. You may download them from my server. I'm not
 sure if this is 100% legal, if not please contact me and I will
 remove these downloads.
+
 - http://webmerge.ocbnet.ch/portable/webmerge-gm-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-perl-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-gm-x64.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-perl-x64.exe
+
 Download the appropriate versions (either x32 or x64) and
 extract the archives beside the main webmerge directory.
 You should finally get this folder structure:
     tools\gm
     tools\perl
     tools\webmerge
+
 Then you can use c:\tools\webmerge\webmerge.bat
 
 
