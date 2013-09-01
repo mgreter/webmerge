@@ -76,7 +76,7 @@ sub crcCheckEntry
 			my $crc = readfile($checksum_path);
 
 			# split checksum file content into lines
-			my @crcs = split(/\s*(?:\n\r?)+\s*/, ${$crc});
+			my @crcs = split(/\s*(?:\r?\n)+\s*/, ${$crc});
 
 			# remove leading checksums
 			my $checksum_result = shift(@crcs);
