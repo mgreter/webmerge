@@ -77,6 +77,17 @@ Using Webmerge
 ==============
 Documentation not yet done. See example directory for hints.
 
+Portable version for windows
+============================
+I created some archives with pre packed binaries for perl and
+GraphicsMagick. You may download them from my server. I'm not
+sure if this is 100% legal, if not please contact me and I will
+remove these downloads.
+- http://webmerge.ocbnet.ch/portable/webmerge-gm-x32.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-perl-x32.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-gm-x64.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-perl-x64.exe
+
 Demo Examples
 =============
 - http://webmerge.ocbnet.ch/webmerge/example/embeder/
