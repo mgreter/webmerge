@@ -70,7 +70,7 @@ sub writeJS
 	my ($path, $data, $config) = @_;
 
 	# write the content to the file and return result
-	return writefile($path, $data, $config->{'atomic'})
+	return writefile($path, $data, $config->{'atomic'}, 1)
 
 }
 # EO writeJS
