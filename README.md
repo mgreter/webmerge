@@ -4,19 +4,19 @@ Asset Manager for Front End Development (JS, CSS, Images)
 
 Features
 ========
-- Merge, join and minify CSS and JavaScript files
+- Merge, join and optimize CSS and JavaScript files
 - Optimize images with external tools (in parallel)
 - Create spritesets by annotating your css stylesheets
 - Can handle sprites optimized for high resolution displays
-- Optimize text files by removing UTF8 BOM and trailing whitespace
-- Does not overwrite any files if a merge is not completely successfull
+- Optimize text files by removing UTF8 BOM and trailing whitespaces
+- Commits all file changes only after a successfull merge
 - File watcher to recompile if a source file has changed
 
 To Do
 =====
-- Finish spriteset feature
-- Integrate a SASS processor
-- Add additional Optimizers (pngcrush, advzip, advmng)
+- Integrate a SASS/LESS processor
+- Implement @license header handling
+- Maybe add support for ImageMagick too
 
 Installing on Windows
 =====================
@@ -44,7 +44,7 @@ Installing Perl Modules
     perl -MCPAN -e "install Data::Dump::PHP"
     perl -MCPAN -e "install File::MimeInfo::Simple"
     # modules are only needed for watcher
-	perl -MCPAN -e "install IPC::Run3"
+    perl -MCPAN -e "install IPC::Run3"
     perl -MCPAN -e "install Filesys::Notify::Simple"
 
 Installing on Gentoo Linux
@@ -52,7 +52,7 @@ Installing on Gentoo Linux
     # maybe review the use flags
     USE="perl png jpeg q16" \
     emerge -u media-gfx/graphicsmagick
-	# install needed perl modules
+    # install needed perl modules
     emerge -u dev-perl/CSS-Minifier
     emerge -u dev-perl/JavaScript-Minifier
     # Data::Dump::PHP has no ebuild yet
