@@ -135,7 +135,7 @@ sub fileOptimizer ($)
 				my $files = filelist(res_path($path), $file, $recursive);
 
 				# call all possible optimizers
-				callProgram($config, $filetype . 'opt', $files, $pattern);
+				callProgram($config, $filetype . 'opt', $files, $pattern, $entry);
 
 			}
 			# EO each file entry
