@@ -526,17 +526,7 @@ sub process
 					'background-size',
 					': ' . (($canvas->width ) / $sprite->{'scale-x'}) . 'px '
 					     . (($canvas->height ) / $sprite->{'scale-y'}) . 'px;'
-				],
-				# [ 'image-rendering', ': -moz-pixelated;' ],
-				# [ 'image-rendering', ': -o-pixelated;' ],
-				[ 'image-rendering', ': -moz-crisp-edges;' ],
-				[ 'image-rendering', ': -moz-optimizeQuality;' ],
-				[ 'image-rendering', ': -o-crisp-edges;' ],
-				[ 'image-rendering', ': -webkit-optimize-contrast;' ],
-				# [ 'image-rendering', ': pixelated;' ],
-				[ 'image-rendering', ': crisp-edges;' ],
-				[ 'image-rendering', ': optimizeQuality;' ],
-				[ '-ms-interpolation-mode', ': nearest-neighbor;' ]
+				]
 			)
 		}
 
