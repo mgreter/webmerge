@@ -18,6 +18,9 @@
 		<!-- you can adjust this also in the xml config -->
 		<directory>{WWW}/webmerge/example/embeder</directory>
 
+		<!-- enable crc check step -->
+		<crc-check>1</crc-check>
+
 	</config>
 
 	<!-- prepare operations -->

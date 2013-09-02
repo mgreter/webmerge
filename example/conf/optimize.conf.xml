@@ -25,9 +25,6 @@
 		<crc-comment>0</crc-comment>
 		<head-comment>0</head-comment>
 
-		<!-- maximum size to inline data -->
-		<inlinedatamax>160KB</inlinedatamax>
-
 	</config>
 
 	<!-- prepare operations - commit right after block -->
