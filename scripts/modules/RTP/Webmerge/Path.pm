@@ -165,7 +165,7 @@ sub chdir
 	my ($self, $chdirs) = @_;
 
 	# assert that current has some value
-	$directory = '.' unless $directory;
+	$directory = abs_path '.' unless $directory;
 
 	# assertion that we have some valid arguments
 	return unless $chdirs && scalar(@{$chdirs}) > 0;
