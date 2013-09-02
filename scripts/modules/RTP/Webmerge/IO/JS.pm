@@ -9,7 +9,7 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::IO::JS::VERSION = "0.70" }
+BEGIN { $RTP::Webmerge::IO::JS::VERSION = "0.8.2" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
@@ -22,7 +22,7 @@ BEGIN { our @EXPORT_OK = qw(); }
 
 ###################################################################################################
 
-# load webmerge file reader
+# import webmerge IO file reader and writer
 use RTP::Webmerge::IO qw(readfile writefile);
 
 ###################################################################################################
@@ -37,28 +37,28 @@ sub readJS
 	# read complete css file
 	my $data = readfile($jsfile);
 
-	# die with an error message that css file is not found
+	# die with an error message that js file is not found
 	die "js file <$jsfile> could not be read: $!\n" unless $data;
 
 	# return as string
 	return $data;
 
 }
-# EO importJS
+# EO sub readJS
 
 # mangle JS
 sub importJS
 {
 	return 1;
 }
-# EO importJS
+# EO sub importJS
 
 # mangle JS
 sub exportJS
 {
 	return 1;
 }
-# EO exportJS
+# EO sub exportJS
 
 ###################################################################################################
 
