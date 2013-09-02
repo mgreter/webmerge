@@ -48,8 +48,6 @@ sub new
 
 	my $self = $pckg->SUPER::new($parent);
 
-	$self->{'bg'} = 'xc:transparent';
-
 	# only for debugging purposes
 	$self->{'bg'} = "xc:transparent";
 
