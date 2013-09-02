@@ -86,7 +86,7 @@ sub crcCheckEntry
 			# check if the generated content changed
 			if (md5sum($content) ne $checksum_result)
 			{
-				printf "sFAIL - dst: %s\n", substr(web_url($result_path), - 45);
+				printf "FAIL - dst: %s\n", substr(web_url($result_path), - 45);
 				printf "=> %s vs %s\n", md5sum($content), $checksum_result;
 			}
 			else
