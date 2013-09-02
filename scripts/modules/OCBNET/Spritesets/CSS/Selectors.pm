@@ -4,6 +4,11 @@
 package OCBNET::Spritesets::CSS::Selectors;
 ####################################################################################################
 
+use strict;
+use warnings;
+
+####################################################################################################
+
 # define our version string
 BEGIN { $OCBNET::Spritesets::CSS::Selectors::VERSION = "0.8.2"; }
 
@@ -15,6 +20,10 @@ BEGIN { our @EXPORT = qw($re_css_selector_rules); }
 
 # define our functions than can be exported
 BEGIN { our @EXPORT_OK = qw($re_css_selector_rule); }
+
+####################################################################################################
+
+use OCBNET::Spritesets::CSS::Base;
 
 ####################################################################################################
 
