@@ -44,50 +44,65 @@ my $re_closer =
 
 ####################################################################################################
 
+# parse all declaration in given data
+# usefull to parse css selector blocks
+# also used to parse spriteset comments
+# ******************************************************************************
 $parse_declarations = sub
 {
 
-	# get passed input arguments
+	# get stylesheet
 	my ($data) = @_;
 
+	# array of rules
 	my @declarations;
 
+	# loop until no more data
 	while (${$data} ne '')
 	{
-		if (${$data} =~ s/^
-		(
-			(?:
-				# escaped char
-				(?: \\ .)+ |
-				# comment or only a slash
-				\/+ (?:\*+ .*? \*+ \/+)? |
-				# a string in delimiters
-				\" $re_quot \" | \' $re_apo \' |
-				# not the delimiter
-				[^\:\;\/]+
-			)*
+		# consume data
+		if (${$data} =~
+			s/^
+			(
+				(?:
+					# escaped char
+					(?: \\ .)+ |
+					# comment or only a slash
+					\/+ (?:\*+ .*? \*+ \/+)? |
+					# a string in delimiters
+					\" $re_quot \" | \' $re_apo \' |
+					# not the delimiter
+					[^\:\;\/]+
+				)*
+			)
+			(
+				(?:\:
+					# escaped char
+					(?: \\ .)+ |
+					# comment or only a slash
+					\/+ (?:\*+ .*? \*+ \/+)? |
+					# a string in delimiters
+					\" $re_quot \" | \' $re_apo \' |
+					# not the delimiter
+					[^\;\/]+
+				)*
+				(?:\;|\z)
+			)
+			//xs
 		)
-		(
-			(?:\:
-				# escaped char
-				(?: \\ .)+ |
-				# comment or only a slash
-				\/+ (?:\*+ .*? \*+ \/+)? |
-				# a string in delimiters
-				\" $re_quot \" | \' $re_apo \' |
-				# not the delimiter
-				[^\;\/]+
-			)*
-			(?:\;|\z)
-		)
-		//xs)
 		{
+
+			# store the name and the config
+			# create a copy for stripped version
 			my $declaration = [$1, $2, $1, $2];
 
+			# strip comments from declaration copy
 			$declaration->[2] =~ s/\/\*\s*.*?\s*\*\///gs;
 			$declaration->[3] =~ s/\/\*\s*.*?\s*\*\///gs;
 
+			# store in order into array
 			push @declarations, $declaration;
+
 		}
 		else
 		{
@@ -96,9 +111,11 @@ $parse_declarations = sub
 		}
 	}
 
+	# return parsed declarations
 	return \ @declarations;
 
 };
+# EO sub $parse_declarations
 
 ####################################################################################################
 
