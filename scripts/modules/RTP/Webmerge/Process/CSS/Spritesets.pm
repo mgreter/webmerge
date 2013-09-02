@@ -22,18 +22,11 @@ BEGIN { our @EXPORT = qw(spritesets); }
 # load some constants
 use Fcntl qw(LOCK_UN O_RDWR);
 
-# import functions from IO module
-use RTP::Webmerge::IO qw(readfile);
-
-use RTP::Webmerge::IO::CSS qw($re_url wrapURL exportURI);
-
-use RTP::Webmerge::Path qw(web_url web_path);
-
-use RTP::Webmerge::Path qw($webroot);
-
-use RTP::Webmerge::IO qw(writefile);
-
 use OCBNET::Spritesets::CSS;
+
+# import functions from IO module
+use RTP::Webmerge::IO qw(writefile readfile);
+use RTP::Webmerge::Path qw(web_url web_path);
 
 ###################################################################################################
 
