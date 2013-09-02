@@ -1,7 +1,3 @@
 #!/bin/sh
 
-pushd `dirname $0` > /dev/null
-
-../../webmerge.sh -f ../conf/sprites.conf.xml -o -png hires "$@"
-
-popd > /dev/null
+"`dirname $0`"/../../webmerge.sh -f "`dirname $0`"/../conf/sprites.conf.xml -o -png hires "$@"
