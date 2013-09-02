@@ -9,6 +9,7 @@ SET DRIVEPWD=%~dp0
 SET GMPATH=%DRIVEPWD%\..\gm
 SET IMPATH=%DRIVEPWD%\..\im
 SET PERLPATH=%DRIVEPWD%\..\perl
+SET UTILSPATH=%DRIVEPWD%\..\utils
 
 IF NOT EXIST "%GMPATH%" GOTO noLocalGM
 
@@ -23,6 +24,13 @@ REM add local im to global path
 SET PATH=%IMPATH%;%PATH%
 
 :noLocalIM
+
+IF NOT EXIST "%UTILSPATH%" GOTO noLocalUtils
+
+REM add local utils to global path
+SET PATH=%UTILSPATH%;%PATH%
+
+:noLocalUtils
 
 IF NOT EXIST "%PERLPATH%" GOTO noLocalPerl
 

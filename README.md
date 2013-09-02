@@ -86,6 +86,7 @@ remove these downloads.
 
 - http://webmerge.ocbnet.ch/portable/webmerge-gm-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-perl-x32.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-utils-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-gm-x64.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-perl-x64.exe
 
