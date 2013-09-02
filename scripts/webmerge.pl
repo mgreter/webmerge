@@ -18,6 +18,9 @@ BEGIN { unshift @INC, "$Bin/modules"; }
 
 ################################################################################
 
+# get working directory
+use Cwd qw(getcwd abs_path);
+
 # load spriteset library
 use OCBNET::Spritesets;
 
@@ -53,6 +56,12 @@ use RTP::Webmerge::Optimize::GZ qw();
 ################################################################################
 
 my $pid = $$;
+
+################################################################################
+# get current working directory
+################################################################################
+
+my $cwd = abs_path(getcwd);
 
 ################################################################################
 # declare and init configuration options
@@ -228,17 +237,16 @@ my $configfile = 'webmerge.conf.xml';
 # register extension path within our path modules for later use
 $RTP::Webmerge::Path::extroot = res_path(join('/', $Bin, '..'));
 
+# helper sub to check file for existence
+sub checkFile { defined $_[0] && -e $_[0] ? $_[0] : undef; }
+
 # check if configfile is given as relative path
 unless ( $config->{'configfile'} =~ m/^\// )
 {
 	# search for the config file
 	$config->{'configfile'} =
 		# first try from current directory
-		res_path($config->{'configfile'}) ||
-		# then try by from our script root
-		res_path(join('/', $Bin, $config->{'configfile'})) ||
-		# then try by from our script root parent
-		res_path(join('/', $Bin, '..', $config->{'configfile'}));
+		checkFile(res_path($config->{'configfile'}));
 }
 
 # abort if the configuration file was not found

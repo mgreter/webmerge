@@ -191,7 +191,7 @@ sub importCSS
 
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
-	# ${$data} =~ s/$re_url/importURI($1, $webroot, $config)/egm;
+	${$data} =~ s/$re_url/importURI($1, $webroot, $config)/egm;
 
 	# return as string
 	return $data;
