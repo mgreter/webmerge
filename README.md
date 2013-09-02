@@ -64,7 +64,7 @@ Installing on Gentoo Linux
 
 Installing Closure Compiler
 ===========================
-Go into the scripts/closure-compiler directory and execute the update script.
+Go into the scripts/google/closure directory and execute the update script.
 
 Other external optimizers
 =========================
