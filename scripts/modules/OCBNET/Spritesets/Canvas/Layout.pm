@@ -130,7 +130,7 @@ sub layout
 		next if $sprite->isRepeatX;
 		next if $sprite->isRepeatY;
 		$sprite->{'padding-left'} = 0;
-		# $sprite->{'padding-right'} = 0;
+		$sprite->{'padding-right'} = 0;
 	}
 
 	foreach my $sprite (@{$self->{'edge-t'}->{'children'}})
