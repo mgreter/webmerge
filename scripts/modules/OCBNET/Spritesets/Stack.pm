@@ -25,9 +25,6 @@ sub new
 	# get object by calling super class
 	my $self = $pckg->SUPER::new($parent);
 
-	$self->{'opposite'} = $align_opp;
-	$self->{'vertical'} = $stack_vert;
-
 	# align the the oppositioning side?
 	$self->{'align-opp'} = $align_opp;
 
