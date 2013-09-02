@@ -169,6 +169,10 @@ sub readCSS
 	# read complete css file
 	my $data = incCSS($cssfile, $config);
 
+	# change all relative urls in this css to absolute paths
+	# also look for comments, but do not change them in the function
+	${$data} =~ s/$re_url/exportURI($1, $webroot, $config)/egm;
+
 	# return as string
 	return $data;
 
@@ -217,6 +221,10 @@ sub exportCSS
 
 	# get input variables
 	my ($file, $data, $config) = @_;
+
+	# change all relative urls in this css to absolute paths
+	# also look for comments, but do not change them in the function
+	${$data} =~ s/$re_url/exportURI($1, $webroot, $config)/egm;
 
 	# change all absolute urls in this css to relative paths
 	# also look for comments, but do not change them in the function
