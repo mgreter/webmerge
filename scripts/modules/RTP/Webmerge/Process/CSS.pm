@@ -222,12 +222,7 @@ sub inline_url
 	{
 
 		# remove any query string
-		$url =~ s/\?.*?$//;
-
-use RTP::Webmerge::Path qw($webroot);
-
-use RTP::Webmerge::IO::CSS qw(_importURI);
-		$url = _importURI($url, $webroot, $config);
+		# $url =~ s/\?.*?$//;
 
 		# create pattern to decide which files to embed
 		my @exts = map { quotemeta } split(/\s*,\s*/, $config->{'inlinedataexts'});
