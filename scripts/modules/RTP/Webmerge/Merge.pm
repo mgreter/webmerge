@@ -243,7 +243,7 @@ sub mergeCollect
 					my $data = $reader{$type}->($local_path, $config) or die "could not read <$local_path>: $!";
 
 					# get the md5sum of the unaltered data (otherwise crc may not be correct)
-					my $md5sum = md5sum($data) or die "could not get md5sum from data: $!";
+					my $md5sum = md5sum(my $org = \ "${$data}") or die "could not get md5sum from data: $!";
 
 					# importer can alter the data after the checksum has been taken
 					$importer{$type}->($data, $local_path, $config) or die "could not import <$local_path>: $!";
@@ -254,6 +254,7 @@ sub mergeCollect
 					# put all informations
 					# on to our data array
 					push(@{$data{$kind}}, {
+						'org' => $org,
 						'data' => $data,
 						# 'path' => $path,
 						'item' => $item,
@@ -336,7 +337,7 @@ sub includeCSS
 	my $css_include_tmpl = '@import url(\'%s\');' . "\n";
 
 	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'data'});
+	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
 
 	# return the script include string
 	return sprintf($css_include_tmpl, $path);
@@ -363,7 +364,7 @@ sub includeJS
 	my $js_include_tmpl = 'includeJS(\'%s\');' . "\n";
 
 	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'web_path'}, $data->{'data'});
+	my $path = fingerprint($config, 'dev', $data->{'web_path'}, $data->{'org'});
 
 	# return the script include string
 	return sprintf($js_include_tmpl, $path);
