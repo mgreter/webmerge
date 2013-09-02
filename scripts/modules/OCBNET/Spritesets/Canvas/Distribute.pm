@@ -48,11 +48,9 @@ sub distribute
 
 	##########################################################
 
-	# first look for the left top corner to fill
+	# reset area childrens (just in case)
 	foreach my $area (@{$self->{'areas'}})
-	{
-		$self->{$area}->{'children'} = [];
-	}
+	{ $self->{$area}->{'children'} = []; }
 
 	##########################################################
 
@@ -101,6 +99,7 @@ sub distribute
 	{
 
 		# distribute one sprite into right bottom corner
+		# optimum for non enclosed sprite left/top aligned
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			last unless $self->{'corner-rb'}->empty;
@@ -117,6 +116,7 @@ sub distribute
 		}
 
 		# distribute one sprite into right top corner
+		# optimum for non enclosed-x sprite left/bottom aligned
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			next if $sprite->{'distributed'};
@@ -130,7 +130,8 @@ sub distribute
 			$sprite->{'distributed'} = 1; last;
 		}
 
-		# distribute one sprite into bottom left corner
+		# distribute one sprite into left bottom corner
+		# optimum for non enclosed sprite right/top aligned
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			next if $sprite->{'distributed'};
@@ -145,6 +146,8 @@ sub distribute
 		}
 
 		# distribute one sprite into left top corner
+		# optimum for non enclosed sprite right/bottom aligned
+		# do not waste this spot for
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			next if $sprite->{'distributed'};

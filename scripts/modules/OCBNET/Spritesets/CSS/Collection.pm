@@ -77,6 +77,7 @@ sub set
 		while ($value ne '')
 		{
 			my $rv = 0;
+			# XXX - fix order as keys will be random
 			foreach my $attr (CORE::keys %{$attributes})
 			{
 				my $re_css_attribute = $attributes->{$attr};

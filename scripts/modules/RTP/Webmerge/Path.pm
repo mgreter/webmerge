@@ -84,6 +84,8 @@ sub web_url ($)
 sub web_path ($)
 {
 
+	# should be doable with web
+
 	# get path string
 	my ($abs_webpath) = @_;
 
@@ -92,11 +94,11 @@ sub web_path ($)
 
 	# replace backward slashes
 	# replace multiple slashes
-	$abs_webpath =~ s/\\+/\//g;
-	$abs_webpath =~ s/\/+/\//g;
-	$root =~ s/\\+/\//g;
-	$root =~ s/\/+/\//g;
-	$root =~ s/\/$//g;
+	#$abs_webpath =~ s/\\+/\//g;
+	#$abs_webpath =~ s/\/+/\//g;
+	#$root =~ s/\\+/\//g;
+	#$root =~ s/\/+/\//g;
+	#$root =~ s/\/$//g;
 
 	# return web path
 	return join('/', $root, $abs_webpath);
@@ -183,7 +185,7 @@ sub chdir
 	foreach my $chdir (@{$chdirs || []})
 	{
 		# now change our current directory variable
-		if ($chdir =~ m/^(?:\/|[a-zA-Z]:)/) { $directory = $chdir; }
+		if ($chdir =~ m/^(?:\/|[a-z]:)/i) { $directory = $chdir; }
 		else { $directory = join('/', $directory, $chdir); }
 	}
 
