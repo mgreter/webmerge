@@ -23,6 +23,16 @@ BEGIN { our @EXPORT_OK = qw($factors); }
 
 ####################################################################################################
 
+# snap value to given multiplier
+# ******************************************************************************
+sub snap
+{
+	# get rest by modulo divide
+	my $rest = $_[0] % $_[1];
+	# add rest to fill up to multipler
+	$_[0] += $rest ? $_[1] - $rest : 0;
+}
+
 # private helper function
 # returns all prime factors
 # ******************************************************************************
@@ -80,70 +90,72 @@ sub layout
 	$self->distribute();
 
 	##########################################################
-	# CALL LAYOUT ON AREAS
+	# RESET PADDINGS FOR CORNER AREAS
 	##########################################################
 
+	# move corner sprite to the outer most position
 	foreach my $sprite (@{$self->{'corner-lt'}->{'children'}})
 	{
-		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
-		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-left'} = 0;
 		$sprite->{'padding-top'} = 0;
 	}
 
+	# move corner sprite to the outer most position
 	foreach my $sprite (@{$self->{'corner-lb'}->{'children'}})
 	{
-		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
-		# $sprite->{'margin-bottom'} = $sprite->{'padding-bottom'};
 		$sprite->{'padding-left'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
 
+	# move corner sprite to the outer most position
 	foreach my $sprite (@{$self->{'corner-rt'}->{'children'}})
 	{
-		# $sprite->{'margin-right'} = $sprite->{'padding-right'};
-		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-right'} = 0;
 		$sprite->{'padding-top'} = 0;
 	}
 
+	# move corner sprite to the outer most position
 	foreach my $sprite (@{$self->{'corner-rb'}->{'children'}})
 	{
-		# $sprite->{'margin-right'} = $sprite->{'padding-right'};
-		# $sprite->{'margin-bottom'} = $sprite->{'padding-top'};
 		$sprite->{'padding-right'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
+
+	##########################################################
+	# RESET PADDINGS FOR EDGE/STACK AREAS
+	##########################################################
 
 	foreach my $sprite (@{$self->{'edge-l'}->{'children'}})
 	{
 		next if $sprite->isRepeatX;
 		next if $sprite->isRepeatY;
-		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
 		$sprite->{'padding-left'} = 0;
+		# $sprite->{'padding-right'} = 0;
 	}
+
 	foreach my $sprite (@{$self->{'edge-t'}->{'children'}})
 	{
 		next if $sprite->isRepeatY;
 		next if $sprite->isRepeatX;
-		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-top'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
 	foreach my $sprite (@{$self->{'stack-l'}->{'children'}})
 	{
 		next if $sprite->isRepeatX;
-		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
 		$sprite->{'padding-left'} = 0;
 		$sprite->{'padding-right'} = 0;
 	}
 	foreach my $sprite (@{$self->{'stack-t'}->{'children'}})
 	{
 		next if $sprite->isRepeatY;
-		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-top'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
+
+	##########################################################
+	# CALL LAYOUT ON EACH AREA
+	##########################################################
 
 	# layout all children
 	foreach my $area (@{$self->{'areas'}})
@@ -171,10 +183,6 @@ sub layout
 			{ push(@repeat_x, $factors->($sprite->{'w'})); }
 			elsif ($sprite->{'repeat-y'} && $sprite->isFlexibleY)
 			{ push(@repeat_y, $factors->($sprite->{'h'})); }
-			# if ($sprite->{'scale-x'} && $sprite->{'scale-x'} != 1)
-			# { push(@repeat_x, $factors->($sprite->{'scale-x'})); }
-			# if ($sprite->{'scale-y'} && $sprite->{'scale-y'} != 1)
-			# { push(@repeat_y, $factors->($sprite->{'scale-y'})); }
 		}
 	}
 
@@ -248,9 +256,6 @@ sub layout
 		$row4_snap_h,
 		$row_snap_last_h
 	);
-
-	# sub snap { $_[0] += 20 - $_[0] % (20); }
-	sub snap { my $rest = $_[0] % $_[1]; $_[0] += $rest ? $_[1] - $rest : 0; }
 
 	##########################################################
 	# GET LIMITS FROM SNAPPED ELEMENTS
@@ -408,87 +413,8 @@ sub layout
 	$self->{'corner-rt'}->left = $self->outerWidth - $self->{'corner-rt'}->outerWidth;
 
 	##########################################################
-	# LAYOUT ALL WIDGETS
+	# RE-ALIGN WIDGETS AFTER SNAPPING
 	##########################################################
-	if (0)
-	{
-
-		# layout all children
-		foreach my $area (@{$self->{'areas'}})
-		{
-
-			# position the area
-			$self->{$area}->left = $width;
-			$self->{$area}->top = $height;
-
-			# ignore area if it's empty
-			next if $self->{$area}->empty;
-
-			# layout the sub area
-			$self->{$area}->layout;
-
-			unless(defined $self->{$area}->height)
-			{
-				die $self->{$area};
-			}
-
-			# increase the dimensions
-			$width += $self->{$area}->width;
-			$height += $self->{$area}->height;
-
-		}
-
-		# shift around some containers for correct layout
-		$self->{'stack-t'}->{'x'} += $self->{'stack-l'}->{'w'};
-		$self->{'stack-l'}->{'x'} -= $self->{'stack-t'}->{'w'};
-		$self->{'stack-b'}->{'x'} -= $self->{'stack-r'}->{'w'};
-		$self->{'stack-r'}->{'x'} += $self->{'stack-b'}->{'w'};
-
-		# store widget size
-		$self->width = $width;
-		$self->height = $height;
-
-	}
-
-	if (0)
-	{
-
-	# declare repating arrays
-	my (@repeat_x, @repeat_y);
-
-	foreach my $area (@{$self->{'areas'}})
-	{
-		foreach my $sprite (@{$self->{$area}->{'children'}})
-		{
-			if ($sprite->{'repeat-x'} && $sprite->{'repeat-y'})
-			{ die "fatal: cannot repeat in both directions"; }
-			elsif ($sprite->{'repeat-x'})
-			{ push(@repeat_x, $sprite->{'w'}); }
-			elsif ($sprite->{'repeat-y'})
-			{ push(@repeat_y, $sprite->{'h'}); }
-		}
-	}
-
-	use List::MoreUtils qw/ uniq /;
-
-	my ($repeat_x, $repeat_y) = (0, 0);
-
-	if (scalar @repeat_x)
-	{
-		@repeat_x = uniq map { $factors->($_) } map { split(/\s+/, $_) } @repeat_x;
-		my $product = 1; $product *= $_ foreach @repeat_x; $repeat_x += $product while $repeat_x < $self->width;
-	}
-	if (scalar @repeat_y)
-	{
-		@repeat_y = uniq map { $factors->($_) } map { split(/\s+/, $_) } @repeat_y;
-		my $product = 1; $product *= $_ foreach @repeat_y; $repeat_y += $product while $repeat_y < $self->height;
-	}
-
-	# store the new size of the outer layout
-	$self->width = $repeat_x if $self->width < $repeat_x;
-	$self->height = $repeat_y if $self->height < $repeat_y;
-
-	}
 
 	# layout all children
 	foreach my $area (@{$self->{'areas'}})
@@ -507,7 +433,6 @@ sub layout
 			{ $self->{$area}->{'x'} = $self->{'w'} - $self->{$area}->{'w'}; }
 			else { $self->{$area}->{'y'} = $self->{'h'} - $self->{$area}->{'h'}; }
 		}
-
 
 	}
 
