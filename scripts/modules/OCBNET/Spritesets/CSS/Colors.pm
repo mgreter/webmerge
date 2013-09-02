@@ -9,7 +9,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::CSS::Colors = "0.70"; }
+BEGIN { $OCBNET::Spritesets::CSS::Colors = "0.8.2"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
