@@ -62,8 +62,8 @@ sub layout
 	{
 
 		# get the dimensions
-		my $w = $sprite->outerWidth; # ToDo: padding
-		my $h = $sprite->outerHeight; # ToDO: padding
+		my $w = $sprite->outerWidth;
+		my $h = $sprite->outerHeight;
 
 		if ($sprite->isRight)
 		{
