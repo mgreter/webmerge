@@ -23,7 +23,7 @@ BEGIN { our @EXPORT = qw(compileJS); }
 use IPC::Run3 qw(run3);
 
 # run3 to get stdout and stderr
-use RTP::Webmerge::Path qw($extroot res_path);
+use RTP::Webmerge::Path qw(EOD $extroot res_path);
 
 ###################################################################################################
 
@@ -40,8 +40,12 @@ sub compileJS
 	# all windows (even x64) report MSWin32!
 	$java_bin = "java" if ($^O eq "MSWin32");
 
+	# if java home is given we will force to use t
+	if (exists $ENV{'JAVA_HOME'} && defined $ENV{'JAVA_HOME'})
+	{ $java_bin = join(EOD, $ENV{'JAVA_HOME'}, 'bin', 'java'); }
+	
 	# create the command to execute the closure compiler
-	my $command = $java_bin . ' -jar ' .
+	my $command = '"' . $java_bin . '" -jar ' .
 			# reference the closure compiler relative from extension
 			'"' . res_path('{EXT}/scripts/google/closure/compiler.jar') . '"' .
 		' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';

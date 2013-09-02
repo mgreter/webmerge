@@ -23,7 +23,7 @@ BEGIN { $RTP::Webmerge::Path::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT_OK = qw($webroot $confroot $extroot $directory); }
+BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory); }
 
 # define our variables to be exported
 BEGIN { our @EXPORT = qw(resolve_path res_path fast_res_path web_url web_path); }
@@ -37,6 +37,12 @@ use Cwd qw(abs_path fast_abs_path);
 use File::Basename qw(dirname basename);
 
 ###################################################################################################
+
+# directory delimiter
+sub EOD
+{
+	$^O eq "MSWin32" ? '\\' : '/';
+}
 
 # return url for web from path
 sub web_url ($)
