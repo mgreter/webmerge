@@ -56,7 +56,7 @@ sub crcCheckEntry
 		my $result = { 'dst' => 0, 'src' => 0, 'srcs' => [] };
 
 		# create path to store this generated output
-		my $result_path = res_path $output->{'path'};
+		my $result_path = $output->{'outputpath'};
 
 		# create path to store checksum of this output
 		my $checksum_path = join('.', $result_path, 'md5');
