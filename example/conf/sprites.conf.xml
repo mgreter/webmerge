@@ -34,7 +34,7 @@
 	<prepare step="fam" disabled="false" >
 		<!-- create neccessary paths -->
 		<mkdir path="fam/generated" />
-	<mkdir path="fam/generated/img" />
+		<mkdir path="fam/generated/img" />
 	</prepare>
 
 	<!-- prepare operations -->
