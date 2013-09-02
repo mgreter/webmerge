@@ -94,14 +94,15 @@ sub _importURI
 
 	# create absolute path from the url if exists
 	my $path = $url =~ m/^\// ?
-			   realpath(join('/', $webroot, dirname($url))) :
+	           realpath(join('/', $webroot, dirname($url))) :
 	           realpath(rel2abs(dirname($url), $csspath));
 
-	# check path on filesystem and
-	die "CSS url($url) in <$csspath> not found\n" unless ($path && -e dirname ($path));
 
 	# now re attach the file name for the resource
 	$path = join('/', $path, basename($url));
+
+	# check path on filesystem only (file may not exist yet)
+	die "CSS url($url) in <$csspath> not found\n" unless ($path && -e dirname ($path));
 
 	# return the wrapped url
 	return $path . $append;
@@ -151,12 +152,12 @@ sub incCSS
 	# die with an error message that css file is not found
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
 
-	# resolve all css imports and include the data (also resolve the path)
-	${$data} =~ s/\@import\s+$re_url/${incCSS(_importURI($1, dirname($cssfile), $config))}/gme if $config->{'import-css'};
-
 	# change all relative urls in this css to absolute paths
 	# also look for comments, but do not change them in the function
-	${$data} =~ s/$re_url/importURI($1, dirname($cssfile), $config)/egm;
+	${$data} =~ s/$re_url/wrapURL(_importURI($1, dirname($cssfile), $config))/egm;
+		
+	# resolve all css imports and include the data (also resolve the path)
+	${$data} =~ s/\@import\s+$re_url/${incCSS($1, $config)}/gme if $config->{'import-css'};
 
 	# return as string
 	return $data;
