@@ -213,7 +213,7 @@ if ($opts)
 	print join("\n", map {
 		s/(?:\!|\=.*?)$//;
 		join(', ', map { '-' . $_ } split /\|/);
-	} keys %{ { @opts } });
+	} sort keys %{ { @opts } });
 }
 
 ################################################################################
@@ -812,7 +812,7 @@ Prints the manual page and exits.
 
 =item B<-opts>
 
-Print a list of command line options and exits.
+Print a sorted list of command line options and exits.
 
 =item B<-help>
 
