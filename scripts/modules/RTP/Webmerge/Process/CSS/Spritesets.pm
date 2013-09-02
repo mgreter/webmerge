@@ -9,7 +9,7 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Process::CSS::Spritesets::VERSION = "0.70" }
+BEGIN { $RTP::Webmerge::Process::CSS::Spritesets::VERSION = "0.8.2" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
@@ -22,11 +22,14 @@ BEGIN { our @EXPORT = qw(spritesets); }
 # load some constants
 use Fcntl qw(LOCK_UN O_RDWR);
 
+# import program runner function
+use RTP::Webmerge qw(runProgram);
+
+# load image spriteset class
 use OCBNET::Spritesets::CSS;
 
-# import functions from IO module
-use RTP::Webmerge::IO qw(writefile readfile);
-use RTP::Webmerge::Path qw(web_url web_path);
+# import webmerge IO file reader and writer
+use RTP::Webmerge::IO qw(readfile writefile);
 
 ###################################################################################################
 
@@ -39,118 +42,84 @@ sub spritesets
 	# get input variables
 	my ($data, $config, $output) = @_;
 
-	my $from = sub
-	{
-		my ($url) = @_;
-		return $url;
-	};
-	my $to = sub
-	{
-		my ($url) = @_;
-		return $url;
-	};
-
-	# parse spritesets and insert bg styles
-	# ${$data} = ${ parseSpritesets($data, $from, $to, $config->{'atomic'}) };
-
+	# create a new ocbnet spriteset object
 	my $css = OCBNET::Spritesets::CSS->new();
 
-	my $rv = 0;
-
+	# read our stylesheet data
 	$css->read($data, $config->{'atomic'});
 
+	# call write and pass writer sub
 	my $written = $css->write(sub
 	{
 
+		# get input varibles
 		my ($file, $blob, $written) = @_;
 
+		# normalize filename (still needed?)
 		$file =~ s/[\/\\]+/\//g;
 
+		# get data for atomic file handling
 		my $atomic = $config->{'atomic'};
 
-			if ($atomic->{$file})
+		# check if file is known
+		if ($atomic->{$file})
+		{
+
+			# content has changed between writes
+			# what should we do in this situation?
+			if (${$atomic->{$file}->[0]} ne $blob)
 			{
-				# file has already been written
-				if (${$atomic->{$file}->[0]} ne $blob)
-				{
-
-					# open(my $fh1, ">", 'out1.tst');
-					# open(my $fh2, ">", 'out2.tst');
-
-					# print $fh1 ${$atomic->{$file}->[0]};
-					# print $fh2 $blob;
-
-					# die "cannot write same file with different content: $file";
-
-					# strange enough this can happen with spritesets
-					# the differences are very subtile, but no idea why
-					warn "writing same file with different content: $file\n";
-
-				}
-				else
-				{
-					warn "writing same file more than once: $file\n";
-				}
+				# strange enough this can happen with spritesets
+				# the differences are very subtile, but no idea why
+				die "writing same file with different content: $file\n";
 			}
 			else
 			{
-				$file = web_path(web_url($file));
-
-				my $handle = writefile($file, \$blob, $atomic, 1);
-				die "error write $file" unless $handle;
-				unless (exists $written->{'png'})
-				{ $written->{'png'} = []; }
-				push(@{$written->{'png'}}, $handle);
+				# this is really just a warning, nothing more
+				warn "writing same file more than once: $file\n";
 			}
-	});
+		}
+		# first write on file
+		else
+		{
+			# write out the file and get the file handle
+			my $handle = writefile($file, \$blob, $atomic, 1);
+			# assertion for any write errors
+			die "error write $file" unless $handle;
+			# create data structure to remember ...
+			unless (exists $written->{'png'})
+			{ $written->{'png'} = []; }
+			# ... which files have been written
+			push(@{$written->{'png'}}, $handle);
+		}
 
-	# process spriteset
+	});
+	# EO write
+
+	# process spritesets
 	# sets sprite positions
 	$css->process();
 
-	# render resulting css
+	# render result stylesheet
 	${$data} = $css->render;
-
-# die length($$data);
-
-	# parse spritesets and insert bg styles
-	# my $rv = parseSpritesets($config, $data, $from, $to, $config->{'atomic'});
-
-	# assign the new css code
-	# ${$data} = ${$rv->[0]};
 
 	# check if we are optimizing
 	# if so we may should optimize images
 	if ($config->{'optimize'})
 	{
-		# load function from main module
-		use RTP::Webmerge qw(runProgram);
 		# call all possible optimizers
 		foreach my $program (keys %{$written})
 		{
 			# check if this program should run or not
 			next unless $config->{'optimize-' . $program};
-
-			foreach (@{$written->{$program}})
-			{
-				CORE::close($_);
-			}
-
-			# call the external program on all files
-			runProgram($config, $program . 'opt',
-			[
-				map {
-					# optimize the temp path
-					${*$_}{'io_atomicfile_temp'}
-				}
-				@{$written->{$program}}
-			], $program . ' sprites');
-
-			foreach (@{$written->{$program}})
-			{
-				sysopen($_, ${*$_}{'io_atomicfile_temp'}, O_RDWR)
-			}
-
+			# close file finehandle now to flush out changes
+			CORE::close($_) foreach (@{$written->{$program}});
+			# fetch all temporary file paths to be optimized by next step
+			my @files = map { ${*$_}{'io_atomicfile_temp'} } @{$written->{$program}};
+			# call the external optimizer program on all temporary files
+			runProgram($config, $program . 'opt', \@files, $program . ' sprites');
+			# re-open the file handles after the optimizers have done their work
+			sysopen($_, ${*$_}{'io_atomicfile_temp'}, O_RDWR) foreach (@{$written->{$program}});
 		}
 		# EO each program
 	}
@@ -165,28 +134,10 @@ sub spritesets
 ###################################################################################################
 
 # import registered processors
-use RTP::Webmerge qw(%processors @initers);
+use RTP::Webmerge qw(%processors);
 
 # register the processor function
 $processors{'spritesets'} = \& spritesets;
-
-# register initializer
-push @initers, sub
-{
-
-	# get input variables
-	my ($config) = @_;
-
-	# assign default value to variable
-	# $config->{'option'} = 0;
-
-	# return additional get options attribute
-	return (
-		# 'option=s' => \ $config->{'option'}
-	);
-
-};
-# EO plugin initer
 
 ###################################################################################################
 ###################################################################################################
