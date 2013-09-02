@@ -34,11 +34,15 @@ sub debug
 
 }
 
+####################################################################################################
+
 sub new
 {
 
+	# shift class name
 	my $pkg = shift;
 
+	# define initial hash
 	my $self = {
 
 		# stack position
@@ -66,10 +70,10 @@ sub new
 		'position-y' => 'top',
 		'position-x' => 'left',
 		# background margins
-		'margin-top' => 0,
-		'margin-left' => 0,
-		'margin-right' => 0,
-		'margin-bottom' => 0,
+		# 'margin-top' => 0,
+		# 'margin-left' => 0,
+		# 'margin-right' => 0,
+		# 'margin-bottom' => 0,
 		# background paddings
 		'padding-top' => 0,
 		'padding-left' => 0,
@@ -80,16 +84,13 @@ sub new
 
 	%{$self} = (%{$self}, %{$_[0]});
 
-	# $self->{'enclosed-x'} = 1 unless $self->{'repeat-x'};
-	# $self->{'enclosed-y'} = 1 unless $self->{'repeat-y'};
-
 	# my $image = new Image::Magick;
 	my $image = new Graphics::Magick;
 
 	if ($self->{'filename'})
 	{
 		my $err = $image->Read($self->{'filename'});
-		die "Error from ImageMagick:\n", $err if $err;
+		die "Error from GraphicsMagick:\n", $err if $err;
 		$self->{'w'} = $image->Get('width');
 		$self->{'h'} = $image->Get('height');
 		$self->{'width'} = $image->Get('width');

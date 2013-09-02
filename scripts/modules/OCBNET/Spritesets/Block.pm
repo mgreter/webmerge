@@ -37,10 +37,10 @@ sub new
 		'padding-bottom' => 0,
 		'padding-left' => 0,
 		# paddings for the box
-		'margin-top' => 0,
-		'margin-right' => 0,
-		'margin-bottom' => 0,
-		'margin-left' => 0,
+		# 'margin-top' => 0,
+		# 'margin-right' => 0,
+		# 'margin-bottom' => 0,
+		# 'margin-left' => 0,
 
 		# the parent block node
 		'parent' => $parent,
@@ -67,10 +67,10 @@ sub height : lvalue { $_[0]->{'h'} }
 
 # getter and setter methods
 # ***************************************************************************************
-sub marginTop : lvalue { $_[0]->{'margin-top'} }
-sub marginLeft : lvalue { $_[0]->{'margin-left'} }
-sub marginRight : lvalue { $_[0]->{'margin-right'} }
-sub marginBottom : lvalue { $_[0]->{'margin-bottom'} }
+# sub marginTop : lvalue { $_[0]->{'margin-top'} }
+# sub marginLeft : lvalue { $_[0]->{'margin-left'} }
+# sub marginRight : lvalue { $_[0]->{'margin-right'} }
+# sub marginBottom : lvalue { $_[0]->{'margin-bottom'} }
 
 # getter and setter methods
 # ***************************************************************************************
@@ -87,8 +87,6 @@ sub size { return join('x', $_[0]->width, $_[0]->height); }
 # ***************************************************************************************
 sub outerWidth { return $_[0]->width + $_[0]->paddingLeft + $_[0]->paddingRight; }
 sub outerHeight { return $_[0]->height + $_[0]->paddingTop + $_[0]->paddingBottom; }
-# sub outerWidth { return ($_[0]->width + $_[0]->paddingLeft + $_[0]->paddingRight) * ($_[0]->{'scale-x'} || 1); }
-# sub outerHeight { return ($_[0]->height + $_[0]->paddingTop + $_[0]->paddingBottom) * ($_[0]->{'scale-y'} || 1); }
 
 ####################################################################################################
 sub position { die "change to offset position"; }

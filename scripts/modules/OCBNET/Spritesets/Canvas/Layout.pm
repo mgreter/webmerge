@@ -85,32 +85,32 @@ sub layout
 
 	foreach my $sprite (@{$self->{'corner-lt'}->{'children'}})
 	{
-		$sprite->{'margin-left'} = $sprite->{'padding-left'};
-		$sprite->{'margin-top'} = $sprite->{'padding-top'};
+		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
+		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-left'} = 0;
 		$sprite->{'padding-top'} = 0;
 	}
 
 	foreach my $sprite (@{$self->{'corner-lb'}->{'children'}})
 	{
-		$sprite->{'margin-left'} = $sprite->{'padding-left'};
-		$sprite->{'margin-bottom'} = $sprite->{'padding-bottom'};
+		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
+		# $sprite->{'margin-bottom'} = $sprite->{'padding-bottom'};
 		$sprite->{'padding-left'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
 
 	foreach my $sprite (@{$self->{'corner-rt'}->{'children'}})
 	{
-		$sprite->{'margin-right'} = $sprite->{'padding-right'};
-		$sprite->{'margin-top'} = $sprite->{'padding-top'};
+		# $sprite->{'margin-right'} = $sprite->{'padding-right'};
+		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-right'} = 0;
 		$sprite->{'padding-top'} = 0;
 	}
 
 	foreach my $sprite (@{$self->{'corner-rb'}->{'children'}})
 	{
-		$sprite->{'margin-right'} = $sprite->{'padding-right'};
-		$sprite->{'margin-bottom'} = $sprite->{'padding-top'};
+		# $sprite->{'margin-right'} = $sprite->{'padding-right'};
+		# $sprite->{'margin-bottom'} = $sprite->{'padding-top'};
 		$sprite->{'padding-right'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
@@ -119,28 +119,28 @@ sub layout
 	{
 		next if $sprite->isRepeatX;
 		next if $sprite->isRepeatY;
-		$sprite->{'margin-left'} = $sprite->{'padding-left'};
+		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
 		$sprite->{'padding-left'} = 0;
 	}
 	foreach my $sprite (@{$self->{'edge-t'}->{'children'}})
 	{
 		next if $sprite->isRepeatY;
 		next if $sprite->isRepeatX;
-		$sprite->{'margin-top'} = $sprite->{'padding-top'};
+		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-top'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
 	foreach my $sprite (@{$self->{'stack-l'}->{'children'}})
 	{
 		next if $sprite->isRepeatX;
-		$sprite->{'margin-left'} = $sprite->{'padding-left'};
+		# $sprite->{'margin-left'} = $sprite->{'padding-left'};
 		$sprite->{'padding-left'} = 0;
 		$sprite->{'padding-right'} = 0;
 	}
 	foreach my $sprite (@{$self->{'stack-t'}->{'children'}})
 	{
 		next if $sprite->isRepeatY;
-		$sprite->{'margin-top'} = $sprite->{'padding-top'};
+		# $sprite->{'margin-top'} = $sprite->{'padding-top'};
 		$sprite->{'padding-top'} = 0;
 		$sprite->{'padding-bottom'} = 0;
 	}
