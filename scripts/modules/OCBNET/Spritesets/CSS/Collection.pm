@@ -1,6 +1,5 @@
 ####################################################################################################
-# this is a block where all sprites get fitted in
-# the smallest available space (see packaging)
+# TODO: Move bits to separated packages
 ####################################################################################################
 package OCBNET::Spritesets::CSS::Collection;
 ####################################################################################################
@@ -34,20 +33,28 @@ my $re_css_bg_position = qr/(?:left|right|top|bottom|center|$re_css_length|inher
 #**************************************************************************************************
 my $re_css_bg_position_block = qr/($re_css_bg_position(?:\s+($re_css_bg_position))?)/;
 
-
 #**************************************************************************************************
 
 my $re_css_bg = qr/(?:$re_css_bg_image|){1,5}/;
 
+####################################################################################################
 
-my $boxsides = {
+# attributes for box model that
+# have left/top and right/bottom
+my $boxmodel =
+{
 	'margin' => 1,
 	'padding' => 1,
+	# not yet implemented
+	# but parse them anyway
+	'sprite-margin' => 1,
 	'sprite-padding' => 1,
 };
 
-my $constructed = {
-
+# attributes with keywords
+# and more complex logic
+my $constructed =
+{
 	'background' => {
 		'color' => $re_css_color,
 		'image' => $re_css_bg_image,
@@ -55,15 +62,10 @@ my $constructed = {
 		'attachment' => $re_css_bg_attachment,
 		'position' => $re_css_bg_position_block
 	}
-
 };
 
-sub keys
-{
+####################################################################################################
 
-	return CORE::keys %{$_[0]}
-
-}
 
 sub set
 {
@@ -150,7 +152,7 @@ sub set
 
 	}
 
-	elsif (exists $boxsides->{$name})
+	elsif (exists $boxmodel->{$name})
 	{
 
 		if ($value =~ m/\A\s*
@@ -252,29 +254,15 @@ sub get
 
 }
 
-sub new
-{
 
-	my ($pckg) = @_;
+####################################################################################################
 
-	my $self = {
-	};
+# simple core methods for hash
+sub new { bless {}, $_[0]; }
+sub keys { CORE::keys %{$_[0]} }
+sub exists { CORE::exists $_[0]->{$_[1]}; }
+sub defined { CORE::defined $_[0]->{$_[1]}; }
 
-	return bless $self, $pckg;
-
-}
-
-
-sub defined
-{
-	my ($self, $name) = @_;
-	return CORE::defined $self->{$name};
-}
-
-sub exists
-{
-	my ($self, $name) = @_;
-	return CORE::exists $self->{$name};
-}
-
+####################################################################################################
+####################################################################################################
 1;

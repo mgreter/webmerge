@@ -205,7 +205,7 @@ use OCBNET::Spritesets::CSS::Base;
 
 # regular expression to find colors
 #**************************************************************************************************
-our $re_css_color_num = qr/
+our $re_css_color_hex = qr/
 	\#[0-9A-F]{3,6}
 /xsi;
 
@@ -291,7 +291,7 @@ our $re_css_color_color = qr/
 our $re_css_color = qr/(?:
 	transparent |
 	currentColor |
-	$re_css_color_num |
+	$re_css_color_hex |
 	$re_css_color_rgb |
 	$re_css_color_rgba |
 	$re_css_color_hsl |
