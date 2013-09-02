@@ -51,7 +51,7 @@ $parse_declarations = sub
 	my ($data) = @_;
 
 	my @declarations;
-my $dbg = $$data =~ m/\-size/;
+
 	while (${$data} ne '')
 	{
 		if (${$data} =~ s/^

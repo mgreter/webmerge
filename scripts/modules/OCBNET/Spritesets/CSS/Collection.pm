@@ -12,7 +12,6 @@ use warnings;
 
 use OCBNET::Spritesets::CSS::Base;
 use OCBNET::Spritesets::CSS::Colors;
-use OCBNET::Spritesets::CSS::Dimensions;
 
 ####################################################################################################
 
