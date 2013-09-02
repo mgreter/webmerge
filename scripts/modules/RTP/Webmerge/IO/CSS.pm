@@ -81,7 +81,9 @@ sub _importURI
 	# }
 
 	# check if the url is actually
-	return $url if ($url =~ m/^(?:[a-zA-Z]+\:)?\/\//);
+	# we never should have absolute urls from file system
+	# we always want to have css urls here, so remove it
+	# die $url if ($url =~ m/^(?:[a-zA-Z]+\:)?\/\//);
 
 	# remove hash tag and query string
 	# why is this needed for a static file?
@@ -91,10 +93,12 @@ sub _importURI
 	# my $path = join('', $csspath, $url);
 
 	# create absolute path from the url if exists
-	my $path = realpath(rel2abs(dirname($url), $csspath));
+	my $path = $url =~ m/^\// ?
+			   realpath(join('/', $webroot, dirname($url))) :
+	           realpath(rel2abs(dirname($url), $csspath));
 
 	# check path on filesystem and
-	die "CSS url($url) in <$csspath> not found\n" unless ($path && -e $path);
+	die "CSS url($url) in <$csspath> not found\n" unless ($path && -e dirname ($path));
 
 	# now re attach the file name for the resource
 	$path = join('/', $path, basename($url));
