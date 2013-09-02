@@ -347,7 +347,7 @@ sub distribute
 	{
 		next if $sprite->{'distributed'};
 		warn sprintf "unsupported: %s : rep(%s/%s), enc(%s/%s), pos(%s/%s)\n",
-			substr($sprite->{'filename'}, -30),
+			substr($sprite->{'filename'}, - 25),
 			$sprite->{'repeat-x'},
 			$sprite->{'repeat-y'},
 			$sprite->{'enclosed-x'},

@@ -119,7 +119,7 @@ sub inlinedata
 		print "\nWARNING: some urls have been included multiple times\n";
 		print "Please try to reference each urls only once in the style sheet!\n";
 		print "It could be possible to merge the selectors of all identical urls!\n";
-		print "\n  ", join("\n  ", map { $_ . " (" . $info->{'seen'}->{$_} . ")" }@duplicates) , "\n\n";
+		print "\n  ", join("\n  ", map { substr($_, - 65) . " (" . $info->{'seen'}->{$_} . ")" } @duplicates) , "\n\n";
 	}
 
 	# return success
