@@ -43,7 +43,7 @@ sub compileJS
 	# create the command to execute the closure compiler
 	my $command = $java_bin . ' -jar ' .
 			# reference the closure compiler relative from extension
-			'"' . res_path('{EXT}/scripts/closure-compiler/compiler.jar') . '"' .
+			'"' . res_path('{EXT}/scripts/google/closure/compiler.jar') . '"' .
 		' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';
 
 	# I should only listen for my own children
