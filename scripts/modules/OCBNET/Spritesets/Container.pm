@@ -175,6 +175,16 @@ sub draw
 	# process all sprites to paint them
 	foreach my $sprite (@{$self->{'children'}})
 	{
+		# draw background on canvas
+		if ($sprite->{'img-bg'})
+		{
+			$self->{'image'}->Composite(
+				compose => 'over',
+				y => $sprite->top + $sprite->paddingTop,
+				x => $sprite->left + $sprite->paddingLeft,
+				image => $sprite->{'img-bg'}
+			);
+		}
 		# draw image on canvas
 		$self->{'image'}->Composite(
 			compose => 'over',
