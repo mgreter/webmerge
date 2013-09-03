@@ -66,7 +66,7 @@ sub new
 	$self->{'sprites'} = [];
 
 	# debug mode variable
-	$self->{'debug'} = 0;
+	$self->{'debug'} = $options->{'debug'};
 
 	# assign or init the options hash
 	$self->{'options'} = $options || {};
@@ -195,6 +195,15 @@ sub draw
 		#my $sprite = $images->{$area};
 		#my $position = $positions->{$area};
 		# draw image on canvas
+		if ($self->{$area}->{'img-bg'})
+		{
+			$self->{'image'}->Composite(
+				compose => 'Over',
+				x => $self->{$area}->{'x'},
+				y => $self->{$area}->{'y'},
+				image => $self->{$area}->{'img-bg'}
+			);
+		}
 		$self->{'image'}->Composite(
 			compose => 'Over',
 			x => $self->{$area}->{'x'},
