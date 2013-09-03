@@ -130,6 +130,15 @@ BODY .head DIV.box
 	padding-right: 45px;
 }
 
+.toggle A
+{
+	margin: -4px 0px;
+	padding: 4px 0px;
+	display: block;
+	font-size: 10px;
+	line-height: 12px;
+	font-family: verdana, arial;
+}
 
 .cf DIV.row-head
 {
