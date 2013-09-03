@@ -21,7 +21,7 @@ function togglePixelRatio (value)
 		var cur = window.devicePixelRatio || 1;
 
 		// shorten the floating point
-		cur = parseInt(cur * 10) / 10;
+		cur = parseInt(cur * 1000) / 1000;
 
 		// loop over all stylesheet rules
 		var i = rules.length; while (i--)
@@ -78,8 +78,11 @@ function togglePixelRatio (value)
 					sheet.insertRule(rule, i);
 				}
 				// give a message about the current ratio
-				jQuery('.toggle A').html(ratio < cur ? 'Hi-Res' : 'Lo-Res')
-				.attr('title', 'Currently visible spriteset');
+				jQuery('.toggle A').html(
+					(ratio < cur ? 'HIGH' : 'LOW')
+					+ '(' + cur + ')'
+				);
+
 			}
 		}
 		// EO each rule
@@ -99,3 +102,19 @@ jQuery(window).on('resize', function()
 
 });
 // @@@ EO event: window resize @@@
+
+// @@@ event: document load @@@
+jQuery(function()
+{
+
+	// wait some time before init
+	window.setTimeout(function()
+	{
+
+		// show current resolution
+		togglePixelRatio(false);
+
+	}, 1500);
+
+});
+// @@@ EO event: document load @@@
