@@ -100,6 +100,7 @@ sub distribute
 
 		# distribute one sprite into right bottom corner
 		# optimum for non enclosed sprite left/top aligned
+		# can remove all paddings and offset from left/top
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			last unless $self->{'corner-rb'}->empty;
@@ -116,7 +117,8 @@ sub distribute
 		}
 
 		# distribute one sprite into right top corner
-		# optimum for non enclosed-x sprite left/bottom aligned
+		# optimum for height enclosed sprite left/bottom aligned
+		# can remove height paddings and offset from top
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			next if $sprite->{'distributed'};
@@ -131,7 +133,8 @@ sub distribute
 		}
 
 		# distribute one sprite into left bottom corner
-		# optimum for non enclosed sprite right/top aligned
+		# optimum for width enclosed sprite right/top aligned
+		# can remove width paddings and offset from left
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			next if $sprite->{'distributed'};
@@ -146,8 +149,8 @@ sub distribute
 		}
 
 		# distribute one sprite into left top corner
-		# optimum for non enclosed sprite right/bottom aligned
-		# do not waste this spot for
+		# optimum for enclosed sprite right/bottom aligned
+		# can remove paddings and offset from left/top
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
 			next if $sprite->{'distributed'};
