@@ -43,7 +43,7 @@ sub spritesets
 	my ($data, $config, $output) = @_;
 
 	# create a new ocbnet spriteset object
-	my $css = OCBNET::Spritesets::CSS->new();
+	my $css = OCBNET::Spritesets::CSS->new($config);
 
 	# read our stylesheet data
 	$css->read($data, $config->{'atomic'});

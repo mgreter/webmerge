@@ -114,14 +114,15 @@ sub fromPx
 sub new
 {
 
-	my ($pckg) = @_;
+	my ($pckg, $config) = @_;
 
 	my $self = {
 		'ids' => {},
 		'head' => '',
 		'blocks' => [],
 		'footer' => '',
-		'spritesets' => {}
+		'spritesets' => {},
+		'config' => $config || {}
 	};
 
 	return bless $self, $pckg;
@@ -244,6 +245,8 @@ sub read
 			next unless $options->defined('sprite-id');
 			# get the id for this spriteset
 			my $id = $options->get('sprite-id');
+			# pass debug mode from config to options
+			$options->{'debug'} = $self->{'config'}->{'debug'};
 			# create a new canvas object to hold all sprites
 			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
 			# add this canvas to global hash object
@@ -306,6 +309,7 @@ sub read
 		# create a new sprite and setup most options
 		my $sprite = new OCBNET::Spritesets::Sprite({
 			'filename' => fromUrl($url),
+			'debug' => $self->{'config'}->{'debug'},
 			'size-x' => fromPx($selector->style('background-size-x')) || undef,
 			'size-y' => fromPx($selector->style('background-size-y')) || undef,
 			'repeat-x' => $selector->style('background-repeat-x') || 0,
@@ -489,12 +493,20 @@ sub process
 		# sprite has not been included yet
 		unless ($sprite->{'parent'})
 		{
-			# make background red
-			# only for developement
-			push(@{$declarations}, [
-				'background-color',
-				':rgba(255, 0, 0, 0.125) !important;',
-			]);
+			# check for debug mode on canvas or sprite
+			if ($canvas->{'debug'} || $sprite->{'debug'})
+			{
+				# make border dark red
+				push(@{$declarations}, [
+					'border-color',
+					':rgb(192, 128, 128) !important;',
+				]);
+				# make background redish
+				push(@{$declarations}, [
+					'background-color',
+					':rgba(255, 0, 0, 0.125) !important;',
+				]);
+			}
 		}
 		# sprite was distributed
 		else
@@ -527,9 +539,8 @@ sub process
 					': ' . (($canvas->width ) / $sprite->{'scale-x'}) . 'px '
 					     . (($canvas->height ) / $sprite->{'scale-y'}) . 'px;'
 				]
-			)
+			);
 		}
-
 
 		################################
 		################################
