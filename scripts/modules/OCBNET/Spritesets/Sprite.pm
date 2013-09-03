@@ -84,6 +84,23 @@ sub new
 
 	%{$self} = (%{$self}, %{$_[0]});
 
+	if ($self->{'debug'})
+	{
+		eval
+		{
+			no warnings 'uninitialized';
+			my $data = join('', values %{$self});
+			use warnings 'uninitialized';
+			use Digest::MD5 qw(md5_hex);
+			my $digest = md5_hex($data);
+			$self->{'bg'} = sprintf
+				'xc:rgba(%d, %d, %d, 0.25)',
+					hex(substr($digest, 0, 2)),
+					hex(substr($digest, 4, 2)),
+					hex(substr($digest, 6, 2));
+		}
+	}
+
 	# my $image = new Image::Magick;
 	my $image = new Graphics::Magick;
 
@@ -130,7 +147,20 @@ sub new
 
 	$self->{'image'} = $image;
 
-	return bless $self, $pkg;
+	$self = bless $self, $pkg;
+
+	if ($self->{'bg'})
+	{
+		# my $bg = new Image::Magick;
+		my $bg = new Graphics::Magick;
+		$bg->Set(size => $self->size);
+		$bg->Set(quality => 3);
+		$bg->ReadImage($self->{'bg'});
+		$bg->Quantize(colorspace=>'RGB');
+		$self->{'img-bg'} = $bg;
+	}
+
+	return $self;
 
 }
 
