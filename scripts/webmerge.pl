@@ -90,6 +90,9 @@ my $config =
 	# doctype to render includes
 	'doctype' => 'html5',
 
+	# debug mode
+	'debug' => 0,
+
 	# preapre stuff
 	'prepare' => 0,
 	# optimize stuff
@@ -156,6 +159,9 @@ my @opts = (
 
 	# the main config file (only from cmd line)
 	'configfile|f=s' => \$config->{'configfile'},
+
+	# enable/disable debug mode
+	'debug|dbg!' => \$config->{'cmd_debug'},
 
 	# maybe change these in the config file
 	'webroot=s' => \$config->{'cmd_webroot'},
@@ -794,6 +800,8 @@ webmerge [options] [steps]
    --optimize-mng      enable/disable optimizer for mng images (--mng)
    --optimize-zip      enable/disable optimizer for zip archives (--zip)
    --optimize-gz       enable/disable optimizer for gz archive files (--gz)
+
+   -dbg, --debug       enable/disable debug mode
 
    --man               full documentation
    --opts              list command line options
