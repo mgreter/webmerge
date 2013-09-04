@@ -43,4 +43,18 @@ SET PATH=%PERLPATH%\c\bin;%PATH%
 
 perl "%DRIVEPWD%\scripts\webmerge.pl" %*
 
+@IF ERRORLEVEL 1 GOTO errorHandling
+
+@echo  
+
+@sleep 1
+
+@GOTO endHandling
+
+:errorHandling
+
+@pause
+
+:endHandling
+
 ENDLOCAL
