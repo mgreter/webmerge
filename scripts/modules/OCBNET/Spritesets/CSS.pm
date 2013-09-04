@@ -376,7 +376,7 @@ sub read
 		{
 			# add some padding to fill the empty space
 			$sprite->{'padding-left'} += $sprite->{'position2-x'};
-			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'position2-x'};
 		}
 		# is right but has fixed dimension
 		elsif ($sprite->isFixedX)
@@ -388,7 +388,7 @@ sub read
 		{
 			# add some padding to fill the empty space
 			$sprite->{'padding-top'} += $sprite->{'position2-y'};
-			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'position2-y'};
 		}
 		# is right but has fixed dimension
 		elsif ($sprite->isFixedY)
