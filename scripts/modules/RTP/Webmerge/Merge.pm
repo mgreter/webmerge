@@ -32,6 +32,9 @@ use RTP::Webmerge::Fingerprint;
 use RTP::Webmerge::Compile::JS;
 use RTP::Webmerge::Compile::CSS;
 
+# import global webroot variable
+use RTP::Webmerge::Path qw($webroot);
+
 ###################################################################################################
 # implement atomic operations
 ###################################################################################################
@@ -417,6 +420,9 @@ sub mergeEntry
 	# process all files to be written for this merge
 	foreach my $output (@{$merge->{'output'} || []})
 	{
+
+		# make webroot local to this block and reset if configured
+		local $webroot = resolve_path $output->{'webroot'} if $output->{'webroot'};
 
 		# create path to store this generated output
 		my $output_path = resolve_path $output->{'path'};
