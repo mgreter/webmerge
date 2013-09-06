@@ -17,6 +17,10 @@ To Do
 - Integrate a SASS/LESS processor
 - Implement @license header handling
 - Maybe add support for ImageMagick too
+- Finalize API for spritesets generator
+- Improve path handling for js dev targets
+- Normalize web_url/path and import/exportURL
+- Make writes to the same atomic file transparent
 
 Installing on Windows
 =====================

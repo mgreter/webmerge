@@ -13,27 +13,37 @@ use warnings;
 use base 'OCBNET::Spritesets::Block';
 
 ####################################################################################################
+# stolen from http://www.perlmonks.org/?node_id=56906
+####################################################################################################
 
-sub gcf {
-  my ($x, $y) = @_;
-  ($x, $y) = ($y, $x % $y) while $y;
-  return $x;
+# greatest common factor
+sub gcf($$)
+{
+	my ($x, $y) = @_;
+	($x, $y) = ($y, $x % $y) while $y;
+	return $x;
 }
 
-sub lcm {
-  return($_[0] * $_[1] / gcf($_[0], $_[1]));
+# least common multiple
+sub lcm($$)
+{
+	return($_[0] * $_[1] / gcf($_[0], $_[1]));
 }
 
-sub multigcf {
-  my $x = shift;
-  $x = gcf($x, shift) while @_;
-  return $x;
+# greatest common factor
+sub multigcf(@)
+{
+	my $x = shift;
+	$x = gcf($x, shift) while @_;
+	return $x;
 }
 
-sub multilcm {
-  my $x = shift;
-  $x = lcm($x, shift) while @_;
-  return $x;
+# least common multiple
+sub multilcm(@)
+{
+	my $x = shift;
+	$x = lcm($x, shift) while @_;
+	return $x;
 }
 
 ####################################################################################################
