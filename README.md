@@ -69,6 +69,13 @@ Installing on Gentoo Linux
 Installing Closure Compiler
 ===========================
 Go into the scripts/google/closure directory and execute the update script.
+You will need wget and unzip accessible. On windows I suggest you install
+UnxUtils into an accessible path (like c:\windows or add a directory to your
+global path environment variable). You can also download the compiler manually
+and extract it to the directory.
+
+- http://sourceforge.net/projects/unxutils/
+- http://closure-compiler.googlecode.com/files/compiler-latest.zip
 
 Other external optimizers
 =========================

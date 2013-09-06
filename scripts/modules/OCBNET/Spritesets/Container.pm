@@ -27,7 +27,7 @@ sub gcf($$)
 # least common multiple
 sub lcm($$)
 {
-	return($_[0] * $_[1] / gcf($_[0], $_[1]));
+	return $_[0] * $_[1] / gcf($_[0], $_[1]);
 }
 
 # greatest common factor
