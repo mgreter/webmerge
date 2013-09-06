@@ -5,12 +5,12 @@ Asset Manager for Front End Development (JS, CSS, Images)
 Features
 ========
 - Merge, join and optimize CSS and JavaScript files
-- Optimize images with external tools (in parallel)
-- Create spritesets by annotating your css stylesheets
-- Can handle sprites optimized for high resolution displays
+- Optimize images with external tools (in parallel jobs)
+- Create spritesets by simply annotating your css stylesheets
+- Can handle sprites optimized for high resolution displays (retina)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
-- Commits all file changes only after a successfull merge
-- File watcher to recompile if a source file has changed
+- Commits all file changes only after a successfull merge ("atomic")
+- File watcher to recompile automatically when a source file has changed
 
 To Do
 =====
