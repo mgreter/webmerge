@@ -86,7 +86,9 @@ Other external optimizers
 
 Using Webmerge
 ==============
-Documentation not yet done. See example directory for hints.
+Documentation not yet done. See example directory for hints. Call
+webmerge script with --help to get information about the available
+command line options.
 
 Portable version for windows
 ============================
