@@ -62,7 +62,12 @@ use Fcntl qw(O_RDONLY LOCK_EX);
 ###################################################################################################
 
 # default template for the js includer function (can be adjusted for defered loading)
-my $fn_include_js = 'function (src) { document.write(\'<script src="\' + src + \'"></script>\'); }';
+my $fn_include_js = 'function (src)
+{
+	if (typeof webmerge != "undefined" && webmerge.webroot)
+	{ src = [webmerge.webroot, src].join("/"); }
+	document.write(\'<script src="\' + src + \'"></script>\');
+}';
 
 ###################################################################################################
 

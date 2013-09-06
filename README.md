@@ -20,7 +20,7 @@ To Do
 - Finalize API for spritesets generator
 - Improve path handling for js dev targets
 - Normalize web_url/path and import/exportURL
-- Make writes to the same atomic file transparent
+- Make writes/reads on same atomic file transparent
 
 Installing on Windows
 =====================
