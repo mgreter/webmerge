@@ -1,3 +1,6 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
 ####################################################################################################
 # OCBNET Spriteset generator from annotated css
 # Inspired by http:://www.csssprites.org

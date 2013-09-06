@@ -1,4 +1,7 @@
 ###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+###################################################################################################
 package RTP::Webmerge::Compile::JS;
 ###################################################################################################
 
@@ -43,7 +46,7 @@ sub compileJS
 	# if java home is given we will force to use t
 	if (exists $ENV{'JAVA_HOME'} && defined $ENV{'JAVA_HOME'})
 	{ $java_bin = join(EOD, $ENV{'JAVA_HOME'}, 'bin', 'java'); }
-	
+
 	# create the command to execute the closure compiler
 	my $command = '"' . $java_bin . '" -jar ' .
 			# reference the closure compiler relative from extension

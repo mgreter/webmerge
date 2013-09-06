@@ -1,3 +1,6 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
 ####################################################################################################
 # this is the base class for all children containers
 # it can be drawn (is a block) and can have child nodes
