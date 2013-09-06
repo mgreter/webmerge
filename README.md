@@ -82,7 +82,7 @@ Other external optimizers
 - http://jpegclub.org/jpegtran/ (jpegtran)
 - http://www.lcdf.org/gifsicle/ (gifsicle)
 - http://optipng.sourceforge.net/ (optipng)
-- http://advancemame.sourceforge.net/comp-readme.html (advdef & advpng)
+- http://advancemame.sourceforge.net/comp-download.html (advdef & advpng)
 
 Using Webmerge
 ==============

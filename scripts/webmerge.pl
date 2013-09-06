@@ -304,7 +304,7 @@ sub get_xml
 # returns xml document as object
 # read the given file and do includes
 sub read_xml
-	{
+{
 
 	# get the filenname
 	my ($file, @config) = @_;
@@ -327,7 +327,7 @@ sub read_xml
 	# return XML doc
 	return $xml;
 
-	}
+}
 # EO read_xml
 
 
