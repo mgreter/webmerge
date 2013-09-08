@@ -1,3 +1,6 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
 ####################################################################################################
 # this block stacks the sprites vertically
 # or horizontally together (and aligned)

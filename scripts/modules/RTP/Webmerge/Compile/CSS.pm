@@ -1,4 +1,7 @@
 ###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+###################################################################################################
 # more ideas:
 # - make selectors uppercase for gzip
 # - make all declarations lowercase for gzip

@@ -5,18 +5,22 @@ Asset Manager for Front End Development (JS, CSS, Images)
 Features
 ========
 - Merge, join and optimize CSS and JavaScript files
-- Optimize images with external tools (in parallel)
-- Create spritesets by annotating your css stylesheets
-- Can handle sprites optimized for high resolution displays
+- Optimize images with external tools (in parallel jobs)
+- Create spritesets by simply annotating your css stylesheets
+- Can handle sprites optimized for high resolution displays (retina)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
-- Commits all file changes only after a successfull merge
-- File watcher to recompile if a source file has changed
+- Commits all file changes only after a successfull merge ("atomic")
+- File watcher to recompile automatically when a source file has changed
 
 To Do
 =====
 - Integrate a SASS/LESS processor
 - Implement @license header handling
 - Maybe add support for ImageMagick too
+- Finalize API for spritesets generator
+- Improve path handling for js dev targets
+- Normalize web_url/path and import/exportURL
+- Make writes/reads on same atomic file transparent
 
 Installing on Windows
 =====================
@@ -65,17 +69,26 @@ Installing on Gentoo Linux
 Installing Closure Compiler
 ===========================
 Go into the scripts/google/closure directory and execute the update script.
+You will need wget and unzip accessible. On windows I suggest you install
+UnxUtils into an accessible path (like c:\windows or add a directory to your
+global path environment variable). You can also download the compiler manually
+and extract it to the directory.
+
+- http://sourceforge.net/projects/unxutils/
+- http://closure-compiler.googlecode.com/files/compiler-latest.zip
 
 Other external optimizers
 =========================
 - http://jpegclub.org/jpegtran/ (jpegtran)
 - http://www.lcdf.org/gifsicle/ (gifsicle)
 - http://optipng.sourceforge.net/ (optipng)
-- http://advancemame.sourceforge.net/comp-readme.html (advdef & advpng)
+- http://advancemame.sourceforge.net/comp-download.html (advdef & advpng)
 
 Using Webmerge
 ==============
-Documentation not yet done. See example directory for hints.
+Documentation not yet done. See example directory for hints. Call
+webmerge script with --help to get information about the available
+command line options.
 
 Portable version for windows
 ============================

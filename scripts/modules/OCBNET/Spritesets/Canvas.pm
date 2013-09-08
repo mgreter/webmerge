@@ -1,3 +1,6 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
 ####################################################################################################
 # this is the main canvas or root block to be drawn
 # it contains four stacked frames on each side on

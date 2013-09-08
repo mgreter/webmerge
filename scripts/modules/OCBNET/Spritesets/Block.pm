@@ -1,3 +1,6 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
 ####################################################################################################
 # this is the base class for all drawable items
 # it can only be drawn and not hold any children

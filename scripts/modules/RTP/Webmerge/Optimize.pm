@@ -1,4 +1,7 @@
 ###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+###################################################################################################
 # If you need to optimize other files, you may use this software
 # http://nikkhokkho.sourceforge.net/static.php?page=FileOptimizer
 ###################################################################################################

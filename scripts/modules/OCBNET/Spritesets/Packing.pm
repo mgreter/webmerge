@@ -1,3 +1,7 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+###################################################################################################
 package OCBNET::Spritesets::Packing;
 
 # https://github.com/jakesgordon/bin-packing/blob/master/js/packer.growing.js
