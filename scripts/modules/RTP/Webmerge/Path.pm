@@ -20,13 +20,13 @@ our ($webroot, $confroot, $extroot, $directory);
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Path::VERSION = "0.70" }
+BEGIN { $RTP::Webmerge::Path::VERSION = "0.8.3" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(res_path resolve_path exportURI importURI); }
+BEGIN { our @EXPORT = qw(check_path exportURI importURI); }
 
 # define our functions to be exported
 BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory); }
@@ -125,15 +125,15 @@ sub exportURI ($;$$)
 # resolve path with special markers for directories
 # will replace {EXT}, {WWW} and {CONF} is given paths
 # also make relative paths relative to current directory
-sub resolve_path ($)
+sub res_path ($)
 {
 
 	# get path string
 	my ($path) = @_;
 
 	# make some assertions and give die message from parent
-	Carp::croak "res_path with undefined path called" if not defined $path;
-	Carp::croak "res_path with empty path called" if $path eq '';
+	Carp::croak "check_path with undefined path called" if not defined $path;
+	Carp::croak "check_path with empty path called" if $path eq '';
 
 	# replace variables within path
 	# make dollar sign mandatory in future
@@ -153,11 +153,11 @@ sub resolve_path ($)
 
 # same as resolve path but check for existence of the parent directory
 # will resolve path to current filesystem and returns an absolute path
-sub res_path ($)
+sub check_path ($)
 {
 
 	# resolve the path string
-	my $path = &resolve_path;
+	my $path = &res_path;
 
 	# create absolute path for the directory and re-add filename
 	return join('/', abs_path(dirname($path)), basename($path));

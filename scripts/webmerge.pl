@@ -244,7 +244,7 @@ use XML::Simple;
 my $configfile = 'webmerge.conf.xml';
 
 # register extension path within our path modules for later use
-$RTP::Webmerge::Path::extroot = res_path(join('/', $Bin, '..'));
+$RTP::Webmerge::Path::extroot = check_path(join('/', $Bin, '..'));
 
 # helper sub to check file for existence
 sub checkFile { defined $_[0] && -e $_[0] ? $_[0] : undef; }
@@ -255,7 +255,7 @@ unless ( $config->{'configfile'} =~ m/^\// )
 	# search for the config file
 	$config->{'configfile'} =
 		# first try from current directory
-		checkFile(res_path($config->{'configfile'}));
+		checkFile(check_path($config->{'configfile'}));
 }
 
 # abort if the configuration file was not found
@@ -283,7 +283,7 @@ sub get_xml
 	my ($file, @config) = @_;
 
 	# resolve the file path
-	$file = resolve_path($file);
+	$file = check_path($file);
 
 	# read the complete xml file
 	my $data = readfile($file) || return;
@@ -310,7 +310,7 @@ sub read_xml
 	my ($file, @config) = @_;
 
 	# resolve the file path
-	$file = resolve_path($file);
+	$file = check_path($file);
 
 	# read the complete xml file
 	my $data = readfile($file) || return;
@@ -402,8 +402,8 @@ foreach my $key (keys %{$config})
 ################################################################################
 
 # set htdocs root directory and current working directory
-$RTP::Webmerge::Path::webroot = res_path($config->{'webroot'} || '.');
-$RTP::Webmerge::Path::directory = res_path($config->{'directory'} || '.');
+$RTP::Webmerge::Path::webroot = check_path($config->{'webroot'} || '.');
+$RTP::Webmerge::Path::directory = check_path($config->{'directory'} || '.');
 
 ################################################################################
 

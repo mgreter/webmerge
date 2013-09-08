@@ -30,7 +30,7 @@ BEGIN { our @EXPORT = qw(watchdog); }
 use Fork::Queue qw();
 
 # load core webmerge path functions
-use RTP::Webmerge::Path qw(res_path exportURI);
+use RTP::Webmerge::Path qw(check_path exportURI);
 
 # load merge function to call on file change
 use RTP::Webmerge::Merge qw(mergeEntry);
@@ -275,7 +275,7 @@ sub watchdog
 					$merge->{'block'} = $block;
 
 					# resolve the input path
-					my $path = res_path($input->{'path'});
+					my $path = check_path($input->{'path'});
 
 					# create array by filepath if it does not exist
 					$files{$path} = [] unless exists $files{$path};

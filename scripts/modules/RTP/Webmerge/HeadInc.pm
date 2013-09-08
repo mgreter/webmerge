@@ -260,7 +260,7 @@ sub headinc
 		# EO each input
 
 		# create path to store this generated output
-		my $output_path = res_path $output->{'path'};
+		my $output_path = check_path $output->{'path'};
 
 		# create the include code to be written
 		my $output_code = join("\n", @includes) . "\n";

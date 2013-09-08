@@ -26,7 +26,7 @@ BEGIN { our @EXPORT = qw(compileJS); }
 use IPC::Run3 qw(run3);
 
 # run3 to get stdout and stderr
-use RTP::Webmerge::Path qw(EOD $extroot res_path);
+use RTP::Webmerge::Path qw(EOD $extroot check_path);
 
 ###################################################################################################
 
@@ -50,7 +50,7 @@ sub compileJS
 	# create the command to execute the closure compiler
 	my $command = '"' . $java_bin . '" -jar ' .
 			# reference the closure compiler relative from extension
-			'"' . res_path('{EXT}/scripts/google/closure/compiler.jar') . '"' .
+			'"' . check_path('{EXT}/scripts/google/closure/compiler.jar') . '"' .
 		' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';
 
 	# I should only listen for my own children

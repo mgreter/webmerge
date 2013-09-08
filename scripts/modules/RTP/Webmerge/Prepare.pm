@@ -58,7 +58,7 @@ sub prepare
 			next if ($prepare->{'disabled'} && lc $prepare->{'disabled'} eq 'true');
 
 			# resolve the path to be created
-			my $path = resolve_path $mkdir->{'path'};
+			my $path = check_path $mkdir->{'path'};
 
 			# allready exists?
 			next if -d $path;
@@ -75,8 +75,8 @@ sub prepare
 		{
 
 			# get path for source and destination
-			my $src = resolve_path $copy->{'src'};
-			my $dst = resolve_path $copy->{'dst'};
+			my $src = check_path $copy->{'src'};
+			my $dst = check_path $copy->{'dst'};
 
 			print "copying ", exportURI($src), "\n";
 

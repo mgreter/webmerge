@@ -214,10 +214,10 @@ sub mergeCollect
 			{
 
 				# create absolute path to store the script output
-				my $path = resolve_path $item->{'path'};
+				my $path = check_path $item->{'path'};
 
 				# create absolute path to execute the script
-				my $script = resolve_path $item->{'script'};
+				my $script = check_path $item->{'script'};
 
 				# shebang should be given by configuration
 				# otherwise the script must have execute permission
@@ -244,7 +244,7 @@ sub mergeCollect
 			{
 
 				# resolve the path via glob (allow filename expansion)
-				foreach my $local_path (bsd_glob(resolve_path $item->{'path'}))
+				foreach my $local_path (bsd_glob(check_path $item->{'path'}))
 				{
 
 					# create absolute path from the web root
@@ -430,10 +430,10 @@ sub mergeEntry
 	{
 
 		# make webroot local to this block and reset if configured
-		local $webroot = resolve_path $output->{'webroot'} if $output->{'webroot'};
+		local $webroot = check_path $output->{'webroot'} if $output->{'webroot'};
 
 		# create path to store this generated output
-		my $output_path = resolve_path $output->{'path'};
+		my $output_path = check_path $output->{'path'};
 
 		# create path to store checksum of this output
 		my $checksum_path = join('.', $output_path, 'md5');

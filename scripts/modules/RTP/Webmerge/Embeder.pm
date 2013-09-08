@@ -25,7 +25,7 @@ BEGIN { our @EXPORT = qw(embeder); }
 # load our local modules
 use RTP::Webmerge qw(@initers);
 use RTP::Webmerge::IO qw(writefile);
-use RTP::Webmerge::Path qw(res_path);
+use RTP::Webmerge::Path qw(check_path);
 
 ###################################################################################################
 
@@ -143,7 +143,7 @@ sub embeder
 				my $context = $output->{'context'};
 
 				# store the absolute path to the output file for include
-				$domains{$rootid}->{$context}->{$class} = res_path $output->{'path'};
+				$domains{$rootid}->{$context}->{$class} = check_path $output->{'path'};
 
 				# remove leading webroot path for each include file
 				# this will make the whole process better deployable
@@ -174,7 +174,7 @@ sub embeder
 		$types = lc $types;
 
 		# resolve path to absolute path
-		$path = res_path $path;
+		$path = check_path $path;
 
 		# create new hash so we can
 		# manipulate it for this output

@@ -35,7 +35,7 @@ use File::Glob qw(:globally :nocase bsd_glob);
 use Fcntl qw(O_RDWR O_RDONLY LOCK_EX SEEK_SET LOCK_UN);
 
 # load webmerge core path module
-use RTP::Webmerge::Path qw(res_path);
+use RTP::Webmerge::Path qw(check_path);
 
 ###################################################################################################
 
@@ -108,12 +108,12 @@ sub readfile ($;$$)
 	{ return $atomic->{$file}->[0]; }
 
 	# check if file does exist
-	# res_path may bail otherwise
+	# check_path may bail otherwise
 	if (-e $file)
 	{
 
 		# resolve path and make absolute
-		$file = res_path($file) || $file;
+		$file = check_path($file) || $file;
 
 	} else {
 
@@ -122,7 +122,7 @@ sub readfile ($;$$)
 		my ($name, $path) = fileparse($file);
 
 		# resolve path and make absolute
-		$path = res_path($path) || $path;
+		$path = check_path($path) || $path;
 
 		# re-join the complete file uri
 		$file = join('/', $path, $name);
@@ -180,12 +180,12 @@ sub writefile ($$;$$)
 	my ($file, $out, $atomic, $binary) = @_;
 
 	# check if file does exist
-	# res_path may bail otherwise
+	# check_path may bail otherwise
 	if (-e $file)
 	{
 
 		# resolve path and make absolute
-		$file = res_path($file) || $file;
+		$file = check_path($file) || $file;
 
 	} else {
 
@@ -194,7 +194,7 @@ sub writefile ($$;$$)
 		my ($name, $path) = fileparse($file);
 
 		# resolve path and make absolute
-		$path = res_path($path) || $path;
+		$path = check_path($path) || $path;
 
 		# re-join the complete file uri
 		$file = join('/', $path, $name);
@@ -302,7 +302,7 @@ sub processfile
 	my ($file, $processor, $config, $options) = @_;
 
 	# resolve path
-	$file = res_path($file);
+	$file = check_path($file);
 
 	# declare local variables
 	my $rv, my $data = '';
@@ -352,7 +352,7 @@ sub filelist
 	my ($root, $file, $recursive) = @_;
 
 	# resolve path
-	$root = res_path($root);
+	$root = check_path($root);
 
 	# declare local variables
 	my @dirs = ($root), my @files;

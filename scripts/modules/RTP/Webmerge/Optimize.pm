@@ -78,7 +78,7 @@ sub optimize
 ###################################################################################################
 
 # load function from main module
-use RTP::Webmerge::Path qw(res_path);
+use RTP::Webmerge::Path qw(check_path);
 
 # load functions from webmerge io library
 use RTP::Webmerge::IO qw(filelist);
@@ -133,7 +133,7 @@ sub fileOptimizer ($)
 				$recursive = 0 if $recursive eq 'false';
 
 				# get all files for the resolved path and pattern
-				my $files = filelist(res_path($path), $file, $recursive);
+				my $files = filelist(check_path($path), $file, $recursive);
 
 				# call all possible optimizers
 				callProgram($config, $filetype . 'opt', $files, $pattern, $entry);

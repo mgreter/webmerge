@@ -109,7 +109,7 @@ sub crcCheckEntry
 				my ($source_path, $source_crc) = split(/:\s*/, $source, 2);
 
 				# source_path is always relative from the readed checksum file
-				$source_path = res_path(join('/', dirname($checksum_path), $source_path));
+				$source_path = check_path(join('/', dirname($checksum_path), $source_path));
 
 				# read the previously created file
 				my $subcontent = $type ne 'css' ?
@@ -135,11 +135,11 @@ sub crcCheckEntry
 
 			if ($crc_joined ne $checksum_joined)
 			{
-				printf "FAIL - tst: %s\n", substr(exportURI(res_path($result_path)), - 45);
+				printf "FAIL - tst: %s\n", substr(exportURI(check_path($result_path)), - 45);
 			}
 			else
 			{
-				printf "PASS - tst: %s\n", substr(exportURI(res_path($result_path)), - 45);
+				printf "PASS - tst: %s\n", substr(exportURI(check_path($result_path)), - 45);
 			}
 
 
