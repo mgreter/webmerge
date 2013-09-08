@@ -30,7 +30,7 @@ BEGIN { our @EXPORT = qw(watchdog); }
 use Fork::Queue qw();
 
 # load core webmerge path functions
-use RTP::Webmerge::Path qw(res_path web_url);
+use RTP::Webmerge::Path qw(res_path exportURI);
 
 # load merge function to call on file change
 use RTP::Webmerge::Merge qw(mergeEntry);
@@ -141,7 +141,7 @@ sub child ($$$$$)
 			next if scalar(@queue) == 0;
 
 			# print a debug message to the console about changed files
-			print "file changed: ", web_url($id2path->{$_}), "\n" foreach (@queue);
+			print "file changed: ", exportURI($id2path->{$_}), "\n" foreach (@queue);
 
 			# print delimiter line if something to do
 			print '#' x 78, "\n";

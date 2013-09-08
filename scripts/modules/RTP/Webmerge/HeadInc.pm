@@ -236,7 +236,7 @@ sub headinc
 				my $inctype = lc $defer eq 'true' ? $type . 'defer' : $type;
 
 				# create the absolute web include path
-				my $incpath = web_url $outpath;
+				my $incpath = exportURI $outpath;
 
 				# add the fingerprint to the include path
 				# this include always uses query string technique

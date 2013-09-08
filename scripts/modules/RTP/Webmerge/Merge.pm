@@ -36,7 +36,7 @@ use RTP::Webmerge::Compile::JS;
 use RTP::Webmerge::Compile::CSS;
 
 # import global webroot variable
-use RTP::Webmerge::Path qw($webroot);
+use RTP::Webmerge::Path qw($webroot exportURI);
 
 ###################################################################################################
 # implement atomic operations
@@ -248,7 +248,7 @@ sub mergeCollect
 				{
 
 					# create absolute path from the web root
-					my $web_path = web_url $local_path;
+					my $web_path = exportURI $local_path;
 
 					# readfile will return a string reference (pointer to the file content)
 					my $data = $reader{$type}->($local_path, $config) or die "could not read <$local_path>: $!";
@@ -443,7 +443,7 @@ sub mergeEntry
 		$output->{'checksumpath'} = $checksum_path;
 
 		# get path to be resolved
-		my $web_path = web_url $output_path;
+		my $web_path = exportURI $output_path;
 
 		# create a header for joined content (do that for all)
 		my $joined = sprintf($config->{'headtmpl'}, 'join');

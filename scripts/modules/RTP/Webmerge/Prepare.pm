@@ -64,8 +64,8 @@ sub prepare
 			next if -d $path;
 
 			# try to create the given directory and give status messages (abort on error)
-			if (mkdir $path) { print "created directory ", web_url $path, "\n"; }
-			else { die "could not create directory ", web_url $path, ": ", $!; }
+			if (mkdir $path) { print "created directory ", exportURI($path), "\n"; }
+			else { die "could not create directory ", exportURI($path), ": ", $!; }
 
 		}
 		# EO each mkdir
@@ -78,7 +78,7 @@ sub prepare
 			my $src = resolve_path $copy->{'src'};
 			my $dst = resolve_path $copy->{'dst'};
 
-			print "copying ", web_url $src, "\n";
+			print "copying ", exportURI($src), "\n";
 
 			# check if we do not copy a text file
 			my $bin = ($copy->{'text'} || '') ne "true";
@@ -87,7 +87,7 @@ sub prepare
 			my $data = readfile($src, $config->{'atomic'}, $bin);
 			writefile($dst, $data, $config->{'atomic'}, $bin);
 
-			print " copied to ", web_url $dst, "\n";
+			print " copied to ", exportURI($dst), "\n";
 
 		}
 		# EO each copy

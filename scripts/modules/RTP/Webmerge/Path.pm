@@ -29,7 +29,7 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory exportURI importURI); }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(resolve_path res_path fast_res_path web_url web_path); }
+BEGIN { our @EXPORT = qw(resolve_path res_path fast_res_path web_path); }
 
 ###################################################################################################
 
@@ -49,13 +49,6 @@ sub EOD
 {
 	$^O eq "MSWin32" ? '\\' : '/';
 }
-
-# return url for web from path
-sub web_url ($)
-{
-	return '/' . exportURI($_[0], $webroot, 1)
-}
-# EO sub web_path
 
 ###################################################################################################
 

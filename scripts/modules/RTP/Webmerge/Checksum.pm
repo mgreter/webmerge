@@ -29,6 +29,7 @@ use File::Spec::Functions qw(abs2rel);
 # load our local modules
 use RTP::Webmerge::IO;
 use RTP::Webmerge::Path;
+use RTP::Webmerge::Path qw(exportURI);
 use RTP::Webmerge::IO::CSS qw(readCSS);
 use RTP::Webmerge::Fingerprint qw(md5sum);
 
@@ -89,12 +90,12 @@ sub crcCheckEntry
 			# check if the generated content changed
 			if (md5sum($content) ne $checksum_result)
 			{
-				printf "FAIL - dst: %s\n", substr(web_url($result_path), - 45);
+				printf "FAIL - dst: %s\n", substr(exportURI($result_path), - 45);
 				printf "=> %s vs %s\n", md5sum($content), $checksum_result;
 			}
 			else
 			{
-				printf "PASS - dst: %s\n", substr(web_url($result_path), - 45);
+				printf "PASS - dst: %s\n", substr(exportURI($result_path), - 45);
 			}
 
 			# declare local variable
@@ -120,12 +121,12 @@ sub crcCheckEntry
 				# check against stored value
 				if ($source_md5 ne $source_crc)
 				{
-					printf "  FAIL - src: %s\n", substr(web_url($source_path), - 45);
+					printf "  FAIL - src: %s\n", substr(exportURI($source_path), - 45);
 					printf "  => %s vs %s\n", $source_md5, $source_crc;
 				}
 				else
 				{
-					printf "  PASS - src: %s\n", substr(web_url($source_path), - 45);
+					printf "  PASS - src: %s\n", substr(exportURI($source_path), - 45);
 				}
 
 			}
@@ -134,11 +135,11 @@ sub crcCheckEntry
 
 			if ($crc_joined ne $checksum_joined)
 			{
-				printf "FAIL - tst: %s\n", substr(web_url(res_path($result_path)), - 45);
+				printf "FAIL - tst: %s\n", substr(exportURI(res_path($result_path)), - 45);
 			}
 			else
 			{
-				printf "PASS - tst: %s\n", substr(web_url(res_path($result_path)), - 45);
+				printf "PASS - tst: %s\n", substr(exportURI(res_path($result_path)), - 45);
 			}
 
 
