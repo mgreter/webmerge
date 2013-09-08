@@ -103,7 +103,7 @@ sub fingerprint
 	return $path unless $config->{'fingerprint'} && $technique;
 
 	# read the file from the disk if a data reference is not passed
-	$data = readfile web_path($path), $config->{'atomic'} unless (defined $data);
+	$data = readfile $path, $config->{'atomic'} unless (defined $data);
 
 	# simply append the fingerprint as a unique query string
 	return join('?', $path, md5short($data)) if $technique eq 'q';

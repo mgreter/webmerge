@@ -240,7 +240,7 @@ sub headinc
 
 				# add the fingerprint to the include path
 				# this include always uses query string technique
-				$incpath = fingerprint($config, 'live', $incpath);
+				$incpath = fingerprint($config, 'live', $outpath);
 
 				# generate and add the include by using sprintf and the given template
 				push(@includes, sprintf $tmpl->{$doctype}->{$inctype}, $incpath, $id, $config->{'jsdeferer'});

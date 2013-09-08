@@ -26,18 +26,21 @@ BEGIN { $RTP::Webmerge::Path::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory); }
+BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory exportURL importURI); }
 
 # define our variables to be exported
 BEGIN { our @EXPORT = qw(resolve_path res_path fast_res_path web_url web_path); }
 
 ###################################################################################################
 
-# use cwd to normalize paths
-use Cwd qw(abs_path fast_abs_path);
-
 # use to parse path and filename
 use File::Basename qw(dirname basename);
+
+# import system path conversion functions
+use File::Spec::Functions qw(rel2abs abs2rel);
+
+# use cwd to normalize paths
+use Cwd qw(realpath abs_path fast_abs_path);
 
 ###################################################################################################
 
@@ -83,6 +86,71 @@ sub web_url ($)
 
 ###################################################################################################
 
+# resolve css url to absolute path on filesystem
+# directory has to exist, but not the actual file
+sub importURI
+{
+
+	# get the uri and css path
+	my ($uri, $csspath, $config) = @_;
+
+	# remove hash tag and query string for uri
+	my $suffix = $uri =~ s/([\?\#].*?)$// ? $1 : '';
+
+	# get path and filename
+	my $path = dirname $uri;
+	my $file = basename $uri;
+
+	# check if uri is absolute
+	if ($uri =~ m/^\//)
+	{
+		# absolute uris should be loaded from webroot
+		$path = realpath(join('/', $webroot, $path));
+	}
+	else
+	{
+		# relative uris load from parent cssfile
+		$path = realpath(rel2abs($path, $csspath));
+	}
+
+	# assert that the path of the uri exists on the actual filesystem
+	die "CSS uri($uri) not found (css path: $csspath)\n" unless $path && -d $path;
+
+	# return the final absolute local url
+	return join('/', $path, basename($uri));
+
+}
+# EO sub importURI
+
+###################################################################################################
+
+# export filesystem url to web uri
+sub exportURL
+{
+
+	# get input variables
+	my ($url, $csspath, $config) = @_;
+
+	# check if we export absolute uris
+	if ($config->{'absoluteurls'})
+	{
+		# absolute url from webroot
+		$url = '/' . abs2rel($url, $webroot);
+	}
+	else
+	{
+		# relative url from csspath
+		$url = abs2rel($url, $csspath);
+	}
+
+	# normalize directory delimiters on win
+	$url =~ s/\\+/\//g if $^O eq "MSWin32";
+
+	# return url
+	return $url;
+
+}
+# EO sub exportURL
 # return path from url for web
 sub web_path ($)
 {

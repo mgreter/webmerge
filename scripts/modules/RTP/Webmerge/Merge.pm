@@ -375,7 +375,7 @@ sub includeJS
 	my $js_include_tmpl = 'includeJS(\'%s\');' . "\n";
 
 	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'web_path'}, $data->{'org'});
+	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
 
 	# return the script include string
 	return sprintf($js_include_tmpl, $path);
