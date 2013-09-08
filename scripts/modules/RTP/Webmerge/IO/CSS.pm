@@ -46,7 +46,7 @@ use File::Spec::Functions qw(rel2abs abs2rel);
 use RTP::Webmerge::IO qw(readfile writefile);
 
 # import local webroot path
-use RTP::Webmerge::Path qw($webroot exportURL importURI);
+use RTP::Webmerge::Path qw($webroot exportURI importURI);
 
 
 ###################################################################################################
@@ -120,7 +120,7 @@ sub readCSS
 
 	# resolve all local paths in the stylesheet to web uris
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(exportURL($1, $webroot, $config))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($1, $webroot))/egm;
 
 	# return scalar
 	return $data;
@@ -160,7 +160,7 @@ sub exportCSS
 
 	# change all absolute local paths to web uris
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(exportURL($1, dirname($file), $config))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($1, dirname($file)))/egm;
 
 	# return success
 	return 1;
