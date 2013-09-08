@@ -55,10 +55,10 @@ sub importURI
 {
 
 	# get uri and local path
-	my ($uri, $localpath) = @_;
+	my ($uri, $relpath) = @_;
 
-	# set localpath to webroot if nothin else given
-	$localpath = $webroot unless defined $localpath;
+	# set relpath to webroot if nothin else given
+	$relpath = $webroot unless defined $relpath;
 
 	# remove hash tag and query string for uri
 	my $suffix = $uri =~ s/([\;\?\#].*?)$// ? $1 : '';
@@ -77,11 +77,11 @@ sub importURI
 	else
 	{
 		# relative uris load from parent cssfile
-		$path = realpath(rel2abs($path, $localpath));
+		$path = realpath(rel2abs($path, $relpath));
 	}
 
 	# assert that at least the path of the uri exists on the actual filesystem
-	die "URI($uri) could not be imported (CWD: $localpath)\n" unless $path && -d $path;
+	die "URI($uri) could not be imported (CWD: $relpath)\n" unless $path && -d $path;
 
 	# return the final absolute local url
 	# the suffix is lost as we convert the
@@ -100,13 +100,13 @@ sub exportURI ($;$$)
 {
 
 	# get input variables
-	my ($url, $localpath, $abs) = @_;
+	my ($path, $relpath, $abs) = @_;
 
-	# set localpath to webroot if nothin else given
-	$localpath = $webroot unless defined $localpath;
+	# set relpath to webroot if nothin else given
+	$relpath = $webroot unless defined $relpath;
 
-	# relative url from localpath
-	$url = abs2rel($url, $localpath);
+	# relative url from relpath
+	my $url = abs2rel($path, $relpath);
 
 	# normalize directory delimiters on win
 	$url =~ s/\\+/\//g if $^O eq "MSWin32";
@@ -140,9 +140,6 @@ sub resolve_path ($)
 	$path =~ s/\$?\{EXT\}/$extroot/gm if $extroot;
 	$path =~ s/\$?\{WWW\}/$webroot/gm if $webroot;
 	$path =~ s/\$?\{CONF\}/$confroot/gm if $confroot;
-
-	# normalize directory slashes
-	# $path =~ s/[\/\\]+/\//g;
 
 	# return if path is already absolute
 	return $path if $path =~m /^(?:\/|[a-zA-Z]:)/;
