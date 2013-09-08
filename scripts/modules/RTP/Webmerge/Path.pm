@@ -25,13 +25,16 @@ BEGIN { $RTP::Webmerge::Path::VERSION = "0.70" }
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
-# define our functions to be exported
-BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory exportURI importURI); }
-
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(resolve_path res_path fast_res_path web_path); }
+BEGIN { our @EXPORT = qw(res_path resolve_path exportURI importURI); }
+
+# define our functions to be exported
+BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory); }
 
 ###################################################################################################
+
+# use cwd to normalize paths
+use Cwd qw(realpath abs_path);
 
 # use to parse path and filename
 use File::Basename qw(dirname basename);
@@ -39,16 +42,10 @@ use File::Basename qw(dirname basename);
 # import system path conversion functions
 use File::Spec::Functions qw(rel2abs abs2rel);
 
-# use cwd to normalize paths
-use Cwd qw(realpath abs_path fast_abs_path);
-
 ###################################################################################################
 
-# directory delimiter
-sub EOD
-{
-	$^O eq "MSWin32" ? '\\' : '/';
-}
+# directory delimiter for supported OS
+sub EOD { $^O eq "MSWin32" ? '\\' : '/'; }
 
 ###################################################################################################
 
@@ -125,26 +122,30 @@ sub exportURI ($;$$)
 
 ###################################################################################################
 
-# resolve path
+# resolve path with special markers for directories
+# will replace {EXT}, {WWW} and {CONF} is given paths
+# also make relative paths relative to current directory
 sub resolve_path ($)
 {
 
 	# get path string
 	my ($path) = @_;
 
-	# make some assertions
+	# make some assertions and give die message from parent
 	Carp::croak "res_path with undefined path called" if not defined $path;
 	Carp::croak "res_path with empty path called" if $path eq '';
 
-	# replace some variables
-	$path =~ s/\{EXT\}/$extroot/gm if $extroot;
-	$path =~ s/\{WWW\}/$webroot/gm if $webroot;
-	$path =~ s/\{CONF\}/$confroot/gm if $confroot;
+	# replace variables within path
+	# make dollar sign mandatory in future
+	$path =~ s/\$?\{EXT\}/$extroot/gm if $extroot;
+	$path =~ s/\$?\{WWW\}/$webroot/gm if $webroot;
+	$path =~ s/\$?\{CONF\}/$confroot/gm if $confroot;
+
+	# normalize directory slashes
+	# $path =~ s/[\/\\]+/\//g;
 
 	# return if path is already absolute
 	return $path if $path =~m /^(?:\/|[a-zA-Z]:)/;
-
-	$path =~ s/[\/\\]+/\//g;
 
 	# prepended current directory and return
 	return join('/', $directory || '.', $path);
@@ -153,28 +154,16 @@ sub resolve_path ($)
 
 ###################################################################################################
 
-# pass through abs_path function
+# same as resolve path but check for existence of the parent directory
+# will resolve path to current filesystem and returns an absolute path
 sub res_path ($)
 {
 
 	# resolve the path string
 	my $path = &resolve_path;
-	$path =~ s/[\/\\]+/\//g;
+
 	# create absolute path for the directory and re-add filename
 	return join('/', abs_path(dirname($path)), basename($path));
-
-}
-
-# pass through fast_abs_path function
-sub fast_res_path ($)
-{
-
-	# resolve the path string
-	my $path = &resolve_path;
-	$path =~ s/[\/\\]+/\//g;
-
-	# create absolute path for the directory and re-add filename
-	return join('/', fast_abs_path(dirname($path)), basename($path));
 
 }
 
@@ -221,7 +210,6 @@ sub chdir
 
 }
 
-
 ###################################################################################################
 
 # restore the saved directory
@@ -238,7 +226,6 @@ sub DESTROY
 	# print "restored directory => $directory\n";
 
 }
-
 
 ###################################################################################################
 ###################################################################################################

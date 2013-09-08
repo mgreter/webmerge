@@ -59,7 +59,7 @@ sub spritesets
 		my ($file, $blob, $written) = @_;
 
 		# normalize filename (still needed?)
-		$file =~ s/[\/\\]+/\//g;
+		# $file =~ s/[\/\\]+/\//g;
 
 		# get data for atomic file handling
 		my $atomic = $config->{'atomic'};

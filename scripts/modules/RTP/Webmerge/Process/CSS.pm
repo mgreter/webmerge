@@ -239,7 +239,7 @@ sub inline_url
 		# get the filesize
 		my $size = 0;
 
-		$url =~ s/[\/\\]+/\//g;
+		# $url =~ s/[\/\\]+/\//g;
 
 		# check if the file has already been written
 		unless (exists $config->{'atomic'}->{$url}) { $size = -s $url; }
