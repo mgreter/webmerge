@@ -54,20 +54,20 @@ sub EOD { $^O eq "MSWin32" ? '\\' : '/'; }
 sub importURI
 {
 
-	# get uri and local path
+	# get URI and local path
 	my ($uri, $relpath) = @_;
 
 	# set relpath to webroot if nothin else given
 	$relpath = $webroot unless defined $relpath;
 
-	# remove hash tag and query string for uri
+	# remove hash tag and query string for URI
 	my $suffix = $uri =~ s/([\;\?\#].*?)$// ? $1 : '';
 
 	# get path and filename
 	my $path = dirname $uri;
 	my $file = basename $uri;
 
-	# check if uri is absolute
+	# check if URI is absolute
 	if ($uri =~ m/^\//)
 	{
 		# absolute uris should be loaded from webroot
@@ -80,10 +80,10 @@ sub importURI
 		$path = realpath(rel2abs($path, $relpath));
 	}
 
-	# assert that at least the path of the uri exists on the actual filesystem
+	# assert that at least the path of the URI exists on the actual filesystem
 	die "URI($uri) could not be imported (CWD: $relpath)\n" unless $path && -d $path;
 
-	# return the final absolute local url
+	# return the final absolute local path
 	# the suffix is lost as we convert the
 	# URI to a real absolute local filepath
 	return join('/', $path, $file);
@@ -105,17 +105,17 @@ sub exportURI ($;$$)
 	# set relpath to webroot if nothin else given
 	$relpath = $webroot unless defined $relpath;
 
-	# relative url from relpath
-	my $url = abs2rel($path, $relpath);
+	# relative URI from relpath
+	my $uri = abs2rel($path, $relpath);
 
 	# normalize directory delimiters on win
-	$url =~ s/\\+/\//g if $^O eq "MSWin32";
+	$uri =~ s/\\+/\//g if $^O eq "MSWin32";
 
-	# create absolute url if set
-	$url = '/' . $url if $abs;
+	# create absolute URI if set
+	$uri = '/' . $uri if $abs;
 
-	# return url
-	return $url;
+	# return URI
+	return $uri;
 
 }
 # EO sub exportURI
