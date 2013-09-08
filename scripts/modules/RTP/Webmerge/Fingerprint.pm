@@ -63,9 +63,6 @@ use File::Basename qw(dirname basename);
 # load core webmerge io functions
 use RTP::Webmerge::IO qw(readfile);
 
-# load core webmerge path functions
-use RTP::Webmerge::Path qw(web_path);
-
 ###################################################################################################
 
 sub md5sum

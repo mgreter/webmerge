@@ -150,31 +150,6 @@ sub exportURL
 	return $url;
 
 }
-# EO sub exportURL
-# return path from url for web
-sub web_path ($)
-{
-
-	# should be doable with web
-
-	# get path string
-	my ($abs_webpath) = @_;
-
-	# resolve the webroot absolute
-	my $root = abs_path($webroot);
-
-	# replace backward slashes
-	# replace multiple slashes
-	#$abs_webpath =~ s/\\+/\//g;
-	#$abs_webpath =~ s/\/+/\//g;
-	#$root =~ s/\\+/\//g;
-	#$root =~ s/\/+/\//g;
-	#$root =~ s/\/$//g;
-
-	# return web path
-	return join('/', $root, $abs_webpath);
-
-}
 
 ###################################################################################################
 
