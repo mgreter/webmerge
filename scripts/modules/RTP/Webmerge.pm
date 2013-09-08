@@ -385,10 +385,12 @@ sub callProgram ($$$$;$)
 	# make array items unqiue
 	@{$files} = uniq(@{$files});
 
+	# do not run in parallel on windows
+	# code has been developed for linux
 	if ($^O eq "MSWin32")
 	{
 
-			# run the program with a subset of files
+			# run the program with a set of all files
 			runProgram($config, $program, $files, $pattern, $options);
 
 	}

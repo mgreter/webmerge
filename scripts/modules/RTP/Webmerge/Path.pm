@@ -160,6 +160,7 @@ sub check_path ($)
 	my $path = &res_path;
 
 	# create absolute path for the directory and re-add filename
+	# abs_path will error out if the given path does not exist
 	return join('/', abs_path(dirname($path)), basename($path));
 
 }
