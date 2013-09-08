@@ -103,8 +103,6 @@ sub readfile ($;$$)
 	# get input variables
 	my ($file, $atomic, $binary) = @_;
 
-	# $file =~ s/[\/\\]+/\//g;
-
 	# check if file has already beed written
 	if ($atomic && exists $atomic->{$file})
 	{ return $atomic->{$file}->[0]; }
@@ -130,8 +128,6 @@ sub readfile ($;$$)
 		$file = join('/', $path, $name);
 
 	}
-
-	# $file =~ s/[\/\\]+/\//g;
 
 	# check if file has already beed written
 	if ($atomic && exists $atomic->{$file})
@@ -204,8 +200,6 @@ sub writefile ($$;$$)
 		$file = join('/', $path, $name);
 
 	}
-
-	# $file =~ s/[\/\\]+/\//g;
 
 	# declare local variables
 	my $rv = undef;
