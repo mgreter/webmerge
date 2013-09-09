@@ -19,7 +19,6 @@ To Do
 - Maybe add support for ImageMagick too
 - Finalize API for spritesets generator
 - Improve path handling for js dev targets
-- Normalize web_url/path and import/exportURL
 - Make writes/reads on same atomic file transparent
 
 Installing on Windows
