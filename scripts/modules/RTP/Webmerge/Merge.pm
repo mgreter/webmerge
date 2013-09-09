@@ -58,13 +58,36 @@ use Fcntl qw(O_RDONLY LOCK_EX);
 
 ###################################################################################################
 
-# default template for the js includer function (can be adjusted for defered loading)
-my $fn_include_js = 'function (src)
+my $js_dev_header =
+'
+// create namespace for webmerge if not yet defined
+if (typeof webmerge == \'undefined\') window.webmerge = {};
+
+// define default JS loader function, overwrite with
+// other defered JS loaders like head.hs or requireJS
+if (typeof webmerge.loadJS != \'function\')
 {
-	if (typeof webmerge != "undefined" && webmerge.webroot)
-	{ src = [webmerge.webroot, src].join("/"); }
-	document.write(\'<script src="\' + src + \'"></script>\');
-}';
+	webmerge.loadJS = function (src)
+	{
+		document.write(\'<script src="\' + src + \'"></script>\');
+	}
+}
+
+// include a JS file will rewrite the url if defined
+// and then call the loadJS function to import the code
+if (typeof webmerge.includeJS != \'function\')
+{
+	webmerge.includeJS = function (src)
+	{
+		// check if we have a custom url rewriter
+		if (webmerge.rewriteJS) src = webmerge.rewriteJS(src);
+		// call the importer function, which
+		// can be overwritten by a custom loader
+		webmerge.loadJS.call(this, src);
+	}
+}
+
+';
 
 ###################################################################################################
 
@@ -363,7 +386,7 @@ sub includeJS
 	my $data = $_;
 
 	# define the template for the script includes
-	my $js_include_tmpl = 'includeJS(\'%s\');' . "\n";
+	my $js_include_tmpl = 'webmerge.includeJS(\'%s\');' . "\n";
 
 	# get a unique path with added fingerprint (query or directory)
 	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
@@ -486,8 +509,10 @@ sub mergeEntry
 				# assertion that we have at least one defered include, otherwise
 				# it may never fire the ready event (happens with head.js)
 				$deferred = 0 if scalar $collect->('input') == 0;
-				# insert the javascript loader function above all other includes
-				$code .= "\n" . 'var includeJS = ' . ($deferred ? 'head.js' : $fn_include_js) . ";\n\n";
+				# insert the javascript header
+				$code .= $js_dev_header;
+				# overwrite loader with defered head.js loader
+				$code .= 'webmerge.loadJS = head.hs;' if $deferred;
 			}
 
 			# prepend the data/text unaltered
