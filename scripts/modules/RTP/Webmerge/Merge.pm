@@ -77,25 +77,24 @@ my $fn_include_js = 'function (src)
 use RTP::Webmerge::IO::JS;
 use RTP::Webmerge::IO::CSS;
 
-my %reader = (
-	'js' => \&readJS,
-	'css' => \&readCSS
-);
+use CSS::Minifier qw();
 
-my %importer = (
-	'js' => \&importJS,
-	'css' => \&importCSS
-);
+sub minifyCSS { &CSS::Minifier::minify }
 
-my %exporter = (
-	'js' => \&exportJS,
-	'css' => \&exportCSS
-);
+use JavaScript::Minifier qw();
 
-my %writer = (
-	'js' => \&writeJS,
-	'css' => \&writeCSS
-);
+sub minifyJS { &JavaScript::Minifier::minify }
+
+###################################################################################################
+
+# define various handlers for all the different actions
+my %reader = ( 'js' => \&readJS, 'css' => \&readCSS );
+my %writer = ( 'js' => \&writeJS, 'css' => \&writeCSS );
+my %importer = ( 'js' => \&importJS, 'css' => \&importCSS );
+my %exporter = ( 'js' => \&exportJS, 'css' => \&exportCSS );
+my %minifier = ( 'js' => \&minifyJS, 'css' => \&minifyCSS, );
+my %compiler = ( 'js' => \&compileJS, 'css' => \&compileCSS );
+my %includer = ( 'js' => \&includeJS, 'css' => \&includeCSS );
 
 ###################################################################################################
 
@@ -382,22 +381,6 @@ sub includeJS
 
 }
 # EO includeJS
-
-###################################################################################################
-
-use CSS::Minifier qw();
-sub minifyCSS { &CSS::Minifier::minify }
-
-use JavaScript::Minifier qw();
-sub minifyJS { &JavaScript::Minifier::minify }
-
-###################################################################################################
-
-# define various handlers for all the different actions
-my %minifier = ( 'js' => \&minifyJS, 'css' => \&minifyCSS, );
-my %compiler = ( 'js' => \&compileJS, 'css' => \&compileCSS );
-my %includer = ( 'js' => \&includeJS, 'css' => \&includeCSS );
-
 
 ###################################################################################################
 # this function does all the joining, minifying and compiling
