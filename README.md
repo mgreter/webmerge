@@ -20,6 +20,7 @@ To Do
 - Finalize API for spritesets generator
 - Improve path handling for js dev targets
 - Make writes/reads on same atomic file transparent
+- Do not hard depend on perl minifier backup modules
 
 Installing on Windows
 =====================

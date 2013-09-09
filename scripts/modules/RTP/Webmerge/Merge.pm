@@ -77,13 +77,13 @@ my $fn_include_js = 'function (src)
 use RTP::Webmerge::IO::JS;
 use RTP::Webmerge::IO::CSS;
 
-use CSS::Minifier qw();
+###################################################################################################
 
-sub minifyCSS { &CSS::Minifier::minify }
-
-use JavaScript::Minifier qw();
-
-sub minifyJS { &JavaScript::Minifier::minify }
+# load minifier libraries and define subroutines
+# maybe make these dependencies dynamic as they are
+# normally only used as backup if the default methods fail
+use CSS::Minifier qw(); sub minifyCSS { &CSS::Minifier::minify }
+use JavaScript::Minifier qw(); sub minifyJS { &JavaScript::Minifier::minify }
 
 ###################################################################################################
 
