@@ -35,9 +35,6 @@ use RTP::Webmerge::Fingerprint;
 use RTP::Webmerge::Compile::JS;
 use RTP::Webmerge::Compile::CSS;
 
-# import global webroot variable
-use RTP::Webmerge::Path qw($webroot exportURI);
-
 ###################################################################################################
 # implement atomic operations
 ###################################################################################################
@@ -45,17 +42,14 @@ use RTP::Webmerge::Path qw($webroot exportURI);
 # module for atomic ops
 use RTP::IO::AtomicFile;
 
-# store atomic file handles
-# commit/revert all at the end
-# remember temp files to remove
-# my $atomic = {}, my $temp = [];
-
 # use core mdoules for path handling
 use File::Basename qw(dirname);
-use File::Spec::Functions qw(abs2rel rel2abs);
 
 # override core glob (case insensitive)
 use File::Glob qw(:globally :nocase bsd_glob);
+
+# import global webroot variable
+use RTP::Webmerge::Path qw($webroot exportURI);
 
 ###################################################################################################
 
@@ -129,9 +123,7 @@ sub mergeWrite
 			# create the md5 sum for this item (only do this once for each path)
 			# $item->{'md5sum'} = md5sum($item->{'data'}) unless ($item->{'md5sum'});
 			# create a relative path from the current checksum file
-			my $rel_path = abs2rel($item->{'local_path'}, dirname($checksum_path));
-			# normalize windows paths and other anomalies
-			$rel_path =~ s/\\+/\//g; $rel_path =~ s/\/+/\//g;
+			my $rel_path = exportURI($item->{'local_path'}, dirname($checksum_path));
 			# append checksum for every input file to be appended to our crc file
 			$crc_listning .= join(': ', $rel_path, $item->{'md5sum'}) . "\n";
 			# concatenate md5sums of all items

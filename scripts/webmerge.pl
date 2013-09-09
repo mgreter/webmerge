@@ -21,9 +21,6 @@ BEGIN { unshift @INC, "$Bin/modules"; }
 
 ################################################################################
 
-# get working directory
-use Cwd qw(getcwd abs_path);
-
 # load spriteset library
 use OCBNET::Spritesets;
 
@@ -64,6 +61,10 @@ my $pid = $$;
 # get current working directory
 ################################################################################
 
+# import cwd functions
+use Cwd qw(getcwd abs_path);
+
+# get working directory
 my $cwd = abs_path(getcwd);
 
 ################################################################################

@@ -20,8 +20,6 @@ use base 'OCBNET::Spritesets::Block';
 # use File::Slurp;
 # use Image::Magick;
 
-use File::Spec qw(rel2abs);
-
 sub debug
 {
 

@@ -25,13 +25,11 @@ BEGIN { our @EXPORT = qw(embeder); }
 # load our local modules
 use RTP::Webmerge qw(@initers);
 use RTP::Webmerge::IO qw(writefile);
-use RTP::Webmerge::Path qw(check_path);
-
-###################################################################################################
 
 # use core mdoules for path handling
 use File::Basename qw(dirname);
-use File::Spec::Functions qw(abs2rel);
+
+use RTP::Webmerge::Path qw(check_path exportURI);
 
 ###################################################################################################
 
@@ -188,7 +186,7 @@ sub embeder
 			{
 				foreach (values %{$includes{$did}->{$context}})
 				{
-					$_ = abs2rel($_, dirname($path));
+					$_ =  exportURI($_, dirname($path));
 				}
 			}
 		}

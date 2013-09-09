@@ -26,10 +26,10 @@ BEGIN { $RTP::Webmerge::Path::VERSION = "0.8.3" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(check_path exportURI importURI); }
+BEGIN { our @EXPORT = qw(dirname res_path check_path exportURI importURI); }
 
 # define our functions to be exported
-BEGIN { our @EXPORT_OK = qw(EOD $webroot $confroot $extroot $directory); }
+BEGIN { our @EXPORT_OK = qw(EOD basename $webroot $confroot $extroot $directory); }
 
 ###################################################################################################
 
