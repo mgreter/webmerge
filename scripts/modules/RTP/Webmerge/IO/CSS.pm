@@ -33,18 +33,11 @@ BEGIN { our @EXPORT_OK = qw($re_url wrapURL); }
 
 ###################################################################################################
 
-# import path resolver
-use Cwd qw(realpath);
-
-# import core file functions
-use File::Basename qw(dirname);
-
 # import webmerge io file reader and writer
 use RTP::Webmerge::IO qw(readfile writefile);
 
 # import local webroot path
-use RTP::Webmerge::Path qw(exportURI importURI);
-
+use RTP::Webmerge::Path qw(dirname exportURI importURI);
 
 ###################################################################################################
 

@@ -22,14 +22,9 @@ BEGIN { our @EXPORT = qw(crcCheck); }
 
 ###################################################################################################
 
-# use core mdoules for path handling
-use File::Basename qw(dirname);
-use File::Spec::Functions qw(abs2rel);
-
 # load our local modules
 use RTP::Webmerge::IO;
 use RTP::Webmerge::Path;
-use RTP::Webmerge::Path qw(exportURI);
 use RTP::Webmerge::IO::CSS qw(readCSS);
 use RTP::Webmerge::Fingerprint qw(md5sum);
 

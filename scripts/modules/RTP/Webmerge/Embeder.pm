@@ -27,9 +27,7 @@ use RTP::Webmerge qw(@initers);
 use RTP::Webmerge::IO qw(writefile);
 
 # use core mdoules for path handling
-use File::Basename qw(dirname);
-
-use RTP::Webmerge::Path qw(check_path exportURI);
+use RTP::Webmerge::Path qw(dirname check_path exportURI);
 
 ###################################################################################################
 

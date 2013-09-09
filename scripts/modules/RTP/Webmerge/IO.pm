@@ -28,14 +28,14 @@ BEGIN { our @EXPORT_OK = qw(processfile filelist); }
 # resolve filepath
 use File::Basename;
 
+# load webmerge core path module
+use RTP::Webmerge::Path;
+
 # override core glob (case insensitive)
 use File::Glob qw(:globally :nocase bsd_glob);
 
 # load flags for the system file operation calls
 use Fcntl qw(O_RDWR O_RDONLY LOCK_EX SEEK_SET LOCK_UN);
-
-# load webmerge core path module
-use RTP::Webmerge::Path qw(check_path);
 
 ###################################################################################################
 
