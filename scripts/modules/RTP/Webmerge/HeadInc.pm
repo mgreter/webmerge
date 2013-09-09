@@ -235,12 +235,15 @@ sub headinc
 				# get the include type wheter include is defered or not
 				my $inctype = lc $defer eq 'true' ? $type . 'defer' : $type;
 
-				# create the absolute web include path
-				my $incpath = exportURI $outpath;
-
 				# add the fingerprint to the include path
 				# this include always uses query string technique
-				$incpath = fingerprint($config, 'live', $outpath);
+				my $incpath = fingerprint($config, 'live', $outpath);
+
+				# remove hash tag and query string for URI
+				my $suffix = $incpath =~ s/([\;\?\#].*?)$// ? $1 : '';
+
+				# create the absolute web include path
+				$incpath = exportURI($outpath, undef, 1) . $suffix;
 
 				# generate and add the include by using sprintf and the given template
 				push(@includes, sprintf $tmpl->{$doctype}->{$inctype}, $incpath, $id, $config->{'jsdeferer'});

@@ -378,7 +378,7 @@ sub includeJS
 	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
 
 	# return the script include string
-	return sprintf($js_include_tmpl, $path);
+	return sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
 
 }
 # EO includeJS
