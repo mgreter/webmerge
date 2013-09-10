@@ -98,11 +98,11 @@ my $config =
 	'debug' => 0,
 
 	# preapre stuff
-	'prepare' => 0,
+	'prepare' => 1,
 	# optimize stuff
 	'optimize' => 0,
 	# merge configured stuff
-	'merge' => 0,
+	'merge' => 1,
 	# create head includes
 	'headinc' => 0,
 	# create embeder
