@@ -79,6 +79,8 @@ if (typeof webmerge.includeJS != \'function\')
 {
 	webmerge.includeJS = function (src)
 	{
+		// check if we have a custom webroot
+		if (webmerge.webroot) src = [webmerge.webroot, src].join(\'/\');
 		// check if we have a custom url rewriter
 		if (webmerge.rewriteJS) src = webmerge.rewriteJS(src);
 		// call the importer function, which
