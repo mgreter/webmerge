@@ -42,7 +42,7 @@ BEGIN { our @EXPORT_OK = qw(%programs %executables %processors @initers @checker
 ###################################################################################################
 
 # make absolute paths (file may not exist yet)
-use RTP::Webmerge::Path qw(check_path);
+use RTP::Webmerge::Path qw(res_path);
 
 # collect all includes
 # return result hash
@@ -112,7 +112,8 @@ sub collectOutputs
 					$info->{'out'}->{$class} = {} unless exists $info->{'out'}->{$class};
 
 					# store the filepath for this merge output (by class/target)
-					$info->{'out'}->{$class}->{$output->{'target'}} = check_path($output->{'path'});
+					# do not yet check for existence of the path as it may be created later
+					$info->{'out'}->{$class}->{$output->{'target'}} = res_path($output->{'path'});
 
 				}
 				# EO each output
