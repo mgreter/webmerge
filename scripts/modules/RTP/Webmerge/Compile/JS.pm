@@ -60,14 +60,18 @@ sub compileJS
 	# now call run3 to compile the javascript code
 	my $rv = run3($command, \ $content, \ my $compiled, \ my $err);
 
+	# print content to console if we have errors
+	# this should only ever print error messages
+	print $compiled if $err || $? || $rv != 1;
+
 	# check if there was any error given by closure compiler
-	die "closure compiler had an error, aborting\n$err" if $err;
+	die "closure compiler had an error, aborting\n$err", "\n" if $err;
 
 	# test if ipc run3 returned success
-	die "closure compiler exited unexpectedly (code $?)" if $?;
+	die "closure compiler exited unexpectedly (code $?)", "\n" if $?;
 
 	# test if ipc run3 returned success
-	die "could not run closure compiler, aborting" if $rv != 1;
+	die "could not run closure compiler, aborting", "\n" if $rv != 1;
 
 	# return compiled
 	return $compiled;
