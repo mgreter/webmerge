@@ -2,7 +2,9 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-# this block can only contain a single sprite
+# so far the canvas makes the difference between
+# an edge and a stack, but leave this file so we
+# may move relevant optimizations into here later
 ####################################################################################################
 package OCBNET::Spritesets::Edge;
 ####################################################################################################
@@ -12,36 +14,51 @@ use warnings;
 
 ####################################################################################################
 
+# a stack is a container is a block
 use base 'OCBNET::Spritesets::Stack';
 
 ####################################################################################################
 
-# create a new object
+# layout the edge
 # ******************************************************************************
-sub new
+sub layout
 {
 
-	# get package name, parent and options
-	my ($pckg, $parent, $stack_vert, $align_opp) = @_;
+	# get instance
+	my ($self) = shift;
 
-	# get object by calling super class
-	my $self = $pckg->SUPER::new($parent);
+	# process all sprites in this edge
+	foreach my $sprite ($self->children)
+	{
+		# only left/top edge
+		if (not $self->alignOpp)
+		{
+			# sprite must not repeat at all
+			if (not $sprite->isRepeating)
+			{
+				# this is the left edge
+				if ($self->stackVert)
+				{
+					$sprite->{'padding-left'} = 0;
+					$sprite->{'padding-right'} = 0;
+				}
+				# this is the top edge
+				else
+				{
+					$sprite->{'padding-top'} = 0;
+					$sprite->{'padding-bottom'} = 0;
+				}
+			}
+		}
+		# EO if left/top
+	}
+	# EO each sprite
 
-	# align the the oppositioning side?
-	$self->{'align-opp'} = $align_opp;
-
-	# stack vertically or horizontally?
-	$self->{'stack-vert'} = $stack_vert;
-
-	# return object
-	return $self;
+	# call and return base method
+	return $self->SUPER::layout(@_);
 
 }
-
-####################################################################################################
-
-sub alignOpp { return $_[0]->{'align-opp'}; }
-sub stackVert { return $_[0]->{'stack-vert'}; }
+# EO sub layout
 
 ####################################################################################################
 ####################################################################################################

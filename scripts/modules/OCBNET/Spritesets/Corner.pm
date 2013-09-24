@@ -2,6 +2,8 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
+# this block can only contain one sprite
+####################################################################################################
 package OCBNET::Spritesets::Corner;
 ####################################################################################################
 
@@ -10,6 +12,7 @@ use warnings;
 
 ####################################################################################################
 
+# a container is also a block
 use base 'OCBNET::Spritesets::Container';
 
 ####################################################################################################
@@ -36,6 +39,8 @@ sub new
 
 ####################################################################################################
 
+# getter methods for the specific options
+# ******************************************************************************
 sub isRight { return $_[0]->{'is-right'}; }
 sub isBottom { return $_[0]->{'is-bottom'}; }
 
@@ -58,13 +63,19 @@ sub layout
 	# get the only sprite in the corner
 	my $sprite = $self->{'children'}->[0];
 
+	# remove unnecessary paddings
+	$sprite->paddingTop = 0 if not $self->isBottom;
+	$sprite->paddingLeft = 0 if not $self->isRight;
+	$sprite->paddingRight = 0 if $self->isRight;
+	$sprite->paddingBottom = 0 if $self->isBottom;
+
 	# fix position to zero
-	$sprite->{'x'} = 0;
-	$sprite->{'y'} = 0;
+	$sprite->left = 0;
+	$sprite->top = 0;
 
 	# use the dimension of the sprite
-	$self->{'w'} = $sprite->outerWidth;
-	$self->{'h'} = $sprite->outerHeight;
+	$self->width = $sprite->outerWidth;
+	$self->height = $sprite->outerHeight;
 
 	# return success
 	return $self;

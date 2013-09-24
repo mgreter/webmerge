@@ -19,27 +19,22 @@ BEGIN { $OCBNET::Spritesets::Canvas::Layout = "0.70"; }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(layout); }
+BEGIN { our @EXPORT = qw(layout snap); }
 
 # define our functions to be exported
-BEGIN { our @EXPORT_OK = qw($factors); }
+BEGIN { our @EXPORT_OK = qw(factors lcm); }
 
 ####################################################################################################
 
-# snap value to given multiplier
+# load function from core module
 # ******************************************************************************
-sub snap
-{
-	# get rest by modulo divide
-	my $rest = $_[0] % $_[1];
-	# add rest to fill up to multipler
-	$_[0] += $rest ? $_[1] - $rest : 0;
-}
+use List::MoreUtils qw(uniq);
+
 
 # private helper function
 # returns all prime factors
 # ******************************************************************************
-our $factors = sub
+sub factors
 {
 
 	# hold all factors
@@ -65,18 +60,32 @@ our $factors = sub
 	return sort @primes;
 
 };
-# EO priv sub factors
+# EO sub factors
 
 ####################################################################################################
-use List::MoreUtils qw/ uniq /;
 
+# private helper function
 # least common multiplier
+# ******************************************************************************
 sub lcm
 {
 	my $product = 1; $product *= $_
 		foreach uniq grep { $_ != 0 }
-			map { $factors->($_) } @_;
+			map { factors($_) } @_;
 	return $product;
+}
+# EO sub factors
+
+####################################################################################################
+
+# snap value to given multiplier
+# ******************************************************************************
+sub snap
+{
+	# get rest by modulo divide
+	my $rest = $_[0] % $_[1];
+	# add rest to fill up to multipler
+	$_[0] += $rest ? $_[1] - $rest : 0;
 }
 
 ####################################################################################################
@@ -88,84 +97,20 @@ sub layout
 {
 
 	# get our object
-	my ($self) = @_;
+	my ($self) = shift;
+
+	##########################################################
+	# DISTRIBUTE SPRITES TO AREAS
+	##########################################################
 
 	$self->distribute();
-
-	##########################################################
-	# RESET PADDINGS FOR CORNER AREAS
-	##########################################################
-
-	# move corner sprite to the outer most position
-	foreach my $sprite (@{$self->{'corner-lt'}->{'children'}})
-	{
-		$sprite->{'padding-left'} = 0;
-		$sprite->{'padding-top'} = 0;
-	}
-
-	# move corner sprite to the outer most position
-	foreach my $sprite (@{$self->{'corner-lb'}->{'children'}})
-	{
-		$sprite->{'padding-left'} = 0;
-		$sprite->{'padding-bottom'} = 0;
-	}
-
-	# move corner sprite to the outer most position
-	foreach my $sprite (@{$self->{'corner-rt'}->{'children'}})
-	{
-		$sprite->{'padding-right'} = 0;
-		$sprite->{'padding-top'} = 0;
-	}
-
-	# move corner sprite to the outer most position
-	foreach my $sprite (@{$self->{'corner-rb'}->{'children'}})
-	{
-		$sprite->{'padding-right'} = 0;
-		$sprite->{'padding-bottom'} = 0;
-	}
-
-	##########################################################
-	# RESET PADDINGS FOR EDGE/STACK AREAS
-	##########################################################
-
-	foreach my $sprite (@{$self->{'edge-l'}->{'children'}})
-	{
-		next if $sprite->isRepeatX;
-		next if $sprite->isRepeatY;
-		$sprite->{'padding-left'} = 0;
-		$sprite->{'padding-right'} = 0;
-	}
-
-	foreach my $sprite (@{$self->{'edge-t'}->{'children'}})
-	{
-		next if $sprite->isRepeatY;
-		next if $sprite->isRepeatX;
-		$sprite->{'padding-top'} = 0;
-		$sprite->{'padding-bottom'} = 0;
-	}
-	foreach my $sprite (@{$self->{'stack-l'}->{'children'}})
-	{
-		next if $sprite->isRepeatX;
-		$sprite->{'padding-left'} = 0;
-		$sprite->{'padding-right'} = 0;
-	}
-	foreach my $sprite (@{$self->{'stack-t'}->{'children'}})
-	{
-		next if $sprite->isRepeatY;
-		$sprite->{'padding-top'} = 0;
-		$sprite->{'padding-bottom'} = 0;
-	}
 
 	##########################################################
 	# CALL LAYOUT ON EACH AREA
 	##########################################################
 
-	# layout all children
-	foreach my $area (@{$self->{'areas'}})
-	{
-			# layout the sub area
-			$self->{$area}->layout;
-	}
+	# call layout method on all areas
+	$_->layout(@_) foreach ($self->areas);
 
 	##########################################################
 	# GET MULTIPLIERS FOR DIMENSIONS AND REPEATING
@@ -176,16 +121,16 @@ sub layout
 	# declare repating arrays
 	my (@repeat_x, @repeat_y);
 
-	foreach my $area (@{$self->{'areas'}})
+	foreach my $area ($self->areas)
 	{
-		foreach my $sprite (@{$self->{$area}->{'children'}})
+		foreach my $sprite ($area->children)
 		{
-			if ($sprite->{'repeat-x'} && $sprite->{'repeat-y'})
+			if ($sprite->isRepeatX && $sprite->isRepeatY)
 			{ die "fatal: cannot repeat in both directions"; }
-			elsif ($sprite->{'repeat-x'} && $sprite->isFlexibleX)
-			{ push(@repeat_x, $factors->($sprite->{'w'})); }
-			elsif ($sprite->{'repeat-y'} && $sprite->isFlexibleY)
-			{ push(@repeat_y, $factors->($sprite->{'h'})); }
+			elsif ($sprite->isRepeatX && $sprite->isFlexibleX)
+			{ push(@repeat_x, factors($sprite->width)); }
+			elsif ($sprite->isRepeatY && $sprite->isFlexibleY)
+			{ push(@repeat_y, factors($sprite->height)); }
 		}
 	}
 
@@ -333,10 +278,10 @@ sub layout
 	snap ($col2_x, $col2_snap_w);
 	snap ($row2_y, $row2_snap_h);
 
-	# make sure both sides will fit our repeating pattern for all
-	# this can blow up the sprite by quite some factor if your images
+	# make sure both sides will fit our repeating pattern
+	# this can blow up the sprite by quite some factor if your image
 	# dimensions have lots of different factors in it, if they are all
-	# of about the same size this should work quite well
+	# about the same size and not too big, this should work quite well
 	$col2_x += $repeat_x - ($col2_x + $col4_w + $col_last_w) % $repeat_x;
 	$row2_y += $repeat_y - ($row2_y + $row4_h + $row_last_h) % $repeat_y;
 
@@ -420,24 +365,25 @@ sub layout
 	##########################################################
 
 	# layout all children
-	foreach my $area (@{$self->{'areas'}})
+	foreach my $area ($self->areas)
 	{
 
 		# ignore area if it's empty
-		next if $self->{$area}->empty;
+		next if $area->empty;
 
-		# do a re layout only for stacked (repeating) elements
-		next unless $self->{$area}->isa('OCBNET::Spritesets::Stack');
+		# adjust layout only for stacked (repeating) elements
+		next unless $area->isa('OCBNET::Spritesets::Stack');
 
 		# re-align the sub area
-		if ($self->{$area}->alignOpp)
+		if ($area->alignOpp)
 		{
-			if ($self->{$area}->stackVert)
-			{ $self->{$area}->{'x'} = $self->{'w'} - $self->{$area}->{'w'}; }
-			else { $self->{$area}->{'y'} = $self->{'h'} - $self->{$area}->{'h'}; }
+			if ($area->stackVert)
+			{ $area->left = $self->width - $area->width; }
+			else { $area->top = $self->height - $area->height; }
 		}
 
 	}
+	# EO each area
 
 	# return success
 	return $self;

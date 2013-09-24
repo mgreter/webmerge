@@ -9,8 +9,11 @@
 # ------------------------------------------------
 # move all selectors for sprite images to
 # one place to reference image only once
-# this may work well with data data urls?
+# this may work well with inline data urls?
 # where to place it to not break inheritance?
+# -> use css inheritance to place it into a
+# -> common selector, so define the spriteset
+# -> in a common block to know where to place it
 # ------------------------------------------------
 # support for multiple background images (css3)
 # ------------------------------------------------
@@ -21,17 +24,24 @@
 package OCBNET::Spritesets;
 ####################################################################################################
 
-# just load all other modules
-use OCBNET::Spritesets::CSS;
-use OCBNET::Spritesets::Packing;
+# load graphic library
+use Graphics::Magick;
+
+# default fitter algorithm
+use OCBNET::Packer::2D;
+
+# load main spriteset modules
 use OCBNET::Spritesets::Block;
+use OCBNET::Spritesets::Sprite;
 use OCBNET::Spritesets::Canvas;
 use OCBNET::Spritesets::Container;
 use OCBNET::Spritesets::Corner;
+use OCBNET::Spritesets::Stack;
 use OCBNET::Spritesets::Edge;
 use OCBNET::Spritesets::Fit;
-use OCBNET::Spritesets::Sprite;
-use OCBNET::Spritesets::Stack;
+
+# load the parser for stylesheets
+use OCBNET::Spritesets::CSS::Parser;
 
 ####################################################################################################
 ####################################################################################################

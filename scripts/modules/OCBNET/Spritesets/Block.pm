@@ -11,9 +11,6 @@ package OCBNET::Spritesets::Block;
 use strict;
 use warnings;
 
-# load imagemagick
-# use Image::Magick;
-
 ####################################################################################################
 
 # create a new object
@@ -22,169 +19,140 @@ use warnings;
 sub new
 {
 
+	# get package name and parent
 	my ($pckg, $parent) = @_;
 
+	# create hash
 	my $self = {
 
-		# offset position
+		# position
 		'x' => 0,
 		'y' => 0,
 
-		# inner dimesions
+		# dimesion
 		'w' => 0,
 		'h' => 0,
 
-		# paddings for the box
+		# padding for the box
 		'padding-top' => 0,
 		'padding-right' => 0,
 		'padding-bottom' => 0,
 		'padding-left' => 0,
-		# paddings for the box
-		# 'margin-top' => 0,
-		# 'margin-right' => 0,
-		# 'margin-bottom' => 0,
-		# 'margin-left' => 0,
 
 		# the parent block node
 		'parent' => $parent,
 
 		# create an empty image
-		'image' => new Graphics::Magick
 		# 'image' => new Image::Magick
+		'image' => new Graphics::Magick
 
 	};
 
+	# bless into passed package
 	return bless $self, $pckg;
 
 }
-# EO sub new
+# EO constructor
 
 ####################################################################################################
-
 # getter and setter methods
+####################################################################################################
+
+# position of the block relative to the parent
 # ***************************************************************************************
 sub left : lvalue { $_[0]->{'x'} }
 sub top : lvalue { $_[0]->{'y'} }
+
+# dimension of the block
+# ***************************************************************************************
 sub width : lvalue { $_[0]->{'w'} }
 sub height : lvalue { $_[0]->{'h'} }
 
-# getter and setter methods
-# ***************************************************************************************
-# sub marginTop : lvalue { $_[0]->{'margin-top'} }
-# sub marginLeft : lvalue { $_[0]->{'margin-left'} }
-# sub marginRight : lvalue { $_[0]->{'margin-right'} }
-# sub marginBottom : lvalue { $_[0]->{'margin-bottom'} }
-
-# getter and setter methods
+# paddings for all four sides of the box
 # ***************************************************************************************
 sub paddingTop : lvalue { $_[0]->{'padding-top'} }
 sub paddingLeft : lvalue { $_[0]->{'padding-left'} }
 sub paddingRight : lvalue { $_[0]->{'padding-right'} }
 sub paddingBottom : lvalue { $_[0]->{'padding-bottom'} }
 
-# getter for combined results
+# getter for combined results (used for graphicsmagick options)
 # ***************************************************************************************
 sub size { return join('x', $_[0]->width, $_[0]->height); }
 
-# getter for outer dimensions
+# getter for outer dimensions (dimension plus padding from both sides of the box)
 # ***************************************************************************************
 sub outerWidth { return $_[0]->width + $_[0]->paddingLeft + $_[0]->paddingRight; }
 sub outerHeight { return $_[0]->height + $_[0]->paddingTop + $_[0]->paddingBottom; }
 
 ####################################################################################################
-sub position { die "change to offset position"; }
-####################################################################################################
 
-# return the offset position from parent
+# return offset from root
 # ***************************************************************************************
-sub getOffsetPosition
+sub offset
 {
 
+	# get instance
 	my ($self) = @_;
 
-	return
-	{
-		'x' => $self->left,
-		'y' => $self->top
-	};
+	# get local offset
+	my $left = $self->left;
+	my $top = $self->top;
 
-}
-# EO sub offsetPosition
-
-# set the offset position from parent
-# ***************************************************************************************
-sub setOffsetPosition
-{
-
-	my ($self, $x, $y) = @_;
-
-	$self->{'x'} = $x;
-	$self->{'y'} = $y;
-
-}
-# EO sub setOffsetPosition
-
-####################################################################################################
-# setter and getter for position
-####################################################################################################
-
-# return absolute position from root
-# ***************************************************************************************
-sub getPosition
-{
-
-	my ($self) = @_;
-
-	my $x = $self->{'x'};
-	my $y = $self->{'y'};
-
+	# check if block has a parent
+	# if so add parent offset too
 	if ($self->{'parent'})
 	{
-		my $offsetPosition = $self->{'parent'}->getOffsetPosition();
-		$x += $offsetPosition->{'x'}; $y += $offsetPosition->{'y'};
+		# get offset to root from parent
+		# this will call offset recursively
+		# since we don't have deep structures normally
+		# it is ok, but convert it to a loop otherwise
+		my $offset = $self->{'parent'}->offset();
+		# sum up the total offset for both axes
+		$left += $offset->{'x'}; $top += $offset->{'y'};
 	}
+	# EO if parent
 
+	# return point
 	return {
-		'x' => $x,
-		'y' => $y
+		'x' => $left,
+		'y' => $top
 	};
+
 }
 # EO sub getPosition
 
 ####################################################################################################
-# some event handlers for drawing
+# event handler for layout
 ####################################################################################################
 
-# nothing needs to be done
-sub layout { return $_[0]; }
+# set width and height to the outer dimension
+# these values are mainly needed by the packer
+sub layout
+{
+
+	# get instance
+	my ($self) = @_;
+
+	# set the values for the outer dimension
+	$self->{'width'} = $self->outerWidth;
+	$self->{'height'} = $self->outerHeight;
+
+	# return instance
+	return $self;
+
+}
+# EO sub layout
 
 ####################################################################################################
+# event handler for drawing
+####################################################################################################
 
-sub generate
-{
-	die "implement generate\n";
-}
+# just returns the image instance
+sub draw { return $_[0]->{'image'}; }
 
-sub redraw
-{
-	return $_[1];
-}
-
-sub calculate
-{
-	return $_[1];
-}
-
-sub draw
-{
-	# return the image instance
-	return $_[0]->{'image'};
-}
-
-sub repeat
-{
-	return 0;
-}
+####################################################################################################
+# debug code returns text
+####################################################################################################
 
 sub debug
 {
@@ -193,20 +161,21 @@ sub debug
 	my ($self) = @_;
 
 	# get absolute position from root
-	my $position = $self->getPosition();
+	my $offset = $self->offset();
 
 	# debug position
 	return sprintf(
 		'at %s/%s (%sx%s) -> [%s/%s|%s/%s@%s/%s] => %s/%s',
-		$self->{'x'}, $self->{'y'},
-		$self->{'w'}, $self->{'h'},
-		$self->{'padding-left'}, $self->{'padding-top'},
-		$self->{'padding-right'}, $self->{'padding-bottom'},
+		$self->left, $self->top,
+		$self->width, $self->height,
+		$self->paddingLeft, $self->paddingTop,
+		$self->paddingRight, $self->paddingBottom,
 		$self->{'scale-x'} || 1, $self->{'scale-y'} || 1,
-		$position->{'x'}, $position->{'y'},
+		$offset->{'x'}, $offset->{'y'},
 	);
 
 }
+# EO sub debug
 
 ####################################################################################################
 ####################################################################################################

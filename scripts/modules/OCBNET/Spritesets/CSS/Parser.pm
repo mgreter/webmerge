@@ -2,7 +2,8 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-# TODO: improve and test handling with invalid formated files
+# this is a block where all sprites get fitted in
+# the smallest available space (see packaging)
 ####################################################################################################
 package OCBNET::Spritesets::CSS::Parser;
 ####################################################################################################
@@ -12,222 +13,80 @@ use warnings;
 
 ####################################################################################################
 
-# define our version string
-BEGIN { $OCBNET::Spritesets::CSS::Base::VERSION = "0.70"; }
-
-# load exporter and inherit from it
-BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
-
-# define our functions that will be exported
-BEGIN { our @EXPORT = qw($parse_blocks $parse_declarations); }
-
-# define our functions than can be exported
-BEGIN { our @EXPORT_OK = qw($parse_bracket); }
+# we are ourself the root css block
+BEGIN { use base 'OCBNET::Spritesets::CSS::Block'; }
 
 ####################################################################################################
 
-use OCBNET::Spritesets::CSS::Base qw($re_apo $re_quot);
+# load dependencies and import functions
+use OCBNET::Spritesets::CSS::Collection;
+use OCBNET::Spritesets::CSS::Parser::CSS;
+use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_definition);
+use OCBNET::Spritesets::CSS::Parser::Base qw($re_number $re_apo $re_quot);
+use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_css_selector_rules);
 
 ####################################################################################################
 
-our $parse_blocks;
-our $parse_bracket;
-our $parse_declarations;
 
-####################################################################################################
-
-my $re_closer =
-{
-	"" => qr/\A\z/,
-	"\(" => qr/\A(\)|\z)/,
-	"\[" => qr/\A(\]|\z)/,
-	"\{" => qr/\A(\}|\z)/,
-	"\"" => qr/\A(\"|\z)/,
-	"\'" => qr/\A(\'|\z)/
-};
-
-####################################################################################################
-
-# parse all declaration in given data
-# usefull to parse css selector blocks
-# also used to parse spriteset comments
-# ******************************************************************************
-$parse_declarations = sub
+sub fromPosition
 {
 
-	# get stylesheet
-	my ($data) = @_;
+	# get position string
+	my ($position) = @_;
 
-	# array of rules
-	my @declarations;
+	# default to left/top position
+	return 0 unless (defined $position);
 
-	# loop until no more data
-	while (${$data} ne '')
-	{
-		# consume data
-		if (${$data} =~
-			s/^
-			(
-				(?:
-					# escaped char
-					(?: \\ .)+ |
-					# comment or only a slash
-					\/+ (?:\*+ .*? \*+ \/+)? |
-					# a string in delimiters
-					\" $re_quot \" | \' $re_apo \' |
-					# not the delimiter
-					[^\:\;\/]+
-				)*
-			)
-			(
-				(?:\:
-					# escaped char
-					(?: \\ .)+ |
-					# comment or only a slash
-					\/+ (?:\*+ .*? \*+ \/+)? |
-					# a string in delimiters
-					\" $re_quot \" | \' $re_apo \' |
-					# not the delimiter
-					[^\;\/]+
-				)*
-				(?:\;|\z)
-			)
-			//xs
-		)
-		{
+	# allow keywords for left and top position
+	return 0 if ($position =~ m/^(?:top|left)$/i);
 
-			# store the name and the config
-			# create a copy for stripped version
-			my $declaration = [$1, $2, $1, $2];
+	# return the parsed pixel number if matched
+	return $1 if ($position =~ m/^($re_number)(?:px)?$/i);
 
-			# strip comments from declaration copy
-			$declaration->[2] =~ s/\/\*\s*.*?\s*\*\///gs;
-			$declaration->[3] =~ s/\/\*\s*.*?\s*\*\///gs;
+	# right/bottom are the only valid keywords
+	# for the position for most other functions
+	return 'right' if ($position =~ m/^right$/i);
+	return 'bottom' if ($position =~ m/^bottom$/i);
 
-			# store in order into array
-			push @declarations, $declaration;
+	# die with a fatal error for invalid positions
+	die "unknown background position: <$position>";
 
-		}
-		else
-		{
-			# this should not happen, investigate further
-			die "Fatal: CSS parse error: ", substr(${$data}, 0, 110);
-		}
-	}
+}
+# EO sub fromPosition
 
-	# return parsed declarations
-	return \ @declarations;
+sub isNumber { $_[0] =~ m/^$re_number$/; }
+sub toUrl { sprintf("url('%s')", $_[0]); }
+sub toPx { sprintf '%spx', $_[0]; }
 
-};
-# EO sub $parse_declarations
-
-####################################################################################################
-
-# parse the css into blocks
-$parse_blocks = sub
+sub fromUrl
 {
+	my ($url) = @_;
+	$url =~ s/^\s*url\(\s*(.*?)\s*\)\s*$/$1/m;
+	$url =~ s/^\"(.*?)\"\z/$1/m;
+	$url =~ s/^\'(.*?)\'\z/$1/m;
+	return $url;
+}
 
-	# get passed input arguments
-	my ($data, $parent, $clause) = @_;
-
-	# create new block node with the given parent
-	my $block = OCBNET::Spritesets::CSS::Block->new($parent);
-
-	# parse the new block as normal bracket block
-	$parse_bracket->($data, $block, '', $clause);
-
-	# return object
-	return $parent;
-
-};
-
-####################################################################################################
-
-# parse a bracket block
-$parse_bracket = sub
+sub fromPx
 {
-
-	# get passed input arguments
-	my ($data, $block, $opener, $clause) = @_;
-
-	# add opener to head if defined
-	$block->{'head'} .= $opener if $opener;
-
-	# repeat until all the data is parsed
-	# be sure to include an abort clause
-	while(1)
-	{
-
-		# simpler grammars
-		if (${$data} =~ s/^(
-			# escaped char
-			(?: \\ .)+ |
-			# comment or only a slash
-			\/+ (?:\* .*? \*\/+)? |
-			# a string in delimiters
-			\" $re_quot \" | \' $re_apo \'
-		)//xs)
-		{
-			# just store the match
-			$block->{'head'} .= $1;
-		}
-
-		# check if we found our exit clause
-		elsif (${$data} =~ s/^($clause)//s)
-		{
-			# add closer to head if defined
-			$block->{'head'} .= $1 if $opener;
-			# return the block node
-			return $block;
-		}
-
-		# parse an inner block recursive
-		elsif (${$data} =~ s/^(\{)//s)
-		{
-			# parse this one block body
-			$parse_blocks->($data, $block, qr/^(\})/);
-			# create new block node with the given parent
-			$block = OCBNET::Spritesets::CSS::Block->new($block->{'parent'});
-		}
-
-		# parse further for a bracket
-		elsif (${$data} =~ s/^(\(|\[)//s)
-		{
-			# parse a default bracket block
-			$parse_bracket->($data, $block, $1, $re_closer->{$1});
-		}
-
-		# parse unimportant chars in this context
-		elsif (${$data} =~ s/^([^\{\}\[\]\(\)\"\'\/]+)//s)
-		{
-			$block->{'head'} .= $1;
-		}
-
-		# invalid parsing
-		else
-		{
-			# this should not happen, investigate further
-			die "Fatal: CSS parse error: ", substr(${$data}, 0, 10);
-		}
-
-	}
-	# EO while 1
-
-	# this should not happen, investigate further
-	die "Fatal: Escaped endless parse loop?";
-
-};
+	return unless defined $_[0];
+	$_[0] =~ m/($re_number)px/i ? $1 : $_[0];
+}
 
 ####################################################################################################
 
 sub new
 {
 
-	my ($pckg) = @_;
+	my ($pckg, $config) = @_;
 
 	my $self = {
+		'ids' => {},
 		'head' => '',
-		'blocks' => []
+		'blocks' => [],
+		'footer' => '',
+		'spritesets' => {},
+		'config' => $config || {}
 	};
 
 	return bless $self, $pckg;
@@ -236,21 +95,435 @@ sub new
 
 ####################################################################################################
 
-sub parse
+
+
+####################################################################################################
+
+sub write
 {
 
-	my ($self, $data) = @_;
+	my %written;
+
+	# get passed arguments
+	my ($self, $writer) = @_;
+
+	foreach my $name (keys %{$self->{'spritesets'}})
+	{
+
+		my $canvas = $self->{'spritesets'}->{$name};
+
+		my $options = $canvas->{'options'};
+
+		die "no sprite image defined for <$name>" unless $options->defined('sprite-image');
+
+		$options->set('url', fromUrl($options->get('sprite-image')));
+		$options->set('sprite-url', toUrl($options->get('url')) );
+
+		my $image = $canvas->layout->draw;
+
+		if ($image)
+		{
+			my $url = $options->get('sprite-url');
+			$image->Set(magick => 'png');
+			my $blob = $image->ImageToBlob();
+			my $file = fromUrl($url);
+			$writer->($file, $blob, \%written);
+
+		}
+
+	}
+
+	foreach my $set (keys %{$self->{'spritesets'}})
+	{ $self->{'spritesets'}->{$set}->debug(); }
+
+	return \%written;
+
+}
+
+####################################################################################################
+
+sub read
+{
+
+	my ($self, $data, $atomic) = @_;
 
 	# parse all blocks and end when all is parsed
 	$parse_blocks->($data, $self, qr/\A\z/);
 
 	# assertion in any case (should not happen - dev)
-	die "not everything parsed" unless ${$data} eq '';
+	die "Fatal: not everything parsed" if ${$data} ne '';
+
+	# put all blocks in a flat array
+	my @blocks = @{$self->blocks};
+	for (my $i = 0; $i < scalar(@blocks); $i ++)
+	{ push @blocks, @{$blocks[$i]->blocks}; }
+
+	$self->{'others'} = [];
+	$self->{'selectors'} = [];
+
+	# find selector blocks
+	foreach my $block (@blocks)
+	{
+		if ($block->head =~ m/^\s*(?:\/\*\s*(.*?)\s*\*\/|$re_css_selector_rules|\s+)+$/s)
+		{ push @{$self->{'selectors'}}, $block } else { push @{$self->{'others'}}, $block }
+	}
+
+	# now process each selector and parse options
+	foreach my $other (@blocks)
+	{
+
+		# get only the head to parse it
+		my $head = $other->head;
+
+		# parse comments for sprite set definitions
+		while ($head =~ s/\/\*\s*(.*?)\s*\*\///s)
+		{
+			# create a new css options collection
+			my $options = new OCBNET::Spritesets::CSS::Collection;
+			# parse declarations for this spriteset
+			$parse_definition->($options, $1);
+			# check if this comment is meant for us
+			next unless $options->defined('sprite-id');
+			# get the id for this spriteset
+			my $id = $options->get('sprite-id');
+			# pass debug mode from config to options
+			$options->{'debug'} = $self->{'config'}->{'debug'};
+			# create a new canvas object to hold all sprites
+			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
+			# add this canvas to global hash object
+			$self->{'spritesets'}->{$id} = $canvas;
+		}
+
+	}
+	# EO each other
+
+	# now process each selector and parse options
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+
+		# get only the body to parse it
+		my $body = $selector->body;
+
+		# parse all comments into options hash
+		while ($body =~ s/\/\*\s*(.*?)\s*\*\///s)
+		{ $parse_definition->($selector->{'options'}, $1); }
+
+		# now parse remaining style options
+		$parse_definition->($selector->{'styles'}, $body);
+
+	}
+	# EO each selector
+
+	# now process each selector and setup references
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+		my $id = $selector->options->get('css-id');
+		$self->{'ids'}->{$id} = $selector if defined $id;
+	}
+
+	# now process each selector and setup references
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+		my $id = $selector->options->get('css-ref');
+		$selector->{'ref'} = $self->{'ids'}->{$id} if defined $id;
+	}
+
+	# step 0 - create spritesets to fill in sprites
+	# step 1 - parse all sprites and fill spritesets
+	# step 2 - adjust background css for sprite blocks
+	sub snap
+	{
+			return unless defined $_[0];
+			my $rest = $_[0] % $_[1];
+			$_[0] += $_[1] - $rest if $rest;
+		}
+
+	# now process each selector and setup sprites
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+		# check if this selector is configured for a sprite
+		next unless defined $selector->option('sprite-ref');
+		# get the id for the sprite set to be in
+		my $id = $selector->option('sprite-ref');
+		# get the background image from styles
+		my $url = $selector->style('background-image');
+		# create a new sprite and setup most options
+		my $sprite = new OCBNET::Spritesets::Sprite({
+			'filename' => fromUrl($url),
+			'debug' => $self->{'config'}->{'debug'},
+			'size-x' => fromPx($selector->style('background-size-x')) || undef,
+			'size-y' => fromPx($selector->style('background-size-y')) || undef,
+			'repeat-x' => $selector->style('background-repeat-x') || 0,
+			'repeat-y' => $selector->style('background-repeat-y') || 0,
+			'position-x' => fromPosition($selector->style('background-position-x') || 0),
+			'position-y' => fromPosition($selector->style('background-position-y') || 0),
+			'position2-x' => fromPosition($selector->style('background-position-x') || 0),
+			'position2-y' => fromPosition($selector->style('background-position-y') || 0),
+			'enclosed-x' => fromPx($selector->style('width') || 0) || 0,
+			'enclosed-y' => fromPx($selector->style('height') || 0) || 0
+		});
+
+		snap($sprite->{'w'}, $sprite->scaleX);
+		snap($sprite->{'h'}, $sprite->scaleY);
+		snap($sprite->{'width'}, $sprite->scaleX);
+		snap($sprite->{'height'}, $sprite->scaleY);
+
+		# normalize left/top position to px
+		# only special case is right/bottom
+		if ($sprite->{'position2-x'} =~ m/^($re_number)px$/i)
+		{ $sprite->{'position2-x'} = $1; }
+		elsif ($sprite->{'position2-x'} =~ m/^top$/i)
+		{ $sprite->{'position2-x'} = 0; }
+		if ($sprite->{'position2-y'} =~ m/^($re_number)px$/i)
+		{ $sprite->{'position2-y'} = $1; }
+		elsif ($sprite->{'position2-y'} =~ m/^left$/i)
+		{ $sprite->{'position2-y'} = 0; }
+
+		# store sprite object on selector
+		$selector->{'sprite'} = $sprite;
+
+
+		#if (isNumber(fromPosition($sprite->{'position-y'})))
+		#{ $sprite->{'padding-top'} += fromPosition($sprite->{'position-y'}); }
+
+		# create dimensions object and fill them in
+		my %dim; foreach my $dim ('width', 'height')
+		{
+			my $val = fromPx($selector->style($dim) || 0);
+			my $min = fromPx($selector->style('min-' . $dim));
+			my $max = fromPx($selector->style('max-' . $dim));
+			$val = $max if defined $max && $val < $max; # extend
+			$val = $max if defined $max && $val > $max; # range
+			$val = $min if defined $min && $val < $min; # range
+			$dim{$dim} = { 'min' => $min, 'max' => $max, 'val' => $val };
+		}
+
+		my $padding_top = fromPx($selector->style('padding-top') || 0) || 0;
+		my $padding_left = fromPx($selector->style('padding-left') || 0) || 0;
+		my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
+		my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
+
+		my $isSmaller = {
+			'width' => $sprite->width < $dim{'width'}->{'val'},
+			'height' => $sprite->height < $dim{'height'}->{'val'}
+		};
+
+		# we have a box with the dimensions of $dim$
+		# setup sprite according to position2
+		# also prepare for background positioning
+
+		# create padding if it's offset from top/left
+		unless ($sprite->{'position2-x'} =~ m/^right$/i)
+		{
+			# add some padding to fill the empty space
+			$sprite->{'padding-left'} += $sprite->{'position2-x'};
+			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'position2-x'};
+		}
+		# is right but has fixed dimension
+		elsif ($sprite->isFixedX)
+		{
+			$sprite->{'position2-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+			$sprite->{'padding-left'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+		}
+		unless ($sprite->{'position2-y'} =~ m/^bottom$/i)
+		{
+			# add some padding to fill the empty space
+			$sprite->{'padding-top'} += $sprite->{'position2-y'};
+			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'position2-y'};
+		}
+		# is right but has fixed dimension
+		elsif ($sprite->isFixedY)
+		{
+			$sprite->{'position2-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+			$sprite->{'padding-top'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+		}
+
+		$sprite->{'padding-top'} *= $sprite->scaleY;
+		$sprite->{'padding-left'} *= $sprite->scaleX;
+		$sprite->{'padding-right'} *= $sprite->scaleX;
+		$sprite->{'padding-bottom'} *= $sprite->scaleY;
+
+		$sprite->{'padding-top'} = 0 if $sprite->{'padding-top'} < 0;
+		$sprite->{'padding-left'} = 0 if $sprite->{'padding-left'} < 0;
+		$sprite->{'padding-right'} = 0 if $sprite->{'padding-right'} < 0;
+		$sprite->{'padding-bottom'} = 0 if $sprite->{'padding-bottom'} < 0;
+
+		# add this sprite to the given spriteset
+		unless ($self->{'spritesets'}->{$id})
+		{ warn sprintf "unknown sprite id <%s>\n", $id; }
+		else { $self->{'spritesets'}->{$id}->add($sprite); }
+
+	}
+	# EO each selector
 
 	# return object
 	return $self;
 
 }
 
+####################################################################################################
+
+sub process
+{
+
+	# get passed arguments
+	my ($self) = @_;
+
+	# now process each selector and setup sprites
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+		# check if this selector is configured for a sprite
+		next unless defined $selector->option('sprite-ref');
+		# get the id for the sprite set to be in
+		my $id = $selector->option('sprite-ref');
+		# get the spriteset object for positions
+		my $canvas = $self->{'spritesets'}->{$id};
+		# get the options for this spriteset
+		my $spriteset = $canvas->{'options'};
+		# get the url of the output image
+		my $url = $spriteset->get('url');
+		# get the sprite for selector
+		my $sprite = $selector->{'sprite'};
+		# get the sprite position within set
+		my $position = $sprite->offset;
+
+		################################
+		################################
+		################################
+
+		my $bg_pos_x = $sprite->{'position2-x'};
+		my $bg_pos_y = $sprite->{'position2-y'};
+
+		die "no x" unless defined $bg_pos_x;
+		die "no y" unless defined $bg_pos_y;
+
+		my $_pos_y = (($position->{'y'} || 0) + $sprite->{'padding-top'}) / $sprite->scaleY;
+		my $_pos_x = (($position->{'x'} || 0) + $sprite->{'padding-left'}) / $sprite->scaleX;
+
+		unless ($bg_pos_y =~ m/^bottom$/i)
+		{
+			$bg_pos_y = toPx($bg_pos_y - $_pos_y);
+		}
+
+		unless ($bg_pos_x =~ m/^right$/i)
+		{
+			$bg_pos_x = toPx($bg_pos_x - $_pos_x);
+		}
+
+
+		my $padding_top = fromPx($selector->style('padding-top') || 0) || 0;
+		my $padding_left = fromPx($selector->style('padding-left') || 0) || 0;
+		my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
+		my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
+
+		#snap($padding_top, $sprite->scaleY);
+		#snap($padding_left, $sprite->scaleX);
+		#snap($padding_right, $sprite->scaleX);
+		#snap($padding_bottom, $sprite->scaleY);
+
+		my @positions = (
+			$bg_pos_x,
+			$bg_pos_y
+		);
+
+
+		my $declarations = [];
+
+		# check if sprite was distributed
+		# if it has no parent it means the
+		# sprite has not been included yet
+		unless ($sprite->{'parent'})
+		{
+			# check for debug mode on canvas or sprite
+			if ($canvas->{'debug'} || $sprite->{'debug'})
+			{
+				# make border dark red
+				push(@{$declarations}, [
+					'border-color',
+					':rgb(192, 128, 128) !important;',
+				]);
+				# make background redish
+				push(@{$declarations}, [
+					'background-color',
+					':rgba(255, 0, 0, 0.125) !important;',
+				]);
+			}
+		}
+		# sprite was distributed
+		else
+		{
+
+			# parse body into declarations (render will use these later)
+			$selector->{'declarations'} = $parse_declarations->(\$selector->body);
+
+			# remove all background declarations now
+			@{$selector->{'declarations'}} = grep {
+				not $_->[2] =~ m/^\s*background(?:\-[a-z0-9])*/is
+			} @{$selector->{'declarations'}};
+
+			# push new declarations
+			push(@{$declarations},
+				[
+					'background-position',
+					':' . ($sprite->{'sprite-position'} || join(' ', @positions)) . ';'
+				],
+				[
+					'background-image',
+					':' . toUrl($url) . ';'
+				],
+				[
+					'background-repeat',
+					': no-repeat;'
+				],
+				[
+					'background-size',
+					': ' . (($canvas->width ) / $sprite->{'scale-x'}) . 'px '
+					     . (($canvas->height ) / $sprite->{'scale-y'}) . 'px;'
+				]
+			);
+		}
+
+		################################
+		################################
+		################################
+
+		# render the selector bodies
+		my $body = $selector->body;
+
+		# find the first indenting to reuse it
+		my $indent = $body =~ m/^([ 	]*)\S/m ? $1 : '';
+
+		# get the traling whitespace on last line
+		my $footer = $body =~ s/([ 	]*)$// ? $1 : '';
+
+		# create a newline for footer
+		$selector->{'footer'} .= ";\n";
+
+		# add some debugger statements into css
+		$selector->{'footer'} .= $indent . "/* added by webmerge */\n";
+
+		# process all new declaration for block
+		foreach my $declaration (@{$declarations})
+		{
+			# add these declarations to the footer to be included within block
+			$selector->{'footer'} .= sprintf "%s%s%s\n", $indent, @{$declaration};
+		}
+
+		# add some debugger statements into css
+		$selector->{'footer'} .= $indent . "/* added by webmerge */\n";
+
+		# append traling whitespace again
+		$selector->{'footer'} .= $footer;
+
+		################################
+		################################
+		################################
+
+	}
+
+}
+
+
+####################################################################################################
 ####################################################################################################
 1;

@@ -2,8 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-# this block stacks the sprites vertically
-# or horizontally together (and aligned)
+# load one sprite image into a block
 ####################################################################################################
 package OCBNET::Spritesets::Sprite;
 ####################################################################################################
@@ -17,38 +16,23 @@ use base 'OCBNET::Spritesets::Block';
 
 ####################################################################################################
 
-# use File::Slurp;
-# use Image::Magick;
-
-sub debug
-{
-
-	# get our object
-	my ($self) = @_;
-
-	# debug filename
-	return sprintf(
-		'%s %s',
-		substr(File::Spec->abs2rel( $self->{'filename'}, '.' ), - 16),
-		$self->SUPER::debug
-	);
-
-}
-
-####################################################################################################
-
+# constructor
 sub new
 {
 
 	# shift class name
 	my $pkg = shift;
 
-	# define initial hash
-	my $self = {
+	# call parent constructor first
+	my $self = $pkg->SUPER::new();
+
+	# extend instance
+	%{$self} = (
+
+		# from parent
+		%{$self},
 
 		# stack position
-		'x' => undef,
-		'y' => undef,
 		'filename' => undef,
 		# imagemagick object
 		'image' => undef,
@@ -70,30 +54,35 @@ sub new
 		# background position
 		'position-y' => 'top',
 		'position-x' => 'left',
-		# background margins
-		# 'margin-top' => 0,
-		# 'margin-left' => 0,
-		# 'margin-right' => 0,
-		# 'margin-bottom' => 0,
 		# background paddings
 		'padding-top' => 0,
 		'padding-left' => 0,
 		'padding-right' => 0,
-		'padding-bottom' => 0
+		'padding-bottom' => 0,
 
-	};
+		# optional config
+		%{$_[0] || {}}
 
-	%{$self} = (%{$self}, %{$_[0]});
+	);
+	# EO extend hash
 
+	# check if debug is enabled
 	if ($self->{'debug'})
 	{
+		# add bg colors to sprites
+		# conditional load Digest::MD5
 		eval
 		{
+			# create unique string for config
+			# this method makes the color static
 			no warnings 'uninitialized';
 			my $data = join('', values %{$self});
 			use warnings 'uninitialized';
+			# try to load the digest module
 			use Digest::MD5 qw(md5_hex);
+			# create a md5 hex string
 			my $digest = md5_hex($data);
+			# create an rgba color out of it
 			$self->{'bg'} = sprintf
 				'xc:rgba(%d, %d, %d, 0.25)',
 					hex(substr($digest, 0, 2)),
@@ -101,131 +90,177 @@ sub new
 					hex(substr($digest, 6, 2));
 		}
 	}
+	# EO if debug
 
-	# my $image = new Image::Magick;
+	# create the image instance
 	my $image = new Graphics::Magick;
 
+	# check if there is a filename
+	# this should probably be enforced
 	if ($self->{'filename'})
 	{
+		# read the image and assign return value
 		my $err = $image->Read($self->{'filename'});
+		# check if there was any error reading the file
 		die "Error from GraphicsMagick:\n", $err if $err;
-		$self->{'w'} = $image->Get('width');
-		$self->{'h'} = $image->Get('height');
-		$self->{'width'} = $image->Get('width');
-		$self->{'height'} = $image->Get('height');
-		# printf "readed %s (%d/%d)\n", $self->{'filename'}, $self->{'width'}, $self->{'height'};
+		# set dimensions readed from source file
+		$self->width = $image->Get('width');
+		$self->height = $image->Get('height');
 	}
 
-	if ($self->{'width'} && $self->{'size-x'})
-	{
-		my $width = $self->{'width'};
-		my $size = $self->{'size-x'};
-		$self->{'scale-x'} = $width / $size;
-		unless ($self->{'scale-x'} =~ m/^\d+$/)
-		{
-			warn sprintf "Illegal sprite: %s\n", $self->{'filename'};
-			warn sprintf "Scale not valid: %s\n", $self->{'scale-x'};
-			warn sprintf "Background X Dimension: %s\n", $size;
-			warn sprintf "Sprite X Resolution: %s\n", $width;
-			Carp::confess "Abort, Fatal Error";
-		}
-	}
-
-	if ($self->{'height'} && $self->{'size-y'})
-	{
-		my $height = $self->{'height'};
-		my $size = $self->{'size-y'};
-		$self->{'scale-y'} = $height / $size;
-		unless ($self->{'scale-y'} =~ m/^\d+$/)
-		{
-			warn sprintf "Illegal sprite: %s\n", $self->{'filename'};
-			warn sprintf "Scale not valid: %s\n", $self->{'scale-y'};
-			warn sprintf "Background Y Dimension: %s\n", $size;
-			warn sprintf "Sprite Y Resolution: %s\n", $height;
-			Carp::confess "Abort, Fatal Error";
-		}
-	}
-
+	# assign image to instance
+	# may not be initialized yet
 	$self->{'image'} = $image;
 
-	$self = bless $self, $pkg;
-
-	if ($self->{'bg'})
+	# calculate the x scaler if size-x is given
+	# if the sprite is the background image in css
+	# size-x would be taken from background-size-x
+	if ($self->width && $self->{'size-x'})
 	{
-		# my $bg = new Image::Magick;
-		my $bg = new Graphics::Magick;
-		$bg->Set(size => $self->size);
-		$bg->Set(quality => 3);
-		$bg->ReadImage($self->{'bg'});
-		$bg->Quantize(colorspace=>'RGB');
-		$self->{'img-bg'} = $bg;
+		# calculate the scale factor (inverse of a zoom factor)
+		$self->{'scale-x'} = $self->width / $self->{'size-x'};
 	}
 
-	return $self;
+	# calculate the x scaler if size-y is given
+	# if the sprite is the background image in css
+	# size-y would be taken from background-size-y
+	if ($self->height && $self->{'size-y'})
+	{
+		# calculate the scale factor (inverse of a zoom factor)
+		$self->{'scale-y'} = $self->height / $self->{'size-y'};
+	}
+
+	# check if we should paint a background
+	# this has to be a separate image as I did
+	# find a reliable way to do this otherwise
+	if ($self->{'bg'})
+	{
+		# create a new graphics object
+		my $bg = new Graphics::Magick;
+		# set the size of the graphic
+		$bg->Set(size => $self->size);
+		# init image with solid color
+		$bg->ReadImage($self->{'bg'});
+		# we are operating in an rgb space
+		$bg->Quantize(colorspace => 'RGB');
+		# assign image to instance
+		$self->{'img-bg'} = $bg;
+	}
+	# EO if bg
+
+	# run debug assertions
+	return $self->assert();
 
 }
+# EO constructor
+
+####################################################################################################
+# getter methods
+####################################################################################################
+
+sub sizeY { $_[0]->{'size-y'} || 1; }
+sub sizeX { $_[0]->{'size-x'} || 1; }
+sub scaleY { $_[0]->{'scale-y'} || 1; }
+sub scaleX { $_[0]->{'scale-x'} || 1; }
+
+####################################################################################################
+# status getter methods
+####################################################################################################
 
 sub isFixedX { $_[0]->{'enclosed-x'} }
 sub isFixedY { $_[0]->{'enclosed-y'} }
 sub isRepeatX { $_[0]->{'repeat-x'} }
 sub isRepeatY { $_[0]->{'repeat-y'} }
+sub isFlexibleX { not $_[0]->isFixedX }
+sub isFlexibleY { not $_[0]->isFixedY }
 
-sub notFixedX { not $_[0]->{'enclosed-x'} }
-sub notFixedY { not $_[0]->{'enclosed-y'} }
-sub notRepeatX { not $_[0]->{'repeat-x'} }
-sub notRepeatY { not $_[0]->{'repeat-y'} }
-
-sub isFlexibleX { not $_[0]->{'enclosed-x'} }
-sub isFlexibleY { not $_[0]->{'enclosed-y'} }
-
-sub isFixed { $_[0]->{'enclosed-x'} || $_[0]->{'enclosed-y'} }
-sub notFixed { not ($_[0]->{'enclosed-x'} || $_[0]->{'enclosed-y'}) }
-sub isFixedBoth { $_[0]->{'enclosed-x'} && $_[0]->{'enclosed-y'} }
-sub notFixedBoth { not ($_[0]->{'enclosed-x'} && $_[0]->{'enclosed-y'}) }
-
-sub isFlexible { not ($_[0]->{'enclosed-x'} && $_[0]->{'enclosed-y'}) }
-sub notFlexible { $_[0]->{'enclosed-x'} && $_[0]->{'enclosed-y'} }
-sub isFlexibleBoth { not ($_[0]->{'enclosed-x'} || $_[0]->{'enclosed-y'}) }
-sub notFlexibleBoth { $_[0]->{'enclosed-x'} || $_[0]->{'enclosed-y'} }
+sub isRepeating { $_[0]->{'repeat-x'} || $_[0]->{'repeat-y'} }
+sub isRepeatingBoth { $_[0]->{'repeat-x'} && $_[0]->{'repeat-y'} }
+sub notRepeating { not ($_[0]->{'repeat-x'} || $_[0]->{'repeat-y'}) }
+sub notRepeatingBoth { not ($_[0]->{'repeat-x'} && $_[0]->{'repeat-y'}) }
 
 sub isRight { (not defined $_[0]->{'position-x'}) || $_[0]->{'position-x'} =~ m/^right$/i; }
 sub isBottom { (not defined $_[0]->{'position-y'}) || $_[0]->{'position-y'} =~ m/^bottom$/i; }
 sub notRight { not((not defined $_[0]->{'position-x'}) || $_[0]->{'position-x'} =~ m/^right$/i); }
 sub notBottom { not((not defined $_[0]->{'position-y'}) || $_[0]->{'position-y'} =~ m/^bottom$/i); }
 
-sub isRepeatBoth { $_[0]->{'repeat-x'} && $_[0]->{'repeat-y'} }
-sub notRepeatBoth { not ($_[0]->{'repeat-x'} && $_[0]->{'repeat-y'}) }
+####################################################################################################
+# debug only - remove in a later release
+####################################################################################################
 
-sub isRepeating { $_[0]->{'repeat-x'} || $_[0]->{'repeat-y'} }
-sub isRepeatingBoth { $_[0]->{'repeat-x'} && $_[0]->{'repeat-y'} }
-
-sub notRepeating { not ($_[0]->{'repeat-x'} || $_[0]->{'repeat-y'}) }
-sub notRepeatingBoth { not ($_[0]->{'repeat-x'} && $_[0]->{'repeat-y'}) }
-
-sub getPosition
+# return offset from root
+# ***************************************************************************************
+sub offset
 {
 
+	# get instance
 	my ($self) = @_;
 
-	my $x = $self->{'fit'}->{'x'} || $self->{'x'};
-	my $y = $self->{'fit'}->{'y'} || $self->{'y'};
+	# assert that the main position has been updated to the fit position
+	die if defined $self->{'fit'}->{'x'} && $self->{'fit'}->{'x'} ne $self->left;
+	die if defined $self->{'fit'}->{'y'} && $self->{'fit'}->{'y'} ne $self->top;
 
-	if ($self->{'parent'})
-	{
-		my $position = $self->{'parent'}->getPosition();
-		$x += $position->{'x'}; $y += $position->{'y'};
-	}
-
-	return {
-		'x' => $x,
-		'y' => $y
-	};
+	# call base class method
+	return $self->SUPER::offset;
 
 }
+# EO sub offset
 
-sub generate { }
+####################################################################################################
 
-sub scaleY { $_[0]->{'scale-y'} || 1; }
-sub scaleX { $_[0]->{'scale-x'} || 1; }
+# object assertions
+sub assert
+{
 
+	# get instance
+	my ($self) = @_;
+
+	# assert that we are only using integer scale factors
+	unless ($self->{'scale-x'} =~ m/^\d+$/)
+	{
+		warn sprintf "Illegal sprite: %s\n", $self->{'filename'};
+		warn sprintf "Scale not valid: %s\n", $self->{'scale-x'};
+		warn sprintf "Background X Dimension: %s\n", $self->{'size-x'};
+		warn sprintf "Sprite X Resolution: %s\n", $self->width;
+		Carp::confess "Abort, Fatal Error";
+	}
+
+	# assert that we are only using integer scale factors
+	unless ($self->{'scale-y'} =~ m/^\d+$/)
+	{
+		warn sprintf "Illegal sprite: %s\n", $self->{'filename'};
+		warn sprintf "Scale not valid: %s\n", $self->{'scale-y'};
+		warn sprintf "Background Y Dimension: %s\n", $self->{'size-y'};
+		warn sprintf "Sprite Y Resolution: %s\n", $self->height;
+		Carp::confess "Abort, Fatal Error";
+	}
+
+	# call instance
+	return $self;
+
+}
+# EO sub assert
+
+####################################################################################################
+
+# return debug text
+# ***************************************************************************************
+sub debug
+{
+
+	# get our object
+	my ($self) = @_;
+
+	# debug filename
+	return sprintf(
+		'%s %s',
+		substr(File::Spec->abs2rel( $self->{'filename'}, '.' ), - 16),
+		$self->SUPER::debug
+	);
+
+}
+# EO sub debug
+
+####################################################################################################
+####################################################################################################
 1;

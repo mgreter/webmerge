@@ -189,7 +189,7 @@ sub draw
 	foreach my $sprite (@{$self->{'children'}})
 	{
 		# draw background on canvas
-		if ($sprite->{'img-bg'})
+		if ($sprite->{'bg'})
 		{
 			$self->{'image'}->Composite(
 				compose => 'over',

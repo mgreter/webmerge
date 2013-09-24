@@ -13,6 +13,7 @@ use warnings;
 
 ####################################################################################################
 
+# a container is also a block
 use base 'OCBNET::Spritesets::Container';
 
 ####################################################################################################
@@ -41,6 +42,8 @@ sub new
 
 ####################################################################################################
 
+# getter methods for the specific options
+# ******************************************************************************
 sub alignOpp { return $_[0]->{'align-opp'}; }
 sub stackVert { return $_[0]->{'stack-vert'}; }
 
@@ -54,6 +57,37 @@ sub layout
 	# get our object
 	my ($self) = @_;
 
+	# process all sprites in this edge
+	foreach my $sprite ($self->children)
+	{
+		# only left/top edge
+		if (not $self->alignOpp)
+		{
+			# this is the left edge
+			if ($self->stackVert)
+			{
+				# sprite must not repeat in x
+				if (not $sprite->isRepeatX)
+				{
+					$sprite->{'padding-left'} = 0;
+					$sprite->{'padding-right'} = 0;
+				}
+			}
+			# this is the top edge
+			else
+			{
+				# sprite must not repeat in y
+				if (not $sprite->isRepeatY)
+				{
+					$sprite->{'padding-top'} = 0;
+					$sprite->{'padding-bottom'} = 0;
+				}
+			}
+		}
+		# EO if left/top
+	}
+	# EO each sprite
+
 	# declare positions
 	my ($top, $left) = (0, 0);
 
@@ -64,26 +98,27 @@ sub layout
 	foreach my $sprite ($self->children)
 	{
 
-		# get the dimensions
-		my $w = $sprite->outerWidth;
-		my $h = $sprite->outerHeight;
-
-		if ($sprite->isRight)
-		{
-			# $sprite->paddingLeft = 0;
-		}
+		# get the sprite outer dimensions
+		my $sprite_width = $sprite->outerWidth;
+		my $sprite_height = $sprite->outerHeight;
 
 		# stack sprites vertically
 		if ($self->stackVert)
 		{
-			# increase the height and check for max width
-			$height += $h; $width = $w if $width < $w;
+			# increase the stack height
+			$height += $sprite_height;
+			# search biggest sprite width
+			if ($width < $sprite_width)
+			{ $width = $sprite_width; }
 		}
 		# or stack sprites horizontally
 		else
 		{
-			# increase the width and check for max height
-			$width += $w; $height = $h if $height < $h;
+			# increase the stack width
+			$width += $sprite_width;
+			# search biggest sprite height
+			if ($height < $sprite_height)
+			{ $height = $sprite_height; }
 		}
 
 		# store sprite position
@@ -92,8 +127,8 @@ sub layout
 
 		# increase the offset
 		if ($self->stackVert)
-		{ $top += $sprite->outerHeight; }
-		else { $left += $sprite->outerWidth; }
+		{ $top += $sprite_height; }
+		else { $left += $sprite_width; }
 
 	}
 	# EO each sprite
@@ -102,6 +137,9 @@ sub layout
 	$self->width = $width;
 	$self->height = $height;
 
+	# return here if no alignment is set
+	return $self unless $self->alignOpp;
+
 	# process all sprites for alignment
 	foreach my $sprite (@{$self->{'children'}})
 	{
@@ -109,13 +147,13 @@ sub layout
 		if ($self->stackVert)
 		{
 			# align this sprite to the oppositioning side
-			$sprite->left = $self->outerWidth - $sprite->outerWidth if $self->alignOpp;
+			$sprite->left = $self->outerWidth - $sprite->outerWidth;
 		}
 		# or stack sprites horizontally
 		else
 		{
 			# align this sprite to the oppositioning side
-			$sprite->top = $self->outerHeight - $sprite->outerHeight if $self->alignOpp;
+			$sprite->top = $self->outerHeight - $sprite->outerHeight;
 		}
 	}
 
@@ -124,23 +162,6 @@ sub layout
 
 }
 # EO sub layout
-
-####################################################################################################
-
-sub draw
-{
-
-	# get our object
-	my ($self) = @_;
-
-	# call super class
-	$self->SUPER::draw;
-
-	# return the image instance
-	return $self->{'image'};
-
-}
-# EO sub draw
 
 ####################################################################################################
 ####################################################################################################

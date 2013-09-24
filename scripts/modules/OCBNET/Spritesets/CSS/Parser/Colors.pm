@@ -2,7 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-package OCBNET::Spritesets::CSS::Colors;
+package OCBNET::Spritesets::CSS::Parser::Colors;
 ####################################################################################################
 
 use strict;
@@ -11,7 +11,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::Spritesets::CSS::Colors = "0.8.2"; }
+BEGIN { $OCBNET::Spritesets::CSS::Parser::Colors = "0.8.2"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
@@ -201,7 +201,7 @@ our %color_ext =
 
 ####################################################################################################
 
-use OCBNET::Spritesets::CSS::Base;
+use OCBNET::Spritesets::CSS::Parser::Base;
 
 ####################################################################################################
 

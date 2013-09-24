@@ -3,8 +3,9 @@
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
 # this is the main canvas or root block to be drawn
-# it contains four stacked frames on each side on
-# one in the middle where the sprites are fitted
+# it contains four stacked frames on each side, four
+# more edge areas, four corner areas and one in the
+# center where the sprites are packed into minimal space
 ####################################################################################################
 package OCBNET::Spritesets::Canvas;
 ####################################################################################################
@@ -15,6 +16,7 @@ use warnings;
 ####################################################################################################
 
 use OCBNET::Spritesets::Canvas::Layout;
+use OCBNET::Spritesets::Canvas::Repeater;
 use OCBNET::Spritesets::Canvas::Distribute;
 
 ####################################################################################################
@@ -57,13 +59,13 @@ sub new
 
 	# this is the base container which will be rendered and
 	# saved to a file, so we always have 0/0 as coordinates
-	$self->{'x'} = 0; $self->{'y'} = 0;
+	$self->left = 0; $self->top = 0;
 
 	# initialize the width and the height
-	$self->{'w'} = 0; $self->{'h'} = 0;
+	$self->width = 0; $self->height = 0;
 
 	# make a copy of our area strings
-	$self->{'areas'} = [ @areas ];
+	# $self->{'areas'} = [ @areas ];
 
 	# array with all sprites
 	$self->{'sprites'} = [];
@@ -95,6 +97,9 @@ sub new
 	$self->{'corner-lb'} = new OCBNET::Spritesets::Corner($self, 0, 1);
 	$self->{'corner-rb'} = new OCBNET::Spritesets::Corner($self, 1, 1);
 
+	# register the name of each area (debug only)
+	$self->{$_}->{'name'} = $_ foreach @areas;
+
 	# if in debug mode we assign background colors
 	# this way you can see what got distributed where
 	if ($self->{'debug'})
@@ -115,8 +120,8 @@ sub new
 	}
 
 	# add the widgets to parent
-	foreach my $area (@areas)
-	{ $self->SUPER::add($self->{$area}); }
+	foreach my $area ($self->areas)
+	{ $self->SUPER::add($area); }
 
 	# reset the children array
 	$self->{'children'} = [];
@@ -126,6 +131,10 @@ sub new
 
 }
 # EO new
+
+####################################################################################################
+
+sub areas { return map { $_[0]->{$_} } @areas; }
 
 ####################################################################################################
 # add a sprite to the canvas - put it into the
@@ -153,230 +162,58 @@ sub add
 
 ####################################################################################################
 
-sub signed
-{
-	return $_[0] < 0 ?
-		  sprintf('%s', $_[0])
-		: sprintf('+%s', $_[0]);
-}
-
 sub draw
 {
 
 	# get our object
 	my ($self) = @_;
 
-	# find out our final dimensions
-	# make sure that stacks that are
-	# repeating are taken care of
-
 	# initialize empty image
 	$self->{'image'}->Set(matte => 'True');
 	$self->{'image'}->Set(magick => 'png');
-	$self->{'image'}->Set(matte => 'True');
 	$self->{'image'}->Set(size => $self->size);
-	$self->{'image'}->Set(quality => 3);
 	$self->{'image'}->ReadImage($self->{'bg'});
 	$self->{'image'}->Quantize(colorspace=>'RGB');
-	# print "draw image with ", $self->size, "\n";
 
 	# process all possible areas
-	foreach my $area (@areas)
+	foreach my $area ($self->areas)
 	{
 
 		# ignore area if it's empty
-		next if $self->{$area}->empty;
+		next if $area->empty;
 
+		# get our own dimensions
 		my $width = $self->width;
 		my $height = $self->height;
 
-		# printf "draw %s with %d/%d at %d/%d\n", $area,
-		#	$self->{$area}->{'w'}, $self->{$area}->{'h'},
-		#	$self->{$area}->{'x'}, $self->{$area}->{'y'};
+		##########################################################
+		# draw main areas on the canvas
+		##########################################################
 
-		# get sprite and position
-		#my $sprite = $images->{$area};
-		#my $position = $positions->{$area};
-		# draw image on canvas
-		if ($self->{$area}->{'img-bg'})
+		# draw background on canvas
+		if ($area->{'img-bg'})
 		{
 			$self->{'image'}->Composite(
 				compose => 'Over',
-				x => $self->{$area}->{'x'},
-				y => $self->{$area}->{'y'},
-				image => $self->{$area}->{'img-bg'}
+				x => $area->left,
+				y => $area->top,
+				image => $area->{'img-bg'}
 			);
 		}
+
+		# draw foreground on canvas
 		$self->{'image'}->Composite(
 			compose => 'Over',
-			x => $self->{$area}->{'x'},
-			y => $self->{$area}->{'y'},
-			image => $self->{$area}->draw
+			x => $area->left,
+			y => $area->top,
+			image => $area->draw
 		);
-
-
-if (
-
-	$self->{$area}->isa('OCBNET::Spritesets::Fit') ||
-	$self->{$area}->isa('OCBNET::Spritesets::Edge') ||
-	$self->{$area}->isa('OCBNET::Spritesets::Stack')
-)
-{
-
-		# paint the repeatings
-		# process all sprites on edge
-		foreach my $sprite (@{$self->{$area}->{'children'}})
-		{
-
-			my $w = $sprite->width;
-			my $h = $sprite->height;
-
-			my $position = $sprite->getPosition();
-
-			my $x = $position->{'x'} + $sprite->paddingLeft;
-			my $y = $position->{'y'} + $sprite->paddingTop;
-
-
-			if ($sprite->{'repeat-x'} && $sprite->{'repeat-y'})
-			{
-				die "fatal: cannot repeat in both directions";
-			}
-			elsif ($sprite->{'repeat-x'})
-			{
-
-				my $lower_x = - $w;
-				my $upper_x = $width + $w;
-
-				$lower_x = $position->{'x'} if $sprite->{'enclosed-x'};
-				$upper_x = $position->{'x'} + $sprite->outerWidth if $sprite->{'enclosed-x'};
-
-				my $pos_x = $sprite->{'position-x'};
-				if ($pos_x=~m/(\-?[0-9]+)px/i)
-				{
-					# $lower_x -= $1;
-					# $upper_x -= $1 + 2;
-				}
-
-				for (my $i = $x - $w; $i > $lower_x - $w; $i -= $w)
-				{
-
-					my $offset = 0;
-					my $image = $sprite->{'image'}->clone;
-					if ($i < $lower_x)
-					{
-
-						$offset = $lower_x - $i;
-
-						$image = $sprite->{'image'}->clone;
-						# draw image on canvas
-						$image->Crop(
-							width => $sprite->width - $offset,
-							height => $sprite->height,
-							x => $offset, y => 0
-						);
-					}
-
-					# draw image on canvas
-					$self->{'image'}->Composite(
-						compose => 'over',
-						x => $i + $offset, y => $y,
-						image => $image
-					);
-				}
-				####
-				for (my $i = $x + $w; $i < $upper_x; $i += $w)
-				{
-					my $offset = 0;
-					my $image = $sprite->{'image'}->clone;
-					if ($i + $w > $upper_x)
-					{
-						$offset = $upper_x - $i;
-						$image = $sprite->{'image'}->clone;
-						# draw image on canvas
-						$image->Crop(
-							width => $offset,
-							height => $sprite->height,
-							x => 0, y => 0
-						);
-					}
-
-					# draw image on canvas
-					$self->{'image'}->Composite(
-						compose => 'over',
-						x => $i, y => $y,
-						image => $image
-					);
-
-					die "what $w ", $image->get('width')," ", ($i + $image->get('width')), " => ", $upper_x
-						if $i + $image->get('width') > $upper_x;
-
-				}
-
-			}
-			elsif ($sprite->{'repeat-y'})
-			{
-
-				my $lower_y = - $h;
-				my $upper_y = $height + $h;
-
-				$lower_y = $position->{'y'} if $sprite->{'enclosed-y'};
-				$upper_y = $position->{'y'} + $sprite->outerHeight if $sprite->{'enclosed-y'};
-
-				for (my $i = $y - $h; $i > $lower_y - $h; $i -= $h)
-				{
-					my $offset = 0;
-					my $image = $sprite->{'image'};
-					if ($i < $lower_y)
-					{
-
-						$offset = $lower_y - $i;
-						$image = $sprite->{'image'}->clone;
-						# draw image on canvas
-						$image->Crop(
-							width => $sprite->width,
-							height => $sprite->height - $offset,
-							x => 0, y => $offset
-						);
-					}
-					# draw image on canvas
-					$self->{'image'}->Composite(
-						compose => 'over',
-						x => $x, y => $i + $offset,
-						image => $image
-					);
-				}
-				for (my $i = $y + $h; $i < $upper_y; $i += $h)
-				{
-					my $offset = 0;
-					my $image = $sprite->{'image'};
-					if ($i + $h > $upper_y)
-					{
-						$offset = $upper_y - $i;
-						# die if $offset < 0;
-						$image = $sprite->{'image'}->clone;
-						# draw image on canvas
-						$image->Crop(
-							width => $sprite->width,
-							height => $offset,
-							x => 0, y => 0
-						);
-						die if $offset < 0;
-					}
-					# draw image on canvas
-					$self->{'image'}->Composite(
-						compose => 'over',
-						x => $x, y => $i,
-						image => $image
-					);
-				}
-			}
-
-		}
-
-	}
 
 	}
 	# EO each area
+
+	# call repeater
+	$self->repeater;
 
 	# return the image instance
 	return $self->{'image'};
@@ -394,10 +231,10 @@ sub debug
 	printf "width: %s, height: %s\n",
 		$self->width, $self->height;
 	print "#" x 60, "\n";
-	foreach my $area (@areas)
+	foreach my $area ($self->areas)
 	{
-		print "AREA: ", $area, " ", $self->{$area}->debug, "\n";
-		foreach my $sprite ($self->{$area}->children)
+		print "AREA: ", $area->{'name'}, " ", $area->debug, "\n";
+		foreach my $sprite ($area->children)
 		{
 			print "  SPRITE: ", $sprite->debug, "\n";
 		}

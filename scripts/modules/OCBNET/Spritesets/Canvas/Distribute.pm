@@ -23,20 +23,13 @@ BEGIN { our @EXPORT = qw(distribute); }
 
 ####################################################################################################
 
+# distribute all sprites to areas
+# according to their configurations
 sub distribute
 {
 
 	# get our object
 	my ($self) = @_;
-
-	# sprite is fully enclosed
-	# means it has a div around with fixed
-	# dimensions where it cannot escape from
-
-	my $do_corners = 1;
-	my $do_stacks = 1;
-	my $do_fits = 1;
-	my $do_edges = 1;
 
 	# a sprite that is enclosed can mostly be fitted. It's not
 	# unnormal to have some offset for the image, but mostly the
@@ -46,8 +39,7 @@ sub distribute
 	# on the edge. This threshold determines when to fit and when
 	# to put the sprite on the edge/stack area. Both padding will
 	# be counted (outerWidth - width > fit_threshold).
-	my $fit_threshold = 75;
-
+	my $fit_threshold = 50;
 
 	##########################################################
 
@@ -62,318 +54,122 @@ sub distribute
 	{ $sprite->{'distributed'} = 0; }
 
 	##########################################################
-	# CORNERS
+	# DISTRIBUTERS
 	##########################################################
 
-	sub hasConstrain
-	{
-		my ($sprite, $constrain) = @_;
-
-		if ($constrain->{'flex'})
-		{
-			if ($constrain->{'flex'} eq 'x')
-			{
-				#return 1 if $sprite->isFlexibleY;
-			}
-			else
-			{
-				#return 1 if $sprite->isFlexibleX;
-			}
-		}
-		return 0;
-	}
-
-	sub addConstrain
-	{
-		my ($sprite, $constrain) = @_;
-		if ($sprite->isFlexibleX)
-		{
-			$constrain->{'flex'} = 'x';
-		}
-		if ($sprite->isFlexibleY)
-		{
-			$constrain->{'flex'} = 'y';
-		}
-	}
-
-	my $contrain = {};
-
-	if ($do_corners)
-	{
+	my @distributers = (
 
 		# distribute one sprite into right bottom corner
 		# optimum for non enclosed sprite left/top aligned
 		# can remove all paddings and offset from left/top
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			last unless $self->{'corner-rb'}->empty;
-			next if $sprite->{'distributed'};
-			next if $sprite->isRepeating;
-			next if $sprite->isRight;
-			next if $sprite->isBottom;
-			next if $sprite->isFixedX;
-			next if $sprite->isFixedY;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'corner-rb'}->add($sprite);
-			$sprite->{'distributed'} = 1; last;
-		}
+		[ $self->{'corner-rb'}, 'isRepeating||isRight||isBottom||isFixedX||isFixedY', 1 ],
 
 		# distribute one sprite into right top corner
 		# optimum for height enclosed sprite left/bottom aligned
 		# can remove height paddings and offset from top
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRepeating;
-			next if $sprite->isRight;
-			next if $sprite->notBottom;
-			next if $sprite->isFixedX;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'corner-rt'}->add($sprite);
-			$sprite->{'distributed'} = 1; last;
-		}
+		[ $self->{'corner-rt'}, 'isRepeating||isRight||notBottom||isFixedX', 1 ],
 
 		# distribute one sprite into left bottom corner
 		# optimum for width enclosed sprite right/top aligned
 		# can remove width paddings and offset from left
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRepeating;
-			next if $sprite->notRight;
-			next if $sprite->isBottom;
-			next if $sprite->isFixedY;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'corner-lb'}->add($sprite);
-			$sprite->{'distributed'} = 1; last;
-		}
+		[ $self->{'corner-lb'}, 'isRepeating||notRight||isBottom||isFixedY', 1 ],
 
 		# distribute one sprite into left top corner
 		# optimum for enclosed sprite right/bottom aligned
 		# can remove paddings and offset from left/top
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRepeating;
-			next if $sprite->notRight;
-			next if $sprite->notBottom;
-			next if $sprite->isFlexibleY;
-			next if $sprite->isFlexibleX;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'corner-lt'}->add($sprite);
-			$sprite->{'distributed'} = 1; last;
-		}
+		[ $self->{'corner-lt'}, 'isRepeating||notRight||notBottom||isFlexibleY||isFlexibleX', 1 ],
 
-	}
+		# distribute the smaller items to the packed area to save precious space on the edges
+		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX||outerWidth-width>$fit_threshold||outerHeight-height>$fit_threshold' ],
+
+		# distribute sprites into left/top edge
+		[ $self->{'stack-l'}, 'isRepeating||notRight||isFlexibleY||isFlexibleX' ],
+		[ $self->{'stack-t'}, 'isRepeating||notBottom||isFlexibleY||isFlexibleX' ],
+		# distribute sprites into right/bottom edge
+		[ $self->{'stack-r'}, 'isRight||isRepeatX||isRepeatY||isFlexibleY' ],
+		[ $self->{'stack-b'}, 'isBottom||isRepeatY||isRepeatX||isFlexibleX' ],
+
+		# distribute sprites into the packed center
+		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX' ],
+
+		# distribute sprites into edges
+		[ $self->{'edge-l'}, 'isRight||isFlexibleY||isRepeatingBoth' ],
+		[ $self->{'edge-r'}, 'notRight||isFlexibleY||isRepeatingBoth' ],
+		[ $self->{'edge-t'}, 'isBottom||isFlexibleX||isRepeatingBoth' ],
+		[ $self->{'edge-b'}, 'notBottom||isFlexibleX||isRepeatingBoth' ],
+
+	);
 
 	##########################################################
-	# FITS THAT DO NOT PROFIT FROM BEEING ON THE STACK
-	##########################################################
 
-	if ($do_fits)
+	# process all distributers for all areas
+	foreach my $distributer (@distributers)
 	{
 
-		# distribute sprites into the fitting area
+		# get the options for this area distributer
+		my ($area, $excludes, $max) = @{$distributer};
+
+		# replace certain keywords to be an actual object call
+		$excludes =~ s/\b(?=is|not|width|height|outer)/\$_[0]->/g;
+
+		# eval the condition into a pre-compiled subroutine to call
+		$excludes = eval sprintf 'sub { return (%s); };', $excludes;
+
+		# propagate any eval errors
+		# not needed but just in case
+		die $@ if $@;
+
+		# process each sprite to see if it should be
+		# distributed into the currently checked area
 		foreach my $sprite (@{$self->{'sprites'}})
 		{
+
+			# skip already distributed sprites
 			next if $sprite->{'distributed'};
-			next if $sprite->isFlexibleY;
-			next if $sprite->isFlexibleX;
-			# skip here if there is too much space lost
-			next if $sprite->outerWidth - $sprite->width > $fit_threshold;
-			next if $sprite->outerHeight - $sprite->height > $fit_threshold;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'middle'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
+
+			# check for failed excludes
+			next if $excludes->($sprite);
+
+			# add sprite to area
+			$area->add($sprite);
+
+			# set the distributed flag
+			$sprite->{'distributed'} = 1;
+
+			# check if we have distributed enough sprites
+			last if $max && scalar(@{$area->{'children'}}) >= $max;
+
 		}
+		# EO each sprite
 
 	}
-
-	##########################################################
-	# EDGE
-	##########################################################
-
-	if ($do_stacks)
-	{
-
-		# distribute sprites into bottom edge
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isBottom;
-			next if $sprite->isRepeatY;
-			next if $sprite->isRepeatX;
-			next if $sprite->isFlexibleX;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'stack-b'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-		# distribute sprites into right edge
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRight;
-			next if $sprite->isRepeatX;
-			next if $sprite->isRepeatY;
-			next if $sprite->isFlexibleY;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'stack-r'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-	}
-
-
-	if ($do_stacks)
-	{
-		# distribute sprites into top edge
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRepeating;
-			next if $sprite->notBottom;
-			next if $sprite->isFlexibleY;
-			next if $sprite->isFlexibleX;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'stack-t'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-		# distribute sprites into left edge
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRepeating;
-			next if $sprite->notRight;
-			next if $sprite->isFlexibleY;
-			next if $sprite->isFlexibleX;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'stack-l'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-	}
-	##########################################################
-	# MIDDLE FIT
-	##########################################################
-
-	if ($do_fits)
-	{
-
-		# distribute sprites into the fitting area
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isFlexibleY;
-			next if $sprite->isFlexibleX;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'middle'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-	}
-
-
-	##########################################################
-	# STACK
-	##########################################################
-
-	if ($do_edges)
-	{
-
-		# distribute sprites into bottom stack
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->notBottom;
-			next if $sprite->notFixedX;
-			next if $sprite->isRepeatBoth;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'edge-b'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-		# distribute sprites into right stack
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->notRight;
-			next if $sprite->notFixedY;
-			next if $sprite->isRepeatBoth;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'edge-r'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-		# distribute sprites into left stack
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isRight;
-			next if $sprite->notFixedY;
-			next if $sprite->isRepeatBoth;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'edge-l'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-		# distribute sprites into top stack
-		foreach my $sprite (@{$self->{'sprites'}})
-		{
-			next if $sprite->{'distributed'};
-			next if $sprite->isBottom;
-			next if $sprite->notFixedX;
-			next if $sprite->isRepeatBoth;
-			next if hasConstrain($sprite, $contrain);
-			addConstrain($sprite, $contrain);
-			$self->{'edge-t'}->add($sprite);
-			$sprite->{'distributed'} = 1; next;
-		}
-
-
-	}
-
-
+	# EO each distributer
 
 	##########################################################
 
-	# distribute one sprite into the fitting area
+	# unsupported sprites
+	my $unsupported = 0;
+
+	# check for sprite that have not been distributed
+	# there are quite a few configurations that cannot
+	# be handled - inform the user about these problems
 	foreach my $sprite (@{$self->{'sprites'}})
 	{
 		next if $sprite->{'distributed'};
 		warn sprintf "unsupported: %s : rep(%s/%s), enc(%s/%s), pos(%s/%s)\n",
 			substr($sprite->{'filename'}, - 25),
-			$sprite->{'repeat-x'},
-			$sprite->{'repeat-y'},
-			$sprite->{'enclosed-x'},
-			$sprite->{'enclosed-y'},
-			$sprite->{'position-x'},
-			$sprite->{'position-y'};
-
+			$sprite->{'repeat-x'}, $sprite->{'repeat-y'},
+			$sprite->{'enclosed-x'}, $sprite->{'enclosed-y'},
+			$sprite->{'position-x'}, $sprite->{'position-y'};
+		$unsupported ++;
 	}
 
-	# distribute one sprite into the fitting area
-	foreach my $sprite (@{$self->{'sprites'}})
-	{
-		next if $sprite->{'distributed'};
-		sleep 1; last; # die "not all sprites distributed";
-	}
+	# wait a second make user more
+	# aware that some problem exists
+	sleep 1 if $unsupported;
+
 }
-
+# EO sub distribute
 
 ####################################################################################################
 ####################################################################################################

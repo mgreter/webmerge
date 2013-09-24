@@ -4,7 +4,7 @@
 ####################################################################################################
 # regular expressions to match css2/css3 selectors
 ####################################################################################################
-package OCBNET::Spritesets::CSS::Selectors;
+package OCBNET::Spritesets::CSS::Parser::Selectors;
 ####################################################################################################
 
 use strict;
@@ -13,7 +13,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::Spritesets::CSS::Selectors::VERSION = "0.8.2"; }
+BEGIN { $OCBNET::Spritesets::CSS::Parser::Selectors::VERSION = "0.8.2"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
@@ -22,11 +22,11 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 BEGIN { our @EXPORT = qw($re_css_selector_rules); }
 
 # define our functions than can be exported
-BEGIN { our @EXPORT_OK = qw($re_css_selector_rule); }
+BEGIN { our @EXPORT_OK = qw($re_css_selector_rule $re_options); }
 
 ####################################################################################################
 
-use OCBNET::Spritesets::CSS::Base;
+use OCBNET::Spritesets::CSS::Parser::Base;
 
 ####################################################################################################
 
@@ -35,7 +35,8 @@ our $re_css_id = qr/\#$re_css_name/; # select single id
 our $re_css_tag = qr/(?:$re_css_name|\*)/; # select single tag
 our $re_css_class = qr/\.$re_css_name/; # select single class
 our $re_css_pseudo = qr/\:{1,2}$re_css_name/; # select single pseudo
-# select attributes and it's content with advanced css2/css3 selectors
+
+# select attributes and its content with advanced css2/css3 selectors
 our $re_css_attr = qr/\[$re_css_name\s*(?:[\~\^\$\*\|]?=\s*(?:\'$re_apo\'|\"$re_quot\"|[^\)]*))?\]/;
 
 ####################################################################################################

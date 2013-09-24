@@ -3,7 +3,7 @@
 # This file is part of Webmerge (GPL3)
 ###################################################################################################
 # this is a block where all sprites get fitted in
-# the smallest available space (see packaging)
+# the smallest available space (see packing module)
 ####################################################################################################
 package OCBNET::Spritesets::Fit;
 ####################################################################################################
@@ -13,26 +13,8 @@ use warnings;
 
 ####################################################################################################
 
+# a container is also a block
 use base 'OCBNET::Spritesets::Container';
-
-####################################################################################################
-
-# create a new object
-# ******************************************************************************
-sub new
-{
-
-	# get package name and parent
-	my ($pckg, $parent) = @_;
-
-	# get object by calling super class
-	my $self = $pckg->SUPER::new($parent);
-
-	# return object
-	return $self;
-
-}
-# EO new
 
 ####################################################################################################
 
@@ -47,21 +29,18 @@ sub layout
 	# do nothing if empty
 	return if $self->empty;
 
-	# create the packer object for composition
-	my $packer = new OCBNET::Spritesets::Packing();
+	# call layout on all children first
+	$_->layout foreach (@{$self->{'children'}});
 
-	foreach my $sprite (@{$self->{'children'}})
-	{
-		$sprite->{'width'} = $sprite->outerWidth;
-		$sprite->{'height'} = $sprite->outerHeight;
-	}
+	# create the packer object for composition
+	my $packer = new OCBNET::Packer::2D;
 
 	# fit the rectangles/images
 	$packer->fit($self->{'children'});
 
 	# get the dimensions for the image and store on block
-	my $width = $self->{'w'} = $packer->{'root'}->{'width'};
-	my $height = $self->{'h'} = $packer->{'root'}->{'height'};
+	my $width = $self->width = $packer->{'root'}->{'width'};
+	my $height = $self->height = $packer->{'root'}->{'height'};
 
 	# process and update rectangles/images
 	foreach my $sprite (@{$self->{'children'}})
@@ -72,18 +51,18 @@ sub layout
 		die "fatal: sprite could not be fitted" unless $sprite->{'fit'};
 
 		# update the positions for the sprites
-		$sprite->{'x'} = $sprite->{'fit'}->{'x'};
-		$sprite->{'y'} = $sprite->{'fit'}->{'y'};
+		$sprite->top = $sprite->{'fit'}->{'y'};
+		$sprite->left = $sprite->{'fit'}->{'x'};
 
 	}
 	# EO each sprite
 
-	# return success
+	# return instance
 	return $self;
 
 }
 # EO sub layout
 
-
+####################################################################################################
 ####################################################################################################
 1;

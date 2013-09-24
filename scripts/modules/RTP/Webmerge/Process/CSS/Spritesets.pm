@@ -29,24 +29,23 @@ use Fcntl qw(LOCK_UN O_RDWR);
 use RTP::Webmerge qw(runProgram);
 
 # load image spriteset class
-use OCBNET::Spritesets::CSS;
+use OCBNET::Spritesets::CSS::Parser;
 
 # import webmerge IO file reader and writer
 use RTP::Webmerge::IO qw(readfile writefile);
 
 ###################################################################################################
 
-# replace jquery calls with simple dollar signs
-# this way we can have best code compatibility
-# and still use the dollar sign when possible
+# process spritesets with additional modules
+# try to keep them as standalone as possible
 sub spritesets
 {
 
 	# get input variables
 	my ($data, $config, $output) = @_;
 
-	# create a new ocbnet spriteset object
-	my $css = OCBNET::Spritesets::CSS->new($config);
+	# create a new ocbnet spriteset css parser object
+	my $css = OCBNET::Spritesets::CSS::Parser->new($config);
 
 	# read our stylesheet data
 	$css->read($data, $config->{'atomic'});
