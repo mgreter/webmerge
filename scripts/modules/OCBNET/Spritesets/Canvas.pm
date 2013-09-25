@@ -64,9 +64,6 @@ sub new
 	# initialize the width and the height
 	$self->width = 0; $self->height = 0;
 
-	# make a copy of our area strings
-	# $self->{'areas'} = [ @areas ];
-
 	# array with all sprites
 	$self->{'sprites'} = [];
 

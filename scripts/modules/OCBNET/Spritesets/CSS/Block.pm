@@ -2,7 +2,11 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-# a css block inside curly braces or root
+# a css block inside curly braces or root and can be
+# anything, from a selector to a media-query declaration
+# any block can have any kind of sublocks, we dont care
+# we do not really support the setting of styles directly
+# but you should be able to safely add new style definitions
 ####################################################################################################
 package OCBNET::Spritesets::CSS::Block;
 ####################################################################################################
@@ -17,6 +21,7 @@ use base 'OCBNET::Spritesets::CSS::Collection';
 
 ####################################################################################################
 
+# constructor
 sub new
 {
 
@@ -27,10 +32,15 @@ sub new
 	# create new object
 	my $block = {
 
+		# defines type of block
+		# can i.e. be css selectors
 		'head' => '',
+
 		'blocks' => [],
+
 		'footer' => '',
 
+		# the actual parsed styles (use getter methods)
 		'styles' => new OCBNET::Spritesets::CSS::Collection,
 		'options' => new OCBNET::Spritesets::CSS::Collection
 
@@ -49,42 +59,63 @@ sub new
 	return bless $block, $pckg;
 
 }
+# EO constructor
 
+####################################################################################################
+
+# render the mangled css
+# must be the same as on read
+# if no styles have been added
 sub render
 {
 
-
+	# get block to render
 	my ($block) = @_;
 
-	my $out = $block->head;
+	# first add the header
+	my $css = $block->head;
 
+	# check if we have any sub-blocks
 	if (scalar(@{$block->blocks}))
 	{
 
-		$out .= "{" if $block->parent;
+		# create a new scope if we are a child
+		$css .= "{" if $block->parent;
 
-		$out .= $block->body;
+		# render and add the block body
+		$css .= $block->body;
 
-		$out .= $block->footer;
+		# finally add the footer
+		$css .= $block->footer;
 
-		$out .= "}" if $block->parent;
+		# close the scope if we are a child
+		$css .= "}" if $block->parent;
 
 	}
+	# EO if has sub-blocks
 
-	return $out;
+	# return the css
+	return $css;
 
 }
 
+####################################################################################################
+
+# render the mangled css body
 sub body
 {
 
-	my $out = '';
+	# init variable
+	my $css = '';
 
+	# get block to render
 	my ($block) = @_;
 
+	# check if we have any declarations
 	if ($block->{'declarations'})
 	{
-		$out .= join "", map
+		# put back all declarations
+		$css .= join "", map
 			{ sprintf "%s%s", @{$_}; }
 				@{$block->{'declarations'}};
 	}
@@ -92,11 +123,12 @@ sub body
 	{
 		foreach my $child (@{$block->blocks})
 		{
-			$out .= $child->render
+			$css .= $child->render
 		}
 	}
 
-	return $out;
+	# return the css
+	return $css;
 
 }
 
@@ -108,50 +140,76 @@ sub footer { $_[0]->{'footer'} }
 sub styles { $_[0]->{'styles'} }
 sub options { $_[0]->{'options'} }
 
+####################################################################################################
+# getter methods for block styles and options
+####################################################################################################
 
+# get parsed css style by name
+#**************************************************************************************************
 sub style
 {
 
+	# get passed variables
 	my ($self, $option) = @_;
 
-	# if ($self->styles->exists($option))
+	# do we have a valid style in current block
 	if (defined $self->styles->get($option))
 	{
+		# get style from current block styles
 		return $self->styles->get($option);
 	}
+	# maybe we have a reference block
+	# basically acts like css/cascading
 	elsif (defined $self->{'ref'})
 	{
+		# get style from referenced block styles
 		return $self->{'ref'}->styles->get($option);
 	}
-	else
-	{
-		return undef;
-	}
+
+	# return null
+	return undef;
 
 }
+# EO sub style
 
+####################################################################################################
+
+# get parsed css comment option by name
+#**************************************************************************************************
 sub option
 {
 
+	# get passed variables
 	my ($self, $option) = @_;
 
-	if ($self->options->exists($option))
+	# do we have a valid style in current block
+	if (defined $self->options->get($option))
 	{
+		# get style from current block styles
 		return $self->options->get($option);
 	}
+	# maybe we have a reference block
+	# basically acts like css/cascading
 	elsif (defined $self->{'ref'})
 	{
+		# get style from referenced block styles
 		return $self->{'ref'}->options->get($option);
 	}
-	else
-	{
-		return undef;
-	}
+
+	# return null
+	return undef;
 
 }
+# EO sub option
 
+####################################################################################################
+
+# get parsed css comment option by name
+#**************************************************************************************************
 sub each
 {
+
+die "ewach";
 
 	my ($self, $sub) = @_;
 
