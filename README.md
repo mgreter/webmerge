@@ -46,7 +46,7 @@ Installing Perl Modules
     perl -MCPAN -e "install CSS::Minifier"
     perl -MCPAN -e "install JavaScript::Minifier"
     perl -MCPAN -e "install Data::Dump::PHP"
-    perl -MCPAN -e "install File::MimeInfo::Simple"
+    perl -MCPAN -e "install File::MimeInfo"
     # modules are only needed for watcher
     perl -MCPAN -e "install IPC::Run3"
     perl -MCPAN -e "install Filesys::Notify::Simple"
@@ -57,11 +57,11 @@ Installing on Gentoo Linux
     USE="perl png jpeg q16" \
     emerge -u media-gfx/graphicsmagick
     # install needed perl modules
+    emerge -u dev-perl/File-MimeInfo
     emerge -u dev-perl/CSS-Minifier
     emerge -u dev-perl/JavaScript-Minifier
     # Data::Dump::PHP has no ebuild yet
     perl -MCPAN -e "install Data::Dump::PHP"
-    perl -MCPAN -e "install File::MimeInfo::Simple"
     # modules are only needed for watcher
     emerge -u dev-perl/IPC-Run3
     emerge -u dev-perl/Filesys-Notify-Simple
