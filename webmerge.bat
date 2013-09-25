@@ -45,7 +45,7 @@ perl "%DRIVEPWD%\scripts\webmerge.pl" %*
 
 @IF ERRORLEVEL 1 GOTO errorHandling
 
-@echo  
+@echo 
 
 @sleep 1
 
