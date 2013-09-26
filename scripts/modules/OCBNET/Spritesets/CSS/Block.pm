@@ -22,6 +22,7 @@ use base 'OCBNET::Spritesets::CSS::Collection';
 ####################################################################################################
 
 # constructor
+#**************************************************************************************************
 sub new
 {
 
@@ -36,8 +37,10 @@ sub new
 		# can i.e. be css selectors
 		'head' => '',
 
+		# optional sub-blocks
 		'blocks' => [],
 
+		# optional footer text
 		'footer' => '',
 
 		# the actual parsed styles (use getter methods)
@@ -98,10 +101,13 @@ sub render
 	return $css;
 
 }
+# EO sub render
 
 ####################################################################################################
 
-# render the mangled css body
+# render the body css code
+# either mangled or original
+#**************************************************************************************************
 sub body
 {
 
@@ -112,6 +118,9 @@ sub body
 	my ($block) = @_;
 
 	# check if we have any declarations
+	# this can overrule the whole rendering
+	# it is used to mangle only certain blocks
+	# without interferring with any other blocks
 	if ($block->{'declarations'})
 	{
 		# put back all declarations
@@ -119,6 +128,7 @@ sub body
 			{ sprintf "%s%s", @{$_}; }
 				@{$block->{'declarations'}};
 	}
+	# render the original code
 	else
 	{
 		foreach my $child (@{$block->blocks})
@@ -131,6 +141,7 @@ sub body
 	return $css;
 
 }
+# EO sub body
 
 sub head { $_[0]->{'head'} }
 sub blocks { $_[0]->{'blocks'} }
@@ -203,24 +214,5 @@ sub option
 # EO sub option
 
 ####################################################################################################
-
-# get parsed css comment option by name
-#**************************************************************************************************
-sub each
-{
-
-die "ewach";
-
-	my ($self, $sub) = @_;
-
-	$sub->($self);
-
-	foreach my $child (@{$self->blocks})
-	{
-		$child->each($sub);
-	}
-
-}
-
 ####################################################################################################
 1;

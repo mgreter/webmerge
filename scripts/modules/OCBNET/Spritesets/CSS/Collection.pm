@@ -32,7 +32,7 @@ my $re_css_bg_attachment = qr/(?:scroll|fixed|inherit)/i;
 my $re_css_bg_repeat = qr/(?:no-repeat|repeat|repeat-x|repeat-y|inherit)/i;
 my $re_css_bg_position = qr/(?:left|right|top|bottom|center|$re_css_length|inherit)/i;
 
-# regular expression for combine background options
+# regular expression for combined background options
 #**************************************************************************************************
 my $re_css_bg_position_block = qr/($re_css_bg_position(?:\s+($re_css_bg_position))?)/;
 
@@ -68,33 +68,49 @@ my $constructed =
 sub set
 {
 
+	# get passed arguments
 	my ($self, $name, $value) = @_;
 
+	# test if this a shorthand
 	if (exists $constructed->{$name})
 	{
 
 		$self->{$name} = 1;
 
+		# get array with all shorthands
 		my $attributes = $constructed->{$name};
 
+		# parse value completly
 		while ($value ne '')
 		{
+			# status variable
 			my $rv = 0;
-			# XXX - fix order as keys will be random
+			# parse in order (priority)
 			foreach my $attr (CORE::keys %{$attributes})
 			{
 				my $re_css_attribute = $attributes->{$attr};
+				# test if the current value matches
 				if ($value =~ s/^\s*($re_css_attribute)\s*//)
 				{ $self->set(join('-', $name, $attr), $1); $rv = 1; last }
+				# EO if match
 			}
+			# EO each shorthand
+
+			# warn and exit loop if nothing was parsed (syntax error)
 			warn "invalid options for $name: ", $value && last if $rv == 0;
+
 		}
+		# EO parse value
 
 	}
+	# EO if shorthand
 
+	# special case top/left and right/bottom
 	elsif ($name eq 'background-position')
 	{
 
+		# parse both values and correct wrong
+		# order of left/top and right/bottom
 		if ($value =~ m/\A\s*
 			($re_css_bg_position)\s*
 			($re_css_bg_position)\s*
@@ -102,8 +118,8 @@ sub set
 		)
 		{
 			if (
-			   	(($1 eq 'top' || $1 eq 'bottom') && not ($2 eq 'top' || $2 eq 'bottom'))
-			 ||	(($2 eq 'left' || $2 eq 'right') && not ($1 eq 'left' || $1 eq 'right'))
+			    (($1 eq 'top' || $1 eq 'bottom') && not ($2 eq 'top' || $2 eq 'bottom'))
+			 || (($2 eq 'left' || $2 eq 'right') && not ($1 eq 'left' || $1 eq 'right'))
 			)
 			{
 				$self->set(join('-', $name, 'x'), $2);
@@ -116,6 +132,7 @@ sub set
 			}
 		}
 
+		# one value means the other is centered
 		if ($value =~ m/\A\s*
 			($re_css_bg_position)\s*
 		\z/gmx
@@ -126,10 +143,13 @@ sub set
 		}
 
 	}
+	# EO if 'background-position'
 
+	# do not inherit for all axes
 	elsif ($name eq 'background-size')
 	{
 
+		# values are always in order
 		if ($value =~ m/\A\s*
 			($re_css_length|inherit)\s*
 			($re_css_length|inherit)\s*
@@ -140,6 +160,7 @@ sub set
 			$self->set(join('-', $name, 'y'), $2);
 		}
 
+		# only adjust one axis
 		if ($value =~ m/\A\s*
 			($re_css_length|inherit)\s*
 		\z/gmx
@@ -150,7 +171,9 @@ sub set
 		}
 
 	}
+	# EO if 'background-size'
 
+	# parse margin and padding boxmodel
 	elsif (exists $boxmodel->{$name})
 	{
 
@@ -205,21 +228,30 @@ sub set
 		}
 
 	}
-	# EO four length
+	# EO boxmodel
+
+	# just assign the value
+	# ignore if we don't understand
+	# implement atrributes when needed
 	else
 	{
 		$self->{$name} = $value;
 	}
 
 }
+# EO sub set
 
 ####################################################################################################
 
+# get a value by name
+#**************************************************************************************************
 sub get
 {
 
+	# get passed arguments
 	my ($self, $name) = @_;
 
+	# return combined shorthand
 	if ($name eq 'background-position')
 	{
 		return join(' ',
@@ -227,11 +259,13 @@ sub get
 			$self->{'background-position-y'}
 		);
 	}
+	# return boolean if we are repeating
 	elsif ($name eq 'background-repeat-x')
 	{
 		return (not defined $self->get('background-repeat')) ||
 			$self->get('background-repeat') eq 'repeat-x' ? 1 : 0;
 	}
+	# return boolean if we are repeating
 	elsif ($name eq 'background-repeat-y')
 	{
 		return (not defined $self->get('background-repeat')) ||
@@ -246,9 +280,11 @@ sub get
 		return $self->defined('height') ? 1 : 0;
 	}
 
+	# return stored value
 	return $self->{$name};
 
 }
+# EO sub get
 
 ####################################################################################################
 
