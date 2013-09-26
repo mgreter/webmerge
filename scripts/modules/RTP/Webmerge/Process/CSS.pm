@@ -17,6 +17,7 @@ BEGIN { $RTP::Webmerge::Process::CSS::VERSION = "0.70" }
 ###################################################################################################
 
 # load the additional submodules
+use RTP::Webmerge::Process::CSS::SCSS qw();
 use RTP::Webmerge::Process::CSS::Spritesets qw();
 use RTP::Webmerge::Process::CSS::Inlinedata qw();
 

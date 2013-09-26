@@ -1,0 +1,44 @@
+<xml>
+
+	<!-- include default configuration file (relative to this file) -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- default configuration -->
+	<config>
+
+		<!-- where is you htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<webroot>{CONF}/../scss</webroot>
+
+		<!-- define a current working directory -->
+		<!-- you can adjust this also in the xml config -->
+		<directory>{WWW}</directory>
+
+	</config>
+
+	<!-- prepare operations -->
+	<prepare disabled="false" >
+
+		<!-- create neccessary paths -->
+		<mkdir path="dst" />
+
+	</prepare>
+
+	<!-- main merge operations -->
+	<merge id="default" disabled="false">
+
+		<!-- build fam spriteset -->
+		<css id="fam" step="fam" disabled="false" >
+
+			<!-- use generated css as input file -->
+			<input path="src/simple.scss" process="scss" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="dst/simple.css" target="join" />
+
+		</css>
+
+	</merge>
+
+</xml>
