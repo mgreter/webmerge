@@ -8,11 +8,20 @@
 package OCBNET::Spritesets::CSS::Parser;
 ####################################################################################################
 # 1) read
+#    -> read blocks into
+#    -> selectors and others
+#    -> parse styles and options
+#    -> setup cascading references
+#    -> creates and loads all sprites
+#    -> adjust some values for sprites
 # 2) write
+#    -> call layout
+#    -> draw to canvas
 # 3) process
+#    -> mangling the css
 # 4) render
+#    -> out resulting css
 ####################################################################################################
-
 
 use strict;
 use warnings;
@@ -28,7 +37,8 @@ BEGIN { use base 'OCBNET::Spritesets::CSS::Block'; }
 use OCBNET::Spritesets::CSS::Collection;
 use OCBNET::Spritesets::CSS::Parser::CSS;
 use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_definition);
-use OCBNET::Spritesets::CSS::Parser::Base qw($re_number $re_apo $re_quot);
+use OCBNET::Spritesets::CSS::Parser::Base;
+use OCBNET::Spritesets::CSS::Parser::Base qw($re_comment);
 use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_css_selector_rules);
 
 ####################################################################################################
@@ -170,7 +180,7 @@ sub read
 	# find selector blocks
 	foreach my $block (@blocks)
 	{
-		if ($block->head =~ m/^\s*(?:\/\*\s*(.*?)\s*\*\/|$re_css_selector_rules|\s+)+$/s)
+		if ($block->head =~ m/^\s*(?:$re_comment|$re_css_selector_rules|\s+)+$/s)
 		{ push @{$self->{'selectors'}}, $block } else { push @{$self->{'others'}}, $block }
 	}
 
@@ -182,7 +192,7 @@ sub read
 		my $head = $other->head;
 
 		# parse comments for sprite set definitions
-		while ($head =~ s/\/\*\s*(.*?)\s*\*\///s)
+		while ($head =~ s/$re_comment//s)
 		{
 			# create a new css options collection
 			my $options = new OCBNET::Spritesets::CSS::Collection;
@@ -211,7 +221,7 @@ sub read
 		my $body = $selector->body;
 
 		# parse all comments into options hash
-		while ($body =~ s/\/\*\s*(.*?)\s*\*\///s)
+		while ($body =~ s/$re_comment//s)
 		{ $parse_definition->($selector->{'options'}, $1); }
 
 		# now parse remaining style options

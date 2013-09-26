@@ -20,7 +20,7 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 BEGIN { our @EXPORT = qw($re_apo $re_quot $re_css_name $re_number $re_percent $re_byte); }
 
 # define our functions than can be exported
-BEGIN { our @EXPORT_OK = qw($re_range $re_number_neg $re_number_pos); }
+BEGIN { our @EXPORT_OK = qw($re_comment $re_number_neg $re_number_pos); }
 
 ####################################################################################################
 
@@ -28,6 +28,10 @@ BEGIN { our @EXPORT_OK = qw($re_range $re_number_neg $re_number_pos); }
 #**************************************************************************************************
 our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
 our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
+
+# match a multiline comment
+#**************************************************************************************************
+our $re_comment = qr/\/\*\s*(.*?)\s*\*\//s;
 
 # match a css identifier name
 #**************************************************************************************************
@@ -42,9 +46,6 @@ our $re_number_pos = qr/\+?[0-9]*\.?[0-9]+/s;
 # match a percent value
 #**************************************************************************************************
 our $re_percent = qr/$re_number\%/s;
-
-#**************************************************************************************************
-our $re_range = qr/(?:$re_number|$re_percent)\%/s;
 
 # match a number from 0 to 255 (strict match)
 #**************************************************************************************************
