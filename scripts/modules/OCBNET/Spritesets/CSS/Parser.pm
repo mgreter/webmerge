@@ -284,14 +284,14 @@ sub read
 
 		# normalize left/top position to px
 		# only special case is right/bottom
-		if ($sprite->{'spritset-x'} =~ m/^($re_number)px$/i)
-		{ $sprite->{'spritset-x'} = $1; }
-		elsif ($sprite->{'spritset-x'} =~ m/^top$/i)
-		{ $sprite->{'spritset-x'} = 0; }
-		if ($sprite->{'spritset-y'} =~ m/^($re_number)px$/i)
-		{ $sprite->{'spritset-y'} = $1; }
-		elsif ($sprite->{'spritset-y'} =~ m/^left$/i)
-		{ $sprite->{'spritset-y'} = 0; }
+		if ($sprite->{'spriteset-x'} =~ m/^($re_number)px$/i)
+		{ $sprite->{'spriteset-x'} = $1; }
+		elsif ($sprite->{'spriteset-x'} =~ m/^top$/i)
+		{ $sprite->{'spriteset-x'} = 0; }
+		if ($sprite->{'spriteset-y'} =~ m/^($re_number)px$/i)
+		{ $sprite->{'spriteset-y'} = $1; }
+		elsif ($sprite->{'spriteset-y'} =~ m/^left$/i)
+		{ $sprite->{'spriteset-y'} = 0; }
 
 		# store sprite object on selector
 		$selector->{'sprite'} = $sprite;
@@ -319,32 +319,32 @@ sub read
 		};
 
 		# we have a box with the dimensions of $dim$
-		# setup sprite according to spritset
+		# setup sprite according to spriteset
 		# also prepare for background positioning
 
 		# create padding if it's offset from top/left
-		unless ($sprite->{'spritset-x'} =~ m/^right$/i)
+		unless ($sprite->{'spriteset-x'} =~ m/^right$/i)
 		{
 			# add some padding to fill the empty space
-			$sprite->{'padding-left'} += $sprite->{'spritset-x'};
-			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'spritset-x'};
+			$sprite->{'padding-left'} += $sprite->{'spriteset-x'};
+			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'spriteset-x'};
 		}
 		# is right but has fixed dimension
 		elsif ($sprite->isFixedX)
 		{
-			$sprite->{'spritset-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+			$sprite->{'spriteset-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 			$sprite->{'padding-left'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 		}
-		unless ($sprite->{'spritset-y'} =~ m/^bottom$/i)
+		unless ($sprite->{'spriteset-y'} =~ m/^bottom$/i)
 		{
 			# add some padding to fill the empty space
-			$sprite->{'padding-top'} += $sprite->{'spritset-y'};
-			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'spritset-y'};
+			$sprite->{'padding-top'} += $sprite->{'spriteset-y'};
+			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'spriteset-y'};
 		}
 		# is right but has fixed dimension
 		elsif ($sprite->isFixedY)
 		{
-			$sprite->{'spritset-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+			$sprite->{'spriteset-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 			$sprite->{'padding-top'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 		}
 
@@ -401,8 +401,8 @@ sub process
 		################################
 		################################
 
-		my $bg_pos_x = $sprite->{'spritset-x'};
-		my $bg_pos_y = $sprite->{'spritset-y'};
+		my $bg_pos_x = $sprite->{'spriteset-x'};
+		my $bg_pos_y = $sprite->{'spriteset-y'};
 
 		die "no x" unless defined $bg_pos_x;
 		die "no y" unless defined $bg_pos_y;
