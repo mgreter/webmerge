@@ -40,31 +40,33 @@ my $re_css_bg_position_block = qr/($re_css_bg_position(?:\s+($re_css_bg_position
 
 # attributes for box model that
 # have left/top and right/bottom
-my $boxmodel =
-{
+my %boxmodel =
+(
 	'margin' => 1,
 	'padding' => 1,
 	# not yet implemented
 	# but parse them anyway
 	'sprite-margin' => 1,
-	'sprite-padding' => 1,
-};
+	'sprite-padding' => 1
+);
 
 # attributes with keywords
 # and more complex logic
-my $constructed =
-{
-	'background' => {
-		'color' => $re_css_color,
-		'image' => $re_css_bg_image,
-		'repeat' => $re_css_bg_repeat,
-		'attachment' => $re_css_bg_attachment,
-		'position' => $re_css_bg_position_block
-	}
-};
+my %shorthand =
+(
+	'background' => [
+		[ 'color' => $re_css_color ],
+		[ 'image' => $re_css_bg_image ],
+		[ 'repeat' => $re_css_bg_repeat ],
+		[ 'attachment' => $re_css_bg_attachment ],
+		[ 'position' => $re_css_bg_position_block ]
+	]
+);
 
 ####################################################################################################
 
+# set a value by name
+#**************************************************************************************************
 sub set
 {
 
@@ -72,13 +74,11 @@ sub set
 	my ($self, $name, $value) = @_;
 
 	# test if this a shorthand
-	if (exists $constructed->{$name})
+	if (exists $shorthand{$name})
 	{
 
-		$self->{$name} = 1;
-
 		# get array with all shorthands
-		my $attributes = $constructed->{$name};
+		my $shorthands = $shorthand{$name};
 
 		# parse value completly
 		while ($value ne '')
@@ -86,12 +86,20 @@ sub set
 			# status variable
 			my $rv = 0;
 			# parse in order (priority)
-			foreach my $attr (CORE::keys %{$attributes})
+			foreach my $shorthand (@{$shorthands})
 			{
-				my $re_css_attribute = $attributes->{$attr};
+				# get the attribute name
+				my $attr = $shorthand->[0];
+				# regular expression for attribute
+				my $re_css_attribute = $shorthand->[1];
 				# test if the current value matches
 				if ($value =~ s/^\s*($re_css_attribute)\s*//)
-				{ $self->set(join('-', $name, $attr), $1); $rv = 1; last }
+				{
+					# set the property (may be shorthand too)
+					$self->set(join('-', $name, $attr), $1);
+					# remember state and exit loop
+					$rv = 1; last
+				}
 				# EO if match
 			}
 			# EO each shorthand
@@ -174,7 +182,7 @@ sub set
 	# EO if 'background-size'
 
 	# parse margin and padding boxmodel
-	elsif (exists $boxmodel->{$name})
+	elsif (exists $boxmodel{$name})
 	{
 
 		if ($value =~ m/\A\s*
@@ -263,21 +271,13 @@ sub get
 	elsif ($name eq 'background-repeat-x')
 	{
 		return (not defined $self->get('background-repeat')) ||
-			$self->get('background-repeat') eq 'repeat-x' ? 1 : 0;
+			$self->get('background-repeat') =~ m/repeat-x/i ? 1 : 0;
 	}
 	# return boolean if we are repeating
 	elsif ($name eq 'background-repeat-y')
 	{
 		return (not defined $self->get('background-repeat')) ||
-			$self->get('background-repeat') eq 'repeat-y' ? 1 : 0;
-	}
-	elsif ($name eq 'background-enclosed-x')
-	{
-		return $self->defined('width') ? 1 : 0;
-	}
-	elsif ($name eq 'background-enclosed-y')
-	{
-		return $self->defined('height') ? 1 : 0;
+			$self->get('background-repeat') =~ m/repeat-y/i ? 1 : 0;
 	}
 
 	# return stored value

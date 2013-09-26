@@ -16,8 +16,8 @@ use warnings;
 
 ####################################################################################################
 
+# store styles and options in collections
 use OCBNET::Spritesets::CSS::Collection;
-use base 'OCBNET::Spritesets::CSS::Collection';
 
 ####################################################################################################
 
@@ -65,10 +65,33 @@ sub new
 # EO constructor
 
 ####################################################################################################
+# getter methods for object attributes
+####################################################################################################
+
+# return code fragments
+#**************************************************************************************************
+sub head { $_[0]->{'head'} }
+sub footer { $_[0]->{'footer'} }
+
+# return the sub-blocks (array ref)
+#**************************************************************************************************
+sub blocks { $_[0]->{'blocks'} }
+
+# return the parent block object
+#**************************************************************************************************
+sub parent { $_[0]->{'parent'} }
+
+# return the collection objects
+#**************************************************************************************************
+sub styles { $_[0]->{'styles'} }
+sub options { $_[0]->{'options'} }
+
+####################################################################################################
 
 # render the mangled css
 # must be the same as on read
 # if no styles have been added
+#**************************************************************************************************
 sub render
 {
 
@@ -131,10 +154,8 @@ sub body
 	# render the original code
 	else
 	{
-		foreach my $child (@{$block->blocks})
-		{
-			$css .= $child->render
-		}
+		# render all sub-blocks to the css
+		$css .= $_->render foreach @{$block->blocks};
 	}
 
 	# return the css
@@ -142,14 +163,6 @@ sub body
 
 }
 # EO sub body
-
-sub head { $_[0]->{'head'} }
-sub blocks { $_[0]->{'blocks'} }
-sub parent { $_[0]->{'parent'} }
-sub footer { $_[0]->{'footer'} }
-
-sub styles { $_[0]->{'styles'} }
-sub options { $_[0]->{'options'} }
 
 ####################################################################################################
 # getter methods for block styles and options
