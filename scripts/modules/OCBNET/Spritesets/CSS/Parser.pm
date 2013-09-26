@@ -257,27 +257,25 @@ sub read
 	# now process each selector and setup sprites
 	foreach my $selector (@{$self->{'selectors'}})
 	{
-		# check if this selector is configured for a sprite
-		next unless defined $selector->option('sprite-ref');
-		# get the id for the sprite set to be in
-		my $id = $selector->option('sprite-ref');
-		# get the background image from styles
-		my $url = $selector->style('background-image');
+		# get the id of the spriteset to put this in
+		my $id = $selector->option('sprite-ref') || next;
 		# create a new sprite and setup most options
 		my $sprite = new OCBNET::Spritesets::Sprite({
-			'filename' => fromUrl($url),
 			'debug' => $self->{'config'}->{'debug'},
+			'filename' => fromUrl($selector->style('background-image')),
 			'size-x' => fromPx($selector->style('background-size-x')) || undef,
 			'size-y' => fromPx($selector->style('background-size-y')) || undef,
+			'enclosed-x' => fromPx($selector->style('width') || 0) || 0,
+			'enclosed-y' => fromPx($selector->style('height') || 0) || 0,
 			'repeat-x' => $selector->style('background-repeat-x') || 0,
 			'repeat-y' => $selector->style('background-repeat-y') || 0,
 			'position-x' => fromPosition($selector->style('background-position-x') || 0),
-			'position-y' => fromPosition($selector->style('background-position-y') || 0),
-			'position2-x' => fromPosition($selector->style('background-position-x') || 0),
-			'position2-y' => fromPosition($selector->style('background-position-y') || 0),
-			'enclosed-x' => fromPx($selector->style('width') || 0) || 0,
-			'enclosed-y' => fromPx($selector->style('height') || 0) || 0
+			'position-y' => fromPosition($selector->style('background-position-y') || 0)
 		});
+
+		# prepare the spriteset position
+		$sprite->{'spriteset-x'} = $sprite->positionX;
+		$sprite->{'spriteset-y'} = $sprite->positionY;
 
 		snap($sprite->{'w'}, $sprite->scaleX);
 		snap($sprite->{'h'}, $sprite->scaleY);
@@ -286,21 +284,17 @@ sub read
 
 		# normalize left/top position to px
 		# only special case is right/bottom
-		if ($sprite->{'position2-x'} =~ m/^($re_number)px$/i)
-		{ $sprite->{'position2-x'} = $1; }
-		elsif ($sprite->{'position2-x'} =~ m/^top$/i)
-		{ $sprite->{'position2-x'} = 0; }
-		if ($sprite->{'position2-y'} =~ m/^($re_number)px$/i)
-		{ $sprite->{'position2-y'} = $1; }
-		elsif ($sprite->{'position2-y'} =~ m/^left$/i)
-		{ $sprite->{'position2-y'} = 0; }
+		if ($sprite->{'spritset-x'} =~ m/^($re_number)px$/i)
+		{ $sprite->{'spritset-x'} = $1; }
+		elsif ($sprite->{'spritset-x'} =~ m/^top$/i)
+		{ $sprite->{'spritset-x'} = 0; }
+		if ($sprite->{'spritset-y'} =~ m/^($re_number)px$/i)
+		{ $sprite->{'spritset-y'} = $1; }
+		elsif ($sprite->{'spritset-y'} =~ m/^left$/i)
+		{ $sprite->{'spritset-y'} = 0; }
 
 		# store sprite object on selector
 		$selector->{'sprite'} = $sprite;
-
-
-		#if (isNumber(fromPosition($sprite->{'position-y'})))
-		#{ $sprite->{'padding-top'} += fromPosition($sprite->{'position-y'}); }
 
 		# create dimensions object and fill them in
 		my %dim; foreach my $dim ('width', 'height')
@@ -325,32 +319,32 @@ sub read
 		};
 
 		# we have a box with the dimensions of $dim$
-		# setup sprite according to position2
+		# setup sprite according to spritset
 		# also prepare for background positioning
 
 		# create padding if it's offset from top/left
-		unless ($sprite->{'position2-x'} =~ m/^right$/i)
+		unless ($sprite->{'spritset-x'} =~ m/^right$/i)
 		{
 			# add some padding to fill the empty space
-			$sprite->{'padding-left'} += $sprite->{'position2-x'};
-			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'position2-x'};
+			$sprite->{'padding-left'} += $sprite->{'spritset-x'};
+			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'spritset-x'};
 		}
 		# is right but has fixed dimension
 		elsif ($sprite->isFixedX)
 		{
-			$sprite->{'position2-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+			$sprite->{'spritset-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 			$sprite->{'padding-left'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 		}
-		unless ($sprite->{'position2-y'} =~ m/^bottom$/i)
+		unless ($sprite->{'spritset-y'} =~ m/^bottom$/i)
 		{
 			# add some padding to fill the empty space
-			$sprite->{'padding-top'} += $sprite->{'position2-y'};
-			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'position2-y'};
+			$sprite->{'padding-top'} += $sprite->{'spritset-y'};
+			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'spritset-y'};
 		}
 		# is right but has fixed dimension
 		elsif ($sprite->isFixedY)
 		{
-			$sprite->{'position2-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+			$sprite->{'spritset-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 			$sprite->{'padding-top'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 		}
 
@@ -407,8 +401,8 @@ sub process
 		################################
 		################################
 
-		my $bg_pos_x = $sprite->{'position2-x'};
-		my $bg_pos_y = $sprite->{'position2-y'};
+		my $bg_pos_x = $sprite->{'spritset-x'};
+		my $bg_pos_y = $sprite->{'spritset-y'};
 
 		die "no x" unless defined $bg_pos_x;
 		die "no y" unless defined $bg_pos_y;
