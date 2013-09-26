@@ -4,8 +4,8 @@ Asset Manager for Front End Development (JS, CSS, Images)
 
 Features
 ========
-- Merge, join and optimize CSS and JavaScript files
-- Optimize images with external tools (in parallel jobs)
+- Merge, join and optimize SCSS, CSS and JavaScript files
+- Optimize images etc. with external tools (in parallel jobs)
 - Create spritesets by simply annotating your css stylesheets
 - Can handle sprites optimized for high resolution displays (retina)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
@@ -14,13 +14,10 @@ Features
 
 To Do
 =====
-- Integrate a SASS/LESS processor
 - Implement @license header handling
-- Maybe add support for ImageMagick too
 - Finalize API for spritesets generator
-- Improve path handling for js dev targets
+- Maybe add support for ImageMagick too
 - Make writes/reads on same atomic file transparent
-- Do not hard depend on perl minifier backup modules
 
 Installing on Windows
 =====================

@@ -101,8 +101,8 @@ use RTP::Webmerge::IO::CSS;
 # load minifier libraries and define subroutines
 # maybe make these dependencies dynamic as they are
 # normally only used as backup if the default methods fail
-use CSS::Minifier qw(); sub minifyCSS { &CSS::Minifier::minify }
-use JavaScript::Minifier qw(); sub minifyJS { &JavaScript::Minifier::minify }
+sub minifyCSS { require CSS::Minifier; &CSS::Minifier::minify }
+sub minifyJS { require JavaScript::Minifier; &JavaScript::Minifier::minify }
 
 ###################################################################################################
 
