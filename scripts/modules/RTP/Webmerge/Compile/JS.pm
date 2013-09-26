@@ -51,7 +51,8 @@ sub compileJS
 	my $command = '"' . $java_bin . '" -jar ' .
 			# reference the closure compiler relative from extension
 			'"' . check_path('{EXT}/scripts/google/closure/compiler.jar') . '"' .
-		' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';
+			# use quiet warning level and safe compilation options
+			' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';
 
 	# I should only listen for my own children
 	# IPC::Run3 will spawn it's own children

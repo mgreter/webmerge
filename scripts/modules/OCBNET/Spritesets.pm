@@ -24,9 +24,6 @@
 package OCBNET::Spritesets;
 ####################################################################################################
 
-# load graphic library
-use Graphics::Magick;
-
 # default fitter algorithm
 use OCBNET::Packer::2D;
 

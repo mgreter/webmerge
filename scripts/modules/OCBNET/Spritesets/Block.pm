@@ -19,6 +19,9 @@ use warnings;
 sub new
 {
 
+	# load graphic library
+	require Graphics::Magick;
+
 	# get package name and parent
 	my ($pckg, $parent) = @_;
 

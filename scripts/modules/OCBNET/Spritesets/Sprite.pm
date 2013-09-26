@@ -92,6 +92,9 @@ sub new
 	}
 	# EO if debug
 
+	# load graphic library
+	require Graphics::Magick;
+
 	# create the image instance
 	my $image = new Graphics::Magick;
 
