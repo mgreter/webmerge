@@ -62,41 +62,41 @@ sub distribute
 		# distribute one sprite into right bottom corner
 		# optimum for non enclosed sprite left/top aligned
 		# can remove all paddings and offset from left/top
-		[ $self->{'corner-rb'}, 'isRepeating||isRight||isBottom||isFixedX||isFixedY', 1 ],
+		[ $self->{'corner-rb'}, 'isRepeating||alignRight||alignBottom||isFixedX||isFixedY', 1 ],
 
 		# distribute one sprite into right top corner
 		# optimum for height enclosed sprite left/bottom aligned
 		# can remove height paddings and offset from top
-		[ $self->{'corner-rt'}, 'isRepeating||isRight||notBottom||isFixedX', 1 ],
+		[ $self->{'corner-rt'}, 'isRepeating||alignRight||alignTop||isFixedX', 1 ],
 
 		# distribute one sprite into left bottom corner
 		# optimum for width enclosed sprite right/top aligned
 		# can remove width paddings and offset from left
-		[ $self->{'corner-lb'}, 'isRepeating||notRight||isBottom||isFixedY', 1 ],
+		[ $self->{'corner-lb'}, 'isRepeating||alignLeft||alignBottom||isFixedY', 1 ],
 
 		# distribute one sprite into left top corner
 		# optimum for enclosed sprite right/bottom aligned
 		# can remove paddings and offset from left/top
-		[ $self->{'corner-lt'}, 'isRepeating||notRight||notBottom||isFlexibleY||isFlexibleX', 1 ],
+		[ $self->{'corner-lt'}, 'isRepeating||alignLeft||alignTop||isFlexibleY||isFlexibleX', 1 ],
 
 		# distribute the smaller items to the packed area to save precious space on the edges
 		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX||outerWidth-width>$fit_threshold||outerHeight-height>$fit_threshold' ],
 
-		# distribute sprites into left/top edge
-		[ $self->{'stack-l'}, 'isRepeating||notRight||isFlexibleY||isFlexibleX' ],
-		[ $self->{'stack-t'}, 'isRepeating||notBottom||isFlexibleY||isFlexibleX' ],
 		# distribute sprites into right/bottom edge
-		[ $self->{'stack-r'}, 'isRight||isRepeatX||isRepeatY||isFlexibleY' ],
-		[ $self->{'stack-b'}, 'isBottom||isRepeatY||isRepeatX||isFlexibleX' ],
+		[ $self->{'stack-r'}, 'isRepeating||alignRight||isFlexibleY' ],
+		[ $self->{'stack-b'}, 'isRepeating||alignBottom||isFlexibleX' ],
+		# distribute sprites into left/top edge
+		[ $self->{'stack-t'}, 'isRepeating||alignTop||isFlexibleY||isFlexibleX' ],
+		[ $self->{'stack-l'}, 'isRepeating||alignLeft||isFlexibleY||isFlexibleX' ],
 
 		# distribute sprites into the packed center
 		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX' ],
 
 		# distribute sprites into edges
-		[ $self->{'edge-l'}, 'isRight||isFlexibleY||isRepeatingBoth' ],
-		[ $self->{'edge-r'}, 'notRight||isFlexibleY||isRepeatingBoth' ],
-		[ $self->{'edge-t'}, 'isBottom||isFlexibleX||isRepeatingBoth' ],
-		[ $self->{'edge-b'}, 'notBottom||isFlexibleX||isRepeatingBoth' ],
+		[ $self->{'edge-b'}, 'alignTop||isFlexibleX||isRepeatingBoth' ],
+		[ $self->{'edge-r'}, 'alignLeft||isFlexibleY||isRepeatingBoth' ],
+		[ $self->{'edge-l'}, 'alignRight||isFlexibleY||isRepeatingBoth' ],
+		[ $self->{'edge-t'}, 'alignBottom||isFlexibleX||isRepeatingBoth' ],
 
 	);
 
@@ -110,7 +110,7 @@ sub distribute
 		my ($area, $excludes, $max) = @{$distributer};
 
 		# replace certain keywords to be an actual object call
-		$excludes =~ s/\b(?=is|not|width|height|outer)/\$_[0]->/g;
+		$excludes =~ s/\b(?=is|not|align|width|height|outer)/\$_[0]->/g;
 
 		# eval the condition into a pre-compiled subroutine to call
 		$excludes = eval sprintf 'sub { return (%s); };', $excludes;

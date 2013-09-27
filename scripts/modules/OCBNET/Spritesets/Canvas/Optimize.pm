@@ -1,0 +1,131 @@
+###################################################################################################
+# Copyright 2013 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+####################################################################################################
+# static helper functions for canvas
+####################################################################################################
+package OCBNET::Spritesets::Canvas::Optimize;
+####################################################################################################
+
+use strict;
+use warnings;
+
+###################################################################################################
+
+# define our version string
+BEGIN { $OCBNET::Spritesets::Canvas::Optimize = "0.7.0"; }
+
+# load exporter and inherit from it
+BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
+
+# define our functions to be exported
+BEGIN { our @EXPORT = qw(optimize); }
+
+####################################################################################################
+
+# load some helper functions for parsing
+# ******************************************************************************
+use OCBNET::Spritesets::CSS::Parser::Base qw(fromPx);
+
+# ******************************************************************************
+sub optimize
+{
+
+	# get our object
+	my ($self) = shift;
+
+	# process each area in canvas
+	foreach my $area ($self->areas)
+	{
+
+		# process each sprite from area
+		foreach my $sprite ($area->children)
+		{
+
+			# get associated selector from current sprite
+			my $selector = $sprite->{'selector'} || next;
+
+			# create dimensions object and fill it with
+			# min, max and actual value set in css styles
+			my %dim; foreach my $dim ('width', 'height')
+			{
+				my $val = fromPx($selector->style($dim) || 0);
+				my $min = fromPx($selector->style('min-' . $dim));
+				my $max = fromPx($selector->style('max-' . $dim));
+				$val = $max if defined $max && $val < $max; # extend
+				$val = $max if defined $max && $val > $max; # range
+				$val = $min if defined $min && $val < $min; # range
+				$dim{$dim} = { 'min' => $min, 'max' => $max, 'val' => $val };
+			}
+
+			# get the block padding from the css
+			# left/right paddings behave different regarding
+			# background-position, as left acts as an offset but
+			# right does not, since right aligns on the outer edge
+			# and we can only position backgrounds relative to top/left
+			my $padding_top = fromPx($selector->style('padding-top') || 0) || 0;
+			my $padding_left = fromPx($selector->style('padding-left') || 0) || 0;
+			my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
+			my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
+
+			# sprite is left aligned
+			if ($sprite->alignLeft)
+			{
+				# add some padding to offset the actual sprite
+				$sprite->paddingLeft = $sprite->positionX;
+				# add more padding to the right to make sure we will fill out the whole available width (if width is not set, result will be negative)
+				$sprite->paddingRight = $dim{'width'}->{'val'} - $sprite->positionX - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+			}
+			# is right but has fixed dimension
+			# we can translate this to left align
+			elsif ($sprite->isFixedX)
+			{
+				# problem is we cannot change position as we are not yet distributed!
+				$sprite->positionX = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+				$sprite->paddingLeft = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+			}
+
+			# create padding if it's offset from top
+			if ($sprite->alignTop)
+			{
+				# add some padding to offset the actual sprite
+				$sprite->paddingTop = $sprite->positionY;
+				# add more padding to the bottom to make sure we will fill out the whole available height (if height is not set, result will be negative)
+				$sprite->paddingBottom = $dim{'height'}->{'val'} - $sprite->positionY - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+			}
+			# is right but has fixed dimension
+			elsif ($sprite->isFixedY)
+			{
+				# problem is we cannot change position as we are not yet distributed!
+				$sprite->positionY = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+				$sprite->paddingTop = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+			}
+
+			# adjust the padding to account for scaling
+			$sprite->paddingTop *= $sprite->scaleY;
+			$sprite->paddingLeft *= $sprite->scaleX;
+			$sprite->paddingRight *= $sprite->scaleX;
+			$sprite->paddingBottom *= $sprite->scaleY;
+
+			# make sure we dont have any negative margins
+			# this fixes the wrong calculation if no dimension is given
+			$sprite->paddingTop = 0 if $sprite->paddingTop < 0;
+			$sprite->paddingLeft = 0 if $sprite->paddingLeft < 0;
+			$sprite->paddingRight = 0 if $sprite->paddingRight < 0;
+			$sprite->paddingBottom = 0 if $sprite->paddingBottom < 0;
+
+		}
+		# EO each sprite
+
+	}
+	# Eo each area
+
+	# return success
+	return $self;
+
+}
+# EO sub optimize
+
+####################################################################################################
+####################################################################################################
+1;

@@ -185,10 +185,12 @@ sub isRepeatingBoth { $_[0]->{'repeat-x'} && $_[0]->{'repeat-y'} }
 sub notRepeating { not ($_[0]->{'repeat-x'} || $_[0]->{'repeat-y'}) }
 sub notRepeatingBoth { not ($_[0]->{'repeat-x'} && $_[0]->{'repeat-y'}) }
 
-sub isRight { (not defined $_[0]->{'position-x'}) || $_[0]->{'position-x'} =~ m/^right$/i; }
-sub isBottom { (not defined $_[0]->{'position-y'}) || $_[0]->{'position-y'} =~ m/^bottom$/i; }
-sub notRight { not((not defined $_[0]->{'position-x'}) || $_[0]->{'position-x'} =~ m/^right$/i); }
-sub notBottom { not((not defined $_[0]->{'position-y'}) || $_[0]->{'position-y'} =~ m/^bottom$/i); }
+# the alignment defines where a sprite can be distributed
+# ***************************************************************************************
+sub alignTop { !(defined $_[0]->{'position-y'} && $_[0]->{'position-y'} =~ m/^bottom$/i); }
+sub alignLeft { !(defined $_[0]->{'position-x'} && $_[0]->{'position-x'} =~ m/^right$/i); }
+sub alignRight { (defined $_[0]->{'position-x'} && $_[0]->{'position-x'} =~ m/^right$/i); }
+sub alignBottom { (defined $_[0]->{'position-y'} && $_[0]->{'position-y'} =~ m/^bottom$/i); }
 
 ####################################################################################################
 # debug only - remove in a later release

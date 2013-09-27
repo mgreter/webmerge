@@ -38,56 +38,13 @@ use OCBNET::Spritesets::CSS::Collection;
 use OCBNET::Spritesets::CSS::Parser::CSS;
 use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_definition);
 use OCBNET::Spritesets::CSS::Parser::Base;
-use OCBNET::Spritesets::CSS::Parser::Base qw($re_comment);
+use OCBNET::Spritesets::CSS::Parser::Base qw($re_comment fromPx fromUrl fromPosition);
 use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_css_selector_rules);
 
 ####################################################################################################
 
-
-sub fromPosition
-{
-
-	# get position string
-	my ($position) = @_;
-
-	# default to left/top position
-	return 0 unless (defined $position);
-
-	# allow keywords for left and top position
-	return 0 if ($position =~ m/^(?:top|left)$/i);
-
-	# return the parsed pixel number if matched
-	return $1 if ($position =~ m/^($re_number)(?:px)?$/i);
-
-	# right/bottom are the only valid keywords
-	# for the position for most other functions
-	return 'right' if ($position =~ m/^right$/i);
-	return 'bottom' if ($position =~ m/^bottom$/i);
-
-	# die with a fatal error for invalid positions
-	die "unknown background position: <$position>";
-
-}
-# EO sub fromPosition
-
-sub isNumber { $_[0] =~ m/^$re_number$/; }
-sub toUrl { sprintf("url('%s')", $_[0]); }
-sub toPx { sprintf '%spx', $_[0]; }
-
-sub fromUrl
-{
-	my ($url) = @_;
-	$url =~ s/^\s*url\(\s*(.*?)\s*\)\s*$/$1/m;
-	$url =~ s/^\"(.*?)\"\z/$1/m;
-	$url =~ s/^\'(.*?)\'\z/$1/m;
-	return $url;
-}
-
-sub fromPx
-{
-	return unless defined $_[0];
-	$_[0] =~ m/($re_number)px/i ? $1 : $_[0];
-}
+sub toPx { sprintf '%spx', @_; }
+sub toUrl { sprintf "url('%s')", @_; }
 
 ####################################################################################################
 
@@ -108,10 +65,6 @@ sub new
 	return bless $self, $pckg;
 
 }
-
-####################################################################################################
-
-
 
 ####################################################################################################
 
@@ -208,6 +161,8 @@ sub read
 			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
 			# add this canvas to global hash object
 			$self->{'spritesets'}->{$id} = $canvas;
+			# store the id for canvas
+			$canvas->{'id'} = $id;
 		}
 
 	}
@@ -230,133 +185,79 @@ sub read
 	}
 	# EO each selector
 
-	# now process each selector and setup references
-	foreach my $selector (@{$self->{'selectors'}})
-	{
-		my $id = $selector->options->get('css-id');
-		$self->{'ids'}->{$id} = $selector if defined $id;
-	}
+	# return object
+	return $self;
+
+}
+
+####################################################################################################
+
+# rehash the block references
+# ***************************************************************************************
+sub rehash
+{
+
+	# get our object
+	my ($self) = @_;
 
 	# now process each selector and setup references
 	foreach my $selector (@{$self->{'selectors'}})
 	{
-		my $id = $selector->options->get('css-ref');
-		$selector->{'ref'} = $self->{'ids'}->{$id} if defined $id;
+		# get own id and reference id
+		my $css_id = $selector->options->get('css-id');
+		my $ref_id = $selector->options->get('css-ref');
+		# setup relationsships between references blocks
+		$self->{'ids'}->{$css_id} = $selector if defined $css_id;
+		$selector->{'ref'} = $self->{'ids'}->{$ref_id} if defined $ref_id;
 	}
 
-	# step 0 - create spritesets to fill in sprites
-	# step 1 - parse all sprites and fill spritesets
-	# step 2 - adjust background css for sprite blocks
-	sub snap
-	{
-			return unless defined $_[0];
-			my $rest = $_[0] % $_[1];
-			$_[0] += $_[1] - $rest if $rest;
-		}
+	# allow chaining
+	return $self;
+
+}
+
+# styles have been readed, so we now can start to
+# load all sprites and setup relation to its css block
+# ***************************************************************************************
+sub load
+{
+
+	# get our object
+	my ($self) = @_;
 
 	# now process each selector and setup sprites
 	foreach my $selector (@{$self->{'selectors'}})
 	{
+
 		# get the id of the spriteset to put this in
 		my $id = $selector->option('sprite-ref') || next;
+
 		# create a new sprite and setup most options
 		my $sprite = new OCBNET::Spritesets::Sprite({
+			# pass debug mode from config
+			# will draw funky color backgrounds
 			'debug' => $self->{'config'}->{'debug'},
+			# get the filename from the url (must be "normalized")
 			'filename' => fromUrl($selector->style('background-image')),
+			# the size the sprite is actually shown in (from css styles)
 			'size-x' => fromPx($selector->style('background-size-x')) || undef,
 			'size-y' => fromPx($selector->style('background-size-y')) || undef,
-			'enclosed-x' => fromPx($selector->style('width') || 0) || 0,
-			'enclosed-y' => fromPx($selector->style('height') || 0) || 0,
+			# set repeat options to decide where to ditribute
 			'repeat-x' => $selector->style('background-repeat-x') || 0,
 			'repeat-y' => $selector->style('background-repeat-y') || 0,
+			# set enclosed options to decide where to ditribute
+			'enclosed-x' => fromPx($selector->style('width') || 0) || 0,
+			'enclosed-y' => fromPx($selector->style('height') || 0) || 0,
+			# set position/align options to decide where to ditribute
 			'position-x' => fromPosition($selector->style('background-position-x') || 0),
 			'position-y' => fromPosition($selector->style('background-position-y') || 0)
 		});
 
-		# prepare the spriteset position
-		$sprite->{'spriteset-x'} = $sprite->positionX;
-		$sprite->{'spriteset-y'} = $sprite->positionY;
-
-		snap($sprite->{'w'}, $sprite->scaleX);
-		snap($sprite->{'h'}, $sprite->scaleY);
-		snap($sprite->{'width'}, $sprite->scaleX);
-		snap($sprite->{'height'}, $sprite->scaleY);
-
-		# normalize left/top position to px
-		# only special case is right/bottom
-		if ($sprite->{'spriteset-x'} =~ m/^($re_number)px$/i)
-		{ $sprite->{'spriteset-x'} = $1; }
-		elsif ($sprite->{'spriteset-x'} =~ m/^top$/i)
-		{ $sprite->{'spriteset-x'} = 0; }
-		if ($sprite->{'spriteset-y'} =~ m/^($re_number)px$/i)
-		{ $sprite->{'spriteset-y'} = $1; }
-		elsif ($sprite->{'spriteset-y'} =~ m/^left$/i)
-		{ $sprite->{'spriteset-y'} = 0; }
-
 		# store sprite object on selector
 		$selector->{'sprite'} = $sprite;
 
-		# create dimensions object and fill them in
-		my %dim; foreach my $dim ('width', 'height')
-		{
-			my $val = fromPx($selector->style($dim) || 0);
-			my $min = fromPx($selector->style('min-' . $dim));
-			my $max = fromPx($selector->style('max-' . $dim));
-			$val = $max if defined $max && $val < $max; # extend
-			$val = $max if defined $max && $val > $max; # range
-			$val = $min if defined $min && $val < $min; # range
-			$dim{$dim} = { 'min' => $min, 'max' => $max, 'val' => $val };
-		}
-
-		my $padding_top = fromPx($selector->style('padding-top') || 0) || 0;
-		my $padding_left = fromPx($selector->style('padding-left') || 0) || 0;
-		my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
-		my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
-
-		my $isSmaller = {
-			'width' => $sprite->width < $dim{'width'}->{'val'},
-			'height' => $sprite->height < $dim{'height'}->{'val'}
-		};
-
-		# we have a box with the dimensions of $dim$
-		# setup sprite according to spriteset
-		# also prepare for background positioning
-
-		# create padding if it's offset from top/left
-		unless ($sprite->{'spriteset-x'} =~ m/^right$/i)
-		{
-			# add some padding to fill the empty space
-			$sprite->{'padding-left'} += $sprite->{'spriteset-x'};
-			$sprite->{'padding-right'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right - $sprite->{'spriteset-x'};
-		}
-		# is right but has fixed dimension
-		elsif ($sprite->isFixedX)
-		{
-			$sprite->{'spriteset-x'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
-			$sprite->{'padding-left'} = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
-		}
-		unless ($sprite->{'spriteset-y'} =~ m/^bottom$/i)
-		{
-			# add some padding to fill the empty space
-			$sprite->{'padding-top'} += $sprite->{'spriteset-y'};
-			$sprite->{'padding-bottom'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom - $sprite->{'spriteset-y'};
-		}
-		# is right but has fixed dimension
-		elsif ($sprite->isFixedY)
-		{
-			$sprite->{'spriteset-y'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
-			$sprite->{'padding-top'} = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
-		}
-
-		$sprite->{'padding-top'} *= $sprite->scaleY;
-		$sprite->{'padding-left'} *= $sprite->scaleX;
-		$sprite->{'padding-right'} *= $sprite->scaleX;
-		$sprite->{'padding-bottom'} *= $sprite->scaleY;
-
-		$sprite->{'padding-top'} = 0 if $sprite->{'padding-top'} < 0;
-		$sprite->{'padding-left'} = 0 if $sprite->{'padding-left'} < 0;
-		$sprite->{'padding-right'} = 0 if $sprite->{'padding-right'} < 0;
-		$sprite->{'padding-bottom'} = 0 if $sprite->{'padding-bottom'} < 0;
+		# and also store the selector on the sprite
+		$sprite->{'selector'} = $selector;
 
 		# add this sprite to the given spriteset
 		unless ($self->{'spritesets'}->{$id})
@@ -364,12 +265,49 @@ sub read
 		else { $self->{'spritesets'}->{$id}->add($sprite); }
 
 	}
-	# EO each selector
 
-	# return object
+	# allow chaining
 	return $self;
 
 }
+
+# sprites have been loaded, so we now can start to
+# distribute all sprites to their appropriate area
+# ***************************************************************************************
+sub distribute
+{
+
+	# get our object
+	my ($self) = @_;
+
+	# call distribute for every spriteset in this stylesheet
+	$_->distribute foreach (values %{$self->{'spritesets'}});
+
+	# allow chaining
+	return $self;
+
+}
+# EO sub optimize
+
+####################################################################################################
+
+# sprites have been distributed, so we now can start to
+# optimize alignments, paddings and positions of sprites
+# ***************************************************************************************
+sub optimize
+{
+
+	# get our object
+	my ($self) = @_;
+
+	# call optimize for every spriteset in this stylesheet
+	$_->optimize foreach (values %{$self->{'spritesets'}});
+
+	# allow chaining
+	return $self;
+
+}
+# EO sub optimize
 
 ####################################################################################################
 
@@ -382,62 +320,72 @@ sub process
 	# now process each selector and setup sprites
 	foreach my $selector (@{$self->{'selectors'}})
 	{
+
 		# check if this selector is configured for a sprite
 		next unless defined $selector->option('sprite-ref');
+
 		# get the id for the sprite set to be in
 		my $id = $selector->option('sprite-ref');
+
 		# get the spriteset object for positions
 		my $canvas = $self->{'spritesets'}->{$id};
+
 		# get the options for this spriteset
 		my $spriteset = $canvas->{'options'};
+
 		# get the url of the output image
 		my $url = $spriteset->get('url');
+
 		# get the sprite for selector
 		my $sprite = $selector->{'sprite'};
+
 		# get the sprite position within set
-		my $position = $sprite->offset;
+		my $offset = $sprite->offset;
 
-		################################
-		################################
-		################################
+		# get position offset vars
+		my $offset_x = $offset->{'x'};
+		my $offset_y = $offset->{'y'};
 
-		my $bg_pos_x = $sprite->{'spriteset-x'};
-		my $bg_pos_y = $sprite->{'spriteset-y'};
+		# assertion that the values are defined
+		die "no sprite x" unless defined $offset_x;
+		die "no sprite y" unless defined $offset_y;
 
-		die "no x" unless defined $bg_pos_x;
-		die "no y" unless defined $bg_pos_y;
+		# get pre-caluculated position in spriteset
+		my $spriteset_x = $sprite->{'position-x'};
+		my $spriteset_y = $sprite->{'position-y'};
 
-		my $_pos_y = (($position->{'y'} || 0) + $sprite->{'padding-top'}) / $sprite->scaleY;
-		my $_pos_x = (($position->{'x'} || 0) + $sprite->{'padding-left'}) / $sprite->scaleX;
+		# assertion that the values are defined
+		die "no spriteset x" unless defined $spriteset_x;
+		die "no spriteset y" unless defined $spriteset_y;
 
-		unless ($bg_pos_y =~ m/^bottom$/i)
+		# align relative to the top
+		if ($sprite->alignTop)
 		{
-			$bg_pos_y = toPx($bg_pos_y - $_pos_y);
+			# $spriteset_y = toPx($spriteset_y - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
+			$spriteset_y = toPx($sprite->positionY - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
 		}
 
-		unless ($bg_pos_x =~ m/^right$/i)
+		# align relative to the left
+		if ($sprite->alignLeft)
 		{
-			$bg_pos_x = toPx($bg_pos_x - $_pos_x);
+			# $spriteset_x = toPx($spriteset_x - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
+			$spriteset_x = toPx($sprite->positionX - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
 		}
 
-
-		my $padding_top = fromPx($selector->style('padding-top') || 0) || 0;
-		my $padding_left = fromPx($selector->style('padding-left') || 0) || 0;
-		my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
-		my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
-
-		#snap($padding_top, $sprite->scaleY);
-		#snap($padding_left, $sprite->scaleX);
-		#snap($padding_right, $sprite->scaleX);
-		#snap($padding_bottom, $sprite->scaleY);
-
-		my @positions = (
-			$bg_pos_x,
-			$bg_pos_y
-		);
-
-
+		# additional declarations
 		my $declarations = [];
+
+		# calculate the axes for background size
+		my $background_w = toPx($canvas->width / $sprite->scaleX);
+		my $background_h = toPx($canvas->height / $sprite->scaleY);
+
+		# setup longhand values
+		my $background_image = toUrl($url);
+		my $background_repeat = 'no-repeat';
+
+		# setup shorthand values
+		my $background_size = join(' ', $background_w, $background_h);
+		my $background_position = join(' ', $spriteset_x, $spriteset_y);
 
 		# check if sprite was distributed
 		# if it has no parent it means the
@@ -447,18 +395,12 @@ sub process
 			# check for debug mode on canvas or sprite
 			if ($canvas->{'debug'} || $sprite->{'debug'})
 			{
-				# make border dark red
-				push(@{$declarations}, [
-					'border-color',
-					':rgb(192, 128, 128) !important;',
-				]);
-				# make background redish
-				push(@{$declarations}, [
-					'background-color',
-					':rgba(255, 0, 0, 0.125) !important;',
-				]);
+				# make border dark red and background lightly red
+				push(@{$declarations}, [ 'border-color', ': rgb(192, 128, 128) !important;' ]);
+				push(@{$declarations}, [ 'background-color', ': rgba(255, 0, 0, 0.125) !important;' ]);
 			}
 		}
+
 		# sprite was distributed
 		else
 		{
@@ -473,23 +415,10 @@ sub process
 
 			# push new declarations
 			push(@{$declarations},
-				[
-					'background-position',
-					':' . ($sprite->{'sprite-position'} || join(' ', @positions)) . ';'
-				],
-				[
-					'background-image',
-					':' . toUrl($url) . ';'
-				],
-				[
-					'background-repeat',
-					': no-repeat;'
-				],
-				[
-					'background-size',
-					': ' . (($canvas->width ) / $sprite->{'scale-x'}) . 'px '
-					     . (($canvas->height ) / $sprite->{'scale-y'}) . 'px;'
-				]
+				[ 'background-size', ': ' . $background_size . ';' ],
+				[ 'background-image', ': ' . $background_image . ';' ],
+				[ 'background-repeat', ': ' . $background_repeat . ';' ],
+				[ 'background-position', ': ' . $background_position . ';' ]
 			);
 		}
 

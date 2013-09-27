@@ -38,6 +38,7 @@ use RTP::Webmerge::IO qw(readfile writefile);
 
 # process spritesets with additional modules
 # try to keep them as standalone as possible
+# ***************************************************************************************
 sub spritesets
 {
 
@@ -49,6 +50,16 @@ sub spritesets
 
 	# read our stylesheet data
 	$css->read($data, $config->{'atomic'});
+
+	$css->rehash();
+
+
+	$css->load();
+
+	$css->distribute();
+
+	$css->optimize();
+
 
 	# call write and pass writer sub
 	my $written = $css->write(sub

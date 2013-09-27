@@ -16,6 +16,7 @@ use warnings;
 ####################################################################################################
 
 use OCBNET::Spritesets::Canvas::Layout;
+use OCBNET::Spritesets::Canvas::Optimize;
 use OCBNET::Spritesets::Canvas::Repeater;
 use OCBNET::Spritesets::Canvas::Distribute;
 
@@ -102,18 +103,18 @@ sub new
 	if ($self->{'debug'})
 	{
 		$self->{'middle'}->{'bg'} = 'xc:rgba(0, 255, 0, 0.25)';
-		$self->{'edge-t'}->{'bg'} = 'xc:rgba(150, 150, 0, 0.25)';
-		$self->{'edge-r'}->{'bg'} = 'xc:rgba(150, 150, 0, 0.25)';
-		$self->{'edge-b'}->{'bg'} = 'xc:rgba(150, 150, 0, 0.25)';
-		$self->{'edge-l'}->{'bg'} = 'xc:rgba(150, 150, 0, 0.25)';
-		$self->{'stack-t'}->{'bg'} = 'xc:rgba(150, 0, 150, 0.25)';
-		$self->{'stack-r'}->{'bg'} = 'xc:rgba(150, 0, 150, 0.25)';
-		$self->{'stack-b'}->{'bg'} = 'xc:rgba(150, 0, 150, 0.25)';
-		$self->{'stack-l'}->{'bg'} = 'xc:rgba(150, 0, 150, 0.25)';
-		$self->{'corner-lt'}->{'bg'} = 'xc:rgba(0, 150, 150, 0.25)';
-		$self->{'corner-rt'}->{'bg'} = 'xc:rgba(0, 150, 150, 0.25)';
-		$self->{'corner-lb'}->{'bg'} = 'xc:rgba(0, 150, 150, 0.25)';
-		$self->{'corner-rb'}->{'bg'} = 'xc:rgba(0, 150, 150, 0.25)';
+		$self->{'edge-t'}->{'bg'} = 'xc:rgba(150, 30, 0, 0.25)';
+		$self->{'edge-r'}->{'bg'} = 'xc:rgba(150, 80, 0, 0.25)';
+		$self->{'edge-b'}->{'bg'} = 'xc:rgba(150, 130, 0, 0.25)';
+		$self->{'edge-l'}->{'bg'} = 'xc:rgba(150, 180, 0, 0.25)';
+		$self->{'stack-t'}->{'bg'} = 'xc:rgba(30, 0, 150, 0.25)';
+		$self->{'stack-r'}->{'bg'} = 'xc:rgba(80, 0, 150, 0.25)';
+		$self->{'stack-b'}->{'bg'} = 'xc:rgba(130, 0, 150, 0.25)';
+		$self->{'stack-l'}->{'bg'} = 'xc:rgba(180, 0, 150, 0.25)';
+		$self->{'corner-lt'}->{'bg'} = 'xc:rgba(0, 150, 30, 0.25)';
+		$self->{'corner-rt'}->{'bg'} = 'xc:rgba(0, 150, 80, 0.25)';
+		$self->{'corner-lb'}->{'bg'} = 'xc:rgba(0, 150, 130, 0.25)';
+		$self->{'corner-rb'}->{'bg'} = 'xc:rgba(0, 150, 180, 0.25)';
 	}
 
 	# add the widgets to parent
