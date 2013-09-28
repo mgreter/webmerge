@@ -81,9 +81,10 @@ sub mother ($$$$$)
 			# get all file events
 			for my $event (@_)
 			{
-
+				# get the normalized path string
+				my $path = check_path($event->{path});
 				# enqueue our merge block key (string) to child
-				$queue->enqueue($path2id->{$event->{path}});
+				$queue->enqueue($path2id->{$path});
 
 			}
 			# EO all events
