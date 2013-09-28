@@ -293,8 +293,8 @@ sub canvas
 		# get canvas from referenced block styles
 		foreach my $ref (@{$self->{'ref'}})
 		{
-			if (defined $ref->canvas())
-			{ return $ref->canvas(); }
+			if (defined $ref->canvas)
+			{ return $ref->canvas; }
 		}
 	}
 

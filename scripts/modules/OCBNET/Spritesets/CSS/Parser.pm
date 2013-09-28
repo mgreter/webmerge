@@ -250,6 +250,20 @@ sub rehash
 		@{$selector->{'ref'}} = grep { defined $_ } @{$selector->{'ref'}};
 	}
 
+	# now process each selector and setup references
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+		if (! $selector->canvas && $selector->option('css-ref'))
+		{
+			print "search spriteset ",$selector->option('css-ref'), "\n";
+			$selector->{'canvas'} = $self->{'spritesets'}->{$selector->option('css-ref')};
+		}
+	}
+
+# die $self->{'spritesets'}->{$self->option('css-ref')} if $self->option('css-ref');
+#	if (my $id = $self->option('css-ref'))
+#	{ return $self->{'spritesets'}->{$id}; }
+
 	# allow chaining
 	return $self;
 
@@ -427,7 +441,7 @@ die "no id for sprite" unless $id;
 
 			# get the url of the output image
 			my $url = $spriteset->get('url');
-			$url = fromUrl($selector->option('sprite-image'));
+			$url = fromUrl($canvas->{'options'}->get('sprite-image'));
 die $url unless $url;
 			# get the sprite for selector
 			my $sprite = $selector->{'sprite'};

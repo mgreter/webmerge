@@ -20,7 +20,7 @@ open(my $html, ">", "fam.html") or die "open fam.html: $!";
 
 my @files = grep { -f join('/', $root, $_) } sort readdir($dh);
 
-print $css "\n /* sprite-id: fam; sprite-image: url(../generated/img/fam.png); */\n";
+print $css "\n /* sprite: fam url(../generated/img/fam.png); */\n";
 
 print $html "<html>\n";
 print $html "<head><title>FAM Spriteset</title></head>\n";
@@ -46,7 +46,7 @@ foreach my $file (@files)
 
 	printf $css "\n.%s\n", $name;
 	printf $css "{\n";
-	printf $css "	/* sprite-ref: fam; */\n";
+	printf $css "	/* css-ref: fam; */\n";
 	printf $css "	background-repeat: no-repeat;\n";
 	printf $css "	background-position: left top;\n";
 	printf $css "	width: %spx; height: %spx;\n", $w, $h;
