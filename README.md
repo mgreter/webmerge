@@ -102,19 +102,11 @@ already be close to the maximum optimization one can achieve. But certain
 programs allow for much insaner optimization levels. A level of 0 means
 the optimizer will not even run at all.
 
-| level | advcomp | optipng | gifsicle |
-|     0 |       1 |       1 |        1 |
-|     1 |       1 |       1 |        1 |
-|     2 |       2 |       2 |        2 |
-|     3 |       2 |       3 |        2 |
-|     4 |       3 |       3 |        2 |
-|     5 |       3 |       4 |        3 |
-|     6 |       4 |       5 |        3 |
-|     7 |       4 |       5 |        3 |
-|     8 |       4 |       6 |        3 |
-|     9 |       4 |       7 |        3 |
-|    11 |       4 |       8 |        3 |
-|    12 |       4 |       9 |        3 |
+| level    |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 |  10 |  11 |  12 |
+| --------:| --:| --:| --:| --:| --:| --:| --:| --:| --:| --:| ---:| ---:| ---:|
+|  advcomp |  - |  1 |  2 |  2 |  3 |  3 |  4 |  4 |  4 |  4 |   4 |  4 |   4 |
+|  optipng |  - |  1 |  2 |  3 |  3 |  4 |  5 |  5 |  6 |  7 |   8 |  8 |   9 |
+| gifsicle |  - |  1 |  2 |  2 |  2 |  3 |  3 |  3 |  3 |  3 |   3 |  3 |   3 |
 
 Portable version for windows
 ============================
