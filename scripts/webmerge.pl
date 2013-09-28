@@ -101,6 +101,8 @@ my $config =
 	'prepare' => 1,
 	# optimize stuff
 	'optimize' => 0,
+	# optimize level
+	'level' => 1,
 	# merge configured stuff
 	'merge' => 1,
 	# create head includes
@@ -174,6 +176,7 @@ my @opts = (
 	# enable/disable base operations
 	'prepare|p!' => \$config->{'cmd_prepare'},
 	'optimize|o!' => \$config->{'cmd_optimize'},
+	'level|l=o' => \$config->{'cmd_level'},
 	'merge|m!' => \$config->{'cmd_merge'},
 	'headinc|i!' => \$config->{'cmd_headinc'},
 	'embeder|e!' => \$config->{'cmd_embeder'},
@@ -790,6 +793,8 @@ webmerge [options] [steps]
    -m, --merge         enable/disable merge steps
    -i, --headinc       enable/disable headinc steps
    -e, --embeder       enable/disable embeder steps
+
+   -l, --level         set optimization level (0-9)
 
    --dev               enable/disable dev targets
    --join              enable/disable join targets

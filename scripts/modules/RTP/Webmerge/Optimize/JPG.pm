@@ -26,7 +26,7 @@ BEGIN { $RTP::Webmerge::Optimize::JPG::VERSION = "0.70" }
 ###################################################################################################
 
 # load webmberge module variables to hook into
-use RTP::Webmerge qw(@initers @checkers %executables);
+use RTP::Webmerge qw(@initers @checkers %executables range);
 
 ###################################################################################################
 

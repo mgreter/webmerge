@@ -41,6 +41,9 @@ sub optimize
 	# get input variables
 	my ($config, $optimize) = @_;
 
+	# do nothing if level is zero
+	return unless $config->{'level'};
+
 	# check for configuration option
 	return unless $config->{'optimize'};
 

@@ -69,7 +69,7 @@ sub cleantxt ($$;$)
 ###################################################################################################
 
 # load webmberge module variables to hook
-use RTP::Webmerge qw(@initers @checkers %executables);
+use RTP::Webmerge qw(@initers @checkers %executables range);
 
 # load functions from webmerge io library
 use RTP::Webmerge::IO qw(processfile);

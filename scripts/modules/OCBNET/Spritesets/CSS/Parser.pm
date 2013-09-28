@@ -255,7 +255,7 @@ sub rehash
 	{
 		if (! $selector->canvas && $selector->option('css-ref'))
 		{
-			print "search spriteset ",$selector->option('css-ref'), "\n";
+			# print "search spriteset ",$selector->option('css-ref'), "\n";
 			$selector->{'canvas'} = $self->{'spritesets'}->{$selector->option('css-ref')};
 		}
 	}
@@ -432,7 +432,8 @@ die $url unless $url;
 
 			# get the id for the sprite set to be in
 			my $id = $selector->canvas->{'id'};
-die "no id for sprite" unless $id;
+			die "no id for sprite" unless $id;
+
 			# get the spriteset object for positions
 			my $canvas = $self->{'spritesets'}->{$id};
 

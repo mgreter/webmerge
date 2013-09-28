@@ -26,7 +26,7 @@ BEGIN { $RTP::Webmerge::Optimize::GIF::VERSION = "0.70" }
 ###################################################################################################
 
 # load webmberge module variables to hook into
-use RTP::Webmerge qw(@initers @checkers %executables);
+use RTP::Webmerge qw(@initers @checkers %executables range);
 
 ###################################################################################################
 
@@ -63,8 +63,11 @@ push @checkers, sub
 	# do nothing if feature is disabled
 	return unless $config->{'optimize-gif'};
 
+	# get the optimization level (1 to 3)
+	my $lvl = '-O' . range($config->{'level'}, 1, 4, 3);
+
 	# define executables to optimize gifs
-	$executables{'gifsicle'} = ['gifopt', '-O3 -o "%s" "%s"'] if $ENV{'WEBMERGE_GIFSICLE'};
+	$executables{'gifsicle'} = ['gifopt', "$lvl -o \"%s\" \"%s\""] if $ENV{'WEBMERGE_GIFSICLE'};
 
 };
 # EO push checker

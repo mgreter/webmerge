@@ -26,7 +26,7 @@ BEGIN { $RTP::Webmerge::Optimize::GZ::VERSION = "0.70" }
 ###################################################################################################
 
 # load webmberge module variables to hook into
-use RTP::Webmerge qw(@initers @checkers %executables);
+use RTP::Webmerge qw(@initers @checkers %executables range);
 
 ###################################################################################################
 
@@ -63,8 +63,11 @@ push @checkers, sub
 	# do nothing if feature is disabled
 	return unless $config->{'optimize-gz'};
 
+	# get the optimization level (1 to 4)
+	my $lvl = '-' . range($config->{'level'}, 1, 5, 4);
+
 	# define executables to optimize gz archives
-	$executables{'advdef[gz]'}  = ['gzopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVDEF'};
+	$executables{'advdef[gz]'}  = ['gzopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVDEF'};
 
 };
 # EO push checker

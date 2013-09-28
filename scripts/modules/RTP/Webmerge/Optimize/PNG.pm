@@ -31,7 +31,7 @@ BEGIN { $RTP::Webmerge::Optimize::PNG::VERSION = "0.70" }
 ###################################################################################################
 
 # load webmberge module variables to hook into
-use RTP::Webmerge qw(@initers @checkers %executables);
+use RTP::Webmerge qw(@initers @checkers %executables range);
 
 ###################################################################################################
 
@@ -68,10 +68,14 @@ push @checkers, sub
 	# do nothing if feature is disabled
 	return unless $config->{'optimize-png'};
 
+	# get the optimization level (1 to 4/6)
+	my $lvl = '-' . range($config->{'level'}, 1, 5, 4);
+	my $olvl = '-o' . range($config->{'level'}, 0.5, 6.5, 9);
+
 	# define executables to optimize pngs
-	$executables{'optipng'} = ['pngopt', '-o3 --quiet "%s"', 1] if $ENV{'WEBMERGE_OPTIPNG'};
-#	$executables{'advpng'}  = ['pngopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVPNG'};
-#	$executables{'advdef[png]'}  = ['pngopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVDEF'};
+	$executables{'optipng'} = ['pngopt', "$olvl --quiet \"%s\"", 1] if $ENV{'WEBMERGE_OPTIPNG'};
+	$executables{'advpng'}  = ['pngopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVPNG'};
+	$executables{'advdef[png]'}  = ['pngopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVDEF'};
 
 };
 # EO push checker

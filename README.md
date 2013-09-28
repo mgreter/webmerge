@@ -93,6 +93,29 @@ Documentation not yet done. See example directory for hints. Call
 webmerge script with --help to get information about the available
 command line options.
 
+Optimization levels
+===================
+You can finetune the level by which we try to optimize things. This mostly
+defines how the external optimizers will be invoked. Webmerge tries to use
+a range of 1 - 6, but higher levels can also be set. Altough level 6 should
+already be close to the maximum optimization one can achieve. But certain
+programs allow for much insaner optimization levels. A level of 0 means
+the optimizer will not even run at all.
+
+| level | advcomp | optipng | gifsicle |
+|     0 |       1 |       1 |        1 |
+|     1 |       1 |       1 |        1 |
+|     2 |       2 |       2 |        2 |
+|     3 |       2 |       3 |        2 |
+|     4 |       3 |       3 |        2 |
+|     5 |       3 |       4 |        3 |
+|     6 |       4 |       5 |        3 |
+|     7 |       4 |       5 |        3 |
+|     8 |       4 |       6 |        3 |
+|     9 |       4 |       7 |        3 |
+|    11 |       4 |       8 |        3 |
+|    12 |       4 |       9 |        3 |
+
 Portable version for windows
 ============================
 I created some archives with pre packed binaries for perl and
@@ -157,6 +180,8 @@ Command Line Options
     -m, --merge           enable/disable merge steps
     -i, --headinc         enable/disable headinc steps
     -e, --embeder         enable/disable embeder steps
+
+    -l, --level           set optimization level (0-9)
 
     --dev                 enable/disable dev targets
     --join                enable/disable join targets

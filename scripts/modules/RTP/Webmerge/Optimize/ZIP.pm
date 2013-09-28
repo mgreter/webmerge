@@ -27,7 +27,7 @@ BEGIN { $RTP::Webmerge::Optimize::ZIP::VERSION = "0.70" }
 ###################################################################################################
 
 # load webmberge module variables to hook into
-use RTP::Webmerge qw(@initers @checkers %executables);
+use RTP::Webmerge qw(@initers @checkers %executables range);
 
 ###################################################################################################
 
@@ -64,9 +64,12 @@ push @checkers, sub
 	# do nothing if feature is disabled
 	return unless $config->{'optimize-zip'};
 
+	# get the optimization level (1 to 4)
+	my $lvl = '-' . range($config->{'level'}, 1, 5, 4);
+
 	# define executables to optimize zips
-	$executables{'advzip'}  = ['zipopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVZIP'};
-	$executables{'advdef[zip]'}  = ['zipopt', '-z -4 --quiet "%s"', 2] if $ENV{'WEBMERGE_ADVDEF'};
+	$executables{'advzip'}  = ['zipopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVZIP'};
+	$executables{'advdef[zip]'}  = ['zipopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVDEF'};
 
 };
 # EO push checker

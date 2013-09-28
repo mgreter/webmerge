@@ -37,7 +37,20 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 BEGIN { our @EXPORT = qw(initConfig checkConfig callProgram runProgram callProcessor); }
 
 # define our functions that can be exported
-BEGIN { our @EXPORT_OK = qw(%programs %executables %processors @initers @checkers); }
+BEGIN { our @EXPORT_OK = qw(%programs %executables %processors @initers @checkers range); }
+
+###################################################################################################
+
+sub range
+{
+
+	my ($value, $from, $to, $max) = @_;
+
+	my $val = int(($_[2] - $_[1]) / 9 * $_[0] + $_[1] + 0.5);
+
+	return $val < $max ? $val : $max;
+
+}
 
 ###################################################################################################
 
@@ -344,9 +357,15 @@ sub runProgram ($$$$;$)
 		else
 		{
 
+			# init level from config value
+			my $lvl = $config->{'level'};
+
+			# get the optimization level from cmd
+			$lvl = $1 if $tmpl =~ m/(\-o?[0-9])/i;
+
 			# print a status message for execution
-			printf "exec %s on %s (%d files)\n",
-				$executable, $pattern, scalar(@{$files});
+			printf "exec %s (%s) on %s (%d files)\n",
+				$executable, $lvl, $pattern, scalar(@{$files});
 
 			# process file or all files
 			foreach my $file (@{$files || [$files]})
