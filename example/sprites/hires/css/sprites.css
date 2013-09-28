@@ -1,9 +1,15 @@
-/* sprite-id: lores; sprite-image: url(../generated/img/lores.png); */
-/* sprite-id: hires; sprite-image: url(../generated/img/hires.png); */
-
 /*****************************************************************************/
 /* Box IDs for sprites
 /*****************************************************************************/
+
+.cf .sprite
+{
+	/*
+		css-id: lores;
+		sprite-id: lores;
+		sprite-image: url(../generated/img/lores.png);
+	*/
+}
 
 .cf .box
 {
@@ -1219,6 +1225,16 @@ only screen and (     -o-min-device-pixel-ratio: 21/20),
 only screen and (        min-device-pixel-ratio: 1.05),
 only screen and (                min-resolution: 1.05dppx)
 {
+
+	.cf .sprite
+	{
+		/*
+			css-id: hires;
+			sprite-id: hires;
+			sprite-image: url(../generated/img/hires.png);
+		*/
+	}
+
 	.cf DIV.fixed-a
 	{
 		/* sprite-ref: hires; */

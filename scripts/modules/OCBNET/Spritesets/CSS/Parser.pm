@@ -119,32 +119,37 @@ sub read
 	# parse all blocks and end when all is parsed
 	$parse_blocks->($data, $self, qr/\A\z/);
 
-	# assertion in any case (should not happen - dev)
+	# assertion in any case (should never happen?)
 	die "Fatal: not everything parsed" if ${$data} ne '';
 
 	# put all blocks in a flat array
 	my @blocks = @{$self->blocks};
+	# this will process all and each sub block
 	for (my $i = 0; $i < scalar(@blocks); $i ++)
 	{ push @blocks, @{$blocks[$i]->blocks}; }
 
+	# reset block type arrays
 	$self->{'others'} = [];
 	$self->{'selectors'} = [];
 
 	# find selector blocks
 	foreach my $block (@blocks)
 	{
-		if ($block->head =~ m/^\s*(?:$re_comment|$re_css_selector_rules|\s+)+$/s)
-		{ push @{$self->{'selectors'}}, $block } else { push @{$self->{'others'}}, $block }
+		# check if the head only consists of selector rules, comments and whitespace
+		if ($block->head =~ m/^\s*(?:$re_css_selector_rules|$re_comment|\s+)+$/s)
+		{ $block->{'selector'} = 1; push @{$self->{'selectors'}}, $block }
+		else { $block->{'selector'} = 0; push @{$self->{'others'}}, $block }
 	}
 
-	# now process each selector and parse options
-	foreach my $other (@blocks)
+	# now process each block
+	foreach my $block (@blocks)
 	{
 
 		# get only the head to parse it
-		my $head = $other->head;
+		my $head = $block->head;
 
-		# parse comments for sprite set definitions
+#			print $head, "\n";
+		# parse comments for spriteset definitions
 		while ($head =~ s/$re_comment//s)
 		{
 			# create a new css options collection
@@ -161,12 +166,17 @@ sub read
 			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
 			# add this canvas to global hash object
 			$self->{'spritesets'}->{$id} = $canvas;
+			# associate this block with the canvas
+			if ($block->{'parent'} && $block->{'selector'})
+			{ $block->{'parent'}->{'canvas'} = $canvas; }
+			# die $id if $block->{'parent'}->{'selector'};
+
 			# store the id for canvas
 			$canvas->{'id'} = $id;
 		}
 
 	}
-	# EO each other
+	# EO each block
 
 	# now process each selector and parse options
 	foreach my $selector (@{$self->{'selectors'}})
@@ -206,9 +216,15 @@ sub rehash
 		# get own id and reference id
 		my $css_id = $selector->options->get('css-id');
 		my $ref_id = $selector->options->get('css-ref');
-		# setup relationsships between references blocks
+		my $sprite_ref = $selector->options->get('sprite-ref');
+		# setup relationships between references blocks
 		$self->{'ids'}->{$css_id} = $selector if defined $css_id;
-		$selector->{'ref'} = $self->{'ids'}->{$ref_id} if defined $ref_id;
+		# allow multiple refs per block via comma delimited list
+		push @{$selector->{'ref'}}, map { $self->{'ids'}->{$_} }
+		     split(/\s*,\s*/, $ref_id) if (defined $ref_id);
+		# allow multiple refs per block via comma delimited list
+		push @{$selector->{'ref'}}, grep { defined $_ } map { $self->{'ids'}->{$_} }
+		     split(/\s*,\s*/, $sprite_ref) if (defined $sprite_ref);
 	}
 
 	# allow chaining
@@ -321,92 +337,27 @@ sub process
 	foreach my $selector (@{$self->{'selectors'}})
 	{
 
-		# check if this selector is configured for a sprite
-		next unless defined $selector->option('sprite-ref');
-
-		# get the id for the sprite set to be in
-		my $id = $selector->option('sprite-ref');
-
-		# get the spriteset object for positions
-		my $canvas = $self->{'spritesets'}->{$id};
-
-		# get the options for this spriteset
-		my $spriteset = $canvas->{'options'};
-
-		# get the url of the output image
-		my $url = $spriteset->get('url');
-
-		# get the sprite for selector
-		my $sprite = $selector->{'sprite'};
-
-		# get the sprite position within set
-		my $offset = $sprite->offset;
-
-		# get position offset vars
-		my $offset_x = $offset->{'x'};
-		my $offset_y = $offset->{'y'};
-
-		# assertion that the values are defined
-		die "no sprite x" unless defined $offset_x;
-		die "no sprite y" unless defined $offset_y;
-
-		# get pre-caluculated position in spriteset
-		my $spriteset_x = $sprite->{'position-x'};
-		my $spriteset_y = $sprite->{'position-y'};
-
-		# assertion that the values are defined
-		die "no spriteset x" unless defined $spriteset_x;
-		die "no spriteset y" unless defined $spriteset_y;
-
-		# align relative to the top
-		if ($sprite->alignTop)
-		{
-			# $spriteset_y = toPx($spriteset_y - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
-			$spriteset_y = toPx($sprite->positionY - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
-		}
-
-		# align relative to the left
-		if ($sprite->alignLeft)
-		{
-			# $spriteset_x = toPx($spriteset_x - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
-			$spriteset_x = toPx($sprite->positionX - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
-		}
-
 		# additional declarations
 		my $declarations = [];
 
-		# calculate the axes for background size
-		my $background_w = toPx($canvas->width / $sprite->scaleX);
-		my $background_h = toPx($canvas->height / $sprite->scaleY);
-
-		# setup longhand values
-		my $background_image = toUrl($url);
-		my $background_repeat = 'no-repeat';
-
-		# setup shorthand values
-		my $background_size = join(' ', $background_w, $background_h);
-		my $background_position = join(' ', $spriteset_x, $spriteset_y);
-
-		# check if sprite was distributed
-		# if it has no parent it means the
-		# sprite has not been included yet
-		unless ($sprite->{'parent'})
+		# selector has a canvas, this means the spriteset
+		# has been declares within this block, so render it
+		if ($selector->{'canvas'})
 		{
-			# check for debug mode on canvas or sprite
-			if ($canvas->{'debug'} || $sprite->{'debug'})
-			{
-				# make border dark red and background lightly red
-				push(@{$declarations}, [ 'border-color', ': rgb(192, 128, 128) !important;' ]);
-				push(@{$declarations}, [ 'background-color', ': rgba(255, 0, 0, 0.125) !important;' ]);
-			}
-		}
 
-		# sprite was distributed
-		else
-		{
+			my $canvas = $selector->{'canvas'};
+
+			# get the options for this spriteset
+			my $spriteset = $canvas->{'options'};
+
+			# get the url of the output image
+			my $url = $spriteset->get('url');
+
+			my $background_image = toUrl($url);
+			my $background_repeat = 'no-repeat';
 
 			# parse body into declarations (render will use these later)
-			$selector->{'declarations'} = $parse_declarations->(\$selector->body);
+			$selector->{'declarations'} = $parse_declarations->(\$selector->body) unless $selector->{'declarations'};
 
 			# remove all background declarations now
 			@{$selector->{'declarations'}} = grep {
@@ -415,16 +366,130 @@ sub process
 
 			# push new declarations
 			push(@{$declarations},
-				[ 'background-size', ': ' . $background_size . ';' ],
 				[ 'background-image', ': ' . $background_image . ';' ],
 				[ 'background-repeat', ': ' . $background_repeat . ';' ],
-				[ 'background-position', ': ' . $background_position . ';' ]
 			);
+
+#			push(@{$declarations},
+#				[ 'background-image', ': qweasd' . $background_image . ';' ],
+#			);
+
+#print $selector, "\n", $selector->render, "\n",
+#" ---------- ", $url, "\n"; sleep 5;
+
+		};
+
+		# check if this selector is configured for a sprite
+		if (defined $selector->option('sprite-ref'))
+		{
+
+			# get the id for the sprite set to be in
+			my $id = $selector->option('sprite-ref');
+
+			# get the spriteset object for positions
+			my $canvas = $self->{'spritesets'}->{$id};
+
+			# get the options for this spriteset
+			my $spriteset = $canvas->{'options'};
+
+			# get the url of the output image
+			my $url = $spriteset->get('url');
+
+			# get the sprite for selector
+			my $sprite = $selector->{'sprite'};
+
+			# get the sprite position within set
+			my $offset = $sprite->offset;
+
+			# get position offset vars
+			my $offset_x = $offset->{'x'};
+			my $offset_y = $offset->{'y'};
+
+			# assertion that the values are defined
+			die "no sprite x" unless defined $offset_x;
+			die "no sprite y" unless defined $offset_y;
+
+			# get pre-caluculated position in spriteset
+			my $spriteset_x = $sprite->{'position-x'};
+			my $spriteset_y = $sprite->{'position-y'};
+
+			# assertion that the values are defined
+			die "no spriteset x" unless defined $spriteset_x;
+			die "no spriteset y" unless defined $spriteset_y;
+
+			# align relative to the top
+			if ($sprite->alignTop)
+			{
+				# $spriteset_y = toPx($spriteset_y - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
+				$spriteset_y = toPx($sprite->positionY - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
+			}
+
+			# align relative to the left
+			if ($sprite->alignLeft)
+			{
+				# $spriteset_x = toPx($spriteset_x - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
+				$spriteset_x = toPx($sprite->positionX - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
+			}
+
+			# calculate the axes for background size
+			my $background_w = toPx($canvas->width / $sprite->scaleX);
+			my $background_h = toPx($canvas->height / $sprite->scaleY);
+
+			# setup longhand values
+			my $background_image = toUrl($url);
+			my $background_repeat = 'no-repeat';
+
+			# setup shorthand values
+			my $background_size = join(' ', $background_w, $background_h);
+			my $background_position = join(' ', $spriteset_x, $spriteset_y);
+
+			# check if sprite was distributed
+			# if it has no parent it means the
+			# sprite has not been included yet
+			unless ($sprite->{'parent'})
+			{
+				# check for debug mode on canvas or sprite
+				if ($canvas->{'debug'} || $sprite->{'debug'})
+				{
+					# make border dark red and background lightly red
+					push(@{$declarations}, [ 'border-color', ': rgb(192, 128, 128) !important;' ]);
+					push(@{$declarations}, [ 'background-color', ': rgba(255, 0, 0, 0.125) !important;' ]);
+				}
+			}
+
+			# sprite was distributed
+			else
+			{
+
+				# parse body into declarations (render will use these later)
+				$selector->{'declarations'} = $parse_declarations->(\$selector->body) unless $selector->{'declarations'};
+
+				# remove all background declarations now
+				@{$selector->{'declarations'}} = grep {
+					not $_->[2] =~ m/^\s*background(?:\-[a-z0-9])*/is
+				} @{$selector->{'declarations'}};
+
+				# push new declarations
+				push(@{$declarations},
+					[ 'background-size', ': ' . $background_size . ';' ],
+					[ 'background-position', ': ' . $background_position . ';' ]
+				);
+
+				# push new declarations
+				push(@{$declarations},
+					[ 'background-image', ': ' . $background_image . ';' ],
+					[ 'background-repeat', ': ' . $background_repeat . ';' ],
+				) unless $selector->canvas;
+
+			}
+
 		}
 
 		################################
 		################################
 		################################
+
+		next unless scalar @{$declarations};
 
 		# render the selector bodies
 		my $body = $selector->body;

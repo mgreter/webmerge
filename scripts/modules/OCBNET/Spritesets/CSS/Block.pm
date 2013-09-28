@@ -43,6 +43,9 @@ sub new
 		# optional footer text
 		'footer' => '',
 
+		# parents array
+		'ref' => [],
+
 		# the actual parsed styles (use getter methods)
 		'styles' => new OCBNET::Spritesets::CSS::Collection,
 		'options' => new OCBNET::Spritesets::CSS::Collection
@@ -174,21 +177,32 @@ sub style
 {
 
 	# get passed variables
-	my ($self, $option) = @_;
+	my ($self, $style) = @_;
 
 	# do we have a valid style in current block
-	if (defined $self->styles->get($option))
+	if (defined $self->styles->get($style))
 	{
 		# get style from current block styles
-		return $self->styles->get($option);
+		return $self->styles->get($style);
 	}
 	# maybe we have a reference block
 	# basically acts like css/cascading
 	elsif (defined $self->{'ref'})
 	{
 		# get style from referenced block styles
-		return $self->{'ref'}->styles->get($option);
+		foreach my $ref (@{$self->{'ref'}})
+		{
+			if (defined $ref->styles->get($style))
+			{ return $ref->styles->get($style); }
+		}
 	}
+	# do we have a valid style in current block
+	#elsif (defined $self->{'sprite-ref'})
+	#{
+	#	die $self->{'sprite-ref'};
+		# get style from current block styles
+		# return $self->styles->get($style);
+	#}
 
 	# return null
 	return undef;
@@ -214,10 +228,68 @@ sub option
 	}
 	# maybe we have a reference block
 	# basically acts like css/cascading
-	elsif (defined $self->{'ref'})
+	if (defined $self->{'ref'})
 	{
-		# get style from referenced block styles
-		return $self->{'ref'}->options->get($option);
+		# get option from referenced block styles
+		foreach my $ref (@{$self->{'ref'}})
+		{
+			if (defined $ref->options->get($option))
+			{ return $ref->options->get($option); }
+		}
+	}
+	# do we have a valid style in current block
+	if (defined $self->options->get('sprite-ref'))
+	{
+		die $self->options->get('sprite-ref');
+		# get style from current block styles
+		# return $self->styles->get($style);
+	}
+
+	# return null
+	return undef;
+
+}
+# EO sub option
+
+####################################################################################################
+
+# get canvas
+#**************************************************************************************************
+sub canvas
+{
+
+	# get passed variables
+	my ($self) = @_;
+
+	# do we have a canvas on block
+	if (defined $self->{'canvas'})
+	{
+		# get canvas from block
+		return $self->{'canvas'};
+	}
+	# maybe we have a reference block
+	# basically acts like css/cascading
+	if (defined $self->{'ref'})
+	{
+		# get canvas from referenced block styles
+		foreach my $ref (@{$self->{'ref'}})
+		{
+			if (defined $ref->canvas())
+			{ return $ref->canvas(); }
+		}
+	}
+	# do we have a valid style in current block
+	if (defined $self->options->get('sprite-ref'))
+	{
+		# get the id for the sprite set to be in
+		my $id = $self->options->get('sprite-ref');
+
+			# get the spriteset object for positions
+#			my $canvas = $self->{'spritesets'}->{$id};
+
+		#die "$canvas" . $self->options->get('sprite-ref');
+		# get style from current block styles
+		# return $self->styles->get($style);
 	}
 
 	# return null
