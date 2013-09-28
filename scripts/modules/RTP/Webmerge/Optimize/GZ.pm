@@ -39,7 +39,7 @@ push @initers, sub
 	my ($config) = @_;
 
 	# create config variable to be available
-	$config->{'cmd_optimize-gz'} = 1;
+	$config->{'optimize-gz'} = 1;
 
 	# connect each tmpl variable with the getOpt option
 	return ('optimize-gz|gz!', \ $config->{'cmd_optimize-gz'});

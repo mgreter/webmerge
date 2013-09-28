@@ -39,7 +39,7 @@ push @initers, sub
 	my ($config) = @_;
 
 	# create config variable to be available
-	$config->{'cmd_optimize-gif'} = 0;
+	$config->{'optimize-gif'} = undef;
 
 	# connect each tmpl variable with the getOpt option
 	return ('optimize-gif|gif!', \ $config->{'cmd_optimize-gif'});

@@ -43,7 +43,7 @@ push @initers, sub
 	my ($config) = @_;
 
 	# create config variable to be available
-	$config->{'cmd_optimize-mng'} = 0;
+	$config->{'optimize-mng'} = undef;
 
 	# connect each tmpl variable with the getOpt option
 	return ('optimize-mng|mng!', \ $config->{'cmd_optimize-mng'});

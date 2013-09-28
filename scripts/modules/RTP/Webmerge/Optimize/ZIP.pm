@@ -40,7 +40,7 @@ push @initers, sub
 	my ($config) = @_;
 
 	# create config variable to be available
-	$config->{'cmd_optimize-zip'} = 1;
+	$config->{'optimize-zip'} = undef;
 
 	# connect each tmpl variable with the getOpt option
 	return ('optimize-zip|zip!', \ $config->{'cmd_optimize-zip'});

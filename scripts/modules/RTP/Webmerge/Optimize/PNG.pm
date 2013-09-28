@@ -44,7 +44,7 @@ push @initers, sub
 	my ($config) = @_;
 
 	# create config variable to be available
-	$config->{'cmd_optimize-png'} = 0;
+	$config->{'optimize-png'} = undef;
 
 	# connect each tmpl variable with the getOpt option
 	return ('optimize-png|png!', \ $config->{'cmd_optimize-png'});
