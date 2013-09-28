@@ -15,7 +15,6 @@ use warnings;
 BEGIN
 {
 	# enable (or disable) different optimizer executables
-	$ENV{'WEBMERGE_ADVDEF'} = 1 unless exists $ENV{'WEBMERGE_ADVDEF'};
 	$ENV{'WEBMERGE_ADVZIP'} = 1 unless exists $ENV{'WEBMERGE_ADVZIP'};
 }
 
@@ -68,8 +67,7 @@ push @checkers, sub
 	my $lvl = '-' . range($config->{'level'}, 1, 5, 4);
 
 	# define executables to optimize zips
-	$executables{'advzip'}  = ['zipopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVZIP'};
-	$executables{'advdef[zip]'}  = ['zipopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVDEF'};
+	$executables{'advzip'}  = ['zipopt', "-z $lvl -q \"%s\"", 2] if $ENV{'WEBMERGE_ADVZIP'};
 
 };
 # EO push checker
