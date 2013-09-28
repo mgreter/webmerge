@@ -71,7 +71,12 @@ sub set
 {
 
 	# get passed arguments
-	my ($self, $name, $value) = @_;
+	my ($self, $name, $value, $imp) = @_;
+
+	# hotfix to at least be able to read
+	# important rules too, altough we will
+	# not consider their importance really
+	$imp = ($value =~ s/!important\s*$//i) || $imp;
 
 	# test if this a shorthand
 	if (exists $shorthand{$name})
@@ -96,7 +101,7 @@ sub set
 				if ($value =~ s/^\s*($re_css_attribute)\s*//)
 				{
 					# set the property (may be shorthand too)
-					$self->set(join('-', $name, $attr), $1);
+					$self->set(join('-', $name, $attr), $1, $imp);
 					# remember state and exit loop
 					$rv = 1; last
 				}
@@ -130,13 +135,13 @@ sub set
 			 || (($2 eq 'left' || $2 eq 'right') && not ($1 eq 'left' || $1 eq 'right'))
 			)
 			{
-				$self->set(join('-', $name, 'x'), $2);
-				$self->set(join('-', $name, 'y'), $1);
+				$self->set(join('-', $name, 'x'), $2, $imp);
+				$self->set(join('-', $name, 'y'), $1, $imp);
 			}
 			else
 			{
-				$self->set(join('-', $name, 'x'), $1);
-				$self->set(join('-', $name, 'y'), $2);
+				$self->set(join('-', $name, 'x'), $1, $imp);
+				$self->set(join('-', $name, 'y'), $2, $imp);
 			}
 		}
 
@@ -146,8 +151,8 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'x'), $1);
-			$self->set(join('-', $name, 'y'), '50%');
+			$self->set(join('-', $name, 'x'), $1, $imp);
+			$self->set(join('-', $name, 'y'), '50%', $imp);
 		}
 
 	}
@@ -164,8 +169,8 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'x'), $1);
-			$self->set(join('-', $name, 'y'), $2);
+			$self->set(join('-', $name, 'x'), $1, $imp);
+			$self->set(join('-', $name, 'y'), $2, $imp);
 		}
 
 		# only adjust one axis
@@ -174,8 +179,8 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'x'), $1);
-			$self->set(join('-', $name, 'y'), '100%');
+			$self->set(join('-', $name, 'x'), $1, $imp);
+			$self->set(join('-', $name, 'y'), '100%', $imp);
 		}
 
 	}
@@ -205,10 +210,10 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'top'), $1);
-			$self->set(join('-', $name, 'left'), $4);
-			$self->set(join('-', $name, 'right'), $2);
-			$self->set(join('-', $name, 'bottom'), $3);
+			$self->set(join('-', $name, 'top'), $1, $imp);
+			$self->set(join('-', $name, 'left'), $4, $imp);
+			$self->set(join('-', $name, 'right'), $2, $imp);
+			$self->set(join('-', $name, 'bottom'), $3, $imp);
 		}
 
 		if ($value =~ m/\A\s*
@@ -218,10 +223,10 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'top'), $1);
-			$self->set(join('-', $name, 'left'), $2);
-			$self->set(join('-', $name, 'right'), $2);
-			$self->set(join('-', $name, 'bottom'), $3);
+			$self->set(join('-', $name, 'top'), $1, $imp);
+			$self->set(join('-', $name, 'left'), $2, $imp);
+			$self->set(join('-', $name, 'right'), $2, $imp);
+			$self->set(join('-', $name, 'bottom'), $3, $imp);
 		}
 
 		if ($value =~ m/\A\s*
@@ -230,10 +235,10 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'top'), $1);
-			$self->set(join('-', $name, 'left'), $2);
-			$self->set(join('-', $name, 'right'), $2);
-			$self->set(join('-', $name, 'bottom'), $1);
+			$self->set(join('-', $name, 'top'), $1, $imp);
+			$self->set(join('-', $name, 'left'), $2, $imp);
+			$self->set(join('-', $name, 'right'), $2, $imp);
+			$self->set(join('-', $name, 'bottom'), $1, $imp);
 		}
 
 		if ($value =~ m/\A\s*
@@ -241,10 +246,10 @@ sub set
 		\z/gmx
 		)
 		{
-			$self->set(join('-', $name, 'top'), $1);
-			$self->set(join('-', $name, 'left'), $1);
-			$self->set(join('-', $name, 'right'), $1);
-			$self->set(join('-', $name, 'bottom'), $1);
+			$self->set(join('-', $name, 'top'), $1, $imp);
+			$self->set(join('-', $name, 'left'), $1, $imp);
+			$self->set(join('-', $name, 'right'), $1, $imp);
+			$self->set(join('-', $name, 'bottom'), $1, $imp);
 		}
 
 	}
@@ -255,7 +260,8 @@ sub set
 	# implement atrributes when needed
 	else
 	{
-		$self->{$name} = $value;
+		unless ($imp) { $self->{$name} = $value; }
+		else { $self->{ '!' . $name } = $value; }
 	}
 
 }
@@ -271,12 +277,22 @@ sub get
 	# get passed arguments
 	my ($self, $name) = @_;
 
+	# try to fetch important rule first
+	# only if we are not yet asking for it
+	unless ($name =~ m/^\!/)
+	{
+		# prepend a exlamation mark to the name
+		my $value = $self->get('!' . $name);
+		# return the important value if given
+		return $value if defined $value;
+	}
+
 	# return combined shorthand
 	if ($name eq 'background-position')
 	{
 		return join(' ',
-			$self->{'background-position-x'},
-			$self->{'background-position-y'}
+			$self->get('background-position-x'),
+			$self->get('background-position-y')
 		);
 	}
 	# return boolean if we are repeating
