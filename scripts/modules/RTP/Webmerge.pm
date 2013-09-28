@@ -198,6 +198,8 @@ sub collectExecutables
 	foreach my $program (keys %programs)
 	{
 
+		no warnings 'uninitialized';
+
 		# sort the programs by priority so they can run in given order
 		@{$programs{$program}} = sort { $a->[2] - $b->[2] } @{$programs{$program}};
 
