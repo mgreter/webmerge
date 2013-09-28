@@ -26,6 +26,9 @@ package OCBNET::Spritesets::CSS::Parser;
 use strict;
 use warnings;
 
+# define uniq inline (copied from List::MoreUtils)
+sub uniq (@) { my %seen = (); grep { not $seen{$_}++ } @_; }
+
 ####################################################################################################
 
 # we are ourself the root css block
@@ -127,6 +130,8 @@ sub read
 	# this will process all and each sub block
 	for (my $i = 0; $i < scalar(@blocks); $i ++)
 	{ push @blocks, @{$blocks[$i]->blocks}; }
+
+	@blocks = uniq @blocks;
 
 	# reset block type arrays
 	$self->{'others'} = [];
