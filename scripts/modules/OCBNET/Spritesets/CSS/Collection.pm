@@ -181,6 +181,18 @@ sub set
 	}
 	# EO if 'background-size'
 
+	# do not inherit for all axes
+	elsif ($name eq 'sprite')
+	{
+		$value =~ m/^\s*($re_css_name)\s+($re_css_url)\s*(\!important)?$/i;
+		# split the shorthand value into id and url
+		my ($id, $url) = split(/\s+/, $value, 2);
+		# set the block options for this sprite
+		$self->set('css-id', $1) if defined $1;
+		$self->set('sprite-image', $2) if defined $2;
+		$self->set('sprite-importance', $3) if defined $3;
+	}
+
 	# parse margin and padding boxmodel
 	elsif (exists $boxmodel{$name})
 	{

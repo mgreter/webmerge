@@ -4,11 +4,7 @@
 
 .cf .sprite
 {
-	/*
-		css-id: lores;
-		sprite-id: lores;
-		sprite-image: url(../generated/img/lores.png);
-	*/
+	/* sprite: lores url(../generated/img/lores.png) !important; */
 }
 
 .cf .box
@@ -45,16 +41,14 @@
 
 .cf DIV.fixed-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
 }
 
 .cf DIV.fixed-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -62,8 +56,7 @@
 
 .cf DIV.fixed-right-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -71,8 +64,7 @@
 
 .cf DIV.fixed-right-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -80,8 +72,7 @@
 
 .cf DIV.fixed-bottom-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -89,8 +80,7 @@
 
 .cf DIV.fixed-bottom-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -98,8 +88,7 @@
 
 .cf DIV.fixed-right-bottom-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -107,8 +96,7 @@
 
 .cf DIV.fixed-right-bottom-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -120,8 +108,7 @@
 
 .cf DIV.flexible-y-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -129,8 +116,7 @@
 
 .cf DIV.flexible-y-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -138,8 +124,7 @@
 
 .cf DIV.flexible-y-right-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -147,8 +132,7 @@
 
 .cf DIV.flexible-y-right-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -156,8 +140,7 @@
 
 .cf DIV.flexible-y-bottom-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -165,8 +148,7 @@
 
 .cf DIV.flexible-y-bottom-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -174,8 +156,7 @@
 
 .cf DIV.flexible-y-right-bottom-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -183,8 +164,7 @@
 
 .cf DIV.flexible-y-right-bottom-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -196,8 +176,7 @@
 
 .cf DIV.flexible-x-right-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -205,8 +184,7 @@
 
 .cf DIV.flexible-x-right-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -214,8 +192,7 @@
 
 .cf DIV.flexible-x-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -223,8 +200,7 @@
 
 .cf DIV.flexible-x-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -232,8 +208,7 @@
 
 .cf DIV.flexible-x-bottom-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -241,8 +216,7 @@
 
 .cf DIV.flexible-x-bottom-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -250,8 +224,7 @@
 
 .cf DIV.flexible-x-right-bottom-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -259,8 +232,7 @@
 
 .cf DIV.flexible-x-right-bottom-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -272,8 +244,7 @@
 
 .cf DIV.flexible-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -281,8 +252,7 @@
 
 .cf DIV.flexible-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -290,8 +260,7 @@
 
 .cf DIV.flexible-right-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -299,8 +268,7 @@
 
 .cf DIV.flexible-right-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -308,8 +276,7 @@
 
 .cf DIV.flexible-bottom-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -317,8 +284,7 @@
 
 .cf DIV.flexible-bottom-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -326,8 +292,7 @@
 
 .cf DIV.flexible-right-bottom-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -335,8 +300,7 @@
 
 .cf DIV.flexible-right-bottom-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -348,8 +312,7 @@
 
 .cf DIV.repeat-x-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: 10px 10px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -357,8 +320,7 @@
 
 .cf DIV.repeat-x-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -366,8 +328,7 @@
 
 .cf DIV.repeat-x-right-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -375,8 +336,7 @@
 
 .cf DIV.repeat-x-right-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -384,8 +344,7 @@
 
 .cf DIV.repeat-x-bottom-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -393,8 +352,7 @@
 
 .cf DIV.repeat-x-bottom-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -402,8 +360,7 @@
 
 .cf DIV.repeat-x-right-bottom-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -411,8 +368,7 @@
 
 .cf DIV.repeat-x-right-bottom-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -424,8 +380,7 @@
 
 .cf DIV.repeat-y-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: 10px 10px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -433,8 +388,7 @@
 
 .cf DIV.repeat-y-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -442,8 +396,7 @@
 
 .cf DIV.repeat-y-right-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -451,8 +404,7 @@
 
 .cf DIV.repeat-y-right-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -460,8 +412,7 @@
 
 .cf DIV.repeat-y-bottom-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -469,8 +420,7 @@
 
 .cf DIV.repeat-y-bottom-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -478,8 +428,7 @@
 
 .cf DIV.repeat-y-right-bottom-a
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -487,8 +436,7 @@
 
 .cf DIV.repeat-y-right-bottom-b
 {
-	/* css-ref: box; */
-	/* sprite-ref: lores; */
+	/* css-ref: box, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -500,8 +448,7 @@
 
 .cf DIV.flexible-y-repeat-x-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -509,8 +456,7 @@
 
 .cf DIV.flexible-y-repeat-x-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -518,8 +464,7 @@
 
 .cf DIV.flexible-y-repeat-x-right-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -527,8 +472,7 @@
 
 .cf DIV.flexible-y-repeat-x-right-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -536,8 +480,7 @@
 
 .cf DIV.flexible-y-repeat-x-bottom-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -545,8 +488,7 @@
 
 .cf DIV.flexible-y-repeat-x-bottom-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -554,8 +496,7 @@
 
 .cf DIV.flexible-y-repeat-x-right-bottom-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -563,8 +504,7 @@
 
 .cf DIV.flexible-y-repeat-x-right-bottom-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -576,8 +516,7 @@
 
 .cf DIV.flexible-y-repeat-y-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -585,8 +524,7 @@
 
 .cf DIV.flexible-y-repeat-y-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -594,8 +532,7 @@
 
 .cf DIV.flexible-y-repeat-y-right-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -603,8 +540,7 @@
 
 .cf DIV.flexible-y-repeat-y-right-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -612,8 +548,7 @@
 
 .cf DIV.flexible-y-repeat-y-bottom-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -621,8 +556,7 @@
 
 .cf DIV.flexible-y-repeat-y-bottom-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -630,8 +564,7 @@
 
 .cf DIV.flexible-y-repeat-y-right-bottom-a
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -639,8 +572,7 @@
 
 .cf DIV.flexible-y-repeat-y-right-bottom-b
 {
-	/* css-ref: flex-x; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-x, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -652,8 +584,7 @@
 
 .cf DIV.flexible-x-repeat-x-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -661,8 +592,7 @@
 
 .cf DIV.flexible-x-repeat-x-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -670,8 +600,7 @@
 
 .cf DIV.flexible-x-repeat-x-right-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -679,8 +608,7 @@
 
 .cf DIV.flexible-x-repeat-x-right-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -688,8 +616,7 @@
 
 .cf DIV.flexible-x-repeat-x-bottom-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -697,8 +624,7 @@
 
 .cf DIV.flexible-x-repeat-x-bottom-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -706,8 +632,7 @@
 
 .cf DIV.flexible-x-repeat-x-right-bottom-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -715,8 +640,7 @@
 
 .cf DIV.flexible-x-repeat-x-right-bottom-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -728,8 +652,7 @@
 
 .cf DIV.flexible-x-repeat-y-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -737,8 +660,7 @@
 
 .cf DIV.flexible-x-repeat-y-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -746,8 +668,7 @@
 
 .cf DIV.flexible-x-repeat-y-right-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -755,8 +676,7 @@
 
 .cf DIV.flexible-x-repeat-y-right-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -764,8 +684,7 @@
 
 .cf DIV.flexible-x-repeat-y-bottom-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -773,8 +692,7 @@
 
 .cf DIV.flexible-x-repeat-y-bottom-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -782,8 +700,7 @@
 
 .cf DIV.flexible-x-repeat-y-right-bottom-a
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -791,8 +708,7 @@
 
 .cf DIV.flexible-x-repeat-y-right-bottom-b
 {
-	/* css-ref: flex-y; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-y, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -804,8 +720,7 @@
 
 .cf DIV.flexible-repeat-x-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -813,8 +728,7 @@
 
 .cf DIV.flexible-repeat-x-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -822,8 +736,7 @@
 
 .cf DIV.flexible-repeat-x-right-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -831,8 +744,7 @@
 
 .cf DIV.flexible-repeat-x-right-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -840,8 +752,7 @@
 
 .cf DIV.flexible-repeat-x-bottom-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -849,8 +760,7 @@
 
 .cf DIV.flexible-repeat-x-bottom-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -858,8 +768,7 @@
 
 .cf DIV.flexible-repeat-x-right-bottom-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -867,8 +776,7 @@
 
 .cf DIV.flexible-repeat-x-right-bottom-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -880,8 +788,7 @@
 
 .cf DIV.flexible-repeat-y-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-1.png');
@@ -889,8 +796,7 @@
 
 .cf DIV.flexible-repeat-y-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 5px;
 	background-image: url('lores/imgs/fixed-left-top-2.png');
@@ -898,8 +804,7 @@
 
 .cf DIV.flexible-repeat-y-right-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-1.png');
@@ -907,8 +812,7 @@
 
 .cf DIV.flexible-repeat-y-right-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/fixed-right-top-2.png');
@@ -916,8 +820,7 @@
 
 .cf DIV.flexible-repeat-y-bottom-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-1.png');
@@ -925,8 +828,7 @@
 
 .cf DIV.flexible-repeat-y-bottom-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/fixed-left-bottom-2.png');
@@ -934,8 +836,7 @@
 
 .cf DIV.flexible-repeat-y-right-bottom-a
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-1.png');
@@ -943,8 +844,7 @@
 
 .cf DIV.flexible-repeat-y-right-bottom-b
 {
-	/* css-ref: flex-xy; */
-	/* sprite-ref: lores; */
+	/* css-ref: flex-xy, lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/fixed-right-bottom-2.png');
@@ -958,7 +858,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: no-repeat;
 	background-position: 2px 5px;
 	background-image: url('lores/imgs/bg-001a.png');
@@ -967,7 +867,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-x;
 	background-position: 2px 5px;
 	background-image: url('lores/imgs/bg-001b.png');
@@ -976,7 +876,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-y;
 	background-position: 2px 5px;
 	background-image: url('lores/imgs/bg-001c.png');
@@ -986,7 +886,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: no-repeat;
 	background-position: 5px 2px;
 	background-image: url('lores/imgs/bg-002a.png');
@@ -995,7 +895,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-x;
 	background-position: 5px 2px;
 	background-image: url('lores/imgs/bg-002b.png');
@@ -1004,7 +904,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-y;
 	background-position: 5px 2px;
 	background-image: url('lores/imgs/bg-002c.png');
@@ -1014,7 +914,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: no-repeat;
 	background-position: right 5px;
 	background-image: url('lores/imgs/bg-003a.png');
@@ -1023,7 +923,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-x;
 	background-position: right 5px;
 	background-image: url('lores/imgs/bg-003b.png');
@@ -1032,7 +932,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-y;
 	background-position: right 5px;
 	background-image: url('lores/imgs/bg-003c.png');
@@ -1042,7 +942,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: no-repeat;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/bg-004a.png');
@@ -1051,7 +951,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-x;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/bg-004b.png');
@@ -1060,7 +960,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-y;
 	background-position: 5px bottom;
 	background-image: url('lores/imgs/bg-004c.png');
@@ -1070,7 +970,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	background-image: url('lores/imgs/bg-005a.png');
@@ -1079,7 +979,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-x;
 	background-position: right bottom;
 	background-image: url('lores/imgs/bg-005b.png');
@@ -1088,7 +988,7 @@
 {
 	padding: 4px 5px;
 	width: 53px; height: 45px;
-	/* sprite-ref: lores; */
+	/* css-ref: lores; */
 	background-repeat: repeat-y;
 	background-position: right bottom;
 	background-image: url('lores/imgs/bg-005c.png');
@@ -1111,7 +1011,7 @@ A.player
 A.player .icon-play-big
 {
 	/*
-		sprite-ref: lores;
+		css-ref: lores;
 	*/
 	width: 60px;
 	height: 60px;
@@ -1130,7 +1030,7 @@ A.player:focus .icon-play-big,
 A.player:hover .icon-play-big
 {
 	/*
-		sprite-ref: lores;
+		css-ref: lores;
 	*/
 	padding: 10px;
 	width: 60px; height: 60px;
@@ -1158,7 +1058,7 @@ A.record SPAN
 A.record SPAN.icon-record
 {
 	/*
-		sprite-ref: lores;
+		css-ref: lores;
 	*/
 	margin: 5px 5px 5px 0px;
 	width: 10px; height: 10px;
@@ -1186,7 +1086,7 @@ A.record-play SPAN
 A.record-play SPAN.icon-record
 {
 	/*
-		sprite-ref: lores;
+		css-ref: lores;
 	*/
 	vertical-align: bottom;
 	display: inline-block;
@@ -1210,7 +1110,7 @@ A:focus SPAN.icon-record,
 A:hover SPAN.icon-record
 {
 	/*
-		sprite-ref: lores;
+		css-ref: lores;
 	*/
 	width: 10px; height: 10px;
 	background-repeat: no-repeat;
@@ -1237,18 +1137,16 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-a
 	{
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
-		/* css-ref: box; */
 		background-repeat: no-repeat;
 		background-image: url('hires/imgs/fixed-left-top-1.png');
 	}
 
 	.cf DIV.fixed-b
 	{
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
-		/* css-ref: box; */
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
 		background-image: url('hires/imgs/fixed-left-top-2.png');
@@ -1256,8 +1154,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-right-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1266,8 +1163,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-right-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1276,9 +1172,8 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-bottom-a
 	{
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
-		/* css-ref: box; */
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
 		background-image: url('hires/imgs/fixed-left-bottom-1.png');
@@ -1286,9 +1181,8 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-bottom-b
 	{
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
-		/* css-ref: box; */
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
 		background-image: url('hires/imgs/fixed-left-bottom-2.png');
@@ -1296,9 +1190,8 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-right-bottom-a
 	{
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
-		/* css-ref: box; */
 		background-repeat: no-repeat;
 		background-position: right bottom;
 		background-image: url('hires/imgs/fixed-right-bottom-1.png');
@@ -1306,9 +1199,8 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.fixed-right-bottom-b
 	{
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
-		/* css-ref: box; */
 		background-repeat: no-repeat;
 		background-position: right bottom;
 		background-image: url('hires/imgs/fixed-right-bottom-2.png');
@@ -1320,10 +1212,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
@@ -1332,10 +1223,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
@@ -1344,10 +1234,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-right-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1356,10 +1245,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-right-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1368,10 +1256,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-bottom-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -1380,10 +1267,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-bottom-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -1392,10 +1278,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-right-bottom-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -1404,10 +1289,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-right-bottom-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -1420,10 +1304,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-right-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1432,10 +1315,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-right-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1444,10 +1326,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
@@ -1456,10 +1337,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
@@ -1468,10 +1348,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-bottom-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -1480,10 +1359,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-bottom-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -1492,10 +1370,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-right-bottom-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -1504,10 +1381,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-right-bottom-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -1520,12 +1396,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
@@ -1534,12 +1409,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px 5px;
@@ -1548,12 +1422,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-right-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1562,12 +1435,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-right-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -1576,12 +1448,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-bottom-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -1590,12 +1461,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-bottom-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -1604,12 +1474,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-right-bottom-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -1618,12 +1487,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-right-bottom-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -1636,8 +1504,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 10px 10px;
@@ -1646,8 +1513,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -1656,8 +1522,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-right-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -1666,8 +1531,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-right-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -1676,8 +1540,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-bottom-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -1686,8 +1549,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-bottom-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -1696,8 +1558,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-right-bottom-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -1706,8 +1567,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-x-right-bottom-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -1720,8 +1580,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 10px 10px;
@@ -1730,8 +1589,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -1740,8 +1598,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-right-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -1750,8 +1607,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-right-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -1760,8 +1616,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-bottom-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -1770,8 +1625,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-bottom-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -1780,8 +1634,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-right-bottom-a
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -1790,8 +1643,7 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.repeat-y-right-bottom-b
 	{
-		/* css-ref: box; */
-		/* sprite-ref: hires; */
+		/* css-ref: box, hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -1804,10 +1656,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -1816,10 +1667,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -1828,10 +1678,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-right-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -1840,10 +1689,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-right-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -1852,10 +1700,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-bottom-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -1864,10 +1711,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-bottom-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -1876,10 +1722,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-right-bottom-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -1888,10 +1733,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-x-right-bottom-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -1904,10 +1748,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -1916,10 +1759,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -1928,10 +1770,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-right-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -1940,10 +1781,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-right-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -1952,10 +1792,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-bottom-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -1964,10 +1803,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-bottom-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -1976,10 +1814,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-right-bottom-a
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -1988,10 +1825,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-y-repeat-y-right-bottom-b
 	{
-		/* css-ref: flex-x; */
+		/* css-ref: flex-x, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -2004,10 +1840,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -2016,10 +1851,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -2028,10 +1862,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-right-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -2040,10 +1873,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-right-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -2052,10 +1884,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-bottom-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -2064,10 +1895,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-bottom-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -2076,10 +1906,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-right-bottom-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -2088,10 +1917,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-x-right-bottom-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -2104,10 +1932,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -2116,10 +1943,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -2128,10 +1954,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-right-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -2140,10 +1965,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-right-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -2152,10 +1976,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-bottom-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -2164,10 +1987,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-bottom-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -2176,10 +1998,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-right-bottom-a
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -2188,10 +2009,9 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-x-repeat-y-right-bottom-b
 	{
-		/* css-ref: flex-y; */
+		/* css-ref: flex-y, hires; */
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -2204,12 +2024,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -2218,12 +2037,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px 5px;
@@ -2232,12 +2050,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-right-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -2246,12 +2063,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-right-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -2260,12 +2076,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-bottom-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -2274,12 +2089,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-bottom-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -2288,12 +2102,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-right-bottom-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -2302,12 +2115,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-x-right-bottom-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -2320,12 +2132,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -2334,12 +2145,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px 5px;
@@ -2348,12 +2158,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-right-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -2362,12 +2171,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-right-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -2376,12 +2184,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-bottom-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -2390,12 +2197,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-bottom-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -2404,12 +2210,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-right-bottom-a
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -2418,12 +2223,11 @@ only screen and (                min-resolution: 1.05dppx)
 
 	.cf DIV.flexible-repeat-y-right-bottom-b
 	{
-		/* css-ref: flex-xy; */
+		/* css-ref: flex-xy, hires; */
 		border-left-color: #FF0000;
 		border-right-color: #FF0000;
 		border-top-color: #FF0000;
 		border-bottom-color: #FF0000;
-		/* sprite-ref: hires; */
 		background-size: 14px 14px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -2438,7 +2242,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: no-repeat;
 		background-position: 2px 5px;
@@ -2448,7 +2252,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-x;
 		background-position: 2px 5px;
@@ -2458,7 +2262,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-y;
 		background-position: 2px 5px;
@@ -2469,7 +2273,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: no-repeat;
 		background-position: 5px 2px;
@@ -2479,7 +2283,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-x;
 		background-position: 5px 2px;
@@ -2489,7 +2293,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-y;
 		background-position: 5px 2px;
@@ -2500,7 +2304,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 13px 12px;
 		background-repeat: no-repeat;
 		background-position: right 5px;
@@ -2510,7 +2314,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 15px 12px;
 		background-repeat: repeat-x;
 		background-position: right 5px;
@@ -2520,7 +2324,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 15px 12px;
 		background-repeat: repeat-y;
 		background-position: right 5px;
@@ -2531,7 +2335,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: no-repeat;
 		background-position: 5px bottom;
@@ -2541,7 +2345,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-x;
 		background-position: 5px bottom;
@@ -2551,7 +2355,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-y;
 		background-position: 5px bottom;
@@ -2562,7 +2366,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: no-repeat;
 		background-position: right bottom;
@@ -2572,7 +2376,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-x;
 		background-position: right bottom;
@@ -2582,7 +2386,7 @@ only screen and (                min-resolution: 1.05dppx)
 	{
 		padding: 4px 5px;
 		width: 53px; height: 45px;
-		/* sprite-ref: hires; */
+		/* css-ref: hires; */
 		background-size: 12px 12px;
 		background-repeat: repeat-y;
 		background-position: right bottom;
@@ -2606,7 +2410,7 @@ only screen and (                min-resolution: 1.05dppx)
 	A.player .icon-play-big
 	{
 		/*
-			sprite-ref: hires;
+			css-ref: hires;
 		*/
 		width: 60px;
 		height: 60px;
@@ -2625,7 +2429,7 @@ only screen and (                min-resolution: 1.05dppx)
 	A.player:hover .icon-play-big
 	{
 		/*
-			sprite-ref: hires;
+			css-ref: hires;
 		*/
 		padding: 10px;
 		width: 60px; height: 60px;
@@ -2653,7 +2457,7 @@ only screen and (                min-resolution: 1.05dppx)
 	A.record SPAN.icon-record
 	{
 		/*
-			sprite-ref: hires;
+			css-ref: hires;
 		*/
 		margin: 5px 5px 5px 0px;
 		width: 10px; height: 10px;
@@ -2681,7 +2485,7 @@ only screen and (                min-resolution: 1.05dppx)
 	A.record-play SPAN.icon-record
 	{
 		/*
-			sprite-ref: hires;
+			css-ref: hires;
 		*/
 		vertical-align: bottom;
 		display: inline-block;
@@ -2705,7 +2509,7 @@ only screen and (                min-resolution: 1.05dppx)
 	A:hover SPAN.icon-record
 	{
 		/*
-			sprite-ref: hires;
+			css-ref: hires;
 		*/
 		width: 10px; height: 10px;
 		background-repeat: no-repeat;

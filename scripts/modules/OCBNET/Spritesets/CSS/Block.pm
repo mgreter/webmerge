@@ -167,6 +167,39 @@ sub body
 }
 # EO sub body
 
+sub bodyText
+{
+
+	# init variable
+	my $css = '';
+
+	# get block to render
+	my ($block) = @_;
+
+	# check if we have any declarations
+	# this can overrule the whole rendering
+	# it is used to mangle only certain blocks
+	# without interferring with any other blocks
+	if ($block->{'declarations'})
+	{
+		# put back all declarations
+		$css .= join "", map
+			{ sprintf "%s%s", @{$_}; }
+				@{$block->{'declarations'}};
+	}
+	# render the original code
+	else
+	{
+		# render all sub-blocks to the css
+		$css .= $_->head foreach @{$block->blocks};
+	}
+
+	# return the css
+	return $css;
+
+}
+# EO sub body
+
 ####################################################################################################
 # getter methods for block styles and options
 ####################################################################################################
@@ -196,13 +229,6 @@ sub style
 			{ return $ref->styles->get($style); }
 		}
 	}
-	# do we have a valid style in current block
-	#elsif (defined $self->{'sprite-ref'})
-	#{
-	#	die $self->{'sprite-ref'};
-		# get style from current block styles
-		# return $self->styles->get($style);
-	#}
 
 	# return null
 	return undef;
@@ -236,13 +262,6 @@ sub option
 			if (defined $ref->options->get($option))
 			{ return $ref->options->get($option); }
 		}
-	}
-	# do we have a valid style in current block
-	if (defined $self->options->get('sprite-ref'))
-	{
-		die $self->options->get('sprite-ref');
-		# get style from current block styles
-		# return $self->styles->get($style);
 	}
 
 	# return null
@@ -278,25 +297,46 @@ sub canvas
 			{ return $ref->canvas(); }
 		}
 	}
-	# do we have a valid style in current block
-	if (defined $self->options->get('sprite-ref'))
-	{
-		# get the id for the sprite set to be in
-		my $id = $self->options->get('sprite-ref');
-
-			# get the spriteset object for positions
-#			my $canvas = $self->{'spritesets'}->{$id};
-
-		#die "$canvas" . $self->options->get('sprite-ref');
-		# get style from current block styles
-		# return $self->styles->get($style);
-	}
 
 	# return null
 	return undef;
 
 }
 # EO sub option
+
+####################################################################################################
+
+# get spriteset
+#**************************************************************************************************
+sub spriteset
+{
+
+	# get passed variables
+	my ($self) = @_;
+
+	# do we have a canvas on block
+	if (defined $self->{'qweasdqwe'})
+	{
+		# get canvas from block
+		return $self->{'qweasdqwe'};
+	}
+	# maybe we have a reference block
+	# basically acts like css/cascading
+	if (defined $self->{'ref'})
+	{
+		# get canvas from referenced block styles
+		foreach my $ref (@{$self->{'ref'}})
+		{
+			if (defined $ref->spriteset())
+			{ return $ref->spriteset(); }
+		}
+	}
+
+	# return null
+	return undef;
+
+}
+# EO sub spriteset
 
 ####################################################################################################
 ####################################################################################################

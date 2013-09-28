@@ -123,7 +123,7 @@ sub read
 	die "Fatal: not everything parsed" if ${$data} ne '';
 
 	# put all blocks in a flat array
-	my @blocks = @{$self->blocks};
+	my @blocks = ($self, @{$self->blocks});
 	# this will process all and each sub block
 	for (my $i = 0; $i < scalar(@blocks); $i ++)
 	{ push @blocks, @{$blocks[$i]->blocks}; }
@@ -142,38 +142,52 @@ sub read
 	}
 
 	# now process each block
+	# find configured spritesets
 	foreach my $block (@blocks)
 	{
 
-		# get only the head to parse it
-		my $head = $block->head;
+		# get the text of this block
+		my $body = $block->bodyText;
 
-#			print $head, "\n";
-		# parse comments for spriteset definitions
-		while ($head =~ s/$re_comment//s)
+		# parse comments for block options
+		while ($body =~ s/$re_comment//s)
 		{
-			# create a new css options collection
+
+			# create a new css collection object to store options
 			my $options = new OCBNET::Spritesets::CSS::Collection;
-			# parse declarations for this spriteset
+
+			# parse options for spriteset
 			$parse_definition->($options, $1);
+
 			# check if this comment is meant for us
-			next unless $options->defined('sprite-id');
-			# get the id for this spriteset
-			my $id = $options->get('sprite-id');
+			next unless $options->defined('sprite-image');
+
+			# check if the sprite image has an associated id
+			die "sprite image has no id" unless $options->defined('css-id');
+
+			# get the id of this spriteset
+			my $id = $options->{'css-id'};
+
 			# pass debug mode from config to options
 			$options->{'debug'} = $self->{'config'}->{'debug'};
+
 			# create a new canvas object to hold all sprites
 			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
+
+			# print out a debug message
+			# print "found spriteset <$id>\n";
+
 			# add this canvas to global hash object
 			$self->{'spritesets'}->{$id} = $canvas;
-			# associate this block with the canvas
-			if ($block->{'parent'} && $block->{'selector'})
-			{ $block->{'parent'}->{'canvas'} = $canvas; }
-			# die $id if $block->{'parent'}->{'selector'};
+
+			# associate canvas with block
+			$block->{'canvas'} = $canvas;
 
 			# store the id for canvas
 			$canvas->{'id'} = $id;
+
 		}
+		# EO each comment
 
 	}
 	# EO each block
@@ -183,7 +197,7 @@ sub read
 	{
 
 		# get only the body to parse it
-		my $body = $selector->body;
+		my $body = $selector->bodyText;
 
 		# parse all comments into options hash
 		while ($body =~ s/$re_comment//s)
@@ -213,18 +227,22 @@ sub rehash
 	# now process each selector and setup references
 	foreach my $selector (@{$self->{'selectors'}})
 	{
-		# get own id and reference id
+		# get css id for this block for inheritance
 		my $css_id = $selector->options->get('css-id');
-		my $ref_id = $selector->options->get('css-ref');
-		my $sprite_ref = $selector->options->get('sprite-ref');
 		# setup relationships between references blocks
 		$self->{'ids'}->{$css_id} = $selector if defined $css_id;
+	}
+
+	# now process each selector and setup references
+	foreach my $selector (@{$self->{'selectors'}})
+	{
+		# get own id and reference id
+		my $ref_id = $selector->options->get('css-ref');
 		# allow multiple refs per block via comma delimited list
 		push @{$selector->{'ref'}}, map { $self->{'ids'}->{$_} }
 		     split(/\s*,\s*/, $ref_id) if (defined $ref_id);
-		# allow multiple refs per block via comma delimited list
-		push @{$selector->{'ref'}}, grep { defined $_ } map { $self->{'ids'}->{$_} }
-		     split(/\s*,\s*/, $sprite_ref) if (defined $sprite_ref);
+		# remove undefined references (maybe print a warning)
+		@{$selector->{'ref'}} = grep { defined $_ } @{$selector->{'ref'}};
 	}
 
 	# allow chaining
@@ -245,8 +263,11 @@ sub load
 	foreach my $selector (@{$self->{'selectors'}})
 	{
 
-		# get the id of the spriteset to put this in
-		my $id = $selector->option('sprite-ref') || next;
+		# check if this selector block has a background
+		next unless $selector->style('background-image');
+
+		# get associated spriteset canvas
+		my $canvas = $selector->canvas || next;
 
 		# create a new sprite and setup most options
 		my $sprite = new OCBNET::Spritesets::Sprite({
@@ -275,17 +296,17 @@ sub load
 		# and also store the selector on the sprite
 		$sprite->{'selector'} = $selector;
 
-		# add this sprite to the given spriteset
-		unless ($self->{'spritesets'}->{$id})
-		{ warn sprintf "unknown sprite id <%s>\n", $id; }
-		else { $self->{'spritesets'}->{$id}->add($sprite); }
+		# add sprite to canvas
+		$canvas->add($sprite);
 
 	}
+	# EO each selector
 
 	# allow chaining
 	return $self;
 
 }
+# EO sub load
 
 # sprites have been loaded, so we now can start to
 # distribute all sprites to their appropriate area
@@ -352,6 +373,13 @@ sub process
 
 			# get the url of the output image
 			my $url = $spriteset->get('url');
+			$url = fromUrl($selector->option('sprite-image')) unless $url;
+
+			my $imp = $selector->option('sprite-importance') || '';
+
+			$imp = '';
+
+die $url unless $url;
 
 			my $background_image = toUrl($url);
 			my $background_repeat = 'no-repeat';
@@ -366,8 +394,8 @@ sub process
 
 			# push new declarations
 			push(@{$declarations},
-				[ 'background-image', ': ' . $background_image . ';' ],
-				[ 'background-repeat', ': ' . $background_repeat . ';' ],
+				[ 'background-image', ': ' . $background_image . $imp . ';' ],
+				[ 'background-repeat', ': ' . $background_repeat . $imp . ';' ],
 			);
 
 #			push(@{$declarations},
@@ -380,12 +408,12 @@ sub process
 		};
 
 		# check if this selector is configured for a sprite
-		if (defined $selector->option('sprite-ref'))
+		if (defined $selector->{'sprite'})
 		{
 
 			# get the id for the sprite set to be in
-			my $id = $selector->option('sprite-ref');
-
+			my $id = $selector->canvas->{'id'};
+die "no id for sprite" unless $id;
 			# get the spriteset object for positions
 			my $canvas = $self->{'spritesets'}->{$id};
 
@@ -394,7 +422,8 @@ sub process
 
 			# get the url of the output image
 			my $url = $spriteset->get('url');
-
+			$url = fromUrl($selector->option('sprite-image'));
+die $url unless $url;
 			# get the sprite for selector
 			my $sprite = $selector->{'sprite'};
 
@@ -495,16 +524,13 @@ sub process
 		my $body = $selector->body;
 
 		# find the first indenting to reuse it
-		my $indent = $body =~ m/^([ 	]*)\S/m ? $1 : '';
+		my $indent = $body =~ m/^([ 	]*)\S/m ? $1 : '	';
 
 		# get the traling whitespace on last line
 		my $footer = $body =~ s/([ 	]*)$// ? $1 : '';
 
-		# create a newline for footer
-		$selector->{'footer'} .= ";\n";
-
 		# add some debugger statements into css
-		$selector->{'footer'} .= $indent . "/* added by webmerge */\n";
+		$selector->{'footer'} .= "\n" . $indent . ";/* added by webmerge */\n";
 
 		# process all new declaration for block
 		foreach my $declaration (@{$declarations})
