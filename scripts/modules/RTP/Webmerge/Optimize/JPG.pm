@@ -16,6 +16,7 @@ BEGIN
 {
 	# enable (or disable) different optimizer executables
 	$ENV{'WEBMERGE_JPEGTRAN'} = 1 unless exists $ENV{'WEBMERGE_JPEGTRAN'};
+	$ENV{'WEBMERGE_JPEGOPTIM'} = 1 unless exists $ENV{'WEBMERGE_JPEGOPTIM'};
 }
 
 ###################################################################################################
@@ -64,6 +65,7 @@ push @checkers, sub
 	return unless $config->{'optimize-jpg'};
 
 	# define executables to optimize jpgs
+	$executables{'jpegoptim'}  = ['jpgopt', "--quiet \"%s\""] if $ENV{'WEBMERGE_JPEGOPTIM'};
 	$executables{'jpegtran'} = ['jpgopt', '-copy none -optimize -outfile "%s" "%s"'] if $ENV{'WEBMERGE_JPEGTRAN'};
 
 };
