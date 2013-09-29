@@ -54,13 +54,13 @@ our $re_css_selector = qr/(?:
 ####################################################################################################
 
 # create expression to match complex rules
-# example #id DIV.class FORM A:hover
+# example : #id DIV.class FORM A:hover
 our $re_css_selector_rule = qr/$re_css_selector(?:(?:\s*[\>\+\~]\s*|\s+)$re_css_selector)*/;
 
 ####################################################################################################
 
 # create expression to match multiple complex rules
-# example #id DIV.class FORM A:hover, BODY DIV.header
+# example : #id DIV.class FORM A:hover, BODY DIV.header
 our $re_css_selector_rules = qr/$re_css_selector_rule(?:\s*,\s*$re_css_selector_rule)*/;
 
 ####################################################################################################
