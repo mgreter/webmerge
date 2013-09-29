@@ -27,37 +27,6 @@ sub layout
 	# get instance
 	my ($self) = shift;
 
-	# process all sprites in this edge
-	foreach my $sprite ($self->children)
-	{
-		# only left/top edge
-		if ($self->stackVert)
-		{
-			if ($self->alignOpp)
-			{
-				if ($sprite->alignLeft)
-				{
-					unless ($sprite->isRepeatX)
-					{
-						$sprite->paddingLeft = 0;
-					}
-					$sprite->paddingRight = 0;
-				}
-			}
-		}
-		else
-		{
-			if ($sprite->alignTop)
-			{
-				unless ($sprite->isRepeatY)
-				{
-					$sprite->paddingTop = 0;
-				}
-				$sprite->paddingBottom = 0;
-			}
-		}
-	}
-
 	# call stack layout
 	$self->SUPER::layout;
 

@@ -147,6 +147,28 @@ sub distribute
 
 	##########################################################
 
+	# optimize space between repeaters
+	@{$self->{'edge-r'}->{'children'}} =
+	sort { $b->isRepeatX - $a->isRepeatX || $a->isFixedX - $b->isFixedX }
+	@{$self->{'edge-r'}->{'children'}};
+
+	# optimize space between repeaters
+	@{$self->{'edge-b'}->{'children'}} =
+	sort { $b->isRepeatY - $a->isRepeatY || $a->isFixedY - $b->isFixedY }
+	@{$self->{'edge-b'}->{'children'}};
+
+	# optimize space between repeaters
+	@{$self->{'edge-t'}->{'children'}} =
+	sort { $a->isRepeatY - $b->isRepeatY || $a->isFixedY - $b->isFixedY }
+	@{$self->{'edge-t'}->{'children'}};
+
+	# optimize space between repeaters
+	@{$self->{'edge-l'}->{'children'}} =
+	sort { $a->isRepeatX - $b->isRepeatX || $a->isFixedX - $b->isFixedX }
+	@{$self->{'edge-l'}->{'children'}};
+
+	##########################################################
+
 	# unsupported sprites
 	my $unsupported = 0;
 

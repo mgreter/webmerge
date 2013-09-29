@@ -57,6 +57,34 @@ sub layout
 	# get our object
 	my ($self) = @_;
 
+	# process all sprites in this edge
+	foreach my $sprite ($self->children)
+	{
+		# only left/top edge
+		if ($self->stackVert)
+		{
+			if ($sprite->alignLeft)
+			{
+				unless ($sprite->isRepeatX)
+				{
+					$sprite->paddingLeft = 0;
+				}
+				$sprite->paddingRight = 0;
+			}
+		}
+		else
+		{
+			if ($sprite->alignTop)
+			{
+				unless ($sprite->isRepeatY)
+				{
+					$sprite->paddingTop = 0;
+				}
+				$sprite->paddingBottom = 0;
+			}
+		}
+	}
+
 	$self->SUPER::layout;
 
 	# process all sprites in this edge
