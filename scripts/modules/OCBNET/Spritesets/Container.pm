@@ -190,8 +190,6 @@ sub draw
 	# initialize empty image
 	$self->{'image'}->Set(matte => 'True');
 	$self->{'image'}->Set(magick => 'png');
-	$self->{'image'}->Set(matte => 'True');
-	$self->{'image'}->Set(quality => 3);
 	$self->{'image'}->Set(size => $self->size);
 	$self->{'image'}->ReadImage($self->{'bg'});
 	$self->{'image'}->Quantize(colorspace=>'RGB');

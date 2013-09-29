@@ -151,8 +151,8 @@ sub read
 	foreach my $block (@blocks)
 	{
 
-		# get the text of this block
-		my $body = $block->bodyText;
+		# get the block text
+		my $body = $block->text;
 
 		# parse comments for block options
 		while ($body =~ s/$re_comment//s)
@@ -201,8 +201,8 @@ sub read
 	foreach my $selector (@{$self->{'selectors'}})
 	{
 
-		# get only the body to parse it
-		my $body = $selector->bodyText;
+		# get body text to parse
+		my $body = $selector->text;
 
 		# parse all comments into options hash
 		while ($body =~ s/$re_comment//s)
