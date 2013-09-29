@@ -108,8 +108,8 @@ sub optimize
 			$sprite->paddingRight *= $sprite->scaleX;
 			$sprite->paddingBottom *= $sprite->scaleY;
 
-			# make sure we dont have any negative margins
-			# this fixes the wrong calculation if no dimension is given
+			# make sure we dont have any negative paddings
+			# fixes wrong calculation if no dimension is given
 			$sprite->paddingTop = 0 if $sprite->paddingTop < 0;
 			$sprite->paddingLeft = 0 if $sprite->paddingLeft < 0;
 			$sprite->paddingRight = 0 if $sprite->paddingRight < 0;

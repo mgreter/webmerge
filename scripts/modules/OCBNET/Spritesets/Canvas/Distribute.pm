@@ -31,15 +31,15 @@ sub distribute
 	# get our object
 	my ($self) = @_;
 
-	# a sprite that is enclosed can mostly be fitted. It's not
+	# a sprite that is enclosed can always be fitted. It's not
 	# unnormal to have some offset for the image, but mostly the
 	# container is nearly of the same size as the sprite. In some
 	# cases the dev meant to use it left aligned in a big container.
 	# then we should handle it as a left aligned image and put it
 	# on the edge. This threshold determines when to fit and when
 	# to put the sprite on the edge/stack area. Both padding will
-	# be counted (outerWidth - width > fit_threshold).
-	my $threshold = 20;
+	# be counted (outerWidth - width > threshold).
+	my $threshold = 40;
 
 	##########################################################
 
@@ -177,8 +177,10 @@ sub distribute
 	foreach my $sprite (@{$self->{'sprites'}})
 	{
 		next if $sprite->{'distributed'};
-		warn sprintf "unsupported: %s : " .
-			"enc(%s/%s), rep(%s/%s), pos(%s/%s)\n",
+		print "#" x 75, "\n" unless $unsupported;
+		print "WARNING: BAD SPRITES\n" unless $unsupported;
+		print "#" x 75, "\n" unless $unsupported;
+		warn sprintf "url(%s) enc(%s/%s), rep(%s/%s), pos(%s/%s)\n",
 			substr($sprite->{'filename'}, - 25),
 			$sprite->isFixedX, $sprite->isFixedY,
 			$sprite->isRepeatX, $sprite->isRepeatY,
@@ -186,9 +188,12 @@ sub distribute
 		$unsupported ++;
 	}
 
+	# print bottom seperator
+	print "#" x 75, "\n" if $unsupported;
+
 	# wait a second make user more
 	# aware that some problem exists
-	sleep 1 if $unsupported;
+	sleep 3 if $unsupported;
 
 }
 # EO sub distribute

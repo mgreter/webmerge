@@ -225,9 +225,8 @@ sub debug
 {
 	my ($self) = @_;
 	print "#" x 60, "\n";
-	print "DEBUG SPRITESET CANVAS\n";
-	printf "width: %s, height: %s\n",
-		$self->width, $self->height;
+	printf "DEBUG SPRITESET <%s> (%sx%s)\n",
+		$self->{'id'}, $self->width, $self->height;
 	print "#" x 60, "\n";
 	foreach my $area ($self->areas)
 	{
