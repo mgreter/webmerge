@@ -48,26 +48,11 @@ sub spritesets
 	# create a new ocbnet spriteset css parser object
 	my $css = OCBNET::Spritesets::CSS::Parser->new($config);
 
-	# read our stylesheet data
-	$css->read($data, $config->{'atomic'});
+	# atomic filehandling interface
+	my $atomic = $config->{'atomic'};
 
-	$css->rehash();
-
-
-	$css->load();
-
-	# setup paddings
-	$css->optimize();
-
-	# distribute into areas
-	$css->distribute();
-
-	# translate some boxes
-	$css->finalize();
-
-
-	# call write and pass writer sub
-	my $written = $css->write(sub
+	# declare writer sub
+	my $writer = sub
 	{
 
 		# get input varibles
@@ -110,18 +95,16 @@ sub spritesets
 			push(@{$written->{'png'}}, $handle);
 		}
 
-	});
-	# EO write
+	};
+	# EO sub $writer
 
-	# process spritesets
-	# sets sprite positions
-	$css->process();
+	# read stylesheet and process spritesets
+	$css->read($data, $atomic)->rehash->load;
+	$css->optimize->distribute->finalize;
+	my $written = $css->write($writer);
+	${$data} = $css->process->render;
 
-	# render result stylesheet
-	${$data} = $css->render;
-
-	# check if we are optimizing
-	# if so we may should optimize images
+	# optimize spriteset images
 	if ($config->{'optimize'})
 	{
 		# call all possible optimizers

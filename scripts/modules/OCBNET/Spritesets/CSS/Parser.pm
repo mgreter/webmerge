@@ -2,25 +2,18 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-# this is a block where all sprites get fitted in
-# the smallest available space (see packaging)
+# this is a block which represents a stylesheet
+# a stylesheet can contain multiple spritesets
+# we will take care of reading and mangling the
+# styles for background images regarding spritesets
 ####################################################################################################
 package OCBNET::Spritesets::CSS::Parser;
 ####################################################################################################
-# 1) read
-#    -> read blocks into
-#    -> selectors and others
-#    -> parse styles and options
-#    -> setup cascading references
-#    -> creates and loads all sprites
-#    -> adjust some values for sprites
-# 2) write
-#    -> call layout
-#    -> draw to canvas
-# 3) process
-#    -> mangling the css
-# 4) render
-#    -> out resulting css
+#  my $css = OCBNET::Spritesets::CSS::Parser->new($config);
+#  $css->read($data, $atomic)->rehash->load;
+#  $css->optimize->distribute->finalize;
+#  my $written = $css->write($writer);
+#  my $data = $css->process->render;
 ####################################################################################################
 
 use strict;
@@ -48,16 +41,20 @@ use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_css_selector_rules);
 
 ####################################################################################################
 
+# helper methods for css stuff
 sub toPx { sprintf '%spx', @_; }
 sub toUrl { sprintf "url('%s')", @_; }
 
 ####################################################################################################
 
+# constructor
 sub new
 {
 
+	# get passed variables
 	my ($pckg, $config) = @_;
 
+	# init object
 	my $self = {
 		'ids' => {},
 		'head' => '',
@@ -67,52 +64,12 @@ sub new
 		'config' => $config || {}
 	};
 
+	# bless into package
 	return bless $self, $pckg;
 
 }
+# EO constructor
 
-####################################################################################################
-
-sub write
-{
-
-	my %written;
-
-	# get passed arguments
-	my ($self, $writer) = @_;
-
-	foreach my $name (keys %{$self->{'spritesets'}})
-	{
-
-		my $canvas = $self->{'spritesets'}->{$name};
-
-		my $options = $canvas->{'options'};
-
-		die "no sprite image defined for <$name>" unless $options->defined('sprite-image');
-
-		$options->set('url', fromUrl($options->get('sprite-image')));
-		$options->set('sprite-url', toUrl($options->get('url')) );
-
-		my $image = $canvas->layout->draw;
-
-		if ($image)
-		{
-			my $url = $options->get('sprite-url');
-			$image->Set(magick => 'png');
-			my $blob = $image->ImageToBlob();
-			my $file = fromUrl($url);
-			$writer->($file, $blob, \%written);
-
-		}
-
-	}
-
-	foreach my $set (keys %{$self->{'spritesets'}})
-	{ $self->{'spritesets'}->{$set}->debug(); }
-
-	return \%written;
-
-}
 
 ####################################################################################################
 
@@ -271,6 +228,8 @@ sub rehash
 
 }
 
+####################################################################################################
+
 # styles have been readed, so we now can start to
 # load all sprites and setup relation to its css block
 # ***************************************************************************************
@@ -329,7 +288,29 @@ sub load
 }
 # EO sub load
 
-# sprites have been loaded, so we now can start to
+####################################################################################################
+
+# sprites have not been distributed, define the paddings
+# and the dimension according to the given css block styles
+# ***************************************************************************************
+sub optimize
+{
+
+	# get our object
+	my ($self) = @_;
+
+	# call optimize for every spriteset in this stylesheet
+	$_->optimize foreach (values %{$self->{'spritesets'}});
+
+	# allow chaining
+	return $self;
+
+}
+# EO sub optimize
+
+####################################################################################################
+
+# sprites have been loaded, so we now can now to
 # distribute all sprites to their appropriate area
 # ***************************************************************************************
 sub distribute
@@ -349,9 +330,9 @@ sub distribute
 
 ####################################################################################################
 
-# sprites have been distributed, so we now can
-# start to translate bottom/right positioned sprites
-# in fixed dimension boxes to top/left aligned sprites
+# sprites have been distributed, we now can start
+# to translate bottom/right positioned sprites within
+# fixed dimension boxes into top/left aligned sprites
 # ***************************************************************************************
 sub finalize
 {
@@ -368,23 +349,48 @@ sub finalize
 }
 # EO sub finalize
 
-# sprites have been distributed, so we now can start to
-# optimize alignments, paddings and positions of sprites
-# ***************************************************************************************
-sub optimize
+####################################################################################################
+
+sub write
 {
 
-	# get our object
-	my ($self) = @_;
+	my %written;
 
-	# call optimize for every spriteset in this stylesheet
-	$_->optimize foreach (values %{$self->{'spritesets'}});
+	# get passed arguments
+	my ($self, $writer) = @_;
 
-	# allow chaining
-	return $self;
+	foreach my $name (keys %{$self->{'spritesets'}})
+	{
+
+		my $canvas = $self->{'spritesets'}->{$name};
+
+		my $options = $canvas->{'options'};
+
+		die "no sprite image defined for <$name>" unless $options->defined('sprite-image');
+
+		$options->set('url', fromUrl($options->get('sprite-image')));
+		$options->set('sprite-url', toUrl($options->get('url')) );
+
+		my $image = $canvas->layout->draw;
+
+		if ($image)
+		{
+			my $url = $options->get('sprite-url');
+			$image->Set(magick => 'png');
+			my $blob = $image->ImageToBlob();
+			my $file = fromUrl($url);
+			$writer->($file, $blob, \%written);
+
+		}
+
+	}
+
+	foreach my $set (keys %{$self->{'spritesets'}})
+	{ $self->{'spritesets'}->{$set}->debug(); }
+
+	return \%written;
 
 }
-# EO sub optimize
 
 ####################################################################################################
 
@@ -417,9 +423,7 @@ sub process
 
 			my $imp = $selector->option('sprite-importance') || '';
 
-			$imp = '';
-
-die $url unless $url;
+die "no url" unless $url;
 
 			my $background_image = toUrl($url);
 			my $background_repeat = 'no-repeat';
@@ -437,13 +441,6 @@ die $url unless $url;
 				[ 'background-image', ': ' . $background_image . $imp . ';' ],
 				[ 'background-repeat', ': ' . $background_repeat . $imp . ';' ],
 			);
-
-#			push(@{$declarations},
-#				[ 'background-image', ': qweasd' . $background_image . ';' ],
-#			);
-
-#print $selector, "\n", $selector->render, "\n",
-#" ---------- ", $url, "\n"; sleep 5;
 
 		};
 
@@ -490,14 +487,12 @@ die $url unless $url;
 			# align relative to the top
 			if ($sprite->alignTop)
 			{
-				# $spriteset_y = toPx($spriteset_y - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
 				$spriteset_y = toPx($sprite->positionY - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
 			}
 
 			# align relative to the left
 			if ($sprite->alignLeft)
 			{
-				# $spriteset_x = toPx($spriteset_x - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
 				$spriteset_x = toPx($sprite->positionX - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
 			}
 
@@ -596,8 +591,10 @@ die $url unless $url;
 
 	}
 
-}
+	# make chainable
+	return $self;
 
+}
 
 ####################################################################################################
 ####################################################################################################
