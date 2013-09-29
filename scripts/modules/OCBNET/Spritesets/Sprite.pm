@@ -109,6 +109,9 @@ sub new
 		# set dimensions readed from source file
 		$self->width = $image->Get('width');
 		$self->height = $image->Get('height');
+		# save dimensions readed from source file
+		$self->{'sprite-width'} = $image->Get('width');
+		$self->{'sprite-height'} = $image->Get('height');
 	}
 
 	# assign image to instance
@@ -165,6 +168,9 @@ sub sizeY { $_[0]->{'size-y'} || 1; }
 sub sizeX { $_[0]->{'size-x'} || 1; }
 sub scaleY { $_[0]->{'scale-y'} || 1; }
 sub scaleX { $_[0]->{'scale-x'} || 1; }
+
+sub spriteWidth { $_[0]->{'sprite-width'}; }
+sub spriteHeight { $_[0]->{'sprite-height'}; }
 
 sub positionY : lvalue { $_[0]->{'position-y'}; }
 sub positionX : lvalue { $_[0]->{'position-x'}; }
