@@ -16,7 +16,7 @@
 		<directory>{WWW}</directory>
 
 		<!-- maximum size to inline data -->
-		<inlinedatamax>160KB</inlinedatamax>
+		<inlinedatamax>300KB</inlinedatamax>
 
 		<!-- enable crc check step -->
 		<crc-check>1</crc-check>
