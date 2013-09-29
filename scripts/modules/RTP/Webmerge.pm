@@ -17,8 +17,8 @@ use File::Which qw(which);
 # override core glob (case insensitive)
 use File::Glob qw(:globally :nocase bsd_glob);
 
-# define uniq inline (copied from List::MoreUtils)
-sub uniq (@) { my %seen = (); grep { not $seen{$_}++ } @_; }
+# load function from core module
+use List::MoreUtils qw(uniq);
 
 ###################################################################################################
 

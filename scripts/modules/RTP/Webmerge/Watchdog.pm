@@ -29,14 +29,14 @@ BEGIN { our @EXPORT = qw(watchdog); }
 # load fork queue
 use Fork::Queue qw();
 
+# load function from core module
+use List::MoreUtils qw(uniq);
+
 # load core webmerge path functions
 use RTP::Webmerge::Path qw(check_path exportURI);
 
 # load merge function to call on file change
 use RTP::Webmerge::Merge qw(mergeEntry);
-
-# define uniq inline (copied from List::MoreUtils)
-sub uniq (@) { my %seen = (); grep { not $seen{$_}++ } @_; }
 
 ###################################################################################################
 

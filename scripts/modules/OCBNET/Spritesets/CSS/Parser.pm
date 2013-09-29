@@ -26,8 +26,10 @@ package OCBNET::Spritesets::CSS::Parser;
 use strict;
 use warnings;
 
-# define uniq inline (copied from List::MoreUtils)
-sub uniq (@) { my %seen = (); grep { not $seen{$_}++ } @_; }
+####################################################################################################
+
+# load function from core module
+use List::MoreUtils qw(uniq);
 
 ####################################################################################################
 
