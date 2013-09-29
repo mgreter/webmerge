@@ -137,10 +137,13 @@ sub layout
 
 	use OCBNET::Spritesets::Canvas::Layout qw(snap);
 
-	foreach my $child ($self->children)
+	# we scale by our common scale factor
+	# so this has to be here and not in block
+	foreach my $sprite ($self->children)
 	{
-		snap ($child->{'width'}, $self->scaleX);
-		snap ($child->{'height'}, $self->scaleY);
+		snap ($sprite->{'width'}, $self->scaleX);
+		snap ($sprite->{'height'}, $self->scaleY);
+
 	}
 
 	# return success

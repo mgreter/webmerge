@@ -102,8 +102,13 @@ sub optimize
 			}
 
 			# add some safety margin
+			# this case has been tested
 			$sprite->paddingTop += 1;
 			$sprite->paddingLeft += 1;
+			# add some more safety margin
+			# this case seems not be needed
+			$sprite->paddingRight += 1;
+			$sprite->paddingBottom += 1;
 
 			# adjust the padding to account for scaling
 			$sprite->paddingTop *= $sprite->scaleY;

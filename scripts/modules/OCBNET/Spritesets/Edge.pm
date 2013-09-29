@@ -31,31 +31,38 @@ sub layout
 	foreach my $sprite ($self->children)
 	{
 		# only left/top edge
-		if (not $self->alignOpp)
+		if ($self->stackVert)
 		{
-			# sprite must not repeat at all
-			if (not $sprite->isRepeating)
+			if ($self->alignOpp)
 			{
-				# this is the left edge
-				if ($self->stackVert)
+				if ($sprite->alignLeft)
 				{
-					$sprite->{'padding-left'} = 0;
-					$sprite->{'padding-right'} = 0;
-				}
-				# this is the top edge
-				else
-				{
-					$sprite->{'padding-top'} = 0;
-					$sprite->{'padding-bottom'} = 0;
+					unless ($sprite->isRepeatX)
+					{
+						$sprite->paddingLeft = 0;
+					}
+					$sprite->paddingRight = 0;
 				}
 			}
 		}
-		# EO if left/top
+		else
+		{
+			if ($sprite->alignTop)
+			{
+				unless ($sprite->isRepeatY)
+				{
+					$sprite->paddingTop = 0;
+				}
+				$sprite->paddingBottom = 0;
+			}
+		}
 	}
-	# EO each sprite
+
+	# call stack layout
+	$self->SUPER::layout;
 
 	# call and return base method
-	return $self->SUPER::layout(@_);
+	return $self;
 
 }
 # EO sub layout

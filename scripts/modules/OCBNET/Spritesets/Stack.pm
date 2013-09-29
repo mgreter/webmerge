@@ -62,6 +62,8 @@ sub layout
 	# process all sprites in this edge
 	foreach my $sprite ($self->children)
 	{
+
+
 		# only left/top edge
 		if (not $self->alignOpp)
 		{
@@ -71,8 +73,8 @@ sub layout
 				# sprite must not repeat in x
 				if (not $sprite->isRepeatX)
 				{
-					$sprite->{'padding-left'} = 0;
-					$sprite->{'padding-right'} = 0;
+					#$sprite->paddingLeft = 0;
+					#$sprite->paddingRight = 0;
 				}
 			}
 			# this is the top edge
@@ -81,8 +83,8 @@ sub layout
 				# sprite must not repeat in y
 				if (not $sprite->isRepeatY)
 				{
-					$sprite->{'padding-top'} = 0;
-					$sprite->{'padding-bottom'} = 0;
+					#$sprite->paddingTop = 0;
+					#$sprite->paddingBottom = 0;
 				}
 			}
 		}

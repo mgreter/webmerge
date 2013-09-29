@@ -489,8 +489,8 @@ die $url unless $url;
 			my $background_repeat = 'no-repeat';
 
 			# assertion that the actual background position is always a full integer
-			die "spriteset_x is not an integer $spriteset_x" unless $spriteset_x =~ m/^(?:\-?[0-9]+px|top|left|right|bottom)$/i;
-			die "spriteset_y is not an integer $spriteset_y" unless $spriteset_y =~ m/^(?:\-?[0-9]+px|top|left|right|bottom)$/i;
+			warn "spriteset_x is not an integer $spriteset_x" unless $spriteset_x =~ m/^(?:\-?[0-9]+px|top|left|right|bottom)$/i;
+			warn "spriteset_y is not an integer $spriteset_y" unless $spriteset_y =~ m/^(?:\-?[0-9]+px|top|left|right|bottom)$/i;
 
 			# setup shorthand values
 			my $background_size = join(' ', $background_w, $background_h);

@@ -136,6 +136,13 @@ sub layout
 	# get instance
 	my ($self) = @_;
 
+	# padding does not make any sense if the
+	# block is aligned to the opposite side
+	$self->paddingLeft = 0 if $self->alignRight;
+	$self->paddingRight = 0 if $self->alignRight;
+	$self->paddingTop = 0 if $self->alignBottom;
+	$self->paddingBottom = 0 if $self->alignBottom;
+
 	# set the values for the outer dimension
 	$self->{'width'} = $self->outerWidth;
 	$self->{'height'} = $self->outerHeight;
