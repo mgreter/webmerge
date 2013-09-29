@@ -48,9 +48,6 @@ sub spritesets
 	# create a new ocbnet spriteset css parser object
 	my $css = OCBNET::Spritesets::CSS::Parser->new($config);
 
-	# atomic filehandling interface
-	my $atomic = $config->{'atomic'};
-
 	# declare writer sub
 	my $writer = sub
 	{
@@ -99,7 +96,7 @@ sub spritesets
 	# EO sub $writer
 
 	# read stylesheet and process spritesets
-	$css->read($data, $atomic)->rehash->load;
+	$css->read($data)->rehash->load;
 	$css->optimize->distribute->finalize;
 	my $written = $css->write($writer);
 	${$data} = $css->process->render;

@@ -10,7 +10,7 @@
 package OCBNET::Spritesets::CSS::Parser;
 ####################################################################################################
 #  my $css = OCBNET::Spritesets::CSS::Parser->new($config);
-#  $css->read($data, $atomic)->rehash->load;
+#  $css->read($data)->rehash->load;
 #  $css->optimize->distribute->finalize;
 #  my $written = $css->write($writer);
 #  my $data = $css->process->render;
@@ -76,7 +76,7 @@ sub new
 sub read
 {
 
-	my ($self, $data, $atomic) = @_;
+	my ($self, $data) = @_;
 
 	# parse all blocks and end when all is parsed
 	$parse_blocks->($data, $self, qr/\A\z/);
