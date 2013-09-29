@@ -2,7 +2,8 @@
 /* Box IDs for sprites
 /*****************************************************************************/
 
-.cf .sprite
+.cf .sprite,
+.player .sprite
 {
 	/* sprite: lores url(../generated/img/lores.png) !important; */
 }
@@ -1126,7 +1127,8 @@ only screen and (        min-device-pixel-ratio: 1.05),
 only screen and (                min-resolution: 1.05dppx)
 {
 
-	.cf .sprite
+	.cf .sprite,
+	.player .sprite
 	{
 		/*
 			css-id: hires;
