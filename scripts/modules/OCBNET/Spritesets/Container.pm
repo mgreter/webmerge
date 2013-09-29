@@ -135,6 +135,14 @@ sub layout
 	# layout all children
 	$_->layout foreach (@{$self->{'children'}});
 
+	use OCBNET::Spritesets::Canvas::Layout qw(snap);
+
+	foreach my $child ($self->children)
+	{
+		snap ($child->{'width'}, $self->scaleX);
+		snap ($child->{'height'}, $self->scaleY);
+	}
+
 	# return success
 	return $self;
 

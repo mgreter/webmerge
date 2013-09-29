@@ -29,8 +29,7 @@ sub layout
 	# do nothing if empty
 	return if $self->empty;
 
-	# call layout on all children first
-	$_->layout foreach (@{$self->{'children'}});
+	$self->SUPER::layout;
 
 	# create the packer object for composition
 	my $packer = new OCBNET::Packer::2D;
@@ -39,8 +38,8 @@ sub layout
 	$packer->fit($self->{'children'});
 
 	# get the dimensions for the image and store on block
-	my $width = $self->width = $packer->{'root'}->{'width'};
-	my $height = $self->height = $packer->{'root'}->{'height'};
+	$self->width = $packer->{'root'}->{'width'};
+	$self->height = $packer->{'root'}->{'height'};
 
 	# process and update rectangles/images
 	foreach my $sprite (@{$self->{'children'}})

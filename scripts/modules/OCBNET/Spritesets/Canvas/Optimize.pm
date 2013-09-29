@@ -101,6 +101,10 @@ sub optimize
 				$sprite->paddingTop = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 			}
 
+			# add some safety margin
+			$sprite->paddingTop += 1;
+			$sprite->paddingLeft += 1;
+
 			# adjust the padding to account for scaling
 			$sprite->paddingTop *= $sprite->scaleY;
 			$sprite->paddingLeft *= $sprite->scaleX;

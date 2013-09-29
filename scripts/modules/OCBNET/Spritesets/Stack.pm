@@ -57,6 +57,8 @@ sub layout
 	# get our object
 	my ($self) = @_;
 
+	$self->SUPER::layout;
+
 	# process all sprites in this edge
 	foreach my $sprite ($self->children)
 	{
@@ -157,7 +159,7 @@ sub layout
 		}
 	}
 
-	# success
+	# call and return base method
 	return $self;
 
 }
