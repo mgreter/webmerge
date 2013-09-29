@@ -39,7 +39,7 @@ sub distribute
 	# on the edge. This threshold determines when to fit and when
 	# to put the sprite on the edge/stack area. Both padding will
 	# be counted (outerWidth - width > fit_threshold).
-	my $fit_threshold = 20;
+	my $threshold = 20;
 
 	##########################################################
 
@@ -59,11 +59,6 @@ sub distribute
 
 	my @distributers = (
 
-		# distribute one sprite into right bottom corner
-		# optimum for non enclosed sprite left/top aligned
-		# can remove all paddings and offset from left/top
-		[ $self->{'corner-rb'}, 'isRepeating||alignRight||alignBottom||isFixedX||isFixedY', 1 ],
-
 		# distribute one sprite into right top corner
 		# optimum for height enclosed sprite left/bottom aligned
 		# can remove height paddings and offset from top
@@ -74,18 +69,22 @@ sub distribute
 		# can remove width paddings and offset from left
 		[ $self->{'corner-lb'}, 'isRepeating||alignLeft||alignBottom||isFixedY', 1 ],
 
+		# distribute one sprite into right bottom corners
+		# optimum for non enclosed sprite left/top aligned
+		# can remove all paddings and offset from left/top
+		[ $self->{'corner-rb'}, 'isRepeating||alignRight||alignBottom||isFixedX||isFixedY', 1 ],
+
 		# distribute one sprite into left top corner
 		# optimum for enclosed sprite right/bottom aligned
 		# can remove paddings and offset from left/top
 		[ $self->{'corner-lt'}, 'isRepeating||alignLeft||alignTop||isFlexibleY||isFlexibleX', 1 ],
 
 		# distribute the smaller items to the packed area to save precious space on the edges
-		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX||outerWidth-width>$fit_threshold||outerHeight-height>$fit_threshold' ],
+		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX||outerWidth-width>$threshold||outerHeight-height>$threshold' ],
 
-		# distribute sprites into right/bottom edge
+		# distribute sprites into edges/stacks
 		[ $self->{'stack-r'}, 'isRepeating||alignRight||isFlexibleY' ],
 		[ $self->{'stack-b'}, 'isRepeating||alignBottom||isFlexibleX' ],
-		# distribute sprites into left/top edge
 		[ $self->{'stack-t'}, 'isRepeating||alignTop||isFlexibleY||isFlexibleX' ],
 		[ $self->{'stack-l'}, 'isRepeating||alignLeft||isFlexibleY||isFlexibleX' ],
 
@@ -148,14 +147,14 @@ sub distribute
 	##########################################################
 
 	# optimize space between repeaters
+	@{$self->{'edge-l'}->{'children'}} =
+	sort { $a->isRepeatX - $b->isRepeatX || $a->isFixedX - $b->isFixedX }
+	@{$self->{'edge-l'}->{'children'}};
+
+	# optimize space between repeaters
 	@{$self->{'edge-r'}->{'children'}} =
 	sort { $b->isRepeatX - $a->isRepeatX || $a->isFixedX - $b->isFixedX }
 	@{$self->{'edge-r'}->{'children'}};
-
-	# optimize space between repeaters
-	@{$self->{'edge-b'}->{'children'}} =
-	sort { $b->isRepeatY - $a->isRepeatY || $a->isFixedY - $b->isFixedY }
-	@{$self->{'edge-b'}->{'children'}};
 
 	# optimize space between repeaters
 	@{$self->{'edge-t'}->{'children'}} =
@@ -163,9 +162,9 @@ sub distribute
 	@{$self->{'edge-t'}->{'children'}};
 
 	# optimize space between repeaters
-	@{$self->{'edge-l'}->{'children'}} =
-	sort { $a->isRepeatX - $b->isRepeatX || $a->isFixedX - $b->isFixedX }
-	@{$self->{'edge-l'}->{'children'}};
+	@{$self->{'edge-b'}->{'children'}} =
+	sort { $b->isRepeatY - $a->isRepeatY || $a->isFixedY - $b->isFixedY }
+	@{$self->{'edge-b'}->{'children'}};
 
 	##########################################################
 
@@ -178,11 +177,12 @@ sub distribute
 	foreach my $sprite (@{$self->{'sprites'}})
 	{
 		next if $sprite->{'distributed'};
-		warn sprintf "unsupported: %s : rep(%s/%s), enc(%s/%s), pos(%s/%s)\n",
+		warn sprintf "unsupported: %s : " .
+			"enc(%s/%s), rep(%s/%s), pos(%s/%s)\n",
 			substr($sprite->{'filename'}, - 25),
-			$sprite->{'repeat-x'}, $sprite->{'repeat-y'},
-			$sprite->{'enclosed-x'}, $sprite->{'enclosed-y'},
-			$sprite->{'position-x'}, $sprite->{'position-y'};
+			$sprite->isFixedX, $sprite->isFixedY,
+			$sprite->isRepeatX, $sprite->isRepeatY,
+			$sprite->positionX, $sprite->positionY;
 		$unsupported ++;
 	}
 
