@@ -347,6 +347,25 @@ sub distribute
 
 ####################################################################################################
 
+# sprites have been distributed, so we now can
+# start to translate bottom/right positioned sprites
+# in fixed dimension boxes to top/left aligned sprites
+# ***************************************************************************************
+sub finalize
+{
+
+	# get our object
+	my ($self) = @_;
+
+	# call optimize for every spriteset in this stylesheet
+	$_->finalize foreach (values %{$self->{'spritesets'}});
+
+	# allow chaining
+	return $self;
+
+}
+# EO sub finalize
+
 # sprites have been distributed, so we now can start to
 # optimize alignments, paddings and positions of sprites
 # ***************************************************************************************

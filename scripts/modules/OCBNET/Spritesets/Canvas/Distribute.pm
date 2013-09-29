@@ -39,7 +39,7 @@ sub distribute
 	# on the edge. This threshold determines when to fit and when
 	# to put the sprite on the edge/stack area. Both padding will
 	# be counted (outerWidth - width > fit_threshold).
-	my $fit_threshold = 50;
+	my $fit_threshold = 20;
 
 	##########################################################
 

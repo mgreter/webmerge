@@ -56,9 +56,14 @@ sub spritesets
 
 	$css->load();
 
+	# setup paddings
+	$css->optimize();
+
+	# distribute into areas
 	$css->distribute();
 
-	$css->optimize();
+	# translate some boxes
+	$css->finalize();
 
 
 	# call write and pass writer sub

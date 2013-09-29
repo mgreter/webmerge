@@ -60,65 +60,38 @@ sub layout
 	# process all sprites in this edge
 	foreach my $sprite ($self->children)
 	{
-		# only left/top edge
+		# top/bottom edge/stack
 		if ($self->stackVert)
 		{
+			# sprite has px position
 			if ($sprite->alignLeft)
 			{
-				unless ($sprite->isRepeatX)
-				{
-					$sprite->paddingLeft = 0;
-				}
+				# never needs right margin
 				$sprite->paddingRight = 0;
+				# keep left margin if repeating
+				unless ($sprite->isRepeatX)
+				{ $sprite->paddingLeft = 0; }
 			}
 		}
+		# left/right edge/stack
 		else
 		{
+			# sprite has px position
 			if ($sprite->alignTop)
 			{
-				unless ($sprite->isRepeatY)
-				{
-					$sprite->paddingTop = 0;
-				}
+				# never needs bottom margin
 				$sprite->paddingBottom = 0;
+				# keep top margin if repeating
+				unless ($sprite->isRepeatY)
+				{ $sprite->paddingTop = 0; }
 			}
 		}
-	}
-
-	$self->SUPER::layout;
-
-	# process all sprites in this edge
-	foreach my $sprite ($self->children)
-	{
-
-
-		# only left/top edge
-		if (not $self->alignOpp)
-		{
-			# this is the left edge
-			if ($self->stackVert)
-			{
-				# sprite must not repeat in x
-				if (not $sprite->isRepeatX)
-				{
-					#$sprite->paddingLeft = 0;
-					#$sprite->paddingRight = 0;
-				}
-			}
-			# this is the top edge
-			else
-			{
-				# sprite must not repeat in y
-				if (not $sprite->isRepeatY)
-				{
-					#$sprite->paddingTop = 0;
-					#$sprite->paddingBottom = 0;
-				}
-			}
-		}
-		# EO if left/top
 	}
 	# EO each sprite
+
+	# call container layout
+	# calls layout on sprites
+	$self->SUPER::layout;
 
 	# declare positions
 	my ($top, $left) = (0, 0);
@@ -173,15 +146,15 @@ sub layout
 	return $self unless $self->alignOpp;
 
 	# process all sprites for alignment
-	foreach my $sprite (@{$self->{'children'}})
+	foreach my $sprite ($self->children)
 	{
-		# stack sprites vertically
+		# stacks sprites vertically
 		if ($self->stackVert)
 		{
 			# align this sprite to the oppositioning side
 			$sprite->left = $self->outerWidth - $sprite->outerWidth;
 		}
-		# or stack sprites horizontally
+		# stacks sprites horizontally
 		else
 		{
 			# align this sprite to the oppositioning side
@@ -189,7 +162,7 @@ sub layout
 		}
 	}
 
-	# call and return base method
+	# allow chaining
 	return $self;
 
 }

@@ -19,7 +19,7 @@ BEGIN { $OCBNET::Spritesets::Canvas::Optimize = "0.7.0"; }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(optimize); }
+BEGIN { our @EXPORT = qw(optimize finalize); }
 
 ####################################################################################################
 
@@ -27,19 +27,22 @@ BEGIN { our @EXPORT = qw(optimize); }
 # ******************************************************************************
 use OCBNET::Spritesets::CSS::Parser::Base qw(fromPx);
 
+####################################################################################################
+
+# get the boxes some padding according to the sprite
+# configuration (by looking at the background position)
 # ******************************************************************************
 sub optimize
 {
-
 	# get our object
 	my ($self) = shift;
 
 	# process each area in canvas
-	foreach my $area ($self->areas)
+	# foreach my $area ($self->areas)
 	{
 
 		# process each sprite from area
-		foreach my $sprite ($area->children)
+		foreach my $sprite (@{$self->{'sprites'}})
 		{
 
 			# get associated selector from current sprite
@@ -81,7 +84,6 @@ sub optimize
 			elsif ($sprite->isFixedX)
 			{
 				# problem is we cannot change position as we are not yet distributed!
-				$sprite->positionX = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 				$sprite->paddingLeft = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
 			}
 
@@ -97,18 +99,8 @@ sub optimize
 			elsif ($sprite->isFixedY)
 			{
 				# problem is we cannot change position as we are not yet distributed!
-				$sprite->positionY = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 				$sprite->paddingTop = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
 			}
-
-			# add some safety margin
-			# this case has been tested
-			$sprite->paddingTop += 1;
-			$sprite->paddingLeft += 1;
-			# add some more safety margin
-			# this case seems not be needed
-			$sprite->paddingRight += 1;
-			$sprite->paddingBottom += 1;
 
 			# adjust the padding to account for scaling
 			$sprite->paddingTop *= $sprite->scaleY;
@@ -129,7 +121,52 @@ sub optimize
 	}
 	# Eo each area
 
-	# return success
+	# make chainable
+	return $self;
+
+}
+# EO sub optimize
+
+###################################################################################################
+
+# sprites have been distributed, so we now can
+# start to translate bottom/right positioned sprites
+# in fixed dimension boxes to top/left aligned sprites
+# ******************************************************************************
+sub finalize
+{
+
+	# get our object
+	my ($self) = shift;
+
+	# process all sprites on this canvas
+	foreach my $sprite (@{$self->{'sprites'}})
+	{
+
+		# get associated selector from current sprite
+		# my $selector = $sprite->{'selector'} || next;
+
+		# is right aligned and has fixed dimension
+		# this can be translated to a left alignment
+		if ($sprite->alignRight && $sprite->isFixedX)
+		{ $sprite->positionX = $sprite->paddingLeft / $sprite->scaleX; }
+
+		# is bottom aligned and has fixed dimension
+		# this can be translated to a top alignment
+		if ($sprite->alignBottom && $sprite->isFixedY)
+		{ $sprite->positionY = $sprite->paddingTop / $sprite->scaleY; }
+
+		# add some safety margin
+		$sprite->paddingTop += $sprite->scaleY;
+		$sprite->paddingLeft += $sprite->scaleX;
+		# add some more safety margin
+		$sprite->paddingRight += $sprite->scaleX;
+		$sprite->paddingBottom += $sprite->scaleY;
+
+	}
+	# EO each sprite
+
+	# make chainable
 	return $self;
 
 }
