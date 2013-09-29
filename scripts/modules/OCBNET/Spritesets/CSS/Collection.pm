@@ -76,7 +76,7 @@ sub set
 	# hotfix to at least be able to read
 	# important rules too, altough we will
 	# not consider their importance really
-	$imp = ($value =~ s/!important\s*$//i) || $imp;
+	$imp = ($value =~ s/\s*!important\s*$//i) || $imp;
 
 	# test if this a shorthand
 	if (exists $shorthand{$name})
