@@ -7,14 +7,6 @@
 ####################################################################################################
 # more ideas:
 # ------------------------------------------------
-# move all selectors for sprite images to
-# one place to reference image only once
-# this may work well with inline data urls?
-# where to place it to not break inheritance?
-# -> use css inheritance to place it into a
-# -> common selector, so define the spriteset
-# -> in a common block to know where to place it
-# ------------------------------------------------
 # support for multiple background images (css3)
 # ------------------------------------------------
 ####################################################################################################

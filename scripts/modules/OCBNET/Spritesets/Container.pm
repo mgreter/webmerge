@@ -16,6 +16,21 @@ use warnings;
 use base 'OCBNET::Spritesets::Block';
 
 ####################################################################################################
+
+# try to optimize slow functions
+# with memoize oly if available
+# eval
+# {
+# 	# try to load
+# 	use Memoize qw(memoize);
+# 	# memoize functions
+# 	memoize('gcf', LIST_CACHE => 'MERGE');
+# 	memoize('lcm', LIST_CACHE => 'MERGE');
+# 	memoize('multigcf', LIST_CACHE => 'MERGE');
+# 	memoize('multilcm', LIST_CACHE => 'MERGE');
+# };
+
+####################################################################################################
 # stolen from http://www.perlmonks.org/?node_id=56906
 ####################################################################################################
 
@@ -159,22 +174,26 @@ sub scaleX
 {
 	my ($self) = @_;
 	my @factors = (1);
+	if (defined $self->{'scale-x'})
+	{ return $self->{'scale-x'}; }
 	foreach my $sprite ($self->children)
 	{ push(@factors, $sprite->scaleX); }
 	my $rv = multilcm(@factors);
 	die $rv unless $rv =~ m/^\d+$/;
-	return $rv;
+	return $self->{'scale-x'} = $rv;
 }
 
 sub scaleY
 {
 	my ($self) = @_;
 	my @factors = (1);
+	if (defined $self->{'scale-y'})
+	{ return $self->{'scale-y'}; }
 	foreach my $sprite ($self->children)
 	{ push(@factors, $sprite->scaleY); }
 	my $rv = multilcm(@factors);
 	die $rv unless $rv =~ m/^\d+$/;
-	return $rv;
+	return $self->{'scale-y'} = $rv;
 }
 
 ####################################################################################################

@@ -15,7 +15,6 @@ Features
 To Do
 =====
 - Implement @license header handling
-- Finalize API for spritesets generator
 - Maybe add support for ImageMagick too
 - Make writes/reads on same atomic file transparent
 
