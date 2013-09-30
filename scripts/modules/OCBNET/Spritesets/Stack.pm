@@ -68,9 +68,13 @@ sub layout
 			{
 				# never needs right margin
 				$sprite->paddingRight = 0;
-				# keep left margin if repeating
-				unless ($sprite->isRepeatX)
-				{ $sprite->paddingLeft = 0; }
+				# only optimize top edge/stack
+				unless ($self->alignOpp)
+				{
+					# keep left margin if repeating
+					unless ($sprite->isRepeatX)
+					{ $sprite->paddingLeft = 0; }
+				}
 			}
 		}
 		# left/right edge/stack
@@ -81,9 +85,13 @@ sub layout
 			{
 				# never needs bottom margin
 				$sprite->paddingBottom = 0;
-				# keep top margin if repeating
-				unless ($sprite->isRepeatY)
-				{ $sprite->paddingTop = 0; }
+				# only optimize top edge/stack
+				unless ($self->alignOpp)
+				{
+					# keep top margin if repeating
+					unless ($sprite->isRepeatY)
+					{ $sprite->paddingTop = 0; }
+				}
 			}
 		}
 	}
