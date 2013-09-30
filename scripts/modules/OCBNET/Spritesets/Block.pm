@@ -175,12 +175,12 @@ sub debug
 
 	# debug position
 	return sprintf(
-		'at %s/%s (%sx%s) -> [%s/%s|%s/%s@%s/%s] => %s/%s',
+		'POS: %s/%s (%sx%s) [%s,%s,%s,%s@%s/%s] => %s/%s',
 		$self->left, $self->top,
 		$self->width, $self->height,
-		$self->paddingLeft, $self->paddingTop,
-		$self->paddingRight, $self->paddingBottom,
-		$self->{'scale-x'} || 1, $self->{'scale-y'} || 1,
+		$self->paddingTop, $self->paddingRight,
+		$self->paddingBottom, $self->paddingLeft,
+		$self->scaleX, $self->scaleY,
 		$offset->{'x'}, $offset->{'y'},
 	);
 
