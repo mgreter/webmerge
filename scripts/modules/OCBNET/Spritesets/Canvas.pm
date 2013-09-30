@@ -224,10 +224,10 @@ sub draw
 sub debug
 {
 	my ($self) = @_;
-	print "#" x 60, "\n";
+	print "#" x 78, "\n";
 	printf "DEBUG SPRITESET <%s> (%sx%s)\n",
 		$self->{'id'}, $self->width, $self->height;
-	print "#" x 60, "\n";
+	print "#" x 78, "\n";
 	foreach my $area ($self->areas)
 	{
 		print "AREA: ", $area->{'name'}, " ", $area->debug, "\n";
@@ -236,7 +236,7 @@ sub debug
 			print "  SPRITE: ", $sprite->debug, "\n";
 		}
 	}
-	print "#" x 60, "\n";
+	print "#" x 75, "\n";
 
 }
 

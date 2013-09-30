@@ -176,20 +176,24 @@ sub distribute
 	# be handled - inform the user about these problems
 	foreach my $sprite (@{$self->{'sprites'}})
 	{
+		# distributed are the ones we like
 		next if $sprite->{'distributed'};
-		print "#" x 75, "\n" unless $unsupported;
-		print "WARNING: BAD SPRITES\n" unless $unsupported;
-		print "#" x 75, "\n" unless $unsupported;
-		warn sprintf "url(%s) enc(%s/%s), rep(%s/%s), pos(%s/%s)\n",
+		# only print header warning once
+		unless ($unsupported)
+		{
+			warn "\nWARNING: Some sprites are configured to be included within\n" .
+			"a spriteset, but are not possible to distribute to any area, due\n" .
+			"to invalid styles (like repeating or beeing flexible in both axes)!\n\n";
+		}
+		# print each unsupported sprite to the console
+		warn sprintf "  url(%s) enc(%s/%s), rep(%s/%s), pos(%s/%s)\n",
 			substr($sprite->{'filename'}, - 25),
 			$sprite->isFixedX, $sprite->isFixedY,
 			$sprite->isRepeatX, $sprite->isRepeatY,
 			$sprite->positionX, $sprite->positionY;
+		# increase counter
 		$unsupported ++;
 	}
-
-	# print bottom seperator
-	print "#" x 75, "\n" if $unsupported;
 
 	# wait a second make user more
 	# aware that some problem exists
