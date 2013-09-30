@@ -48,6 +48,7 @@ sub toUrl { sprintf "url('%s')", @_; }
 ####################################################################################################
 
 # constructor
+# ******************************************************************************
 sub new
 {
 
@@ -56,11 +57,18 @@ sub new
 
 	# init object
 	my $self = {
+		# store id blocks
 		'ids' => {},
+		# the header part
 		'head' => '',
+		# all subparts
 		'blocks' => [],
+		# the footer part
 		'footer' => '',
+		# spritesets by name
 		'spritesets' => {},
+		# config from outside
+		# only debug implemented
 		'config' => $config || {}
 	};
 
@@ -73,6 +81,9 @@ sub new
 
 ####################################################################################################
 
+# read some css block data
+# parse out selector blocks
+# ******************************************************************************
 sub read
 {
 
@@ -90,6 +101,7 @@ sub read
 	for (my $i = 0; $i < scalar(@blocks); $i ++)
 	{ push @blocks, @{$blocks[$i]->blocks}; }
 
+	# make blocks unique
 	@blocks = uniq @blocks;
 
 	# reset block type arrays
@@ -100,7 +112,7 @@ sub read
 	foreach my $block (@blocks)
 	{
 		# check if the head only consists of selector rules, comments and whitespace
-		if ($block->head =~ m/^\s*(?:$re_css_selector_rules|$re_comment|\s+)+$/s)
+		if ($block->head =~ m/(?:\A|;)\s*(?:$re_css_selector_rules|$re_comment|\s+)+$/s)
 		{ $block->{'selector'} = 1; push @{$self->{'selectors'}}, $block }
 		else { $block->{'selector'} = 0; push @{$self->{'others'}}, $block }
 	}
@@ -137,9 +149,6 @@ sub read
 
 			# create a new canvas object to hold all sprites
 			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
-
-			# print out a debug message
-			# print "found spriteset <$id>\n";
 
 			# add this canvas to global hash object
 			$self->{'spritesets'}->{$id} = $canvas;
