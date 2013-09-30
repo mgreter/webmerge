@@ -83,19 +83,19 @@ sub distribute
 		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX||outerWidth-width>$threshold||outerHeight-height>$threshold' ],
 
 		# distribute sprites into edges/stacks
-		[ $self->{'stack-r'}, 'isRepeating||alignRight||isFlexibleY' ],
-		[ $self->{'stack-b'}, 'isRepeating||alignBottom||isFlexibleX' ],
-		[ $self->{'stack-t'}, 'isRepeating||alignTop||isFlexibleY||isFlexibleX' ],
 		[ $self->{'stack-l'}, 'isRepeating||alignLeft||isFlexibleY||isFlexibleX' ],
+		[ $self->{'stack-t'}, 'isRepeating||alignTop||isFlexibleY||isFlexibleX' ],
+		[ $self->{'stack-b'}, 'isRepeating||alignBottom||isFlexibleX' ],
+		[ $self->{'stack-r'}, 'isRepeating||alignRight||isFlexibleY' ],
 
 		# distribute sprites into the packed center
 		[ $self->{'middle'}, 'isFlexibleY||isFlexibleX' ],
 
 		# distribute sprites into edges
-		[ $self->{'edge-b'}, 'alignTop||isFlexibleX||isRepeatingBoth' ],
-		[ $self->{'edge-r'}, 'alignLeft||isFlexibleY||isRepeatingBoth' ],
-		[ $self->{'edge-l'}, 'alignRight||isFlexibleY||isRepeatingBoth' ],
 		[ $self->{'edge-t'}, 'alignBottom||isFlexibleX||isRepeatingBoth' ],
+		[ $self->{'edge-l'}, 'alignRight||isFlexibleY||isRepeatingBoth' ],
+		[ $self->{'edge-r'}, 'alignLeft||isFlexibleY||isRepeatingBoth' ],
+		[ $self->{'edge-b'}, 'alignTop||isFlexibleX||isRepeatingBoth' ],
 
 	);
 
