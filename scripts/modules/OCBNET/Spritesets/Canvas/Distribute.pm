@@ -109,7 +109,7 @@ sub distribute
 		my ($area, $excludes, $max) = @{$distributer};
 
 		# replace certain keywords to be an actual object call
-		$excludes =~ s/\b(?=is|not|align|width|height|outer)/\$_[0]->/g;
+		$excludes =~ s/\b(?=is|not|align|width|height|outer|padding)/\$_[0]->/g;
 
 		# eval the condition into a pre-compiled subroutine to call
 		$excludes = eval sprintf 'sub { return (%s); };', $excludes;

@@ -57,7 +57,7 @@ sub layout
 	# get our object
 	my ($self) = @_;
 
-	# process all sprites in this edge
+	# process all sprites in this stack
 	foreach my $sprite ($self->children)
 	{
 		# top/bottom edge/stack

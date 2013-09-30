@@ -71,20 +71,28 @@ sub optimize
 			my $padding_right = fromPx($selector->style('padding-right') || 0) || 0;
 			my $padding_bottom = fromPx($selector->style('padding-bottom') || 0) || 0;
 
+			# adjust all three values for padding
+			foreach my $key ('min', 'max', 'val')
+			{
+				# add the padding to get the actual outer dimensions
+				$dim{'width'}->{$key} += $padding_left + $padding_right;
+				$dim{'height'}->{$key} += $padding_top + $padding_bottom;
+			}
+
 			# sprite is left aligned
 			if ($sprite->alignLeft)
 			{
 				# add some padding to offset the actual sprite
 				$sprite->paddingLeft = $sprite->positionX;
 				# add more padding to the right to make sure we will fill out the whole available width (if width is not set, result will be negative)
-				$sprite->paddingRight = $dim{'width'}->{'val'} - $sprite->positionX - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+				$sprite->paddingRight = $dim{'width'}->{'val'} - $sprite->positionX - $sprite->width / $sprite->scaleX if $dim{'width'}->{'val'};
 			}
 			# is right but has fixed dimension
 			# we can translate this to left align
 			elsif ($sprite->isFixedX)
 			{
 				# problem is we cannot change position as we are not yet distributed!
-				$sprite->paddingLeft = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX + $padding_left + $padding_right;
+				$sprite->paddingLeft = $dim{'width'}->{'val'} - $sprite->width / $sprite->scaleX;
 			}
 
 			# create padding if it's offset from top
@@ -93,13 +101,13 @@ sub optimize
 				# add some padding to offset the actual sprite
 				$sprite->paddingTop = $sprite->positionY;
 				# add more padding to the bottom to make sure we will fill out the whole available height (if height is not set, result will be negative)
-				$sprite->paddingBottom = $dim{'height'}->{'val'} - $sprite->positionY - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+				$sprite->paddingBottom = $dim{'height'}->{'val'} - $sprite->positionY - $sprite->height / $sprite->scaleY if $dim{'height'}->{'val'};
 			}
 			# is right but has fixed dimension
 			elsif ($sprite->isFixedY)
 			{
 				# problem is we cannot change position as we are not yet distributed!
-				$sprite->paddingTop = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY + $padding_top + $padding_bottom;
+				$sprite->paddingTop = $dim{'height'}->{'val'} - $sprite->height / $sprite->scaleY;
 			}
 
 			# adjust the padding to account for scaling
