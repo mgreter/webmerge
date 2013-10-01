@@ -102,7 +102,7 @@ my $config =
 	# optimize stuff
 	'optimize' => 0,
 	# optimize level
-	'level' => 1,
+	'level' => 2,
 	# merge configured stuff
 	'merge' => 1,
 	# create head includes
