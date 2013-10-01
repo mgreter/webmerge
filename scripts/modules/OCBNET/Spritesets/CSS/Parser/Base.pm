@@ -20,7 +20,7 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 BEGIN { our @EXPORT = qw($re_apo $re_quot $re_css_name $re_number $re_percent $re_byte); }
 
 # define our functions than can be exported
-BEGIN { our @EXPORT_OK = qw($re_comment $re_number_neg $re_number_pos fromPx fromUrl fromPosition); }
+BEGIN { our @EXPORT_OK = qw($re_comment uncomment fromPx fromUrl fromPosition); }
 
 ####################################################################################################
 # base regular expressions
@@ -42,8 +42,8 @@ our $re_css_name = qr/[_a-zA-Z][_a-zA-Z0-9\-]*/;
 # match (floating point) numbers
 #**************************************************************************************************
 our $re_number = qr/[\-\+]?[0-9]*\.?[0-9]+/s;
-our $re_number_neg = qr/\-[0-9]*\.?[0-9]+/s;
-our $re_number_pos = qr/\+?[0-9]*\.?[0-9]+/s;
+# our $re_number_neg = qr/\-[0-9]*\.?[0-9]+/s;
+# our $re_number_pos = qr/\+?[0-9]*\.?[0-9]+/s;
 
 # match a percent value
 #**************************************************************************************************
@@ -56,6 +56,17 @@ our $re_byte = qr/(?:0|[1-9]\d?|1\d{2}|2(?:[0-4]\d|5[0-5]))/s;
 ####################################################################################################
 # some helper functions
 ####################################################################################################
+
+# parse dimension from pixel
+#**************************************************************************************************
+sub uncomment
+{
+	# remove comment from actual value
+	$_[0] =~ s/$re_comment//gm;
+	# return the given value
+	return $_[0];
+}
+# EO sub uncomment
 
 # parse dimension from pixel
 #**************************************************************************************************

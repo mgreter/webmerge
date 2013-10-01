@@ -69,13 +69,16 @@ sub spritesets
 				# this seems that it can happen with spritesets
 				# the differences are very subtile, but no idea why
 				# so far we haven't had an issue with it in a long time
-				die "writing same file with different content: $file\n";
+				warn "\nERROR: Writing to same file more than once (different content):\n";
+				warn substr($file, - 65), "\n";
+				die "PLEASE REVIEW YOUR CONFIGURATION!\n";
 			}
 			else
 			{
 				# this is really just a warning, nothing more
 				# remove this once we add a proper implementation
-				warn "writing same file more than once: $file\n";
+				warn "\nWARNING: Writing to the same file more than once (same content):\n";
+				warn substr($file, - 65), "\n";
 			}
 		}
 		# first write on file
@@ -100,6 +103,9 @@ sub spritesets
 	$css->optimize->distribute->finalize;
 	my $written = $css->write($writer);
 	${$data} = $css->process->render;
+
+	# print debug messages if wished
+	$css->debug if $config->{'debug'};
 
 	# optimize spriteset images
 	if ($config->{'optimize'})

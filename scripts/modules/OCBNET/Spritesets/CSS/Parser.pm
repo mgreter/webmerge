@@ -31,12 +31,14 @@ BEGIN { use base 'OCBNET::Spritesets::CSS::Block'; }
 
 ####################################################################################################
 
-# load dependencies and import functions
-use OCBNET::Spritesets::CSS::Collection;
-use OCBNET::Spritesets::CSS::Parser::CSS;
+# load base classes for later instantiation
+require OCBNET::Spritesets::CSS::Collection;
+
+# load dependencies and import globals and functions
+use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_blocks);
 use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_definition);
-use OCBNET::Spritesets::CSS::Parser::Base;
-use OCBNET::Spritesets::CSS::Parser::Base qw($re_comment fromPx fromUrl fromPosition);
+use OCBNET::Spritesets::CSS::Parser::Base qw($re_comment uncomment);
+use OCBNET::Spritesets::CSS::Parser::Base qw(fromPx fromUrl fromPosition);
 use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_css_selector_rules);
 
 ####################################################################################################
@@ -78,7 +80,6 @@ sub new
 }
 # EO constructor
 
-
 ####################################################################################################
 
 # read some css block data
@@ -87,6 +88,7 @@ sub new
 sub read
 {
 
+	# get text as data ref
 	my ($self, $data) = @_;
 
 	# parse all blocks and end when all is parsed
@@ -96,10 +98,10 @@ sub read
 	die "Fatal: not everything parsed" if ${$data} ne '';
 
 	# put all blocks in a flat array
-	my @blocks = ($self, @{$self->blocks});
+	my @blocks = ($self, $self->blocks);
 	# this will process all and each sub block
 	for (my $i = 0; $i < scalar(@blocks); $i ++)
-	{ push @blocks, @{$blocks[$i]->blocks}; }
+	{ push @blocks, $blocks[$i]->blocks; }
 
 	# make blocks unique
 	@blocks = uniq @blocks;
@@ -112,7 +114,7 @@ sub read
 	foreach my $block (@blocks)
 	{
 		# check if the head only consists of selector rules, comments and whitespace
-		if ($block->head =~ m/(?:\A|;)\s*(?:$re_css_selector_rules|$re_comment|\s+)+$/s)
+		if (uncomment($block->head) =~ m/(?:\A|;)\s*(?:$re_css_selector_rules|\s+)+$/s)
 		{ $block->{'selector'} = 1; push @{$self->{'selectors'}}, $block }
 		else { $block->{'selector'} = 0; push @{$self->{'others'}}, $block }
 	}
@@ -150,8 +152,8 @@ sub read
 			# create a new canvas object to hold all sprites
 			my $canvas = new OCBNET::Spritesets::Canvas(undef, $options);
 
-			# add this canvas to global hash object
-			$self->{'spritesets'}->{$id} = $canvas;
+			# add canvas to global hash object
+			$self->spriteset($id) = $canvas;
 
 			# associate canvas with block
 			$block->{'canvas'} = $canvas;
@@ -186,6 +188,7 @@ sub read
 	return $self;
 
 }
+# EO sub read
 
 ####################################################################################################
 
@@ -222,20 +225,14 @@ sub rehash
 	foreach my $selector (@{$self->{'selectors'}})
 	{
 		if (! $selector->canvas && $selector->option('css-ref'))
-		{
-			# print "search spriteset ",$selector->option('css-ref'), "\n";
-			$selector->{'canvas'} = $self->{'spritesets'}->{$selector->option('css-ref')};
-		}
+		{ $selector->{'canvas'} = $self->spriteset($selector->option('css-ref')); }
 	}
-
-# die $self->{'spritesets'}->{$self->option('css-ref')} if $self->option('css-ref');
-#	if (my $id = $self->option('css-ref'))
-#	{ return $self->{'spritesets'}->{$id}; }
 
 	# allow chaining
 	return $self;
 
 }
+# EO sub rehash
 
 ####################################################################################################
 
@@ -308,8 +305,8 @@ sub optimize
 	# get our object
 	my ($self) = @_;
 
-	# call optimize for every spriteset in this stylesheet
-	$_->optimize foreach (values %{$self->{'spritesets'}});
+	# call optimize for every spriteset
+	$_->optimize foreach $self->spritesets;
 
 	# allow chaining
 	return $self;
@@ -319,7 +316,7 @@ sub optimize
 
 ####################################################################################################
 
-# sprites have been loaded, so we now can now to
+# sprites have been loaded, so we now can now
 # distribute all sprites to their appropriate area
 # ***************************************************************************************
 sub distribute
@@ -328,14 +325,14 @@ sub distribute
 	# get our object
 	my ($self) = @_;
 
-	# call distribute for every spriteset in this stylesheet
-	$_->distribute foreach (values %{$self->{'spritesets'}});
+	# call distribute for every spriteset
+	$_->distribute foreach $self->spritesets;
 
 	# allow chaining
 	return $self;
 
 }
-# EO sub optimize
+# EO sub distribute
 
 ####################################################################################################
 
@@ -349,8 +346,8 @@ sub finalize
 	# get our object
 	my ($self) = @_;
 
-	# call optimize for every spriteset in this stylesheet
-	$_->finalize foreach (values %{$self->{'spritesets'}});
+	# call finalize for every spriteset
+	$_->finalize foreach $self->spritesets;
 
 	# allow chaining
 	return $self;
@@ -360,49 +357,83 @@ sub finalize
 
 ####################################################################################################
 
-sub write
+# just print out some debug messages
+# ***************************************************************************************
+sub debug
 {
 
-	my %written;
+	# get our object
+	my ($self) = @_;
+
+	# call debug for every spriteset
+	$_->debug foreach $self->spritesets;
+
+	# allow chaining
+	return $self;
+
+}
+# EO sub debug
+
+####################################################################################################
+
+# write out all spritesets within stylesheet
+# ***************************************************************************************
+sub write
+{
 
 	# get passed arguments
 	my ($self, $writer) = @_;
 
-	foreach my $name (keys %{$self->{'spritesets'}})
+	# status variable
+	# info about all writes which is
+	# used to optimize files afterwards
+	my %written;
+
+	# write all registered spritesets
+	foreach my $canvas ($self->spritesets)
 	{
 
-		my $canvas = $self->{'spritesets'}->{$name};
+		# get name of the canvas
+		my $id = $canvas->{'id'};
 
+		# get the css options for canvas
+		# they are gathered from block comments
 		my $options = $canvas->{'options'};
 
-		die "no sprite image defined for <$name>" unless $options->defined('sprite-image');
-
+		# parse sprite image option and add to options for later use
 		$options->set('url', fromUrl($options->get('sprite-image')));
-		$options->set('sprite-url', toUrl($options->get('url')) );
 
-		my $image = $canvas->layout->draw;
+		# assertion that we have gotten some usefull url to store the image
+		die "no sprite image defined for <$id>" unless $options->get('url');
 
-		if ($image)
+		# draw image and check for success
+		if (my $image = $canvas->layout->draw)
 		{
-			my $url = $options->get('sprite-url');
+			# set the output format
 			$image->Set(magick => 'png');
+			# cal image to binary object
 			my $blob = $image->ImageToBlob();
-			my $file = fromUrl($url);
+			# get the filename to store image
+			my $file = $options->get('url');
+			# write through given writer function
 			$writer->($file, $blob, \%written);
-
 		}
+		# EO if successfull drawn
 
 	}
+	# EO each spriteset
 
-	foreach my $set (keys %{$self->{'spritesets'}})
-	{ $self->{'spritesets'}->{$set}->debug(); }
-
+	# return status variable
 	return \%written;
 
 }
+# EO sub write
 
 ####################################################################################################
 
+# process the css and prepare for write
+# this mangles the original css for rendering
+#**************************************************************************************************
 sub process
 {
 
@@ -413,66 +444,49 @@ sub process
 	foreach my $selector (@{$self->{'selectors'}})
 	{
 
-		# additional declarations
-		my $declarations = [];
+		# new styles
+		my %styles;
 
 		# selector has a canvas, this means the spriteset
 		# has been declares within this block, so render it
+		# check this directly and not with the object method
+		# this way we will really only check the local block
 		if ($selector->{'canvas'})
 		{
 
+			# get canvas directly from selector block
+			# this means that the spriteset was defined
+			# inline and not in referenced selector block
 			my $canvas = $selector->{'canvas'};
 
-			# get the options for this spriteset
-			my $spriteset = $canvas->{'options'};
+			# get the url of the spriteset image
+			my $url = $canvas->{'options'}->get('url');
 
-			# get the url of the output image
-			my $url = $spriteset->get('url');
-			$url = fromUrl($selector->option('sprite-image')) unless $url;
-
-			my $imp = $selector->option('sprite-importance') || '';
-
-die "no url" unless $url;
-
-			my $background_image = toUrl($url);
-			my $background_repeat = 'no-repeat';
-
-			# parse body into declarations (render will use these later)
-			$selector->{'declarations'} = $parse_declarations->(\$selector->body) unless $selector->{'declarations'};
-
-			# remove all background declarations now
-			@{$selector->{'declarations'}} = grep {
-				not $_->[2] =~ m/^\s*background(?:\-[a-z0-9])*/is
-			} @{$selector->{'declarations'}};
+			# parse css body
+			$selector->parse();
 
 			# push new declarations
-			push(@{$declarations},
-				[ 'background-image', ': ' . $background_image . $imp . ';' ],
-				[ 'background-repeat', ': ' . $background_repeat . $imp . ';' ],
-			);
+			$styles{'background-image'} = toUrl($url);
+			$styles{'background-repeat'} = 'no-repeat';
+
+			# remove all background styles from selector
+			$selector->clean(qr/background(?:\-[a-z0-9])*/);
 
 		};
+		# EO each selector
 
 		# check if this selector is configured for a sprite
-		if (defined $selector->{'sprite'})
+		if ($selector->{'sprite'})
 		{
 
-			# get the id for the sprite set to be in
-			my $id = $selector->canvas->{'id'};
-			die "no id for sprite" unless $id;
-
-			# get the spriteset object for positions
-			my $canvas = $self->{'spritesets'}->{$id};
-
-			# get the options for this spriteset
-			my $spriteset = $canvas->{'options'};
-
-			# get the url of the output image
-			my $url = $spriteset->get('url');
-			$url = fromUrl($canvas->{'options'}->get('sprite-image'));
-die $url unless $url;
 			# get the sprite for selector
 			my $sprite = $selector->{'sprite'};
+
+			# spriteset canvas of block
+			my $canvas = $selector->canvas;
+
+			# get the url of the spriteset image
+			my $url = $canvas->{'options'}->get('url');
 
 			# get the sprite position within set
 			my $offset = $sprite->offset;
@@ -493,33 +507,17 @@ die $url unless $url;
 			die "no spriteset x" unless defined $spriteset_x;
 			die "no spriteset y" unless defined $spriteset_y;
 
-			# align relative to the top
-			if ($sprite->alignTop)
-			{
-				$spriteset_y = toPx($sprite->positionY - ($offset_y + $sprite->{'padding-top'}) / $sprite->scaleY);
-			}
-
-			# align relative to the left
-			if ($sprite->alignLeft)
-			{
-				$spriteset_x = toPx($sprite->positionX - ($offset_x + $sprite->{'padding-left'}) / $sprite->scaleX);
-			}
-
 			# calculate the axes for background size
 			my $background_w = toPx($canvas->width / $sprite->scaleX);
 			my $background_h = toPx($canvas->height / $sprite->scaleY);
 
-			# setup longhand values
-			my $background_image = toUrl($url);
-			my $background_repeat = 'no-repeat';
+			# align relative to the top and relative to the left
+			$spriteset_y = toPx($sprite->positionY - ($offset_y + $sprite->paddingTop) / $sprite->scaleY) if $sprite->alignTop;
+			$spriteset_x = toPx($sprite->positionX - ($offset_x + $sprite->paddingLeft) / $sprite->scaleX) if $sprite->alignLeft;
 
 			# assertion that the actual background position is always a full integer
 			warn "spriteset_x is not an integer $spriteset_x" unless $spriteset_x =~ m/^(?:\-?[0-9]+px|top|left|right|bottom)$/i;
 			warn "spriteset_y is not an integer $spriteset_y" unless $spriteset_y =~ m/^(?:\-?[0-9]+px|top|left|right|bottom)$/i;
-
-			# setup shorthand values
-			my $background_size = join(' ', $background_w, $background_h);
-			my $background_position = join(' ', $spriteset_x, $spriteset_y);
 
 			# check if sprite was distributed
 			# if it has no parent it means the
@@ -530,8 +528,8 @@ die $url unless $url;
 				if ($canvas->{'debug'} || $sprite->{'debug'})
 				{
 					# make border dark red and background lightly red
-					push(@{$declarations}, [ 'border-color', ': rgb(192, 128, 128) !important;' ]);
-					push(@{$declarations}, [ 'background-color', ': rgba(255, 0, 0, 0.125) !important;' ]);
+					$styles{'border-color'} = 'rgb(192, 128, 128) !important';
+					$styles{'background-color'} = 'rgba(255, 0, 0, 0.125) !important';
 				}
 			}
 
@@ -539,80 +537,75 @@ die $url unless $url;
 			else
 			{
 
-				# parse body into declarations (render will use these later)
-				$selector->{'declarations'} = $parse_declarations->(\$selector->body) unless $selector->{'declarations'};
+				# parse css body
+				$selector->parse;
 
-				# remove all background declarations now
-				@{$selector->{'declarations'}} = grep {
-					not $_->[2] =~ m/^\s*background(?:\-[a-z0-9])*/is
-				} @{$selector->{'declarations'}};
+				# add shorthand styles for sprite sizing and position
+				$styles{'background-size'} = join(' ', $background_w, $background_h);
+				$styles{'background-position'} = join(' ', $spriteset_x, $spriteset_y);
 
-				# push new declarations
-				push(@{$declarations},
-					[ 'background-size', ': ' . $background_size . ';' ],
-					[ 'background-position', ': ' . $background_position . ';' ]
-				);
+				# add repeating if sprite has it configured
+				if ($sprite->isRepeatX && $sprite->isFlexibleX)
+				{ $styles{'background-repeat'} = 'repeat-x'; }
+				if ($sprite->isRepeatY && $sprite->isFlexibleY)
+				{ $styles{'background-repeat'} = 'repeat-y'; }
 
-				# push new declarations
-				push(@{$declarations},
-					[ 'background-image', ': ' . $background_image . ';' ],
-					[ 'background-repeat', ': ' . $background_repeat . ';' ],
-				) unless $selector->canvas;
-
-				# push new declarations
-				push(@{$declarations},
-					[ 'background-repeat', ': ' . 'repeat-x' . ';' ],
-				) if $sprite->isRepeatX && $sprite->isFlexibleX;
-				# push new declarations
-				push(@{$declarations},
-					[ 'background-repeat', ': ' . 'repeat-y' . ';' ],
-				) if $sprite->isRepeatY && $sprite->isFlexibleY;
+				# remove all background styles from selector
+				$selector->clean(qr/background(?:\-[a-z0-9])*/);
 
 			}
 
 		}
+		# EO if has sprite
 
-		################################
-		################################
-		################################
-
-		next unless scalar @{$declarations};
-
-		# render the selector bodies
-		my $body = $selector->body;
-
-		# find the first indenting to reuse it
-		my $indent = $body =~ m/^([ 	]*)\S/m ? $1 : '	';
-
-		# get the traling whitespace on last line
-		my $footer = $body =~ s/([ 	]*)$// ? $1 : '';
-
-		# add some debugger statements into css
-		$selector->{'footer'} .= "\n" . $indent . ";/* added by webmerge */\n";
-
-		# process all new declaration for block
-		foreach my $declaration (@{$declarations})
+		# do we have new styles
+		if (scalar %styles)
 		{
+
+			# render the selector bodies
+			my $body = $selector->body;
+
+			# find the first indenting to reuse it
+			my $indent = $body =~ m/^([ 	]*)\S/m ? $1 : '	';
+
+			# get the traling whitespace on last line
+			my $footer = $body =~ s/([ 	]*)$// ? $1 : '';
+
+			# add some debugger statements into css
+			$selector->{'footer'} .= "\n" . $indent . ";/* added by webmerge */\n";
+
 			# add these declarations to the footer to be included within block
-			$selector->{'footer'} .= sprintf "%s%s%s\n", $indent, @{$declaration};
+			$selector->{'footer'} .= sprintf "%s%s: %s;\n", $indent, $_, $styles{$_} foreach keys %styles;
+
+			# add some debugger statements into css
+			$selector->{'footer'} .= $indent . "/* added by webmerge */\n";
+
+			# append traling whitespace again
+			$selector->{'footer'} .= $footer;
+
 		}
-
-		# add some debugger statements into css
-		$selector->{'footer'} .= $indent . "/* added by webmerge */\n";
-
-		# append traling whitespace again
-		$selector->{'footer'} .= $footer;
-
-		################################
-		################################
-		################################
+		# EO if has styles
 
 	}
+	# EO each selector
 
 	# make chainable
 	return $self;
 
 }
+# EO sub process
+
+####################################################################################################
+# getter functions for this object
+####################################################################################################
+
+# get the spriteset by the passed key/name
+# ******************************************************************************
+sub spriteset : lvalue { $_[0]->{'spritesets'}->{$_[1]}; }
+
+# get list of all spriteset objects (actualy canvas)
+# ******************************************************************************
+sub spritesets { return values %{$_[0]->{'spritesets'}}; }
 
 ####################################################################################################
 ####################################################################################################

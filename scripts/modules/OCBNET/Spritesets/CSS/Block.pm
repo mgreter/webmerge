@@ -19,6 +19,52 @@ use warnings;
 # store styles and options in collections
 use OCBNET::Spritesets::CSS::Collection;
 
+# load functions to parse block body styles
+use OCBNET::Spritesets::CSS::Parser::CSS;
+
+####################################################################################################
+
+# parse block body styles
+# do this if you want to mangle the css
+# render will use the parsed declarations
+# but only if parse was called once, so we can decide
+# which blocks we want to touch and which stay untouched
+#**************************************************************************************************
+sub parse
+{
+
+	# get selector block
+	my ($selector) = @_;
+
+	# blocker to not parse more than once
+	return if $selector->{'declarations'};
+
+	# parse declarations from the block body text (only real styles)
+	$selector->{'declarations'} = $parse_declarations->(\$selector->body);
+
+}
+
+# remove certain parse styles
+#**************************************************************************************************
+sub clean
+{
+
+	# get selector and regex
+	# remove styles found by regex
+	my ($selector, $regexp) = @_;
+
+	# define default expression to clean all
+	$regexp = qr// unless defined $regexp;
+
+	# remove all background declarations now
+	@{$selector->{'declarations'}} = grep {
+		not $_->[2] =~ m/^\s*$regexp/is
+	} @{$selector->{'declarations'}};
+
+}
+# EO sub clean
+
+
 ####################################################################################################
 
 # constructor
@@ -76,9 +122,9 @@ sub new
 sub head { $_[0]->{'head'} }
 sub footer { $_[0]->{'footer'} }
 
-# return the sub-blocks (array ref)
+# return the sub-blocks list
 #**************************************************************************************************
-sub blocks { $_[0]->{'blocks'} }
+sub blocks { @{$_[0]->{'blocks'}} }
 
 # return the parent block object
 #**************************************************************************************************
@@ -105,7 +151,7 @@ sub render
 	my $css = $block->head;
 
 	# check if we have any sub-blocks
-	if (scalar(@{$block->blocks}))
+	if (scalar($block->blocks))
 	{
 
 		# create a new scope if we are a child
@@ -158,7 +204,7 @@ sub body
 	else
 	{
 		# render all sub-blocks to the css
-		$css .= $_->render foreach @{$block->blocks};
+		$css .= $_->render foreach $block->blocks;
 	}
 
 	# return the css
@@ -195,7 +241,7 @@ sub text
 	else
 	{
 		# render all sub-blocks to the css
-		$css .= $_->head foreach @{$block->blocks};
+		$css .= $_->head foreach $block->blocks;
 	}
 
 	# return the css

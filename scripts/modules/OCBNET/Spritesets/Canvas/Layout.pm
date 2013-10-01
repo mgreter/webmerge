@@ -74,17 +74,9 @@ sub lcm
 			map { factors($_) } @_;
 	return $product;
 }
-# EO sub factors
+# EO sub lcm
 
 ####################################################################################################
-
-#	sub snap
-#	{
-#			return unless defined $_[0];
-#			my $rest = $_[0] % $_[1];
-#			$_[0] += $_[1] - $rest if $rest;
-#	}
-
 
 # snap value to given multiplier
 # ******************************************************************************
@@ -95,6 +87,7 @@ sub snap
 	# add rest to fill up to multipler
 	$_[0] += $rest ? $_[1] - $rest : 0;
 }
+# EO sub snap
 
 ####################################################################################################
 
@@ -106,12 +99,6 @@ sub layout
 
 	# get our object
 	my ($self) = shift;
-
-	##########################################################
-	# DISTRIBUTE SPRITES TO AREAS
-	##########################################################
-
-	# $self->distribute();
 
 	##########################################################
 	# CALL LAYOUT ON EACH AREA
@@ -127,6 +114,7 @@ sub layout
 	# declare repating arrays
 	my (%repeat_x, %repeat_y);
 
+	# process all sprites in canvas
 	foreach my $sprite ($self->sprites)
 	{
 
