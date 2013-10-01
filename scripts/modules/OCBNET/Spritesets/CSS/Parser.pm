@@ -559,6 +559,15 @@ die $url unless $url;
 					[ 'background-repeat', ': ' . $background_repeat . ';' ],
 				) unless $selector->canvas;
 
+				# push new declarations
+				push(@{$declarations},
+					[ 'background-repeat', ': ' . 'repeat-x' . ';' ],
+				) if $sprite->isRepeatX && $sprite->isFlexibleX;
+				# push new declarations
+				push(@{$declarations},
+					[ 'background-repeat', ': ' . 'repeat-y' . ';' ],
+				) if $sprite->isRepeatY && $sprite->isFlexibleY;
+
 			}
 
 		}

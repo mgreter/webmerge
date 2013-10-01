@@ -72,7 +72,7 @@ sub layout
 				unless ($self->alignOpp)
 				{
 					# keep left margin if repeating
-					unless ($sprite->isRepeatX)
+					# unless ($sprite->isRepeatX)
 					{ $sprite->paddingLeft = 0; }
 				}
 			}
@@ -89,7 +89,7 @@ sub layout
 				unless ($self->alignOpp)
 				{
 					# keep top margin if repeating
-					unless ($sprite->isRepeatY)
+					# unless ($sprite->isRepeatY)
 					{ $sprite->paddingTop = 0; }
 				}
 			}

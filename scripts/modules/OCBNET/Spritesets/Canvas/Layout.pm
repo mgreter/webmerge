@@ -124,31 +124,52 @@ sub layout
 	# GET MULTIPLIERS FOR DIMENSIONS AND REPEATING
 	##########################################################
 
-	use List::MoreUtils qw/ uniq /;
-
 	# declare repating arrays
-	my (@repeat_x, @repeat_y);
+	my (%repeat_x, %repeat_y);
 
-	foreach my $area ($self->areas)
+	foreach my $sprite ($self->sprites)
 	{
-		foreach my $sprite ($area->children)
+
+		# skip not distributed sprites
+		next unless $sprite->{'distributed'};
+
+		# assertion for not repeating in both directions
+		if ($sprite->isRepeatX && $sprite->isRepeatY)
+		{ die "fatal: cannot repeat in both directions"; }
+
+		# make sure we can repeat this sprite perfectly
+		if ($sprite->isRepeatX && $sprite->isFlexibleX)
 		{
-			if ($sprite->isRepeatX && $sprite->isRepeatY)
-			{ die "fatal: cannot repeat in both directions"; }
-			elsif ($sprite->isRepeatX && $sprite->isFlexibleX)
-			{ push(@repeat_x, factors($sprite->width)); }
-			elsif ($sprite->isRepeatY && $sprite->isFlexibleY)
-			{ push(@repeat_y, factors($sprite->height)); }
+			my @factors = factors($sprite->width);
+			my %factors; ++ $factors{$_} foreach @factors;
+			foreach (keys %factors)
+			{
+				$repeat_x{$_} = 0 unless exists $repeat_x{$_};
+				next if $repeat_x{$_} > $factors{$_};
+				$repeat_x{$_} = $factors{$_};
+			}
 		}
+
+		# make sure we can repeat this sprite perfectly
+		if ($sprite->isRepeatY && $sprite->isFlexibleY)
+		{
+
+			my @factors = factors($sprite->height);
+			my %factors; ++ $factors{$_} foreach @factors;
+			foreach (keys %factors)
+			{
+				$repeat_y{$_} = 0 unless exists $repeat_y{$_};
+				next if $repeat_y{$_} > $factors{$_};
+				$repeat_y{$_} = $factors{$_};
+			}
+		}
+
 	}
+	# EO each sprite
 
-	# make factors unique
-	@repeat_x = uniq @repeat_x;
-	@repeat_y = uniq @repeat_y;
-
-	# create the products for the common repeating size
-	my $repeat_x = 1; $repeat_x *= $_ foreach @repeat_x;
-	my $repeat_y = 1; $repeat_y *= $_ foreach @repeat_y;
+	# calculate the lowest denominator for repeating snaping values
+	my $repeat_x = 1; $repeat_x *= $_ ** $repeat_x{$_} foreach keys %repeat_x;
+	my $repeat_y = 1; $repeat_y *= $_ ** $repeat_y{$_} foreach keys %repeat_y;
 
 	##########################################################
 	# GET LIMITS FROM SNAPPED ELEMENTS
@@ -198,6 +219,7 @@ sub layout
 	);
 
 	my $col_snap_w = lcm(
+		$repeat_x,
 		$col1_snap_w,
 		$col2_snap_w,
 		$col3_snap_w,
@@ -206,6 +228,7 @@ sub layout
 	);
 
 	my $row_snap_h = lcm(
+		$repeat_y,
 		$row1_snap_h,
 		$row2_snap_h,
 		$row3_snap_h,
@@ -277,36 +300,25 @@ sub layout
 	my $col1_x = $col1_w;
 	my $row1_y = $row1_h;
 
-	snap ($col1_x, $col1_snap_w);
-	snap ($row1_y, $row1_snap_h);
-
 	my $col2_x = $col1_x + $col2_w;
 	my $row2_y = $row1_y + $row2_h;
-
-	snap ($col2_x, $col2_snap_w);
-	snap ($row2_y, $row2_snap_h);
 
 	# make sure both sides will fit our repeating pattern
 	# this can blow up the sprite by quite some factor if your image
 	# dimensions have lots of different factors in it, if they are all
 	# about the same size and not too big, this should work quite well
-	$col2_x += $repeat_x - ($col2_x + $col4_w + $col_last_w) % $repeat_x;
-	$row2_y += $repeat_y - ($row2_y + $row4_h + $row_last_h) % $repeat_y;
-
-	snap ($col2_x, $col2_snap_w);
-	snap ($row2_y, $row2_snap_h);
+	my $snap_w = $col2_x + $col3_w + $col4_w + $col_last_w;
+	my $snap_h = $row2_y + $row3_h + $row4_h + $row_last_h;
+	snap(my $snapped_w = $snap_w, $repeat_x);
+	snap(my $snapped_h = $snap_h, $repeat_y);
+	$col2_x += $snapped_w - $snap_w;
+	$row2_y += $snapped_h - $snap_h;
 
 	my $col3_x = $col2_x + $col3_w;
 	my $col4_x = $col3_x + $col4_w;
 
-	snap ($col3_x, $col3_snap_w);
-	snap ($col4_x, $col4_snap_w);
-
 	my $row3_y = $row2_y + $row3_h;
 	my $row4_y = $row3_y + $row4_h;
-
-	snap ($row3_y, $row3_snap_h);
-	snap ($row4_y, $row4_snap_h);
 
 	##########################################################
 	# CALCULATE LAYOUT
@@ -349,11 +361,14 @@ sub layout
 
 	##########################################################
 
-	$width = $self->width = $col4_x + $col_last_w;
-	$height = $self->height = $row4_y + $row_last_h;
+	my $w = $width = $self->width = $col4_x + $col_last_w;
+	my $h = $height = $self->height = $row4_y + $row_last_h;
 
-	snap ($width, $col_snap_w);
-	snap ($height, $row_snap_h);
+	snap ($w, $repeat_x);
+	snap ($h, $repeat_y);
+
+	die "width invalid: $width $w" if $w != $width;
+	die "height invalid: $height $h" if $h != $height;
 
 	##########################################################
 
