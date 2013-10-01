@@ -14,9 +14,22 @@ Features
 
 To Do
 =====
+- Write documentation
+- Prepare code for v1.0.0 release
+- Load more modules conditionally
 - Implement @license header handling
 - Maybe add support for ImageMagick too
+- Test more edge cases (specially with css parser)
 - Make writes/reads on same atomic file transparent
+
+More ideas
+==========
+- Add smart locks to ensure parallel execution
+- Implement parallel workers for unrelated blocks
+- Put more usefull information to the console
+- Like file imported, files created, time needed ...
+- Make compilers "pluggable" (for 3rd party plugins)
+- Modularize the whole merge process into sub modules
 
 Installing on Windows
 =====================
