@@ -58,6 +58,10 @@ use Fcntl qw(O_RDONLY LOCK_EX);
 
 ###################################################################################################
 
+sub data { ${$_->{'data'}} };
+
+###################################################################################################
+
 my $js_dev_header =
 '
 // create namespace for webmerge if not yet defined
@@ -467,11 +471,11 @@ sub mergeEntry
 		};
 
 		# add everything as data/text unaltered
-		$joined .= join("\n", map { ${$_->{'data'}} } $collect->('prefix'));
-		$joined .= join("\n", map { ${$_->{'data'}} } $collect->('prepend'));
-		$joined .= join("\n", map { ${$_->{'data'}} } $collect->('input'));
-		$joined .= join("\n", map { ${$_->{'data'}} } $collect->('append'));
-		$joined .= join("\n", map { ${$_->{'data'}} } $collect->('suffix'));
+		$joined .= join("\n", map data, $collect->('prefix'));
+		$joined .= join("\n", map data, $collect->('prepend'));
+		$joined .= join("\n", map data, $collect->('input'));
+		$joined .= join("\n", map data, $collect->('append'));
+		$joined .= join("\n", map data, $collect->('suffix'));
 
 		# store joined output by id for later use
 		# this id may be referenced by other inputs
@@ -518,15 +522,15 @@ sub mergeEntry
 			}
 
 			# prepend the data/text unaltered
-			$code .= join("\n", map { ${$_->{'data'}} } $collect->('prefix'));
+			$code .= join("\n", map data, $collect->('prefix'));
 
 			# append the data/text unaltered
-			$code .= join("\n", map { &{$includer{$type}} } $collect->('prepend'));
-			$code .= join("\n", map { &{$includer{$type}} } $collect->('input'));
-			$code .= join("\n", map { &{$includer{$type}} } $collect->('append'));
+			$code .= join("\n", $includer{$type}, $collect->('prepend'));
+			$code .= join("\n", $includer{$type}, $collect->('input'));
+			$code .= join("\n", $includer{$type}, $collect->('append'));
 
 			# append the data/text unaltered
-			$code .= join("\n", map { ${$_->{'data'}} } $collect->('suffix'));
+			$code .= join("\n", map data, $collect->('suffix'));
 
 			my $rv = mergeWrite($type, $config, $output, \$code, $collection);
 			printf " created %s dev <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
@@ -539,23 +543,23 @@ sub mergeEntry
 
 			my $joiner = $type eq 'js' ? ";\n" : "";
 
-			# get content to be minified
-			my $minify = join($joiner, map { ${$_->{'data'}} } $collect->('input'));
-
-			# call processors (will return if nothing is set)
-			callProcessor($output->{'preprocess'}, \$minify, $config, $output);
-
 			printf "creating %s minified <%s>\n", $type, $output->{'path'};
 
 			# create a header for this output file
 			my $code = sprintf($config->{'headtmpl'}, 'minify');
 
+			# get content to be minified
+			my $minify = join($joiner, map data, $collect->('input'));
+
+			# call processors (will return if nothing is set)
+			callProcessor($output->{'preprocess'}, \$minify, $config, $output);
+
 			# add everything as data/text unaltered
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('prefix'));
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('prepend'));
+			$code .= join($joiner, map data, $collect->('prefix'));
+			$code .= join($joiner, map data, $collect->('prepend'));
 			$code .= $minifier{$type}->(input => $minify);
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('append'));
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('suffix'));
+			$code .= join($joiner, map data, $collect->('append'));
+			$code .= join($joiner, map data, $collect->('suffix'));
 
 			my $rv = mergeWrite($type, $config, $output, \$code, $collection);
 			printf " created %s minified <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
@@ -575,7 +579,7 @@ sub mergeEntry
 
 			# get the code to be compiled from already readed data
 			# we will only compile the stuff registered as input items
-			my $compile = join($joiner, map { ${$_->{'data'}} } $collect->('input'));
+			my $compile = join($joiner, map data, $collect->('input'));
 
 			# call processors (will return if nothing is set)
 			callProcessor($output->{'preprocess'}, \$compile, $config, $output);
@@ -584,11 +588,11 @@ sub mergeEntry
 			$config->{'pretty'} = $output->{'pretty'};
 
 			# add everything as data/text unaltered
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('prefix'));
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('prepend'));
+			$code .= join($joiner, map data, $collect->('prefix'));
+			$code .= join($joiner, map data, $collect->('prepend'));
 			$code .= $compiler{$type}->($compile, $config);
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('append'));
-			$code .= join($joiner, map { ${$_->{'data'}} } $collect->('suffix'));
+			$code .= join($joiner, map data, $collect->('append'));
+			$code .= join($joiner, map data, $collect->('suffix'));
 
 			# write the final output file to the disk
 			my $rv = mergeWrite($type, $config, $output, \$code, $collection);
