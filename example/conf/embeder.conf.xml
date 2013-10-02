@@ -9,7 +9,7 @@
 		<!-- doctype to render includes -->
 		<doctype>html5</doctype>
 
-		<!-- where is you htdocs root directory -->
+		<!-- where is your htdocs root directory -->
 		<!-- this is needed to create absolute urls -->
 		<!-- default is relative to the config file -->
 		<webroot>{CONF}/../../..</webroot>
@@ -141,8 +141,8 @@
 
 	</merge>
 
-	<!-- welcher headinc genommen wird entscheided die pid -->
-	<!-- es wird nur immer ein headinc im html eingebaut -->
+	<!-- which headinc is taken is solely decided by the pid -->
+	<!-- we will always only just include one headinc per page -->
 	<headinc step="headinc" rootid="/" disabled="false" >
 
 		<!-- change directory in this block -->
@@ -163,8 +163,8 @@
 
 	</headinc>
 
-	<!-- welcher headinc genommen wird entscheided die pid -->
-	<!-- es wird nur immer ein headinc im html eingebaut -->
+	<!-- which headinc is taken is solely decided by the pid -->
+	<!-- we will always only just include one headinc per page -->
 	<headinc step="headinc" rootid="/sub/" disabled="false" >
 
 		<!-- change directory in this block -->
@@ -186,7 +186,6 @@
 		<output path="default-sub.classic.live.inc" class="default" context="live" />
 
 	</headinc>
-
 
 	<!-- create standalone embeding code -->
 	<embeder id="embeder" step="embeder" disabled="false" >

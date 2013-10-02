@@ -6,7 +6,7 @@
 	<!-- default configuration -->
 	<config>
 
-		<!-- where is you htdocs root directory -->
+		<!-- where is your htdocs root directory -->
 		<!-- this is needed to create absolute urls -->
 		<!-- default is relative to the config file -->
 		<webroot>{CONF}/../optimize</webroot>

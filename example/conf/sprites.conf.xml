@@ -6,7 +6,7 @@
 	<!-- default configuration -->
 	<config>
 
-		<!-- where is you htdocs root directory -->
+		<!-- where is your htdocs root directory -->
 		<!-- this is needed to create absolute urls -->
 		<!-- default is relative to the config file -->
 		<webroot>{CONF}/../sprites</webroot>
@@ -94,13 +94,13 @@
 
 		</css>
 
-				<!-- build fam spriteset -->
+		<!-- build hires spriteset -->
 		<css id="hires" step="hires" disabled="false" >
 
 			<!-- change directory -->
 			<chdir>hires</chdir>
 
-			<!-- use generated css as input file -->
+			<!-- use sprite styles file -->
 			<input path="css/sprites.css" />
 
 			<!-- create output css files and the spriteset image -->
