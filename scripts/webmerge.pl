@@ -58,16 +58,6 @@ use RTP::Webmerge::Optimize::GZ qw();
 my $pid = $$;
 
 ################################################################################
-# get current working directory
-################################################################################
-
-# import cwd functions
-use Cwd qw(getcwd abs_path);
-
-# get working directory
-my $cwd = abs_path(getcwd);
-
-################################################################################
 # declare and init configuration options
 ################################################################################
 
