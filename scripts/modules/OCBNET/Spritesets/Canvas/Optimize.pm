@@ -25,7 +25,7 @@ BEGIN { our @EXPORT = qw(optimize finalize); }
 
 # load some helper functions for parsing
 # ******************************************************************************
-use OCBNET::Spritesets::CSS::Parser::Base qw(fromPx);
+use OCBNET::CSS::Parser::Base qw(fromPx);
 
 ####################################################################################################
 

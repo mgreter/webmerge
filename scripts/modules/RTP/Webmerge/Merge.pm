@@ -62,38 +62,6 @@ sub data { ${$_->{'data'}} };
 
 ###################################################################################################
 
-my $js_dev_header =
-'
-// create namespace for webmerge if not yet defined
-if (typeof webmerge == \'undefined\') window.webmerge = {};
-
-// define default JS loader function, overwrite with
-// other defered JS loaders like head.hs or requireJS
-if (typeof webmerge.loadJS != \'function\')
-{
-	webmerge.loadJS = function (src)
-	{
-		document.write(\'<script src="\' + src + \'"></script>\');
-	}
-}
-
-// include a JS file will rewrite the url if defined
-// and then call the loadJS function to import the code
-if (typeof webmerge.includeJS != \'function\')
-{
-	webmerge.includeJS = function (src)
-	{
-		// check if we have a custom webroot
-		if (webmerge.webroot) src = [webmerge.webroot, src].join(\'/\');
-		// check if we have a custom url rewriter
-		if (webmerge.rewriteJS) src = webmerge.rewriteJS(src);
-		// call the importer function, which
-		// can be overwritten by a custom loader
-		webmerge.loadJS.call(this, src);
-	}
-}
-
-';
 
 ###################################################################################################
 
@@ -107,6 +75,8 @@ use RTP::Webmerge::IO::CSS;
 # normally only used as backup if the default methods fail
 sub minifyCSS { require CSS::Minifier; &CSS::Minifier::minify }
 sub minifyJS { require JavaScript::Minifier; &JavaScript::Minifier::minify }
+
+use RTP::Webmerge::Merge::Include;
 
 ###################################################################################################
 
@@ -353,55 +323,6 @@ sub mergeCollect
 
 ###################################################################################################
 ###################################################################################################
-
-# called via array map
-sub includeCSS
-{
-
-	# get passed variables
-	my ($config) = @_;
-
-	# magick map variable
-	my $data = $_;
-
-	# define the template for the script includes (don't care about doctype versions, dev only)
-	my $css_include_tmpl = '@import url(\'%s\');' . "\n";
-
-	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
-
-	# return the script include string
-	return sprintf($css_include_tmpl, $path);
-
-}
-# EO sub includeCSS
-
-###################################################################################################
-
-
-###################################################################################################
-
-# called via array map
-sub includeJS
-{
-
-	# get passed variables
-	my ($config) = @_;
-
-	# magick map variable
-	my $data = $_;
-
-	# define the template for the script includes
-	my $js_include_tmpl = 'webmerge.includeJS(\'%s\');' . "\n";
-
-	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
-
-	# return the script include string
-	return sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
-
-}
-# EO includeJS
 
 ###################################################################################################
 # this function does all the joining, minifying and compiling

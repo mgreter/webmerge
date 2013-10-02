@@ -4,7 +4,7 @@
 ####################################################################################################
 # regular expressions to match css2/css3 selectors
 ####################################################################################################
-package OCBNET::Spritesets::CSS::Parser::Selectors;
+package OCBNET::CSS::Parser::Selectors;
 ####################################################################################################
 
 use strict;
@@ -13,7 +13,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::Spritesets::CSS::Parser::Selectors::VERSION = "0.8.2"; }
+BEGIN { $OCBNET::CSS::Parser::Selectors::VERSION = "0.8.2"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
@@ -26,7 +26,7 @@ BEGIN { our @EXPORT_OK = qw($re_css_selector_rule $re_options); }
 
 ####################################################################################################
 
-use OCBNET::Spritesets::CSS::Parser::Base;
+use OCBNET::CSS::Parser::Base;
 
 ####################################################################################################
 

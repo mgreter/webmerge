@@ -12,8 +12,8 @@ use warnings;
 
 ####################################################################################################
 
-use OCBNET::Spritesets::CSS::Parser::Base;
-use OCBNET::Spritesets::CSS::Parser::Colors;
+use OCBNET::CSS::Parser::Base;
+use OCBNET::CSS::Parser::Colors;
 
 ####################################################################################################
 

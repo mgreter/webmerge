@@ -35,11 +35,11 @@ BEGIN { use base 'OCBNET::Spritesets::CSS::Block'; }
 require OCBNET::Spritesets::CSS::Collection;
 
 # load dependencies and import globals and functions
-use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_blocks);
-use OCBNET::Spritesets::CSS::Parser::CSS qw($parse_definition);
-use OCBNET::Spritesets::CSS::Parser::Base qw($re_comment uncomment);
-use OCBNET::Spritesets::CSS::Parser::Base qw(fromPx fromUrl fromPosition);
-use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_css_selector_rules);
+use OCBNET::CSS::Parser::CSS qw($parse_blocks);
+use OCBNET::CSS::Parser::CSS qw($parse_definition);
+use OCBNET::CSS::Parser::Base qw($re_comment uncomment);
+use OCBNET::CSS::Parser::Base qw(fromPx fromUrl fromPosition);
+use OCBNET::CSS::Parser::Selectors qw($re_css_selector_rules);
 
 ####################################################################################################
 

@@ -20,7 +20,7 @@ use warnings;
 use OCBNET::Spritesets::CSS::Collection;
 
 # load functions to parse block body styles
-use OCBNET::Spritesets::CSS::Parser::CSS;
+use OCBNET::CSS::Parser::CSS;
 
 ####################################################################################################
 

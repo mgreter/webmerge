@@ -4,7 +4,7 @@
 ####################################################################################################
 # TODO: improve and test handling with invalid formated files
 ####################################################################################################
-package OCBNET::Spritesets::CSS::Parser::CSS;
+package OCBNET::CSS::Parser::CSS;
 ####################################################################################################
 
 use strict;
@@ -13,7 +13,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::Spritesets::CSS::Parser::CSS::VERSION = "0.70"; }
+BEGIN { $OCBNET::CSS::Parser::CSS::VERSION = "0.70"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
@@ -26,8 +26,8 @@ BEGIN { our @EXPORT_OK = qw($parse_bracket $parse_definition); }
 
 ####################################################################################################
 
-use OCBNET::Spritesets::CSS::Parser::Base qw($re_apo $re_quot);
-use OCBNET::Spritesets::CSS::Parser::Selectors qw($re_options);
+use OCBNET::CSS::Parser::Base qw($re_apo $re_quot);
+use OCBNET::CSS::Parser::Selectors qw($re_options);
 
 ####################################################################################################
 

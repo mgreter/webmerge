@@ -2,7 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-package OCBNET::Spritesets::CSS::Parser::Base;
+package OCBNET::CSS::Parser::Base;
 ####################################################################################################
 
 use strict;
@@ -11,7 +11,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::Spritesets::CSS::Parser::Base::VERSION = "0.70"; }
+BEGIN { $OCBNET::CSS::Parser::Base::VERSION = "0.70"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
