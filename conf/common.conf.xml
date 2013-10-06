@@ -18,8 +18,8 @@
 
 		<!-- templates for embedder generating -->
 		<!-- paths are relative to config file -->
+		<tmpl-embed-js>{EXT}/templates/embedder.tmpl.js</tmpl-embed-js>
 		<tmpl-embed-php>{EXT}/templates/embedder.tmpl.php</tmpl-embed-php>
-		<!-- <tmpl-embed-js>{EXT}/templates/embedder.tmpl.js</tmpl-embed-js> -->
 		<!-- <tmpl-embed-perl>{EXT}/templates/embedder.tmpl.pl</tmpl-embed-perl> -->
 
 		<!-- run operations by default -->

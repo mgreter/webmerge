@@ -24,10 +24,10 @@ BEGIN { our @EXPORT = qw(embedder); }
 
 # load our local modules
 use RTP::Webmerge qw(@initers);
-use RTP::Webmerge::IO qw(writefile);
+use RTP::Webmerge::IO qw(writefile readfile);
 
 # use core mdoules for path handling
-use RTP::Webmerge::Path qw(dirname check_path exportURI);
+use RTP::Webmerge::Path qw(dirname check_path exportURI importURI);
 
 ###################################################################################################
 
@@ -174,17 +174,35 @@ sub embedder
 
 		# create new hash so we can
 		# manipulate it for this output
-		my %includes = %domains;
+		my %includes; my %contents;
 
-		# make all include paths relative
+		# load all include files content
 		# to the generated embedder script
-		foreach my $did (keys %includes)
+		foreach my $did (keys %domains)
 		{
-			foreach my $context (keys %{$includes{$did}})
+			# define new objects
+			$includes{$did} = {};
+			$contents{$did} = {};
+			# process each context in domain id
+			foreach my $context (keys %{$domains{$did}})
 			{
-				foreach (values %{$includes{$did}->{$context}})
+				# define new objects
+				$includes{$did}->{$context} = {};
+				$contents{$did}->{$context} = {};
+				# process each class in domain id context
+				foreach my $class (keys %{$domains{$did}->{$context}})
 				{
-					$_ =  exportURI($_, dirname($path));
+					# get the filepath to load/include
+					my $file = $domains{$did}->{$context}->{$class};
+					# load the content of the include file
+					my $data = readfile($file, $atomic);
+					# make include paths relative to output
+					$file = exportURI($_, dirname($path));
+					# assert that the file could be loaded
+					die "could not load $file" unless defined $data;
+					# store filepath and the content for later
+					$includes{$did}->{$context}->{$class} = $file;
+					$contents{$did}->{$context}->{$class} = ${$data};
 				}
 			}
 		}
@@ -199,7 +217,7 @@ sub embedder
 			{
 
 				# get the embedder code for this given type (i.e. php or perl)
-				my $code = $embedder{lc$type}(\%includes, \%features, $detects, $config);
+				my $code = $embedder{lc$type}(\%includes, \%contents, \%features, $detects, $config);
 
 				# give debug message about creating the embedder code
 				print "creating standalone embedder for $type\n";
@@ -231,6 +249,7 @@ sub embedder
 ###################################################################################################
 
 # load implementations
+use RTP::Webmerge::Embedder::JS;
 use RTP::Webmerge::Embedder::PHP;
 
 ###################################################################################################

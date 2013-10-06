@@ -3,31 +3,40 @@
 
 		<title>Webmerge example</title>
 
-		<?php
+		<script src="admin/webmerge/generated/embedder.js"></script>
+
+		<script>
 
 			// declare path and rootline array
-			$path = ''; $rootline =  array();
+			var path = ''; var rootline =  [];
 
-			// get the path info without issuing a warning and sensible default
-			$pathinfo = isset ($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+			// get the path info from location hash
+			var pathinfo = document.location.search.replace(/^\?/, '');
+
+			/*
+			// alternative method from pathname
+			var pathinfo = document.location.pathname;
+			pathinfo = pathinfo.replace(/\/?[^\/]*$/, '');
+			pathinfo = pathinfo.replace(/^\/[A-Za-z]:/, '');
+			*/
+
+			// split path info into parts
+			var paths = pathinfo.split('\/');
 
 			// process each directory in full path
-			foreach (explode('/', $pathinfo) as $pid) {
+			for (var i = 0, l = paths.length; i < l; i++)
+			{
 
 				// prepend full path into our rootline
-				array_unshift($rootline, $path .= $pid . '/');
+				rootline.unshift(path += paths[i] + '/');
 
 			}
 
 			// load the embedder to select and embed includes
-			include('admin/webmerge/generated/embedder.php');
-			$domain = tx_rtpwebmerge_embed_data::select($rootline);
-			$include = tx_rtpwebmerge_embed_data::embed('live', $domain);
+			var domain = webmerge.embed.select(rootline);
+			var include = webmerge.embed('live', domain);
 
-			// print into header
-			print $include;
-
-		?>
+		</script>
 
 	</head>
 	<body>
@@ -43,9 +52,9 @@
 
 		<p>
 			Go to page:
-			<a href="<?php print($_SERVER['SCRIPT_NAME']); ?>/sub/page">sub page</a>
-			<a href="<?php print($_SERVER['SCRIPT_NAME']); ?>/home/page">home page</a>
-			<a href="<?php print($_SERVER['SCRIPT_NAME']); ?>/other/page">other page</a>
+			<a href="?/sub/page">sub page</a>
+			<a href="?/home/page">home page</a>
+			<a href="?/other/page">other page</a>
 		</p>
 
 		CSS: <ul>

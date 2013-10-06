@@ -776,6 +776,7 @@ webmerge [options] [steps]
 
    --headtmpl          text to prepend to generated files
    --jsdeferer         javascript loader for defered loading
+   --tmpl-embed-js     embedder template for js embedder generator
    --tmpl-embed-php    embedder template for php embedder generator
 
    -p, --prepare       enable/disable prepare steps

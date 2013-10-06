@@ -232,6 +232,7 @@
 		<detect feature="inline-data" target="class" enabled="modern" optional="false" />
 
 		<!-- generate a php file to get the embed code (with ua sniffing) -->
+		<output path="admin/webmerge/generated/embedder.js" type="js" />
 		<output path="admin/webmerge/generated/embedder.php" type="php" />
 
 	</embedder>
