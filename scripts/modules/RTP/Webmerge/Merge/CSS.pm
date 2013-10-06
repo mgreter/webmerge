@@ -71,7 +71,7 @@ $processor{'css'} =
 	'minify' => sub
 	{
 		require CSS::Minifier;
-		&CSS::Minifier::minify;
+		&CSS::Minifier::minify('input' => $_[0]);
 	},
 	'compile' => sub
 	{

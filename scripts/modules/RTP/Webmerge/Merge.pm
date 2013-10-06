@@ -394,8 +394,8 @@ my $merger = sub
 		my $joiner = $joiner{$type} || "\n";
 
 		# create a header for joined content (do that for all)
-		my @input = (sprintf($config->{'headtmpl'}, 'join'));
-		my @prefix = (sprintf($config->{'headtmpl'}, 'join'));
+		my @input = (sprintf($config->{'headtmpl'}, $target));
+		my @prefix = (sprintf($config->{'headtmpl'}, $target));
 
 		# add everything as data/text unaltered (just include data)
 		push @input, join($joiner, grep { $_ } map data, $collect->('prefix'));

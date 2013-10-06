@@ -83,7 +83,7 @@ $processor{'js'} =
 	'minify' => sub
 	{
 		require JavaScript::Minifier;
-		&JavaScript::Minifier::minify;
+		&JavaScript::Minifier::minify('input' => $_[0]);
 	},
 	'compile' => sub
 	{
