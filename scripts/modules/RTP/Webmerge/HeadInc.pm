@@ -147,8 +147,8 @@ sub headinc
 			unless (ref($input))
 			{
 
-				# simply push the text
-				push(@includes, $input);
+				# add text as is (you must not add script tags yourself)
+				push(@includes, sprintf $tmpl->{$doctype}->{'script'}, $input);
 
 			}
 
@@ -255,7 +255,7 @@ sub headinc
 			{
 
 				# easy but not yet implemented
-				die "include some generic text (with attributes)";
+				die "unsupported input configuration for headinc";
 
 			}
 
