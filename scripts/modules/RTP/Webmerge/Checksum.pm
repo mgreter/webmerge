@@ -40,9 +40,6 @@ sub crcCheckEntry
 	return if exists $merge->{'disabled'} &&
 		lc $merge->{'disabled'} eq 'true';
 
-	# collect all data (files) for this merge
-	# my $collection = mergeCollect($config, $merge, $type);
-
 	# process all files to be written for this merge
 	foreach my $output (@{$merge->{'output'} || []})
 	{

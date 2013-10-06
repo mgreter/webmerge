@@ -26,7 +26,7 @@ BEGIN { $RTP::Webmerge::Optimize::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(optimize); }
+BEGIN { our @EXPORT = qw(optimizer); }
 
 # define our functions that can be exported
 BEGIN { our @EXPORT_OK = qw(%optimizer fileOptimizer); }
@@ -35,7 +35,7 @@ BEGIN { our @EXPORT_OK = qw(%optimizer fileOptimizer); }
 
 # main optimizer function
 # call all optimizer steps
-sub optimize
+sub optimizer
 {
 
 	# get input variables

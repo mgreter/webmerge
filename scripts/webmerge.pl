@@ -644,12 +644,12 @@ unless ($config->{'watchdog'})
 	# call the optimization step next
 	# this will change some source files
 	if ($config->{'optimize'} && $xml->{'optimize'})
-	{ optimize($config, $_) foreach @{$xml->{'optimize'}}; }
+	{ optimizer($config, $_) foreach @{$xml->{'optimize'}}; }
 
 	# next we will continue with the merge step
 	# this will write generated and processed files
 	if ($config->{'merge'} && $xml->{'merge'})
-	{ merge($config, $_) foreach @{$xml->{'merge'}}; }
+	{ merger($config, $_) foreach @{$xml->{'merge'}}; }
 
 	# call headinc function to generate headers
 	# these can be included as standalone files

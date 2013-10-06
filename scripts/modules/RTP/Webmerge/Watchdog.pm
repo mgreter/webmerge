@@ -36,7 +36,7 @@ use List::MoreUtils qw(uniq);
 use RTP::Webmerge::Path qw(check_path exportURI);
 
 # load merge function to call on file change
-use RTP::Webmerge::Merge qw(mergeEntry);
+use RTP::Webmerge::Merge qw(merge);
 
 ###################################################################################################
 
@@ -165,7 +165,7 @@ sub child ($$$$$)
 				my $merge_dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
 
 				# now dispatch to merge this entry in eval
-				eval { mergeEntry($config, $merge, $type); };
+				eval { merge($config, $merge, $type); };
 
 				# check if eval had an error
 				print $@ if $@;

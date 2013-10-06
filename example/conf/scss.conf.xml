@@ -35,7 +35,8 @@
 			<input path="src/simple.scss" process="scss" />
 
 			<!-- create output css files and the spriteset image -->
-			<output path="dst/simple.css" target="join" />
+			<output path="dst/simple.dev.css" target="dev" />
+			<output path="dst/simple.join.css" target="join" />
 
 		</css>
 

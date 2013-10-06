@@ -18,10 +18,13 @@ BEGIN { $RTP::Webmerge::Merge::VERSION = "0.70" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(merge); }
+BEGIN { our @EXPORT = qw(merger); }
 
 # define our functions to be exported
-BEGIN { our @EXPORT_OK = qw(mergeEntry); }
+BEGIN { our @EXPORT_OK = qw (
+	merge %reader %writer %importer %exporter
+	%joiner %includer %prefixer %processor %suffixer
+); }
 
 ###################################################################################################
 
@@ -32,8 +35,6 @@ use RTP::Webmerge qw(callProcessor);
 use RTP::Webmerge::IO;
 use RTP::Webmerge::Path;
 use RTP::Webmerge::Fingerprint;
-use RTP::Webmerge::Compile::JS;
-use RTP::Webmerge::Compile::CSS;
 
 ###################################################################################################
 # implement atomic operations
@@ -62,38 +63,35 @@ sub data { ${$_->{'data'}} };
 
 ###################################################################################################
 
-
-###################################################################################################
-
 use RTP::Webmerge::IO::JS;
 use RTP::Webmerge::IO::CSS;
+
+use RTP::Webmerge::Merge::JS;
+use RTP::Webmerge::Merge::CSS;
 
 ###################################################################################################
 
 # load minifier libraries and define subroutines
 # maybe make these dependencies dynamic as they are
 # normally only used as backup if the default methods fail
-sub minifyCSS { require CSS::Minifier; &CSS::Minifier::minify }
-sub minifyJS { require JavaScript::Minifier; &JavaScript::Minifier::minify }
 
 use RTP::Webmerge::Merge::Include;
 
 ###################################################################################################
 
 # define various handlers for all the different actions
-my %reader = ( 'js' => \&readJS, 'css' => \&readCSS );
-my %writer = ( 'js' => \&writeJS, 'css' => \&writeCSS );
-my %importer = ( 'js' => \&importJS, 'css' => \&importCSS );
-my %exporter = ( 'js' => \&exportJS, 'css' => \&exportCSS );
-my %minifier = ( 'js' => \&minifyJS, 'css' => \&minifyCSS, );
-my %compiler = ( 'js' => \&compileJS, 'css' => \&compileCSS );
-my %includer = ( 'js' => \&includeJS, 'css' => \&includeCSS );
+our (%reader, %writer, %importer, %exporter);
+
+# define joiner for mutliple block parts
+# processors for prepend, input and append
+our (%joiner, %includer, %prefixer, %processor, %suffixer);
 
 ###################################################################################################
 
 # write merged data to disk
 # also create checksums etc.
-sub mergeWrite
+# ***********************************************************************************************
+sub writer
 {
 
 	# get input variables
@@ -135,7 +133,7 @@ sub mergeWrite
 		or die "could not export <$output_path>: $!";
 
 	# calculate md5sum of joined md5sums
-	my $md5_joined = md5sum(\$crc_joined);
+	my $md5_joined = md5sum(\ $crc_joined);
 
 	# append the crc of all joined checksums
 	${$data} .= "\n/* crc: " . $md5_joined . " */\n" if $config->{'crc-comment'};
@@ -157,7 +155,7 @@ sub mergeWrite
 	return $rv unless $config->{'crc-file'};
 
 	# ... and then write the md5 checksum file
-	return $rv && writefile($checksum_path, \$crc, $config->{'atomic'}, 1)
+	return $rv && writefile($checksum_path, \ $crc, $config->{'atomic'}, 1)
 		or die "could not write <$checksum_path>: $!";
 
 }
@@ -167,7 +165,8 @@ sub mergeWrite
 
 # collect all files
 # return result hash
-sub mergeCollect
+# ***********************************************************************************************
+sub collect
 {
 
 	# get input variables
@@ -192,7 +191,7 @@ sub mergeCollect
 		{ $merge->{$kind} = [$merge->{$kind}]; }
 
 		# check if the merged file has been set to load deferred
-		my $deferred = $merge->{'defer'} && lc $merge->{'defer'} eq 'true';
+		# my $deferred = $merge->{'defer'} && lc $merge->{'defer'} eq 'true';
 
 		# process all items for this merge kind
 		foreach my $item (@{$merge->{$kind} || []})
@@ -257,12 +256,11 @@ sub mergeCollect
 					push(@{$data{$kind}}, {
 						'org' => $org,
 						'data' => $data,
-						# 'path' => $path,
 						'item' => $item,
 						'md5sum' => $md5sum,
-						'deferred' => $deferred,
 						'web_path' => $web_path,
 						'local_path' => $local_path,
+						# 'deferred' => $deferred,
 					});
 
 				}
@@ -294,8 +292,8 @@ sub mergeCollect
 			{
 
 				# get the md5sum of the unaltered data (otherwise crc may not be correct)
-				my $md5sum = md5sum(\$item) or die "could not get md5sum for item: $!";
-				push(@{$data{$kind}}, { 'data' => \$item, 'md5sum' => $md5sum });
+				my $md5sum = md5sum(\ $item) or die "could not get md5sum for item: $!";
+				push(@{$data{$kind}}, { 'data' => \ $item, 'md5sum' => $md5sum });
 
 			}
 
@@ -330,11 +328,12 @@ sub mergeCollect
 ###################################################################################################
 
 # main merge function
-sub mergeEntry
+# ***********************************************************************************************
+my $merger = sub
 {
 
 	# get input variables
-	my ($config, $merge, $type) = @_;
+	my ($config, $type, $merge) = @_;
 
 	# test if the merge has been disabled
 	return if exists $merge->{'disabled'} &&
@@ -344,7 +343,7 @@ sub mergeEntry
 	my $dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
 
 	# collect all data (files) for this merge
-	my $collection = mergeCollect($config, $merge, $type);
+	my $collection = collect($config, $merge, $type);
 
 	# make sure that option is an array
 	if(ref $merge->{'output'} eq 'HASH')
@@ -370,8 +369,8 @@ sub mergeEntry
 		# get path to be resolved
 		my $web_path = exportURI $output_path;
 
-		# create a header for joined content (do that for all)
-		my $joined = sprintf($config->{'headtmpl'}, 'join');
+		# get output target of block
+		my $target = $output->{'target'};
 
 		# local function to collect files to process
 		# will filter out stuff according to given target
@@ -384,217 +383,149 @@ sub mergeEntry
 				unless ($_->{'item'}->{'target'}) { 1; }
 				# target is not live, it's a real context
 				elsif ($_->{'item'}->{'target'} ne 'live')
-				{ $output->{'target'} eq $_->{'item'}->{'target'}; }
+				{ $target eq $_->{'item'}->{'target'}; }
 				# target is live - include if not dev
-				else { $output->{'target'} ne 'dev'; }
+				else { $target ne 'dev'; }
 			}
 			@{$collection->{$_[0]} || []};
 		};
 
-		# add everything as data/text unaltered
-		$joined .= join("\n", map data, $collect->('prefix'));
-		$joined .= join("\n", map data, $collect->('prepend'));
-		$joined .= join("\n", map data, $collect->('input'));
-		$joined .= join("\n", map data, $collect->('append'));
-		$joined .= join("\n", map data, $collect->('suffix'));
+		# get different joiner for js or css
+		my $joiner = $joiner{$type} || "\n";
+
+		# create a header for joined content (do that for all)
+		my @input = (sprintf($config->{'headtmpl'}, 'join'));
+		my @prefix = (sprintf($config->{'headtmpl'}, 'join'));
+
+		# add everything as data/text unaltered (just include data)
+		push @input, join($joiner, grep { $_ } map data, $collect->('prefix'));
+		push @input, join($joiner, grep { $_ } map data, $collect->('prepend'));
+		push @input, join($joiner, grep { $_ } map data, $collect->('input'));
+		push @input, join($joiner, grep { $_ } map data, $collect->('append'));
+		push @input, join($joiner, grep { $_ } map data, $collect->('suffix'));
+
+		# create final joined code
+		my $input = join($joiner, grep { $_ } @input);
 
 		# store joined output by id for later use
 		# this id may be referenced by other inputs
 		$config->{'merged'}->{$merge->{'id'}} =
 		{
-			# 'path' => $output->{'path'},
-			'data' => \ $joined,
+			'data' => \ $input,
 			'web_path' => $web_path,
 			'local_path' => $output_path,
+			# 'path' => $output->{'path'},
 		};
 
+		# delcare additional input
+		# use them for positioning
+		# maybe add a prio to input
+		my (@process, @suffix);
 
-		# create joined output for live
-		if ($config->{'join'} && $output->{'target'} eq 'join')
+		# should we pretty print the compiled code
+		$config->{'pretty'} = $output->{'pretty'};
+
+		# assertion that we have a output target of block
+		die "no target given for merge block" unless $target;
+
+		# get processor variables for pre and post process
+		my $includer = $includer{$type}->{$target} if $includer{$type};
+		my $prefixer = $prefixer{$type}->{$target} if $prefixer{$type};
+		my $processor = $processor{$type}->{$target} if $processor{$type};
+		my $suffixer = $suffixer{$type}->{$target} if $suffixer{$type};
+
+		# assertion that we have a includer for the given type and target
+		die sprintf "no includer for %s/%s\n", $type, $target unless $includer;
+		# die sprintf "no processor for %s/%s\n", $type, $target unless $processor;
+
+		# is feature enabled
+		if ($config->{$target})
 		{
 
-			printf "creating %s joined <%s>\n", $type, $output->{'path'};
-			callProcessor($output->{'preprocess'}, \$joined, $config, $output);
-			my $rv = mergeWrite($type, $config, $output, \$joined, $collection);
-			printf " created %s joined <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
-
-		}
-
-		# create output for development
-		if ($config->{'dev'} && $output->{'target'} eq 'dev')
-		{
-
-			printf "creating %s dev <%s>\n", $type, $output->{'path'};
-
-			# create a header for this output file
-			my $code = sprintf($config->{'headtmpl'}, 'dev');
-
-			if ($type eq 'js')
-			{
-				# check if the merged file has been set to load deferred
-				my $deferred = $merge->{'defer'} && lc $merge->{'defer'} eq 'true';
-				# assertion that we have at least one defered include, otherwise
-				# it may never fire the ready event (happens with head.js)
-				$deferred = 0 if scalar $collect->('input') == 0;
-				# insert the javascript header
-				$code .= $js_dev_header;
-				# overwrite loader with defered head.js loader
-				$code .= 'webmerge.loadJS = head.hs;' if $deferred;
-			}
-
-			# prepend the data/text unaltered
-			$code .= join("\n", map data, $collect->('prefix'));
-
-			# append the data/text unaltered
-			$code .= join("\n", $includer{$type}, $collect->('prepend'));
-			$code .= join("\n", $includer{$type}, $collect->('input'));
-			$code .= join("\n", $includer{$type}, $collect->('append'));
-
-			# append the data/text unaltered
-			$code .= join("\n", map data, $collect->('suffix'));
-
-			my $rv = mergeWrite($type, $config, $output, \$code, $collection);
-			printf " created %s dev <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
-
-		}
-
-		# create minified output for live
-		elsif ($config->{'minify'} && $output->{'target'} eq 'minify')
-		{
-
-			my $joiner = $type eq 'js' ? ";\n" : "";
-
-			printf "creating %s minified <%s>\n", $type, $output->{'path'};
-
-			# create a header for this output file
-			my $code = sprintf($config->{'headtmpl'}, 'minify');
-
-			# get content to be minified
-			my $minify = join($joiner, map data, $collect->('input'));
-
-			# call processors (will return if nothing is set)
-			callProcessor($output->{'preprocess'}, \$minify, $config, $output);
+			# print a message to the console about the current status
+			printf "creating %s %s <%s>\n", $type, $target, $output->{'path'};
 
 			# add everything as data/text unaltered
-			$code .= join($joiner, map data, $collect->('prefix'));
-			$code .= join($joiner, map data, $collect->('prepend'));
-			$code .= $minifier{$type}->(input => $minify);
-			$code .= join($joiner, map data, $collect->('append'));
-			$code .= join($joiner, map data, $collect->('suffix'));
+			push @prefix, map data, $collect->('prefix');
+			push @process, map &{$includer}, $collect->('prepend');
+			push @process, map &{$includer}, $collect->('input');
+			push @process, map &{$includer}, $collect->('append');
+			push @suffix, map data, $collect->('suffix');
 
-			my $rv = mergeWrite($type, $config, $output, \$code, $collection);
-			printf " created %s minified <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
+			# create code fragment to process
+			my $prefix = join($joiner, grep { $_ } @prefix);
+			my $process = join($joiner, grep { $_ } @process);
+			my $suffix = join($joiner, grep { $_ } @suffix);
 
-		}
+			# call processors (will return immediately if nothing is set)
+			callProcessor($output->{'preprocess'}, \ $prefix, $config, $output);
+			callProcessor($output->{'preprocess'}, \ $process, $config, $output);
+			callProcessor($output->{'preprocess'}, \ $suffix, $config, $output);
 
-		# create minified output for live
-		elsif ($config->{'compile'} && $output->{'target'} eq 'compile')
-		{
+			# call target specific processor if available
+			$process = $processor->($process, $config) if $processor;
 
-			my $joiner = $type eq 'js' ? ";\n" : "";
+			# call target prefix/suffix processor if available
+			$prefix = $prefixer->(\ $prefix, $merge, $config) if $prefixer;
+			$suffix = $suffixer->(\ $suffix, $merge, $config) if $suffixer;
 
-			printf "creating %s compiled <%s>\n", $type, $output->{'path'};
+			# create final joined code (prefix and suffix are unchanged)
+			my $code = join($joiner, grep { $_ } ($prefix, $process, $suffix));
 
-			# create a header for this output file
-			my $code = sprintf($config->{'headtmpl'}, 'compile');
+			# commit and write out the completely merged block
+			my $rv = writer($type, $config, $output, \ $code, $collection);
 
-			# get the code to be compiled from already readed data
-			# we will only compile the stuff registered as input items
-			my $compile = join($joiner, map data, $collect->('input'));
-
-			# call processors (will return if nothing is set)
-			callProcessor($output->{'preprocess'}, \$compile, $config, $output);
-
-			# should we pretty print the compiled code
-			$config->{'pretty'} = $output->{'pretty'};
-
-			# add everything as data/text unaltered
-			$code .= join($joiner, map data, $collect->('prefix'));
-			$code .= join($joiner, map data, $collect->('prepend'));
-			$code .= $compiler{$type}->($compile, $config);
-			$code .= join($joiner, map data, $collect->('append'));
-			$code .= join($joiner, map data, $collect->('suffix'));
-
-			# write the final output file to the disk
-			my $rv = mergeWrite($type, $config, $output, \$code, $collection);
-			printf " created %s compiled <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
+			# print a message to the console about the current status
+			printf " created %s %s <%s> -> %s\n", $type, $target, $output->{'path'}, $rv ? 'ok' : 'error';
 
 		}
-
-		# create minified output for live
-		elsif ($config->{'license'} && $output->{'target'} eq 'license')
-		{
-
-			# map out the licenses from inputs
-			my $licenses = join("\n", map
-				{
-					# remove everything but the very first comment (first line!)
-					${$_->{'data'}} =~m /\A\s*(\/\*(?:\n|\r|.)+?\*\/)\s*(?:\n|\r|.)*\z/m
-						# return map result or nothing
-						? ( '/* license for ' . $_->{'web_path'} . ' */', $1, '' ) : ();
-				}
-				# map the input collections
-				(
-					$collect->('prepend'),
-					$collect->('input'),
-					$collect->('append')
-				)
-			);
-
-			printf "creating %s license <%s>\n", $type, $output->{'path'};
-			my $rv = mergeWrite($type, $config, $output, \$licenses, $collection);
-			printf " created %s license <%s> - %s\n", $type, $output->{'path'}, $rv ? 'ok' : 'error';
-
-		}
+		# EO if target is enabled
 
 	}
+	# EO each output
 
-}
-
-###################################################################################################
-
-# define merger functions
-# not really needed but still keept
-# as it will ensure a valid type
-my %mergers =
-(
-	'js' => \&mergeEntry,
-	'css' => \&mergeEntry,
-);
+};
+# EO sub $merge
 
 ###################################################################################################
 
-sub merge
+# merge all blocks in config
+# ***********************************************************************************************
+sub merger
 {
 
 	# get input variables
-	my ($config, $merges) = @_;
+	my ($config, $block) = @_;
 
 	# should we commit filesystem changes?
-	my $commit = $merges->{'commit'} || 0;
+	my $commit = $block->{'commit'} || 0;
 
 	# change directory (restore previous state after this block)
-	my $dir = RTP::Webmerge::Path->chdir($merges->{'chdir'});
+	my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
 
 	# commit all changes to the filesystem if configured
 	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
 
 	# do not process if disabled attribute is given and set to true
-	unless ($merges->{'disabled'} && lc $merges->{'disabled'} eq 'true')
+	unless ($block->{'disabled'} && lc $block->{'disabled'} eq 'true')
 	{
-
-		foreach my $merge (@{$merges->{'css'} || []})
-		{ mergeEntry($config, $merge, 'css'); }
-
-		foreach my $merge (@{$merges->{'js'} || []})
-		{ mergeEntry($config, $merge, 'js'); }
-
+		# process each type (js/css)
+		foreach my $type ('css', 'js')
+		{
+			# process each merge block for type
+			foreach my $merge (@{$block->{$type} || []})
+			{
+				# call sub to merge a single block
+				$merger->($config, $type, $merge);
+			}
+		}
 	}
 
 	# commit all changes to the filesystem if configured
 	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|af)/i;
 
 }
+# EO sub merge
 
 ###################################################################################################
 ###################################################################################################
