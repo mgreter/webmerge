@@ -181,6 +181,7 @@ Command Line Options
 
     --headtmpl            text to prepend to generated files
     --jsdeferer           javascript loader for defered loading
+    --tmpl-embed-js       template for js embedder generator
     --tmpl-embed-php      template for php embedding generator
 
     -p, --prepare         enable/disable prepare steps
