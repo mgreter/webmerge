@@ -197,7 +197,7 @@ sub embedder
 					# load the content of the include file
 					my $data = readfile($file, $atomic);
 					# make include paths relative to output
-					$file = exportURI($_, dirname($path));
+					$file = exportURI($file, dirname($path));
 					# assert that the file could be loaded
 					die "could not load $file" unless defined $data;
 					# store filepath and the content for later
