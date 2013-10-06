@@ -95,6 +95,7 @@
 		<js id="header" step="scripts" media="all" disabled="false" >
 
 			<!-- merge js files in order -->
+			<input path="js/lib/ready.js" />
 			<input path="js/lib/head.js" />
 
 			<!-- special output target for the license file -->
@@ -173,12 +174,14 @@
 		<!-- collect all css includes -->
 		<input merged="styles" />
 
-		<!-- collect all js includes -->
+		<!-- collect head js includes -->
 		<input merged="header" defer="false" />
-		<input merged="scripts" defer="false" />
 
 		<!-- add a post function to print a message to the log -->
-		<input>head.ready(function () { console.log('head.js is ready'); });</input>
+		<input>rtp.ready(function () { console.log('everything is ready'); });</input>
+
+		<!-- collect all other js includes -->
+		<input merged="scripts" defer="false" />
 
 		<!-- generate various header includes by class/target -->
 		<!-- the files can be directly included in the html header -->
@@ -200,13 +203,15 @@
 		<input merged="styles" />
 		<input merged="styles-sub" />
 
-		<!-- collect all js includes -->
+		<!-- collect head js includes -->
 		<input merged="header" defer="false" />
-		<input merged="scripts" defer="true" />
-		<input merged="scripts-sub" defer="true" />
 
 		<!-- add a post function to print a message to the log -->
-		<input>head.ready(function () { console.log('head.js is ready'); });</input>
+		<input>rtp.ready(function () { console.log('everything is ready'); });</input>
+
+		<!-- collect all other js includes -->
+		<input merged="scripts" defer="true" />
+		<input merged="scripts-sub" defer="true" />
 
 		<!-- generate various header includes by class/target -->
 		<!-- the files can be directly included in the html header -->
