@@ -145,9 +145,10 @@ can use the run script __tools\webmerge\webmerge.bat__
 
 Demo Examples
 =============
-- http://webmerge.ocbnet.ch/webmerge/example/embedder/
 - http://webmerge.ocbnet.ch/webmerge/example/sprites/fam/
 - http://webmerge.ocbnet.ch/webmerge/example/sprites/hires/
+- http://webmerge.ocbnet.ch/webmerge/example/embedder/index.php
+- http://webmerge.ocbnet.ch/webmerge/example/embedder/index.html
 
 Command Line Options
 ====================
