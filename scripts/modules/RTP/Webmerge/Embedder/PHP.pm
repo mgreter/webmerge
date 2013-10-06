@@ -2,7 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ###################################################################################################
-package RTP::Webmerge::Embeder::PHP;
+package RTP::Webmerge::Embedder::PHP;
 ###################################################################################################
 
 use Carp;
@@ -12,7 +12,7 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Embeder::PHP::VERSION = "0.70" }
+BEGIN { $RTP::Webmerge::Embedder::PHP::VERSION = "0.70" }
 
 ###################################################################################################
 
@@ -35,7 +35,7 @@ sub is_enabled ($)
 	return 0;
 }
 
-sub embeder
+sub embedder
 {
 
 	# get variables and collections from parent
@@ -137,12 +137,12 @@ sub embeder
 	return $tmpl;
 
 }
-# EO sub embeder
+# EO sub embedder
 
 ###################################################################################################
 
-# register this embeder type to parent module
-RTP::Webmerge::Embeder::register('php', \&embeder);
+# register this embedder type to parent module
+RTP::Webmerge::Embedder::register('php', \&embedder);
 
 ###################################################################################################
 ###################################################################################################

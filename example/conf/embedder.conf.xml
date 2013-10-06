@@ -16,7 +16,7 @@
 
 		<!-- define a current working directory -->
 		<!-- you can adjust this also in the xml config -->
-		<directory>{CONF}/../embeder</directory>
+		<directory>{CONF}/../embedder</directory>
 
 		<!-- enable crc check step -->
 		<crc-check>1</crc-check>
@@ -218,7 +218,7 @@
 	</headinc>
 
 	<!-- create standalone embeding code -->
-	<embeder id="embeder" step="embeder" disabled="false" >
+	<embedder id="embedder" step="embedder" disabled="false" >
 
 		<!-- detect if we are in dev context -->
 		<detect feature="dev-context" target="context" enabled="dev" optional="false" />
@@ -227,8 +227,8 @@
 		<detect feature="inline-data" target="class" enabled="modern" optional="false" />
 
 		<!-- generate a php file to get the embed code (with ua sniffing) -->
-		<output path="admin/webmerge/generated/embeder.php" type="php" />
+		<output path="admin/webmerge/generated/embedder.php" type="php" />
 
-	</embeder>
+	</embedder>
 
 </xml>

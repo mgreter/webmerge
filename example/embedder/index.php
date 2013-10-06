@@ -19,8 +19,8 @@
 
 			}
 
-			# load the embeder to select and embed includes
-			include('admin/webmerge/generated/embeder.php');
+			# load the embedder to select and embed includes
+			include('admin/webmerge/generated/embedder.php');
 			$domain = tx_rtpwebmerge_embed_data::select($rootline);
 			$include = tx_rtpwebmerge_embed_data::embed('live', $domain);
 

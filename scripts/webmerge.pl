@@ -31,7 +31,7 @@ use RTP::Webmerge::Path;
 use RTP::Webmerge::Merge;
 use RTP::Webmerge::Prepare;
 use RTP::Webmerge::HeadInc;
-use RTP::Webmerge::Embeder;
+use RTP::Webmerge::Embedder;
 use RTP::Webmerge::Optimize;
 use RTP::Webmerge::Checksum;
 use RTP::Webmerge::Watchdog;
@@ -97,8 +97,8 @@ my $config =
 	'merge' => 1,
 	# create head includes
 	'headinc' => 0,
-	# create embeder
-	'embeder' => 0,
+	# create embedder
+	'embedder' => 0,
 	# start watchdog
 	'watchdog' => 0,
 
@@ -169,7 +169,7 @@ my @opts = (
 	'level|l=o' => \$config->{'cmd_level'},
 	'merge|m!' => \$config->{'cmd_merge'},
 	'headinc|i!' => \$config->{'cmd_headinc'},
-	'embeder|e!' => \$config->{'cmd_embeder'},
+	'embedder|e!' => \$config->{'cmd_embedder'},
 	'watchdog|w!' => \$config->{'cmd_watchdog'},
 	'crc-check|c!' => \$config->{'cmd_crc-check'},
 
@@ -512,7 +512,7 @@ if (scalar(@ARGV))
 		@{$xml->{'merge'} || []},
 		@{$xml->{'prepare'} || []},
 		@{$xml->{'headinc'} || []},
-		@{$xml->{'embeder'} || []},
+		@{$xml->{'embedder'} || []},
 		@{$xml->{'optimize'} || []},
 	)
 	{
@@ -592,7 +592,7 @@ foreach my $nodes
 	($xml->{'prepare'} || []),
 	($xml->{'headinc'} || []),
 	($xml->{'feature'} || []),
-	($xml->{'embeder'} || []),
+	($xml->{'embedder'} || []),
 	($xml->{'optimize'} || []),
 	(map { $_->{'js'} || [] } @{$xml->{'merge'} || []}),
 	(map { $_->{'css'} || [] } @{$xml->{'merge'} || []})
@@ -657,11 +657,11 @@ unless ($config->{'watchdog'})
 	if ($config->{'headinc'} && $xml->{'headinc'})
 	{ headinc($config, $_) foreach @{$xml->{'headinc'}}; }
 
-	# call embeder to create standalone embeder code
+	# call embedder to create standalone embedder code
 	# this code will sniff the environment to choose
 	# the correct headinc to be included in the html
-	if ($config->{'embeder'} && $xml->{'embeder'})
-	{ embeder($config, $_) foreach @{$xml->{'embeder'}}; }
+	if ($config->{'embedder'} && $xml->{'embedder'})
+	{ embedder($config, $_) foreach @{$xml->{'embedder'}}; }
 
 }
 
@@ -776,13 +776,13 @@ webmerge [options] [steps]
 
    --headtmpl          text to prepend to generated files
    --jsdeferer         javascript loader for defered loading
-   --tmpl-embed-php    embeder template for php embeder generator
+   --tmpl-embed-php    embedder template for php embedder generator
 
    -p, --prepare       enable/disable prepare steps
    -o, --optimize      enable/disable optimize steps
    -m, --merge         enable/disable merge steps
    -i, --headinc       enable/disable headinc steps
-   -e, --embeder       enable/disable embeder steps
+   -e, --embedder       enable/disable embedder steps
 
    -l, --level         set optimization level (0-9)
 

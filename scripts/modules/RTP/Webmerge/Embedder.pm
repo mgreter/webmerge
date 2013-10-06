@@ -2,7 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ###################################################################################################
-package RTP::Webmerge::Embeder;
+package RTP::Webmerge::Embedder;
 ###################################################################################################
 
 use Carp;
@@ -12,13 +12,13 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Embeder::VERSION = "0.70" }
+BEGIN { $RTP::Webmerge::Embedder::VERSION = "0.70" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(embeder); }
+BEGIN { our @EXPORT = qw(embedder); }
 
 ###################################################################################################
 
@@ -31,19 +31,19 @@ use RTP::Webmerge::Path qw(dirname check_path exportURI);
 
 ###################################################################################################
 
-our (%embeder, %tmpl);
+our (%embedder, %tmpl);
 
 sub register
 {
 
-	my ($type, $embeder) = @_;
+	my ($type, $embedder) = @_;
 
 	$type = lc $type;
 
-	if (exists $embeder{$type} && $embeder{$type} != $embeder)
-	{ printf 'embeder type <%s> already registered', $type; exit; }
+	if (exists $embedder{$type} && $embedder{$type} != $embedder)
+	{ printf 'embedder type <%s> already registered', $type; exit; }
 
-	$embeder{$type} = $embeder;
+	$embedder{$type} = $embedder;
 
 }
 # EO sub register
@@ -59,8 +59,8 @@ push @initers, sub
 	# declare variables
 	my (@options);
 
-	# process each embeder type
-	foreach my $type (keys %embeder)
+	# process each embedder type
+	foreach my $type (keys %embedder)
 	{
 		# create config variable to be available
 		$config->{'tmpl-embed-' . $type} = undef;
@@ -79,18 +79,18 @@ push @initers, sub
 
 # create header include files
 # containing scripts/links nodes
-sub embeder
+sub embedder
 {
 
 	# get input variables
-	my ($config, $embeder) = @_;
+	my ($config, $embedder) = @_;
 
 	# get local variables from config
 	my $atomic = $config->{'atomic'};
 
 	# test if current header has been disabled
-	return if exists $embeder->{'disabled'} &&
-		lc $embeder->{'disabled'} eq 'true';
+	return if exists $embedder->{'disabled'} &&
+		lc $embedder->{'disabled'} eq 'true';
 
 	# get local variables from config
 	# my $webpath = $config->{'webpath'};
@@ -155,8 +155,8 @@ sub embeder
 	# EO each include
 
 	# put the arrays into local variables
-	my $detects = $embeder->{'detect'} || [];
-	my $outputs = $embeder->{'output'} || [];
+	my $detects = $embedder->{'detect'} || [];
+	my $outputs = $embedder->{'output'} || [];
 
 	# process all output (different types)
 	foreach my $output (@{$outputs || [] })
@@ -177,7 +177,7 @@ sub embeder
 		my %includes = %domains;
 
 		# make all include paths relative
-		# to the generated embeder script
+		# to the generated embedder script
 		foreach my $did (keys %includes)
 		{
 			foreach my $context (keys %{$includes{$did}})
@@ -194,15 +194,15 @@ sub embeder
 		foreach my $type (split(/\s*\,\s*/, $types))
 		{
 
-			# check if embeder type is registered
-			if (exists $embeder{$type})
+			# check if embedder type is registered
+			if (exists $embedder{$type})
 			{
 
-				# get the embeder code for this given type (i.e. php or perl)
-				my $code = $embeder{lc$type}(\%includes, \%features, $detects, $config);
+				# get the embedder code for this given type (i.e. php or perl)
+				my $code = $embedder{lc$type}(\%includes, \%features, $detects, $config);
 
-				# give debug message about creating the embeder code
-				print "creating standalone embeder for $type\n";
+				# give debug message about creating the embedder code
+				print "creating standalone embedder for $type\n";
 
 				# write the include code now
 				writefile($path, $code, $atomic);
@@ -216,7 +216,7 @@ sub embeder
 
 				# die with an error if type is unknown
 				# maybe you forgot to load the type module
-				die "unknown embeder output type <$type>\n"
+				die "unknown embedder output type <$type>\n"
 
 			}
 
@@ -226,12 +226,12 @@ sub embeder
 	# EO each output
 
 }
-# EO sub embeder
+# EO sub embedder
 
 ###################################################################################################
 
 # load implementations
-use RTP::Webmerge::Embeder::PHP;
+use RTP::Webmerge::Embedder::PHP;
 
 ###################################################################################################
 ####################################################################################################

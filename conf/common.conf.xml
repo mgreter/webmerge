@@ -16,17 +16,17 @@
 		<!-- it's also possible to change it only for a block -->
 		<directory>{WWW}</directory>
 
-		<!-- templates for embeder generating -->
+		<!-- templates for embedder generating -->
 		<!-- paths are relative to config file -->
-		<tmpl-embed-php>{EXT}/templates/embeder.tmpl.php</tmpl-embed-php>
-		<!-- <tmpl-embed-js>{EXT}/templates/embeder.tmpl.js</tmpl-embed-js> -->
-		<!-- <tmpl-embed-perl>{EXT}/templates/embeder.tmpl.pl</tmpl-embed-perl> -->
+		<tmpl-embed-php>{EXT}/templates/embedder.tmpl.php</tmpl-embed-php>
+		<!-- <tmpl-embed-js>{EXT}/templates/embedder.tmpl.js</tmpl-embed-js> -->
+		<!-- <tmpl-embed-perl>{EXT}/templates/embedder.tmpl.pl</tmpl-embed-perl> -->
 
 		<!-- run operations by default -->
 		<merge>1</merge>
 		<prepare>1</prepare>
 		<headinc>1</headinc>
-		<embeder>1</embeder>
+		<embedder>1</embedder>
 		<optimize>0</optimize>
 
 		<!-- max file size to inline -->

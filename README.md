@@ -145,7 +145,7 @@ can use the run script __tools\webmerge\webmerge.bat__
 
 Demo Examples
 =============
-- http://webmerge.ocbnet.ch/webmerge/example/embeder/
+- http://webmerge.ocbnet.ch/webmerge/example/embedder/
 - http://webmerge.ocbnet.ch/webmerge/example/sprites/fam/
 - http://webmerge.ocbnet.ch/webmerge/example/sprites/hires/
 
@@ -180,13 +180,13 @@ Command Line Options
 
     --headtmpl            text to prepend to generated files
     --jsdeferer           javascript loader for defered loading
-    --tmpl-embed-php      embeder template for php embeder generator
+    --tmpl-embed-php      template for php embedding generator
 
     -p, --prepare         enable/disable prepare steps
     -o, --optimize        enable/disable optimize steps
     -m, --merge           enable/disable merge steps
     -i, --headinc         enable/disable headinc steps
-    -e, --embeder         enable/disable embeder steps
+    -e, --embedder        enable/disable embedder steps
 
     -l, --level           set optimization level (0-9)
 
