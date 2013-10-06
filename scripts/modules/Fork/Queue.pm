@@ -1,11 +1,11 @@
 # from http://www.perlmonks.org/?node_id=49335
 # 26.06.2012 added can_dequeue function (mgr@rtp.ch)
 package Fork::Queue;
-use IO::Socket;
-#use IO::Select;
 
 use strict;
 use warnings;
+
+use Socket;
 
 sub new {
     my($this) = @_;
@@ -18,11 +18,12 @@ sub new {
 # make the socketpair
 sub mksockpair {
     my($self)=@_;
-    my $creator=IO::Socket->new() or die();
-    my($reader,$writer);
-    ($reader,$writer)=$creator->socketpair(AF_UNIX,SOCK_STREAM,PF_UNSPEC);
-    shutdown($reader,1);
-    shutdown($writer,0);
+    socketpair(my $reader, my $writer, AF_UNIX, SOCK_STREAM, PF_UNSPEC);
+    if ($^O ne "MSWin32")
+    {
+      shutdown($reader,1);
+      shutdown($writer,0);
+    }
     $self->{'READER'}=$reader;
     $self->{'WRITER'}=$writer;
 }
@@ -35,7 +36,9 @@ sub enqueue {
         $header=pack("N",length($item));
         $buffer=$header . $item;
         $tosend=length($buffer);
-        print $handle $buffer;
+        my $rv = print $handle $buffer;
+        die "write error : $!" unless defined $rv;
+        die "write disconnected" if $rv eq 0;
         $handle->flush;
     }
 }
@@ -50,13 +53,19 @@ sub dequeue {
     my($handle)=$self->{'READER'};
     # read 4 byte header
     while ($bytes_read < $toread) {
-       $bytes_read+=read($handle,$header,$toread,$bytes_read);
+       my $rv=read($handle,$header,$toread);
+       die "read error : $!" unless defined $rv;
+       die "read disconnected" if $rv eq 0;
+       $bytes_read+=$rv;
     }
     $toread=unpack("N",$header);
     $bytes_read=0;
     # read the actual data
     while ($bytes_read < $toread) {
-       $bytes_read+=read($handle,$data,$toread,$bytes_read);
+       my $rv=read($handle,$data,$toread,0);
+       die "read error : $!" unless defined $rv;
+       die "read disconnected" if $rv eq 0;
+       $bytes_read+=$rv;
     }
     return $data;
 }
@@ -68,7 +77,9 @@ sub can_dequeue {
     my($handle)=$self->{'READER'};
     if (defined(my $fileno = $handle->fileno())) {
         vec(my $rbit = '', $fileno, 1) = 1; # enable fd in vector table
-        select($rbit, undef, undef, $timeout); # select for readable handles
+        vec(my $ebit = '', $fileno, 1) = 1; # enable fd in vector table
+        my $rv = select($rbit, undef, $ebit, $timeout); # select for readable handles
+        die "can dequeue errors" if vec($ebit, $fileno, 1);
         return vec($rbit, $fileno, 1); # check fd in vector table
     } else { return undef; }
     # my($io) = IO::Select->new($handle);
