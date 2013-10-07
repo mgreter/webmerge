@@ -13,7 +13,7 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::Spritesets::Canvas::Optimize = "0.7.0"; }
+BEGIN { $OCBNET::Spritesets::Canvas::Optimize = "0.9.0"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }

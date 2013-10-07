@@ -20,7 +20,7 @@ our ($webroot, $confroot, $extroot, $directory);
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Path::VERSION = "0.8.3" }
+BEGIN { $RTP::Webmerge::Path::VERSION = "0.9.0" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }

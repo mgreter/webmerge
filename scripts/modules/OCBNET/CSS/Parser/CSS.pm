@@ -13,7 +13,7 @@ use warnings;
 ####################################################################################################
 
 # define our version string
-BEGIN { $OCBNET::CSS::Parser::CSS::VERSION = "0.70"; }
+BEGIN { $OCBNET::CSS::Parser::CSS::VERSION = "0.9.0"; }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }

@@ -12,7 +12,7 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::IO::JS::VERSION = "0.8.2" }
+BEGIN { $RTP::Webmerge::IO::JS::VERSION = "0.9.0" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }

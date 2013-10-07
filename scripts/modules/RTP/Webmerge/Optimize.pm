@@ -20,7 +20,7 @@ our (%optimizer);
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Optimize::VERSION = "0.70" }
+BEGIN { $RTP::Webmerge::Optimize::VERSION = "0.9.0" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
