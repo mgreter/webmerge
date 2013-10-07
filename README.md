@@ -26,9 +26,7 @@ More ideas
 - Add smart locks to ensure parallel execution
 - Implement parallel workers for unrelated blocks
 - Put more usefull information to the console
-- Like file imported, files created, time needed ...
-- Make compilers "pluggable" (for 3rd party plugins)
-- Modularize the whole merge process into sub modules
+- i.e. files imported, files created, time needed ...
 
 Installing on Windows
 =====================
@@ -141,13 +139,21 @@ You should finally get this folder structure:
 __tools\gm__, __tools\perl__, __tools\webmerge__. Then you
 can use the run script __tools\webmerge\webmerge.bat__
 
-
 Demo Examples
 =============
 - http://webmerge.ocbnet.ch/webmerge/example/sprites/fam/
 - http://webmerge.ocbnet.ch/webmerge/example/sprites/hires/
 - http://webmerge.ocbnet.ch/webmerge/example/embedder/index.php
 - http://webmerge.ocbnet.ch/webmerge/example/embedder/index.html
+
+Performance
+===========
+The performance should be quite decent but is definitely not 100%
+optimal. Altough I tried to use the best methods wherever possible.
+From code profiling the sprites examples, one of the most promising
+optimizations would be to implement OCBNET::Packer::2D in XS code (C).
+You can view a NYTPROF Performance Profile of the sprite example here:
+- http://webmerge.ocbnet.ch/webmerge/nytprof/
 
 Command Line Options
 ====================
