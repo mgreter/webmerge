@@ -75,7 +75,7 @@ push @checkers, sub
 ###################################################################################################
 
 # now create a new file optimizer subroutine and hook it into our optimizers
-$RTP::Webmerge::Optimize::optimizer{'gz'} = RTP::Webmerge::Optimize::fileOptimizer('gz');
+$RTP::Webmerge::Optimize::optimizer{'gz'} = RTP::Webmerge::Optimize::optimize('gz');
 
 ###################################################################################################
 ###################################################################################################

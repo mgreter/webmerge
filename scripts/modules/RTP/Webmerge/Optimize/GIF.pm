@@ -75,7 +75,7 @@ push @checkers, sub
 ###################################################################################################
 
 # now create a new file optimizer subroutine and hook it into our optimizers
-$RTP::Webmerge::Optimize::optimizer{'gif'} = RTP::Webmerge::Optimize::fileOptimizer('gif');
+$RTP::Webmerge::Optimize::optimizer{'gif'} = RTP::Webmerge::Optimize::optimize('gif');
 
 ###################################################################################################
 ###################################################################################################

@@ -15,8 +15,6 @@ BEGIN { $RTP::Webmerge::Process::CSS::SCSS::VERSION = "0.7.0" }
 
 ###################################################################################################
 
-###################################################################################################
-
 # process spritesets with additional modules
 # try to keep them as standalone as possible
 sub scss
@@ -35,7 +33,7 @@ sub scss
 		# include_paths => ['some/include/path'],
 
 		# always output in nice formated way
-		# will compress later by own compressor
+		# will compress later by our own compilers
 		output_style => CSS::Sass::SASS_STYLE_NESTED(),
 
 		# output debug comments

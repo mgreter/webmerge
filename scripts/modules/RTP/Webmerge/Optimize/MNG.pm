@@ -80,7 +80,7 @@ push @checkers, sub
 ###################################################################################################
 
 # now create a new file optimizer subroutine and hook it into our optimizers
-$RTP::Webmerge::Optimize::optimizer{'mng'} = RTP::Webmerge::Optimize::fileOptimizer('mng');
+$RTP::Webmerge::Optimize::optimizer{'mng'} = RTP::Webmerge::Optimize::optimize('mng');
 
 ###################################################################################################
 ###################################################################################################

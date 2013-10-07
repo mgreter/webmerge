@@ -29,7 +29,7 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 BEGIN { our @EXPORT = qw(optimizer); }
 
 # define our functions that can be exported
-BEGIN { our @EXPORT_OK = qw(%optimizer fileOptimizer); }
+BEGIN { our @EXPORT_OK = qw(%optimizer optimize); }
 
 ###################################################################################################
 
@@ -93,7 +93,7 @@ use RTP::Webmerge qw(callProgram);
 
 # create a new sub to optimize files
 # pass the filetype to be optimized
-sub fileOptimizer ($)
+sub optimize ($)
 {
 
 	# create a closure variable
@@ -151,7 +151,7 @@ sub fileOptimizer ($)
 	# EO sub optimizer
 
 }
-# EO sub fileOptimizer
+# EO sub optimize
 
 ###################################################################################################
 ###################################################################################################

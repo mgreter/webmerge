@@ -83,7 +83,7 @@ push @checkers, sub
 ###################################################################################################
 
 # now create a new file optimizer subroutine and hook it into our optimizers
-$RTP::Webmerge::Optimize::optimizer{'png'} = RTP::Webmerge::Optimize::fileOptimizer('png');
+$RTP::Webmerge::Optimize::optimizer{'png'} = RTP::Webmerge::Optimize::optimize('png');
 
 ###################################################################################################
 ###################################################################################################
