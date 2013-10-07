@@ -65,17 +65,10 @@ sub data { ${$_->{'data'}} };
 
 use RTP::Webmerge::IO::JS;
 use RTP::Webmerge::IO::CSS;
-
 use RTP::Webmerge::Merge::JS;
 use RTP::Webmerge::Merge::CSS;
-
-###################################################################################################
-
-# load minifier libraries and define subroutines
-# maybe make these dependencies dynamic as they are
-# normally only used as backup if the default methods fail
-
-use RTP::Webmerge::Merge::Include;
+use RTP::Webmerge::Include::JS;
+use RTP::Webmerge::Include::CSS;
 
 ###################################################################################################
 
@@ -159,7 +152,7 @@ sub writer
 		or die "could not write <$checksum_path>: $!";
 
 }
-# EO sub mergeOutput
+# EO sub writer
 
 ###################################################################################################
 
@@ -454,8 +447,8 @@ my $merger = sub
 
 			# create code fragment to process
 			my $prefix = join($joiner, grep { $_ } @prefix);
-			my $process = join($joiner, grep { $_ } @process);
 			my $suffix = join($joiner, grep { $_ } @suffix);
+			my $process = join($joiner, grep { $_ } @process);
 
 			# call processors (will return immediately if nothing is set)
 			callProcessor($output->{'preprocess'}, \ $prefix, $config, $output);

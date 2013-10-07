@@ -55,7 +55,7 @@ $importer{'css'} = \&importCSS;
 $exporter{'css'} = \&exportCSS;
 $writer{'css'} = \&writeCSS;
 
-use RTP::Webmerge::Merge::Include;
+use RTP::Webmerge::Include::CSS;
 
 $includer{'css'} =
 {

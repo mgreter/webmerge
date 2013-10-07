@@ -2,7 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ###################################################################################################
-package RTP::Webmerge::Merge::Include;
+package RTP::Webmerge::Include::JS;
 ###################################################################################################
 
 use Carp;
@@ -12,13 +12,13 @@ use warnings;
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Merge::Include::VERSION = "0.7.0" }
+BEGIN { $RTP::Webmerge::Include::JS::VERSION = "0.7.0" }
 
 # load exporter and inherit from it
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(includeJS includeCSS $js_dev_header $css_dev_header); }
+BEGIN { our @EXPORT = qw(includeJS $js_dev_header); }
 
 ###################################################################################################
 
@@ -66,12 +66,6 @@ if (typeof webmerge.includeJS != \'function\')
 
 ###################################################################################################
 
-# css header include
-#**************************************************************************************************
-our $css_dev_header = '';
-
-###################################################################################################
-
 # called via array map
 #**************************************************************************************************
 sub includeJS
@@ -94,31 +88,6 @@ sub includeJS
 
 }
 # EO includeJS
-
-###################################################################################################
-
-# called via array map
-#**************************************************************************************************
-sub includeCSS
-{
-
-	# get passed variables
-	my ($config) = @_;
-
-	# magick map variable
-	my $data = $_;
-
-	# define the template for the script includes (don't care about doctype versions, dev only)
-	my $css_include_tmpl = '@import url(\'%s\');' . "\n";
-
-	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
-
-	# return the script include string
-	return sprintf($css_include_tmpl, $path);
-
-}
-# EO sub includeCSS
 
 ###################################################################################################
 ###################################################################################################

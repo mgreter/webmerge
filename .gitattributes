@@ -10,6 +10,7 @@
 *.sh text eol=lf
 *.js text eol=lf
 *.css text eol=lf
+*.scss text eol=lf
 
 # Declare files that will always have CRLF line endings on checkout.
 *.bat text eol=crlf

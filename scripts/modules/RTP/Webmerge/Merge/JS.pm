@@ -67,7 +67,7 @@ $importer{'js'} = \&importJS;
 $exporter{'js'} = \&exportJS;
 $writer{'js'} = \&writeJS;
 
-use RTP::Webmerge::Merge::Include;
+use RTP::Webmerge::Include::JS;
 
 $includer{'js'} =
 {
