@@ -213,15 +213,31 @@ sub writefile ($$;$$)
 	# open the file via atomic interface
 	# my $fh = RTP::IO::AtomicFile->open($file, 'w');
 
-	my $dir = dirname $file;
-
-	die "directory does not exist: ", $dir unless -d $dir;
+	# assertion that the directory to write file to exists before
+	die "directory does not exist: ", dirname $file unless -d dirname $file;
 
 	# looks like we already written this file
 	# truncate, sync and unlock, then write again
 	if (exists $atomic->{$file})
 	{
-
+		# content has changed between writes
+		# what should we do in this situation?
+		if (${$atomic->{$file}->[0]} ne ${$out})
+		{
+			# this seems that it can happen with spritesets
+			# the differences are very subtile, but no idea why
+			# so far we haven't had an issue with it in a long time
+			warn "\nERROR: Writing to same file more than once (different content):\n";
+			warn substr($file, - 65), "\n";
+			die "PLEASE REVIEW YOUR CONFIGURATION!\n";
+		}
+		else
+		{
+			# this is really just a warning, nothing more
+			# remove this once we add a proper implementation
+			warn "\nWARNING: Writing to the same file more than once (same content):\n";
+			warn substr($file, - 65), "\n";
+		}
 		# get the stored old handle
 		$fh = $atomic->{$file}->[1];
 		# enable autoflush

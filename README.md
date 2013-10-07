@@ -20,7 +20,6 @@ To Do
 - Implement @license header handling
 - Maybe add support for ImageMagick too
 - Test more edge cases (specially with css parser)
-- Make writes/reads on same atomic file transparent
 
 More ideas
 ==========

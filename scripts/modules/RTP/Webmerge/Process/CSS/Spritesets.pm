@@ -58,42 +58,16 @@ sub spritesets
 		# get data for atomic file handling
 		my $atomic = $config->{'atomic'};
 
-		# check if file is known
-		if ($atomic->{$file})
-		{
+		# write out the file and get the file handle
+		my $handle = writefile($file, \$blob, $atomic, 1);
+		# assertion for any write errors
+		die "error write $file" unless $handle;
 
-			# content has changed between writes
-			# what should we do in this situation?
-			if (${$atomic->{$file}->[0]} ne $blob)
-			{
-				# this seems that it can happen with spritesets
-				# the differences are very subtile, but no idea why
-				# so far we haven't had an issue with it in a long time
-				warn "\nERROR: Writing to same file more than once (different content):\n";
-				warn substr($file, - 65), "\n";
-				die "PLEASE REVIEW YOUR CONFIGURATION!\n";
-			}
-			else
-			{
-				# this is really just a warning, nothing more
-				# remove this once we add a proper implementation
-				warn "\nWARNING: Writing to the same file more than once (same content):\n";
-				warn substr($file, - 65), "\n";
-			}
-		}
-		# first write on file
-		else
-		{
-			# write out the file and get the file handle
-			my $handle = writefile($file, \$blob, $atomic, 1);
-			# assertion for any write errors
-			die "error write $file" unless $handle;
-			# create data structure to remember ...
-			unless (exists $written->{'png'})
-			{ $written->{'png'} = []; }
-			# ... which files have been written
-			push(@{$written->{'png'}}, $handle);
-		}
+		# create data structure to remember ...
+		unless (exists $written->{'png'})
+		{ $written->{'png'} = []; }
+		# ... which files have been written
+		push(@{$written->{'png'}}, $handle);
 
 	};
 	# EO sub $writer
