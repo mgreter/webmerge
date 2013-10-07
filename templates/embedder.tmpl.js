@@ -60,6 +60,10 @@
 
 	//#########################################################################
 
+	webmerge.SERVER = { 'HTTP_USER_AGENT': navigator.userAgent };
+
+	//#########################################################################
+
 	// precreated include file by webmerge
 	var includes = %%includes%%;
 
@@ -71,6 +75,7 @@
 		//#########################################################################
 
 		if (typeof did == 'undefined' || did === null) did = '';
+		if (typeof debug == 'undefined' || debug === null) debug = 1;
 
 		//#########################################################################
 
@@ -89,16 +94,33 @@
 
 		//#########################################################################
 
-			// test if include for favored class exists
+		// no debug message by default
+		var debugmsg = '';
+
+		// create a debug message to be printed out
+		if (debug) { debugmsg = 'webmerge: ' + [context, did, klass].join(':'); }
+
+		// wrap debug message within a html comment if debug equals one
+		if (debug == 1) { debugmsg = '<!-- ' + debugmsg + ' -->'; }
+
+		// add a newline to the debug message
+		if (debug) { debugmsg += "\n"; }
+
+		// test if include for favored class exists
 		if (includes[did][context][klass])
 		{
 			// write the includes for domain and context
-			document.write(includes[did][context][klass]);
+			return(debugmsg + includes[did][context][klass]);
 		}
 		else if (includes[did][context]['default'])
 		{
 			// write the includes for domain and context
-			document.write(includes[did][context]['default']);
+			return(debugmsg + includes[did][context]['default']);
+		}
+		else
+		{
+			// give an error message as html comment
+			return '<!-- webmerge found no include: ' + [context, did, klass].join(':') + ' -->';
 		}
 
 		//#########################################################################

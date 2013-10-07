@@ -36,6 +36,9 @@
 			var domain = webmerge.embed.select(rootline);
 			var include = webmerge.embed('live', domain);
 
+			// print include header
+			document.write(include);
+
 		</script>
 
 	</head>
@@ -67,7 +70,16 @@
 
 		<hr>
 
-		<pre><?php print htmlspecialchars($include) ?></pre>
+		<pre><script>
+				// print include header
+				document.write
+				(
+					// do a cheap "htmlreplace"
+					include.replace(/&/g, '&amp;')
+					       .replace(/</g, '&lt;')
+					       .replace(/>/g, '&gt;')
+				);
+		</script></pre>
 
 	</body>
 </html>
