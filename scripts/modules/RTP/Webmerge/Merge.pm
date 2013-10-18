@@ -275,13 +275,15 @@ sub collect
 				{
 					unless (exists $config->{'ids'}->{$type}->{$id})
 					{ die "Fatal: merge id <$id> is not available\n"; }
-					my $item = $config->{'ids'}->{$type}->{$id};
-					die "could merge $id: $item -> not yet implemented\n";
+					push(@{$data{$kind}}, $config->{'ids'}->{$type}->{$id});
+				}
+				else
+				{
+					# put all informations on to our data array
+					# we just copy the entry from previous merge
+					push(@{$data{$kind}}, $config->{'merged'}->{$id});
 				}
 
-				# put all informations on to our data array
-				# we just copy the entry from previous merge
-				push(@{$data{$kind}}, $config->{'merged'}->{$id});
 
 			}
 			# EO if id
@@ -327,11 +329,11 @@ sub collect
 
 # main merge function
 # ***********************************************************************************************
-my $merger = sub
+my $merger; $merger = sub
 {
 
 	# get input variables
-	my ($config, $type, $merge) = @_;
+	my ($config, $type, $merge, $render) = @_;
 
 	# test if the merge has been disabled
 	return if exists $merge->{'disabled'} &&
@@ -370,11 +372,28 @@ my $merger = sub
 		# get output target of block
 		my $target = $output->{'target'};
 
+		# skip this target if not the one to render
+		next if ($render && $render ne $target);
+
 		# local function to collect files to process
 		# will filter out stuff according to given target
 		# usefull for including stuff only in dev or live
 		my $collect = sub
 		{
+
+			map
+			{
+				unless ($_->{'data'})
+				{
+					my $stage = $config->stage;
+					$config->apply($_->{'_conf'})->finalize;
+					my $data = $merger->($config, $type, $_, $_[1]);
+					# get the md5sum of the unaltered data (otherwise crc may not be correct)
+					my $md5sum = md5sum(my $org = \ "$data") or die "could not get md5sum from data: $!";
+					$_->{'data'} = \ $data; $_->{'md5sum'} = \ $md5sum;
+				}
+			$_ }
+
 			grep
 			{
 				# item has no target - include
@@ -396,11 +415,11 @@ my $merger = sub
 		my @prefix = (sprintf($config->{'headtmpl'}, $target));
 
 		# add everything as data/text unaltered (just include data)
-		push @input, join($joiner, grep { $_ } map data, $collect->('prefix'));
-		push @input, join($joiner, grep { $_ } map data, $collect->('prepend'));
-		push @input, join($joiner, grep { $_ } map data, $collect->('input'));
-		push @input, join($joiner, grep { $_ } map data, $collect->('append'));
-		push @input, join($joiner, grep { $_ } map data, $collect->('suffix'));
+		push @input, join($joiner, grep { $_ } map data, $collect->('prefix', $target));
+		push @input, join($joiner, grep { $_ } map data, $collect->('prepend', $target));
+		push @input, join($joiner, grep { $_ } map data, $collect->('input', $target));
+		push @input, join($joiner, grep { $_ } map data, $collect->('append', $target));
+		push @input, join($joiner, grep { $_ } map data, $collect->('suffix', $target));
 
 		# create final joined code
 		my $input = join($joiner, grep { $_ } @input);
@@ -410,7 +429,7 @@ my $merger = sub
 
 		# store joined output by id for later use
 		# this id may be referenced by other inputs
-		$config->{'merged'}->{$merge->{'id'}} =
+		$config->{'merged'}->{$merge->{'id'}}->{$target} =
 		{
 			'data' => \ $input,
 			'md5sum' => $md5sum,
@@ -441,18 +460,18 @@ my $merger = sub
 		# die sprintf "no processor for %s/%s\n", $type, $target unless $processor;
 
 		# is feature enabled
-		if ($config->{$target})
+		if ($config->{$target} || $render)
 		{
 
 			# print a message to the console about the current status
 			printf "creating %s %s <%s>\n", $type, $target, $output->{'path'};
 
 			# add everything as data/text unaltered
-			push @prefix, map data, $collect->('prefix');
-			push @process, map &{$includer}, $collect->('prepend');
-			push @process, map &{$includer}, $collect->('input');
-			push @process, map &{$includer}, $collect->('append');
-			push @suffix, map data, $collect->('suffix');
+			push @prefix, map data, $collect->('prefix', $target);
+			push @process, map &{$includer}, $collect->('prepend', $target);
+			push @process, map &{$includer}, $collect->('input', $target);
+			push @process, map &{$includer}, $collect->('append', $target);
+			push @suffix, map data, $collect->('suffix', $target);
 
 			# create code fragment to process
 			my $prefix = join($joiner, grep { $_ } @prefix);
@@ -473,6 +492,9 @@ my $merger = sub
 
 			# create final joined code (prefix and suffix are unchanged)
 			my $code = join($joiner, grep { $_ } ($prefix, $process, $suffix));
+
+			# special case if render is given
+			return $code if $render;
 
 			# commit and write out the completely merged block
 			my $rv = writer($type, $config, $output, \ $code, $collection);
