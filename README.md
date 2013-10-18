@@ -17,6 +17,7 @@ To Do
 - Write documentation
 - Prepare code for v1.0.0 release
 - Load more modules conditionally
+- Implement correct import handling
 - Implement @license header handling
 - Maybe add support for ImageMagick too
 - Test more edge cases (specially with css parser)

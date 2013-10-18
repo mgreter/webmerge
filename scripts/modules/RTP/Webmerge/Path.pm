@@ -180,8 +180,13 @@ sub chdir
 	# assert that current has some value
 	$directory = abs_path '.' unless $directory;
 
-	# assertion that we have some valid arguments
-	return unless $chdirs && scalar(@{$chdirs}) > 0;
+	# check that we have some arguments (test attribute)
+	return unless defined $chdirs && $chdirs ne '';
+	# make sure that we have an array in the end
+	# we also support strings as input -> normalize
+	$chdirs = [$chdirs] if ref $chdirs ne 'ARRAY';
+	# check that we have some input arguments
+	return if scalar(@{$chdirs}) == 0;
 
 	# create a new variable
 	my $dir = $directory;

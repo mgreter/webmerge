@@ -636,32 +636,68 @@ foreach my $nodes
 unless ($config->{'watchdog'})
 {
 
+	# action handlers
+	my %actions = (
+		'merge' => \&merger,
+		'prepare' => \&prepare,
+		'headinc' => \&headinc,
+		'embedder' => \&embedder,
+		'optimize' => \&optimizer
+	);
+
+	# call initial process
+	# recursive on chdir blocks
+	sub process
+	{
+
+		# get input arguments
+		my ($config, $xml, $action) = @_;
+
+		# call the given action
+		if ($xml->{'block'})
+		{
+			# process each given block
+			foreach my $block ( @{$xml->{'block'}} )
+			{
+				# change directory (restore previous state after this block)
+				my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
+				# pass on to recursively process blocks
+				&process($config, $block, $action);
+			}
+		}
+
+		# call the given action
+		if ($config->{$action} && $xml->{$action})
+		{
+			# process each given block
+			foreach ( @{$xml->{$action}} )
+			{ &{$actions{$action}}($config, $_); }
+		}
+
+	};
+	# EO sub process
+
 	# call the action step first
 	# this will create directories
-	if ($config->{'prepare'} && $xml->{'prepare'})
-	{ prepare($config, $_) foreach @{$xml->{'prepare'}}; }
+	process($config, $xml, 'prepare');
 
 	# call the optimization step next
 	# this will change some source files
-	if ($config->{'optimize'} && $xml->{'optimize'})
-	{ optimizer($config, $_) foreach @{$xml->{'optimize'}}; }
+	process($config, $xml, 'optimize');
 
 	# next we will continue with the merge step
 	# this will write generated and processed files
-	if ($config->{'merge'} && $xml->{'merge'})
-	{ merger($config, $_) foreach @{$xml->{'merge'}}; }
+	process($config, $xml, 'merge');
 
 	# call headinc function to generate headers
 	# these can be included as standalone files
 	# they have includes for all the css and js files
-	if ($config->{'headinc'} && $xml->{'headinc'})
-	{ headinc($config, $_) foreach @{$xml->{'headinc'}}; }
+	process($config, $xml, 'headinc');
 
 	# call embedder to create standalone embedder code
 	# this code will sniff the environment to choose
 	# the correct headinc to be included in the html
-	if ($config->{'embedder'} && $xml->{'embedder'})
-	{ embedder($config, $_) foreach @{$xml->{'embedder'}}; }
+	process($config, $xml, 'embedder');
 
 }
 

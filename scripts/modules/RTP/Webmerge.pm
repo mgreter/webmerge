@@ -69,75 +69,103 @@ sub collectOutputs
 	return if (exists $config->{'outpaths'});
 
 	# get local variables from config
+	my $xml = $config->{'xml'};
 	my $paths = $config->{'paths'};
 	my $doctype = $config->{'doctype'};
 
-	# get local arrays from loaded xml file
-	my $merges = $config->{'xml'}->{'merge'} || [];
-	my $headers = $config->{'xml'}->{'header'} || [];
-
-	# local variable
-	$config->{'outpaths'} = {};
-
-	# reset webpath after this block (make local)
-	local $config->{'webpath'} = $config->{'webpath'};
-
-	foreach my $block (@{$merges || []})
+	sub process
 	{
 
-		# change directory (restore previous state after this block)
-		my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
+		my ($config, $xml) = @_;
 
-		# process all types
-		foreach my $type ('css', 'js')
+		# get local arrays from loaded xml file
+		my $merges = $xml->{'merge'} || [];
+		my $imports = $xml->{'import'} || [];
+		my $headers = $xml->{'header'} || [];
+
+		# local variable
+		$config->{'outpaths'} = {};
+
+		# reset webpath after this block (make local)
+		local $config->{'webpath'} = $config->{'webpath'};
+
+		# call the given action
+		if ($xml->{'block'})
+		{
+			# process each given block
+			foreach my $block ( @{$xml->{'block'}} )
+			{
+				# change directory (restore previous state after this block)
+				my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
+				# pass on to recursively process blocks
+				&process($config, $block);
+			}
+		}
+
+		# process all merge blocks for outputs
+		foreach my $block (@{$merges || []})
 		{
 
-			# process all include entries
-			foreach my $merge (map { @{$_->{$type} || []} } @{$merges || {} })
+			# change directory (restore previous state after this block)
+			my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
+
+			# process all types
+			foreach my $type ('css', 'js')
 			{
 
-				# change directory (restore previous state after this block)
-				my $dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
-
-				# get id of this merge
-				my $id = $merge->{'id'};
-
-				# create and assign info hash for this merge
-				my $info = $config->{'outpaths'}->{$id} = { 'out' => {} };
-
-				# store some important attributes
-				$info->{'id'} = $merge->{'id'};
-				$info->{'type'} = $type;
-				$info->{'media'} = $merge->{'media'};
-				$info->{'disabled'} = $merge->{'disabled'} || 'false';
-
-				# process all files to be written for this merge
-				foreach my $output (@{$merge->{'output'} || []})
+				# process all include entries
+				foreach my $merge (map { @{$_->{$type} || []} } @{$merges || {} })
 				{
 
-					# get the class name for this output
-					my $class = $output->{'class'} || 'default';
+					# change directory (restore previous state after this block)
+					my $dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
 
-					# assert that the target has been given for this output
-					die 'no target given for output' unless $output->{'target'};
+					# get id of this merge
+					my $id = $merge->{'id'};
 
-					# create another sub hash for this class if needed
-					$info->{'out'}->{$class} = {} unless exists $info->{'out'}->{$class};
+					# create and assign info hash for this merge
+					my $info = $config->{'outpaths'}->{$id} = { 'out' => {} };
 
-					# store the filepath for this merge output (by class/target)
-					# do not yet check for existence of the path as it may be created later
-					$info->{'out'}->{$class}->{$output->{'target'}} = res_path($output->{'path'});
+					# store some important attributes
+					$info->{'id'} = $merge->{'id'};
+					$info->{'type'} = $type;
+					$info->{'media'} = $merge->{'media'};
+					$info->{'disabled'} = $merge->{'disabled'} || 'false';
+
+					# process all files to be written for this merge
+					foreach my $output (@{$merge->{'output'} || []})
+					{
+
+						# get the class name for this output
+						my $class = $output->{'class'} || 'default';
+
+						# assert that the target has been given for this output
+						die 'no target given for output' unless $output->{'target'};
+
+						# create another sub hash for this class if needed
+						$info->{'out'}->{$class} = {} unless exists $info->{'out'}->{$class};
+
+						# store the filepath for this merge output (by class/target)
+						# do not yet check for existence of the path as it may be created later
+						$info->{'out'}->{$class}->{$output->{'target'}} = res_path($output->{'path'});
+
+					}
+					# EO each output
 
 				}
-				# EO each output
+				# EO each merge
 
 			}
-			# EO each merge
+			# EO each type (css/js)
 
 		}
-		# EO each type (css/js)
+		# EO each merge
 
 	}
+	# EO sub process
+
+	# call process
+	process($config, $xml);
 
 	# return success
 	return 1;
