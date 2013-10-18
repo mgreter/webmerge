@@ -49,7 +49,7 @@ sub new
 	my ($pkg) = @_;
 
 	# create and bless instance
-	my $self = bless {}, ref $pkg || $pkg;
+	my $self = bless { 'ids' => {}, 'merged' => {} }, ref $pkg || $pkg;
 
 	# init stages array
 	$stages{$self} = [];
@@ -120,7 +120,9 @@ sub cmdline
 	return $self;
 
 }
-# EO apply
+# EO sub cmdline
+
+###################################################################################################
 
 # apply cmdline options
 sub finalize
@@ -200,6 +202,7 @@ sub finalize
 	return $self;
 
 }
+# EO sub finalize
 
 ###################################################################################################
 
@@ -224,7 +227,7 @@ sub apply
 	return $self;
 
 }
-# EO apply
+# EO sub apply
 
 ###################################################################################################
 
@@ -260,6 +263,62 @@ sub xml
 	}
 	# EO each xml config
 
+	# collect all IDs
+	sub collectIDs
+	{
+
+		# get input
+		my ($config, $xml) = @_;
+
+		# call uniqueIDs recursively on nested blocks
+		collectIDs($_) foreach (@{$xml->{'block'} || []});
+
+		# get nodes arrays to clean
+		foreach my $item
+		(
+			([ 'prepare', $xml->{'prepare'} || [] ]),
+			([ 'headinc', $xml->{'headinc'} || [] ]),
+			([ 'feature', $xml->{'feature'} || [] ]),
+			([ 'embedder', $xml->{'embedder'} || [] ]),
+			([ 'optimize', $xml->{'optimize'} || [] ]),
+			(map { [ 'js', $_->{'js'} || [] ] } @{$xml->{'merge'} || []}),
+			(map { [ 'css', $_->{'css'} || [] ] } @{$xml->{'merge'} || []})
+		)
+		{
+
+			# get variables from item
+			my ($prefix, $nodes) = @{$item};
+
+			# loop from behind so we can splice items out
+			for (my $i = $#{$nodes}; $i != -1; -- $i)
+			{
+
+				# the the id of this block (skip if undefined)
+				my $id = $nodes->[$i]->{'id'} || next;
+
+				# check if store for prefix exists
+				unless (exists $config->{'ids'}->{$prefix})
+				{ $config->{'ids'}->{$prefix} = {}; }
+				my $ids = $config->{'ids'}->{$prefix};
+
+				# skip if id is already known
+				next if exists $ids->{$id};
+
+				# increment id counter
+				# will init automatically
+				$ids->{$id} = $nodes->[$i];
+
+			}
+
+		}
+		# EO loop arrays to clean
+
+	}
+	# EO sub uniqueIDs
+
+	# collect ids
+	collectIDs($self, $xml);
+
 	# store xml reference
 	$self->{'xml'} = $xml;
 
@@ -270,7 +329,7 @@ sub xml
 	return $self;
 
 }
-# EO apply
+# EO sub xml
 
 ###################################################################################################
 

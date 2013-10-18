@@ -272,7 +272,12 @@ sub collect
 
 				# check if referenced id has been merged
 				unless (exists $config->{'merged'}->{$id})
-				{ die "id <$id> has not been merged, fatal\n"; }
+				{
+					unless (exists $config->{'ids'}->{$type}->{$id})
+					{ die "Fatal: merge id <$id> is not available\n"; }
+					my $item = $config->{'ids'}->{$type}->{$id};
+					die "could merge $id: $item -> not yet implemented\n";
+				}
 
 				# put all informations on to our data array
 				# we just copy the entry from previous merge
@@ -400,11 +405,15 @@ my $merger = sub
 		# create final joined code
 		my $input = join($joiner, grep { $_ } @input);
 
+		# get the md5sum of the unaltered data (otherwise crc may not be correct)
+		my $md5sum = md5sum(my $org = \ "$input") or die "could not get md5sum from data: $!";
+
 		# store joined output by id for later use
 		# this id may be referenced by other inputs
 		$config->{'merged'}->{$merge->{'id'}} =
 		{
 			'data' => \ $input,
+			'md5sum' => $md5sum,
 			'web_path' => $web_path,
 			'local_path' => $output_path,
 			# 'path' => $output->{'path'},

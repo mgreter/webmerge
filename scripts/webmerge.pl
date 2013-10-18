@@ -292,13 +292,13 @@ sub get_xml
 	# includes are just inserted
 	if ($import)
 	{
-		$header .= "  <block><config>\n";
+		$header .= "\n<block>\n";
+		$header .= "  <config>\n";
 		$header .= sprintf "    <configfile>%s</configfile>\n", $file;
 		$header .= "  </config>\n";
-		$footer .= "</block>\n";
+		$footer .= "\n</block>\n";
 	}
 	# EO if imported
-
 
 	# replace include tags with the real content of the file to be included
 	${$data} =~ s/<include\s+src=(?:\'([^\']+)\'|\"([^\"]+)\"|(\w+))\s*\/?>/get_xml($1||$2||$3)/egm;
