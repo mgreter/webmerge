@@ -28,8 +28,9 @@ use OCBNET::Spritesets;
 use RTP::Webmerge;
 use RTP::Webmerge::IO;
 use RTP::Webmerge::Path;
-use RTP::Webmerge::Merge;
+use RTP::Webmerge::Config;
 use RTP::Webmerge::Prepare;
+use RTP::Webmerge::Merge;
 use RTP::Webmerge::HeadInc;
 use RTP::Webmerge::Embedder;
 use RTP::Webmerge::Optimize;
@@ -61,8 +62,10 @@ my $pid = $$;
 # declare and init configuration options
 ################################################################################
 
-my $config =
-{
+my $config = new RTP::Webmerge::Config();
+my $default = new RTP::Webmerge::Config();
+
+$default->apply({
 
 	# where is you htdocs root directory
 	# this is needed to create absolute urls
@@ -133,7 +136,7 @@ my $config =
 		'live' => ['compile', 'minify', 'join', 'dev']
 	}
 
-};
+});
 # EO config
 
 ################################################################################
@@ -154,44 +157,44 @@ my ($man, $help, $opts) = (0, 0, 0);
 my @opts = (
 
 	# the main config file (only from cmd line)
-	'configfile|f=s' => \$config->{'configfile'},
+	'configfile|f=s' => \$default->{'configfile'},
 
 	# enable/disable debug mode
-	'debug|dbg!' => \$config->{'cmd_debug'},
+	'debug|dbg!' => \$default->{'cmd_debug'},
 
 	# maybe change these in the config file
-	'webroot=s' => \$config->{'cmd_webroot'},
-	'doctype|d=s' => \$config->{'cmd_doctype'},
+	'webroot=s' => \$default->{'cmd_webroot'},
+	'doctype|d=s' => \$default->{'cmd_doctype'},
 
 	# enable/disable base operations
-	'prepare|p!' => \$config->{'cmd_prepare'},
-	'optimize|o!' => \$config->{'cmd_optimize'},
-	'level|l=o' => \$config->{'cmd_level'},
-	'merge|m!' => \$config->{'cmd_merge'},
-	'headinc|i!' => \$config->{'cmd_headinc'},
-	'embedder|e!' => \$config->{'cmd_embedder'},
-	'watchdog|w!' => \$config->{'cmd_watchdog'},
-	'crc-check|c!' => \$config->{'cmd_crc-check'},
+	'prepare|p!' => \$default->{'cmd_prepare'},
+	'optimize|o!' => \$default->{'cmd_optimize'},
+	'level|l=o' => \$default->{'cmd_level'},
+	'merge|m!' => \$default->{'cmd_merge'},
+	'headinc|i!' => \$default->{'cmd_headinc'},
+	'embedder|e!' => \$default->{'cmd_embedder'},
+	'watchdog|w!' => \$default->{'cmd_watchdog'},
+	'crc-check|c!' => \$default->{'cmd_crc-check'},
 
 	# various crc features
-	'crc-file!' => \$config->{'cmd_crc-file'},
-	'crc-comment!' => \$config->{'cmd_crc-comment'},
+	'crc-file!' => \$default->{'cmd_crc-file'},
+	'crc-comment!' => \$default->{'cmd_crc-comment'},
 
 	# enable/disable stage operations
-	'license!' => \$config->{'cmd_license'},
-	'compile!' => \$config->{'cmd_compile'},
-	'minify!' => \$config->{'cmd_minify'},
-	'join!' => \$config->{'cmd_join'},
-	'dev!' => \$config->{'cmd_dev'},
+	'license!' => \$default->{'cmd_license'},
+	'compile!' => \$default->{'cmd_compile'},
+	'minify!' => \$default->{'cmd_minify'},
+	'join!' => \$default->{'cmd_join'},
+	'dev!' => \$default->{'cmd_dev'},
 
 	# referer http header for downloads
-	'referer|r=s' => \$config->{'cmd_referer'},
+	'referer|r=s' => \$default->{'cmd_referer'},
 
 	# header tempalte to prepend to files
-	'headtmpl|h=s' => \$config->{'cmd_headtmpl'},
+	'headtmpl|h=s' => \$default->{'cmd_headtmpl'},
 
 	# number of commands to run simultaneously
-	'jobs|j=i' => \$config->{'cmd_jobs'},
+	'jobs|j=i' => \$default->{'cmd_jobs'},
 
 	# usage/help options
 	'help|?' => \$help,
@@ -200,7 +203,7 @@ my @opts = (
 
 	# init config will prepare additional configuration
 	# returns additional options to be fetched from cmd
-	initConfig($config)
+	initConfig($default)
 
 );
 # EO @options
@@ -244,24 +247,24 @@ $RTP::Webmerge::Path::extroot = check_path(join('/', $Bin, '..'));
 sub checkFile { defined $_[0] && -e $_[0] ? $_[0] : undef; }
 
 # check if configfile is given as relative path
-unless ( $config->{'configfile'} =~ m/^\// )
+unless ( $default->{'configfile'} =~ m/^\// )
 {
 	# search for the config file
-	$config->{'configfile'} =
+	$default->{'configfile'} =
 		# first try from current directory
-		checkFile(check_path($config->{'configfile'}));
+		checkFile(check_path($default->{'configfile'}));
 }
 
 # abort if the configuration file was not found
-die "configfile not found" unless $config->{'configfile'};
+die "configfile not found" unless $default->{'configfile'};
 
 # create the config path from config file ...
-$config->{'configpath'} = $config->{'configfile'};
+$default->{'configpath'} = $default->{'configfile'};
 # ... and remove the trailing filename
-$config->{'configpath'} =~ s/\/[^\/]+$//;
+$default->{'configpath'} =~ s/\/[^\/]+$//;
 
 # register path within our path modules for later use
-$RTP::Webmerge::Path::confroot = $config->{'configpath'};
+$RTP::Webmerge::Path::confroot = $default->{'configpath'};
 
 
 ################################################################################
@@ -274,7 +277,7 @@ sub get_xml
 {
 
 	# get the filenname
-	my ($file, @config) = @_;
+	my ($file, $import) = @_;
 
 	# resolve the file path
 	$file = check_path($file);
@@ -282,14 +285,30 @@ sub get_xml
 	# read the complete xml file
 	my $data = readfile($file) || return;
 
+	# init header and footer strings
+	my $header = "\n"; my $footer = "\n";
+
+	# custom config if imported
+	# includes are just inserted
+	if ($import)
+	{
+		$header .= "  <block><config>\n";
+		$header .= sprintf "    <configfile>%s</configfile>\n", $file;
+		$header .= "  </config>\n";
+		$footer .= "</block>\n";
+	}
+	# EO if imported
+
+
 	# replace include tags with the real content of the file to be included
 	${$data} =~ s/<include\s+src=(?:\'([^\']+)\'|\"([^\"]+)\"|(\w+))\s*\/?>/get_xml($1||$2||$3)/egm;
+	${$data} =~ s/<import\s+src=(?:\'([^\']+)\'|\"([^\"]+)\"|(\w+))\s*\/?>/get_xml($1||$2||$3, 1)/egm;
 
 	# parse and create the xml document
 	my $xml = XMLin(${$data}, 'ForceArray' => 1, 'KeyAttr' => []);
 
 	# return the xml fragment
-	return XMLout($xml, 'KeyAttr' => [], 'RootName' => undef);
+	return $header . XMLout($xml, 'KeyAttr' => [], 'RootName' => undef) . $footer;
 
 }
 # EO get_xml
@@ -301,7 +320,7 @@ sub read_xml
 {
 
 	# get the filenname
-	my ($file, @config) = @_;
+	my ($file) = @_;
 
 	# resolve the file path
 	$file = check_path($file);
@@ -314,6 +333,7 @@ sub read_xml
 
 	# replace include tags with the real content of the file to be included
 	${$data} =~ s/<include\s+src=(?:\'([^\']+)\'|\"([^\"]+)\"|(\w+))\s*\/?>/get_xml($1||$2||$3)/egm;
+	${$data} =~ s/<import\s+src=(?:\'([^\']+)\'|\"([^\"]+)\"|(\w+))\s*\/?>/get_xml($1||$2||$3, 1)/egm;
 
 	# parse and create the xml document
 	my $xml = XMLin(${$data}, 'ForceArray' => 1, 'KeyAttr' => []);
@@ -330,7 +350,7 @@ sub read_xml
 ################################################################################
 
 # parse the xml configuration file
-my $xml = read_xml($config->{'configfile'})
+my $xml = read_xml($default->{'configfile'})
 	or die 'error while reading config file, aborting';
 
 
@@ -338,127 +358,8 @@ my $xml = read_xml($config->{'configfile'})
 # apply the configuration from the xml to the config hash
 ################################################################################
 
-# process all config nodes in config file
-foreach my $cfg (@{$xml->{'config'} || []})
-{
-
-	# process all given configuration keys
-	foreach my $key (keys %{$cfg || {}})
-	{
-
-		# do not create unknown config keys
-		next unless exists $config->{$key};
-
-		# assign the value from the first item
-		$config->{$key} = $cfg->{$key}->[0];
-
-		# if we got a hash we had an empty tag
-		if (ref($config->{$key}) eq 'HASH')
-		{ $config->{$key} = ''; }
-
-	}
-	# EO each xml config key
-
-}
-# EO each xml config
-
-# store xml reference
-$config->{'xml'} = $xml;
-
-
-################################################################################
-# apply overruling command line options after xml has been applied
-################################################################################
-
-# search all config keys for /^cmd_/
-# options from command line overrule
-# all other configuration options
-foreach my $key (keys %{$config})
-{
-
-	# only process cmd keys
-	next unless $key =~ s/^cmd_//;
-
-	# only process valid cmd keys
-	next unless defined $config->{'cmd_'.$key};
-
-	# overrule the option from cmd line
-	$config->{$key} = $config->{'cmd_'.$key};
-
-	# remove cmd option from config
-	delete $config->{'cmd_'.$key};
-
-}
-# EO each config key
-
-################################################################################
-# setup some paths to be used by all other functions
-################################################################################
-
-# set htdocs root directory and current working directory
-$RTP::Webmerge::Path::webroot = check_path($config->{'webroot'} || '.');
-$RTP::Webmerge::Path::directory = check_path($config->{'directory'} || '.');
-
-################################################################################
-
-# only allow directory or query option to be given for fingerprinting
-if ($config->{'fingerprint-dev'} && !($config->{'fingerprint-dev'} =~ m/^[qfn]/i))
-{ die "invalid fingerprinting set for dev: <" .  $config->{'fingerprint-dev'} . ">"; }
-if ($config->{'fingerprint-live'} && !($config->{'fingerprint-live'} =~ m/^[qfn]/i))
-{ die "invalid fingerprinting set for live: <" .  $config->{'fingerprint-live'} . ">"; }
-
-# normalize fingerprint configuration to the first letter (lowercase)
-$config->{'fingerprint-dev'} = lc substr($config->{'fingerprint-dev'}, 0, 1);
-$config->{'fingerprint-live'} = lc substr($config->{'fingerprint-live'}, 0, 1);
-# disable the fingerprint option if the given value is no or none
-$config->{'fingerprint-dev'} = undef if $config->{'fingerprint-dev'} eq 'n';
-$config->{'fingerprint-live'} = undef if $config->{'fingerprint-live'} eq 'n';
-
-
-################################################################################
-# setup configuration for external downloads
-# so far this can only be set by the config file
-################################################################################
-
-# init the config array
-$config->{'external'} = [];
-
-# process all config nodes in config file
-foreach my $cfg (@{$xml->{'config'} || []})
-{
-
-	# process all given external options
-	foreach my $ext (@{$cfg->{'external'} || []})
-	{
-
-		# get content from xml node
-		my $enabled = $ext->{'content'};
-		# enable when tag was self closing
-		$enabled = 1 unless defined $enabled;
-		# push hash object to config array
-		unshift @{$config->{'external'}},
-		{
-			'enabled' => $enabled,
-			'href' => $ext->{'href'},
-			'referer' => $ext->{'referer'},
-		};
-
-	}
-	# EO each external
-
-}
-# EO each xml config
-
-
-################################################################################
-# declare status variables and attach to config hash
-################################################################################
-
-# store atomic operations
-$config->{'atomic'} = {};
-
-# store temporarily files
-$config->{'temps'} = [];
+# apply the xml configuration and finalize
+$config->apply($default)->xml($xml)->finalize;
 
 
 ################################################################################
@@ -586,48 +487,62 @@ if (scalar(@ARGV))
 # remove xml for dublicate ids (only use last)
 ################################################################################
 
-# get nodes arrays to clean
-foreach my $nodes
-(
-	($xml->{'prepare'} || []),
-	($xml->{'headinc'} || []),
-	($xml->{'feature'} || []),
-	($xml->{'embedder'} || []),
-	($xml->{'optimize'} || []),
-	(map { $_->{'js'} || [] } @{$xml->{'merge'} || []}),
-	(map { $_->{'css'} || [] } @{$xml->{'merge'} || []})
-)
+sub uniqueIDs
 {
 
-	# count block occurences
-	# blocks identified by id
-	my %known_id;
+	# get input
+	my ($xml) = @_;
 
-	# loop from behind so we can splice items out
-	for (my $i = $#{$nodes}; $i != -1; -- $i)
+	# call uniqueIDs recursively on nested blocks
+	uniqueIDs($_) foreach (@{$xml->{'block'} || []});
+
+	# get nodes arrays to clean
+	foreach my $nodes
+	(
+		($xml->{'prepare'} || []),
+		($xml->{'headinc'} || []),
+		($xml->{'feature'} || []),
+		($xml->{'embedder'} || []),
+		($xml->{'optimize'} || []),
+		(map { $_->{'js'} || [] } @{$xml->{'merge'} || []}),
+		(map { $_->{'css'} || [] } @{$xml->{'merge'} || []})
+	)
 	{
 
-		# the the id of this block (skip if undefined)
-		my $id = $nodes->[$i]->{'id'} || next;
+		# count block occurences
+		# blocks identified by id
+		my %known_id;
 
-		# increment id counter
-		# will init automatically
-		$known_id{$id} += 1;
+		# loop from behind so we can splice items out
+		for (my $i = $#{$nodes}; $i != -1; -- $i)
+		{
 
-		# always keep the first node
-		# the loop is going from behind
-		# so this is actually the last node
-		next if ($known_id{$id} == 1);
+			# the the id of this block (skip if undefined)
+			my $id = $nodes->[$i]->{'id'} || next;
 
-		# splice out all other nodes with
-		# the same type and identifier
-		splice(@{$nodes}, $i, 1);
+			# increment id counter
+			# will init automatically
+			$known_id{$id} += 1;
+
+			# always keep the first node
+			# the loop is going from behind
+			# so this is actually the last node
+			next if ($known_id{$id} == 1);
+
+			# splice out all other nodes with
+			# the same type and identifier
+			splice(@{$nodes}, $i, 1);
+
+		}
 
 	}
+	# EO loop arrays to clean
 
 }
-# EO loop arrays to clean
+# EO sub uniqueIDs
 
+# make ids unique
+uniqueIDs($xml);
 
 ################################################################################
 # main execution of the operations
@@ -660,6 +575,7 @@ unless ($config->{'watchdog'})
 			foreach my $block ( @{$xml->{'block'}} )
 			{
 				# change directory (restore previous state after this block)
+				my $stage = $config->stage; $config->xml($block)->finalize;
 				my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
 				# pass on to recursively process blocks
 				&process($config, $block, $action);
