@@ -36,7 +36,7 @@
 	</config>
 
 	<!-- prepare operations - commit right after block -->
-	<prepare id="prepare" step="prepare" disabled="false" commit="after" >
+	<prepare step="prepare" disabled="false" commit="after" >
 		<!-- create neccessary paths -->
 		<mkdir path="dst" />
 		<!-- create neccessary paths -->
@@ -51,7 +51,7 @@
 	</prepare>
 
 	<!-- prepare operations - do not commit these files -->
-	<prepare id="originals" step="prepare" disabled="false" commit="false" >
+	<prepare step="prepare" disabled="false" commit="false" >
 		<!-- create neccessary paths -->
 		<mkdir path="dst" />
 		<!-- create neccessary paths -->
@@ -66,7 +66,7 @@
 	</prepare>
 
 	<!-- optimize operations (id needed to overwrite) -->
-	<optimize id="optimize" step="optimize" disabled="false">
+	<optimize step="optimize" disabled="false">
 
 		<!-- clean/fix text files -->
 		<txt disabled="false">

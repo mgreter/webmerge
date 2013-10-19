@@ -38,7 +38,7 @@
 	</prepare>
 
 	<!-- optimize operations (id needed to overwrite) -->
-	<optimize id="optimize" step="optimize" disabled="false">
+	<optimize step="optimize" disabled="false">
 
 		<!-- clean/fix text files -->
 		<txt disabled="false">
@@ -70,7 +70,7 @@
 	</optimize>
 
 	<!-- main merge operations -->
-	<merge id="default" disabled="false">
+	<merge disabled="false">
 
 		<!-- build fam spriteset -->
 		<css id="fam" step="fam" disabled="false" >

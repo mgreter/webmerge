@@ -37,7 +37,7 @@
 	</prepare>
 
 	<!-- main merge operations -->
-	<merge id="default" disabled="false">
+	<merge disabled="false">
 
 		<!-- change directory for this block -->
 		<config><directory>global</directory></config>

@@ -26,10 +26,10 @@
 	</prepare>
 
 	<!-- main merge operations -->
-	<merge id="default" disabled="false">
+	<merge disabled="false">
 
 		<!-- build fam spriteset -->
-		<css id="fam" step="fam" disabled="false" >
+		<css id="scss" step="scss" disabled="false" >
 
 			<!-- use generated css as input file -->
 			<input path="src/simple.scss" process="scss" />
