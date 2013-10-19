@@ -4,7 +4,7 @@
 	<include src="{EXT}/conf/common.conf.xml" />
 
 	<!-- optimize operations (id needed to overwrite) -->
-	<optimize id="optimize" step="optimize" disabled="false">
+	<optimize step="optimize" disabled="false">
 
 		<!-- clean/fix text files -->
 		<txt disabled="false">

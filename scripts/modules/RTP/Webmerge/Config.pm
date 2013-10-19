@@ -139,7 +139,7 @@ sub cmdline
 		$self->{$key} = $self->{'cmd_'.$key};
 
 		# remove cmd option from config
-		delete $self->{'cmd_'.$key};
+		# delete $self->{'cmd_'.$key};
 
 	}
 	# EO each config key
