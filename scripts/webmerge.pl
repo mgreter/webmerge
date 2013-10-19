@@ -394,6 +394,157 @@ END
 # call after you have read command line options
 checkConfig($config) or die "config check failed";
 
+
+################################################################################
+# remove xml for not mentioned steps
+################################################################################
+
+# if some arguments are given we only want to merge given steps
+# therefore remove all other steps from the configuration file
+if (scalar(@ARGV))
+{
+
+	# create regular expression to match steps
+	my $re_argv = join('|', @ARGV);
+
+	# loop all operation nodes (which could have an step)
+	foreach my $node
+	(
+		@{$xml->{'merge'} || []},
+		@{$xml->{'prepare'} || []},
+		@{$xml->{'headinc'} || []},
+		@{$xml->{'embedder'} || []},
+		@{$xml->{'optimize'} || []},
+	)
+	{
+
+		# get all subnodes from the main operation nodes
+		my @subnodes = grep { ref($_) eq 'ARRAY' } values %{$node};
+
+		# should we keep the root node
+		# otheriwse it may be disabled
+		my $keep_root = 0;
+
+		# keep all subnodes if the root node should be generated
+		my $keep_sub = $node->{'step'} && $node->{'step'} =~ m/^(?:$re_argv)$/;
+
+		# process each subnode
+		foreach my $subnode (map { @{$_} } @subnodes)
+		{
+
+			# abort loop if we want to keep all subnodes
+			# othwerwise it may be disabled if step doesn't match
+			next if $keep_sub || ref($subnode) ne 'HASH';
+
+			# only can remove items with step
+			next unless $subnode->{'step'};
+
+			# test if we should disable this node from the xml
+			unless ($subnode->{'step'} =~ m/^(?:$re_argv)$/)
+			{
+
+				# simply disable this subnode
+				$subnode->{'disabled'} = 'true';
+
+			}
+			else
+			{
+
+				# keep this root node
+				$keep_root = 1;
+
+			}
+			# EO if step matches argv
+
+		}
+		# EO each subnode
+
+		# abort loop if we want to keep the root node
+		# othwerwise it may be disabled if step doesn't match
+		next if $keep_root;
+
+		# only can remove items with step
+		next unless $node->{'step'};
+
+		# test if we should disable this node from the xml
+		unless ($node->{'step'} =~ m/^(?:$re_argv)$/)
+		{
+
+			# simply disable this node
+			$node->{'disabled'} = 'true';
+
+		}
+		# EO if disable node
+
+	}
+	# EO foreach nodes
+
+}
+# EO input arguments
+
+
+################################################################################
+# remove xml for dublicate ids (only use last)
+################################################################################
+
+sub uniqueIDs
+{
+
+	# get input
+	my ($xml) = @_;
+
+	# call uniqueIDs recursively on nested blocks
+	uniqueIDs($_) foreach (@{$xml->{'block'} || []});
+
+	# get nodes arrays to clean
+	foreach my $nodes
+	(
+		($xml->{'prepare'} || []),
+		($xml->{'headinc'} || []),
+		($xml->{'feature'} || []),
+		($xml->{'embedder'} || []),
+		($xml->{'optimize'} || []),
+		(map { $_->{'js'} || [] } @{$xml->{'merge'} || []}),
+		(map { $_->{'css'} || [] } @{$xml->{'merge'} || []})
+	)
+	{
+
+		# count block occurences
+		# blocks identified by id
+		my %known_id;
+
+		# loop from behind so we can splice items out
+		for (my $i = $#{$nodes}; $i != -1; -- $i)
+		{
+
+			# the the id of this block (skip if undefined)
+			my $id = $nodes->[$i]->{'id'} || next;
+
+			# increment id counter
+			# will init automatically
+			$known_id{$id} += 1;
+
+			# always keep the first node
+			# the loop is going from behind
+			# so this is actually the last node
+			next if ($known_id{$id} == 1);
+
+			# splice out all other nodes with
+			# the same type and identifier
+			splice(@{$nodes}, $i, 1);
+
+		}
+
+	}
+	# EO loop arrays to clean
+
+}
+# EO sub uniqueIDs
+
+# make ids unique
+uniqueIDs($xml);
+
+
 ################################################################################
 # setup config for the complete tree
 # store a copy of config on each block
@@ -406,24 +557,15 @@ sub setupBlocks
 	# get input
 	my ($config, $xml) = @_;
 
-	# lexical stage
-	my $stage = $config;
-
-	# check for config
-	if ($xml->{'config'})
-	{
-		# stage config (reset later)
-		$stage = $config->stage;
-		# apply xml config and finalize
-		$config->xml($xml)->finalize;
-	}
-	# EO if block has config
+	# create lexical config scope
+	my $scope = $config->scope($xml);
 
 	# remember the current config
-	$xml->{'_conf'} = { %{$stage} };
+	$xml->{'_conf'} = { %{$scope} };
 
 	# setup blocks recursively (for nested blocks)
 	setupBlocks($config, $_) foreach (@{$xml->{'block'} || []});
+	setupBlocks($config, $_) foreach (@{$xml->{'merge'} || []});
 
 	# get nodes to process
 	foreach my $item
@@ -434,9 +576,7 @@ sub setupBlocks
 		([ 'headinc', $xml->{'headinc'} || [] ]),
 		([ 'feature', $xml->{'feature'} || [] ]),
 		([ 'embedder', $xml->{'embedder'} || [] ]),
-		([ 'optimize', $xml->{'optimize'} || [] ]),
-		(map { [ 'js', $_->{'js'} || [] ] } @{$xml->{'merge'} || []}),
-		(map { [ 'css', $_->{'css'} || [] ] } @{$xml->{'merge'} || []})
+		([ 'optimize', $xml->{'optimize'} || [] ])
 	)
 	{
 
@@ -447,24 +587,14 @@ sub setupBlocks
 		for (my $i = $#{$nodes}; $i != -1; -- $i)
 		{
 
-			# lexical stage
-			my $staged = $config;
-
 			# get current xml node
 			my $xml = $nodes->[$i];
 
-			# check for config
-			if ($xml->{'config'})
-			{
-				# stage config (reset later)
-				$staged = $config->stage;
-				# apply xml config and finalize
-				$config->xml($xml)->finalize;
-			}
-			# EO if block has config
+			# create lexical config scope
+			my $scoped = $config->scope($xml);
 
 			# remember the current config
-			$xml->{'_conf'} = { %{$staged} };
+			$xml->{'_conf'} = { %{$scoped } };
 
 		}
 		# EO each node in block
@@ -503,26 +633,27 @@ unless ($config->{'watchdog'})
 		# get input arguments
 		my ($config, $xml, $action) = @_;
 
-		# call the given action
-		if ($xml->{'block'})
+		# create lexical config scope
+		my $scope = $config->scope($xml);
+
+		# process each given block
+		foreach my $block ( @{$xml->{'block'} || []} )
 		{
-			# process each given block
-			foreach my $block ( @{$xml->{'block'}} )
-			{
-				# change directory (restore previous state after this block)
-				my $stage = $config->stage; $config->xml($block)->finalize;
-				my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
-				# pass on to recursively process blocks
-				&process($config, $block, $action);
-			}
+			# pass on to recursively process blocks
+			&process($config, $block, $action);
 		}
 
 		# call the given action
 		if ($config->{$action} && $xml->{$action})
 		{
 			# process each given block
-			foreach ( @{$xml->{$action}} )
-			{ &{$actions{$action}}($config, $_); }
+			foreach my $block ( @{$xml->{$action}} )
+			{
+				# create lexical config scope
+				my $scoped = $config->scope($block);
+				# pass execution over to action handler
+				&{$actions{$action}}($config, $block);
+			}
 		}
 
 	};

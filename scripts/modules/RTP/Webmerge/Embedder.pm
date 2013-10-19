@@ -116,8 +116,8 @@ sub embedder
 	foreach my $include (@{$includes || []})
 	{
 
-		# change directory (restore previous state after this block)
-		my $dir = RTP::Webmerge::Path->chdir($include->{'chdir'});
+		# create lexical config scope
+		my $scope = $config->scope($include);
 
 		# get variables from include
 		my $id = $include->{'id'};

@@ -47,9 +47,6 @@ sub prepare
 	unless ($prepare->{'disabled'} && lc $prepare->{'disabled'} eq 'true')
 	{
 
-		# change directory (restore previous state after this block)
-		my $dir = RTP::Webmerge::Path->chdir($prepare->{'chdir'});
-
 		# process all directories to create
 		foreach my $mkdir (@{$prepare->{'mkdir'} || []})
 		{

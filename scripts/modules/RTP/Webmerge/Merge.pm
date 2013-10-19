@@ -339,9 +339,6 @@ my $merger; $merger = sub
 	return if exists $merge->{'disabled'} &&
 		lc $merge->{'disabled'} eq 'true';
 
-	# change directory (restore previous state after this block)
-	my $dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
-
 	# collect all data (files) for this merge
 	my $collection = collect($config, $merge, $type);
 
@@ -524,9 +521,6 @@ sub merger
 	# should we commit filesystem changes?
 	my $commit = $block->{'commit'} || 0;
 
-	# change directory (restore previous state after this block)
-	my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
-
 	# commit all changes to the filesystem if configured
 	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
 
@@ -539,6 +533,9 @@ sub merger
 			# process each merge block for type
 			foreach my $merge (@{$block->{$type} || []})
 			{
+				# create lexical config scope
+				my $scoped = $config->scope($merge);
+				# EO if block has config
 				# call sub to merge a single block
 				$merger->($config, $type, $merge);
 			}

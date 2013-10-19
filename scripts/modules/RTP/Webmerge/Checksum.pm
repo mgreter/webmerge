@@ -40,6 +40,9 @@ sub crcCheckEntry
 	return if exists $merge->{'disabled'} &&
 		lc $merge->{'disabled'} eq 'true';
 
+	# create lexical config scope
+	my $scope = $config->scope($merge);
+
 	# process all files to be written for this merge
 	foreach my $output (@{$merge->{'output'} || []})
 	{
@@ -157,19 +160,17 @@ sub crcCheck
 	foreach my $merges (@{$xml->{'merge'} || []})
 	{
 
-		# change directory (restore previous state after this block)
-		my $dir = RTP::Webmerge::Path->chdir($merges->{'chdir'});
-
 		# do not process if disabled attribute is given and set to true
-		unless ($merges->{'disabled'} && lc $merges->{'disabled'} eq 'true')
+		next if $merges->{'disabled'} && lc $merges->{'disabled'} eq 'true';
+
+		# create lexical config scope
+		my $scope = $config->scope($merges);
+
+		# process each merge type
+		foreach my $type ('css', 'js')
 		{
-
-			foreach my $merge (@{$merges->{'css'} || []})
-			{ crcCheckEntry($config, $merge, 'css'); }
-
-			foreach my $merge (@{$merges->{'js'} || []})
-			{ crcCheckEntry($config, $merge, 'js'); }
-
+			foreach my $merge (@{$merges->{$type} || []})
+			{ crcCheckEntry($config, $merge, $type); }
 		}
 
 	}

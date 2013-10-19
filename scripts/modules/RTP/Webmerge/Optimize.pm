@@ -57,9 +57,6 @@ sub optimizer
 	unless ($optimize->{'disabled'} && lc $optimize->{'disabled'} eq 'true')
 	{
 
-		# change directory (restore previous state after this block)
-		my $dir = RTP::Webmerge::Path->chdir($optimize->{'chdir'});
-
 		# process all optimizers
 		foreach my $key (sort keys %optimizer)
 		{

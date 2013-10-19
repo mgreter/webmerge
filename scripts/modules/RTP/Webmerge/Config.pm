@@ -88,6 +88,34 @@ sub stage
 
 ###################################################################################################
 
+# create new config/path scope
+# only if config is given on xml
+sub scope
+{
+
+	# lexical stage
+	my ($config, $xml) = @_;
+
+	# lexical stage
+	my $scope = $config;
+
+	# check for config
+	if ($xml->{'config'})
+	{
+		# stage config (reset later)
+		$scope = $config->stage;
+		# apply xml config and finalize
+		$config->xml($xml)->finalize;
+	}
+
+	# return scope
+	return $scope;
+
+}
+# EO sub scope
+
+###################################################################################################
+
 # apply cmdline options
 sub cmdline
 {

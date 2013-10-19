@@ -40,7 +40,7 @@
 	<merge id="default" disabled="false">
 
 		<!-- change directory for this block -->
-		<chdir>global</chdir>
+		<config><directory>global</directory></config>
 
 		<css id="styles" step="styles" media="all" disabled="false" >
 
@@ -169,7 +169,7 @@
 	<headinc step="headinc" rootid="/" disabled="false" >
 
 		<!-- change directory in this block -->
-		<chdir>admin/webmerge/generated/</chdir>
+		<config><directory>admin/webmerge/generated/</directory></config>
 
 		<!-- collect all css includes -->
 		<input merged="styles" />
@@ -197,7 +197,7 @@
 	<headinc step="headinc" rootid="/sub/" disabled="false" >
 
 		<!-- change directory in this block -->
-		<chdir>admin/webmerge/generated/</chdir>
+		<config><directory>admin/webmerge/generated/</directory></config>
 
 		<!-- collect all css includes -->
 		<input merged="styles" />

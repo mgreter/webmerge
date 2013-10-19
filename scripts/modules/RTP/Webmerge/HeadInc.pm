@@ -110,9 +110,6 @@ sub headinc
 	my $inputs = $headinc->{'input'} || [];
 	my $outputs = $headinc->{'output'} || [];
 
-	# change directory (restore previous state after this block)
-	my $dir = RTP::Webmerge::Path->chdir($headinc->{'chdir'});
-
 	# process all header output entries
 	foreach my $output (@{$outputs || [] })
 	{

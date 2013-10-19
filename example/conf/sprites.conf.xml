@@ -76,7 +76,7 @@
 		<css id="fam" step="fam" disabled="false" >
 
 			<!-- change directory -->
-			<chdir>fam</chdir>
+			<config><directory>fam</directory></config>
 
 			<!-- use generated css as input file -->
 			<input path="generate/fam.css" />
@@ -98,7 +98,7 @@
 		<css id="hires" step="hires" disabled="false" >
 
 			<!-- change directory -->
-			<chdir>hires</chdir>
+			<config><directory>hires</directory></config>
 
 			<!-- use sprite styles file -->
 			<input path="css/sprites.css" />
