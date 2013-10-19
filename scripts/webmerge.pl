@@ -97,19 +97,21 @@ $default->apply({
 	# debug mode
 	'debug' => 0,
 
-	# preapre stuff
+	# generic blocks
+	'action' => 1,
+	# preapre blocks
 	'prepare' => 1,
-	# optimize stuff
+	# optimizer blocks
 	'optimize' => 0,
 	# optimize level
 	'level' => 2,
-	# global merge option
+	# merge blocks
 	'merge' => 1,
-	# specific merge options
+	# specific merge blocks
 	'js' => 1, 'css' => 1,
-	# create head includes
+	# headinc blocks
 	'headinc' => 0,
-	# create embedder
+	# embedder blocks
 	'embedder' => 0,
 	# start watchdog
 	'watchdog' => 0,
@@ -176,6 +178,7 @@ my @opts = (
 	'doctype|d=s' => \$default->{'cmd_doctype'},
 
 	# enable/disable base operations
+	'action!' => \$default->{'cmd_action'},
 	'prepare|p!' => \$default->{'cmd_prepare'},
 	'optimize|o!' => \$default->{'cmd_optimize'},
 	'level|l=o' => \$default->{'cmd_level'},
@@ -541,8 +544,12 @@ sub process
 		foreach my $block ( @{$xml->{'block'} || []} )
 		{ &process($config, $block, $action); }
 
-		# process the given action
-		if ($config->{$action} && $xml->{$action})
+		# check if enabled
+		if (
+			$xml->{$action} &&
+			$config->{$action} &&
+			$config->{'action'}
+		)
 		{
 			# check for merge config option
 			if ($config->{'merge'} || !$merger{$action})
@@ -701,67 +708,68 @@ webmerge - Asset manager for js/css and related files
 webmerge [options] [steps]
 
  Options:
-   -f, --configfile    main xml configuration
-   -d, --doctype       how to render includes [html|xhtml|html5]
-   -j, --jobs          number of jobs (commands) to run simultaneously
+   -f, --configfile      main xml configuration
+   -d, --doctype         how to render includes [html|xhtml|html5]
+   -j, --jobs            number of jobs (commands) to run simultaneously
 
-   -w, --watchdog      start the watchdog process (quit with ctrl+c)
+   -w, --watchdog        start the watchdog process (quit with ctrl+c)
 
-   --webroot           webroot directory to render absolute urls
-   --import-css        inline imported css files into stylesheet
-   --absoluteurls      export urls as absolute urls (from webroot)
+   --webroot             webroot directory to render absolute urls
+   --import-css          inline imported css files into stylesheet
+   --absoluteurls        export urls as absolute urls (from webroot)
 
-   --referer           optional referer url for external downloads
-   --inlinedataexts    file extensions to inline (comma separated)
-   --inlinedatamax     maximum file sizes to inline into stylesheets
+   --referer             optional referer url for external downloads
+   --inlinedataexts      file extensions to inline (comma separated)
+   --inlinedatamax       maximum file sizes to inline into stylesheets
 
-   --crc-check         run crc check before exiting
-   --crc-file          write crc file beside generated files
-   --crc-comment       append crc comment into generated files
+   --crc-check           run crc check before exiting
+   --crc-file            write crc file beside generated files
+   --crc-comment         append crc comment into generated files
 
-   --fingerprint       add fingerprints to includes (--fp)
-   --fingerprint-dev   for dev context [query|directory|file] (--fp-dev)
-   --fingerprint-live  for live context [query|directory|file] (--fp-live)
+   --fingerprint         add fingerprints to includes (--fp)
+   --fingerprint-dev     for dev context [query|directory|file] (--fp-dev)
+   --fingerprint-live    for live context [query|directory|file] (--fp-live)
 
-   --txt-type          text type [nix|mac|win]
-   --txt-remove-bom    remove superfluous utf boms
-   --txt-normalize-eol normalize line endings to given type
-   --txt-trim-trailing trim trailing whitespace in text files
+   --txt-type            text type [nix|mac|win]
+   --txt-remove-bom      remove superfluous utf boms
+   --txt-normalize-eol   normalize line endings to given type
+   --txt-trim-trailing   trim trailing whitespace in text files
 
-   --headtmpl          text to prepend to generated files
-   --jsdeferer         javascript loader for defered loading
-   --tmpl-embed-js     template for js embedder generator
-   --tmpl-embed-php    template for php embedder generator
+   --headtmpl            text to prepend to generated files
+   --jsdeferer           javascript loader for defered loading
+   --tmpl-embed-js       template for js embedder generator
+   --tmpl-embed-php      template for php embedder generator
 
-   -p, --prepare       enable/disable prepare steps
-   -o, --optimize      enable/disable optimize steps
-   -m, --merge         enable/disable all merge steps
-       --css           enable/disable css merge steps
-       --js            enable/disable js merge steps
-   -i, --headinc       enable/disable headinc steps
-   -e, --embedder       enable/disable embedder steps
+       --action          use to disable all actions
+   -p, --prepare         enable/disable prepare blocks
+   -o, --optimize        enable/disable optimizer blocks
+   -m, --merge           use to disable all merge blocks
+       --css             enable/disable css merge blocks
+       --js              enable/disable js merge blocks
+   -i, --headinc         enable/disable headinc blocks
+   -e, --embedder        enable/disable embedder blocks
 
-   -l, --level         set optimization level (0-9)
+   -l, --level           set optimization level (0-9)
 
-   --dev               enable/disable dev targets
-   --join              enable/disable join targets
-   --minify            enable/disable minify targets
-   --compile           enable/disable compile targets
-   --license           enable/disable license targets
+   --dev                 enable/disable dev targets
+   --join                enable/disable join targets
+   --minify              enable/disable minify targets
+   --compile             enable/disable compile targets
+   --license             enable/disable license targets
 
-   --optimize-txt      enable/disable optimizer for text files (--txt)
-   --optimize-jpg      enable/disable optimizer for jpg images (--jpg)
-   --optimize-gif      enable/disable optimizer for gif images (--gif)
-   --optimize-png      enable/disable optimizer for png images (--png)
-   --optimize-mng      enable/disable optimizer for mng images (--mng)
-   --optimize-zip      enable/disable optimizer for zip archives (--zip)
-   --optimize-gz       enable/disable optimizer for gz archive files (--gz)
+   --optimize-txt        enable/disable optimizer for text files (--txt)
+   --optimize-jpg        enable/disable optimizer for jpg images (--jpg)
+   --optimize-gif        enable/disable optimizer for gif images (--gif)
+   --optimize-png        enable/disable optimizer for png images (--png)
+   --optimize-mng        enable/disable optimizer for mng images (--mng)
+   --optimize-zip        enable/disable optimizer for zip archives (--zip)
+   --optimize-gz         enable/disable optimizer for gz archive files (--gz)
 
-   -dbg, --debug       enable/disable debug mode
+   -dbg, --debug         enable/disable debug mode
 
-   --man               full documentation
-   --opts              list command line options
-   -?, --help          brief help message with options
+   --man                 full documentation
+   --opts                list command line options
+   -?, --help            brief help message with options
 
  Steps:
    Just process certain steps in configuration

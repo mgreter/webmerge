@@ -17,7 +17,6 @@ To Do
 - Write documentation
 - Prepare code for v1.0.0 release
 - Load more modules conditionally
-- Rework unique id and step feature
 - Implement @license header handling
 - Maybe add support for ImageMagick too
 - Test more edge cases (specially with css parser)
@@ -188,15 +187,16 @@ Command Line Options
     --headtmpl            text to prepend to generated files
     --jsdeferer           javascript loader for defered loading
     --tmpl-embed-js       template for js embedder generator
-    --tmpl-embed-php      template for php embedding generator
+    --tmpl-embed-php      template for php embedder generator
 
-    -p, --prepare         enable/disable prepare steps
-    -o, --optimize        enable/disable optimize steps
-    -m, --merge           enable/disable all merge steps
-        --css             enable/disable css merge steps
-        --js              enable/disable js merge steps
-    -i, --headinc         enable/disable headinc steps
-    -e, --embedder        enable/disable embedder steps
+        --action          use to disable all actions
+    -p, --prepare         enable/disable prepare blocks
+    -o, --optimize        enable/disable optimizer blocks
+    -m, --merge           use to disable all merge blocks
+        --css             enable/disable css merge blocks
+        --js              enable/disable js merge blocks
+    -i, --headinc         enable/disable headinc blocks
+    -e, --embedder        enable/disable embedder blocks
 
     -l, --level           set optimization level (0-9)
 
