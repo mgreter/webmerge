@@ -192,7 +192,9 @@ Command Line Options
 
     -p, --prepare         enable/disable prepare steps
     -o, --optimize        enable/disable optimize steps
-    -m, --merge           enable/disable merge steps
+    -m, --merge           enable/disable all merge steps
+        --css             enable/disable css merge steps
+        --js              enable/disable js merge steps
     -i, --headinc         enable/disable headinc steps
     -e, --embedder        enable/disable embedder steps
 

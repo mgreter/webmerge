@@ -270,20 +270,24 @@ sub collect
 				# get the id to include
 				my $id = $item->{'id'};
 
-				# check if referenced id has been merged
-				unless (exists $config->{'merged'}->{$id})
-				{
-					unless (exists $config->{'ids'}->{$type}->{$id})
-					{ die "Fatal: merge id <$id> is not available\n"; }
-					push(@{$data{$kind}}, $config->{'ids'}->{$type}->{$id});
-				}
-				else
+				# check if this type has already been rendered
+				if (
+					exists $config->{'merged'}->{$id} &&
+					$config->{'merged'}->{$id}->{$type}
+				)
 				{
 					# put all informations on to our data array
 					# we just copy the entry from previous merge
-					push(@{$data{$kind}}, $config->{'merged'}->{$id});
+					push(@{$data{$kind}}, $config->{'merged'}->{$id}->{$type});
 				}
-
+				else
+				{
+					# otherwise push block to data (render later)
+					unless (exists $config->{'ids'}->{$type}->{$id})
+					{ die "Fatal: merge id <$id> is not available\n"; }
+					delete $config->{'ids'}->{$type}->{$id}->{'data'};
+					push(@{$data{$kind}}, $config->{'ids'}->{$type}->{$id});
+				}
 
 			}
 			# EO if id
@@ -334,6 +338,11 @@ my $merger; $merger = sub
 
 	# get input variables
 	my ($config, $type, $merge, $render) = @_;
+
+	# check if type is disabled by config
+	# return unless ($config->{$type});
+	# check if merge is disabled by config
+	# return unless ($config->{'merge'});
 
 	# test if the merge has been disabled
 	return if exists $merge->{'disabled'} &&

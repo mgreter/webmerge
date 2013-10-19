@@ -103,7 +103,9 @@ $default->apply({
 	'optimize' => 0,
 	# optimize level
 	'level' => 2,
-	# merge configured stuff
+	# global merge option
+	'merge' => 1,
+	# specific merge options
 	'js' => 1, 'css' => 1,
 	# create head includes
 	'headinc' => 0,
@@ -178,6 +180,8 @@ my @opts = (
 	'optimize|o!' => \$default->{'cmd_optimize'},
 	'level|l=o' => \$default->{'cmd_level'},
 	'merge|m!' => \$default->{'cmd_merge'},
+	'css!' => \$default->{'cmd_css'},
+	'js!' => \$default->{'cmd_js'},
 	'headinc|i!' => \$default->{'cmd_headinc'},
 	'embedder|e!' => \$default->{'cmd_embedder'},
 	'watchdog|w!' => \$default->{'cmd_watchdog'},
@@ -538,17 +542,24 @@ sub process
 		{ &process($config, $block, $action); }
 
 		# process the given action
-		if ($xml->{$action})
+		if ($config->{$action} && $xml->{$action})
 		{
-			# process each given block
-			foreach my $block ( @{$xml->{$action}} )
+			# check for merge config option
+			if ($config->{'merge'} || !$merger{$action})
 			{
-				# create lexical config scope
-				my $scoped = $config->scope($block);
-				# pass execution over to action handler
-				&{$actions{$action}}($config, $block);
+				# process each given block
+				foreach my $block ( @{$xml->{$action}} )
+				{
+					# create lexical config scope
+					my $scoped = $config->scope($block);
+					# pass execution over to action handler
+					&{$actions{$action}}($config, $block);
+				}
+				# EO each block
 			}
+			# EO if merge enabled
 		}
+		# EO if action enabled
 
 		# pass on to recursively process blocks
 		foreach my $block ( @{$xml->{'merge'} || []} )
@@ -711,7 +722,9 @@ webmerge [options] [steps]
 
    -p, --prepare       enable/disable prepare steps
    -o, --optimize      enable/disable optimize steps
-   -m, --merge         enable/disable merge steps
+   -m, --merge         enable/disable all merge steps
+       --css           enable/disable css merge steps
+       --js            enable/disable js merge steps
    -i, --headinc       enable/disable headinc steps
    -e, --embedder       enable/disable embedder steps
 

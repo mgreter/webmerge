@@ -228,10 +228,10 @@ sub sprites { @{$_[0]->{'sprites'}} }
 sub debug
 {
 	my ($self) = @_;
-	print "#" x 78, "\n";
+	print '=' x 78, "\n";
 	printf "DEBUG SPRITESET <%s> (%sx%s)\n",
 		$self->{'id'}, $self->width, $self->height;
-	print "#" x 78, "\n";
+	print '-' x 78, "\n";
 	foreach my $area ($self->areas)
 	{
 		print "AREA: ", $area->{'name'}, " ", $area->debug, "\n";
@@ -240,7 +240,7 @@ sub debug
 			print "  SPRITE: ", $sprite->debug, "\n";
 		}
 	}
-	print "#" x 75, "\n";
+	print '=' x 75, "\n";
 
 }
 

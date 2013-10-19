@@ -67,7 +67,7 @@ sub mother ($$$$$)
 	# print all filenames?
 	if ($config->{'debug'})
 	{
-		print '#' x 78, "\n";
+		print '=' x 78, "\n";
 		print join("\n",
 		        map { substr($_, -60) }
 		          sort keys %{$path2id});
@@ -75,13 +75,13 @@ sub mother ($$$$$)
 	}
 
 	# print delimiter line
-	print '#' x 78, "\n";
+	print '=' x 78, "\n";
 
 	# print a debug message to the console
 	print "Started watchdog, waiting for file changes ...\n";
 
 	# print delimiter line
-	print '#' x 78, "\n";
+	print '=' x 78, "\n";
 
 	# go into endless loop
 	while (1)
@@ -153,13 +153,17 @@ sub child ($$$$$)
 		else
 		{
 
+			# count errors
+			my $beeps = 1;
+
+			# do nothing of queue is empty
 			next if scalar(@queue) == 0;
 
 			# print a debug message to the console about changed files
 			print "file changed: ", exportURI($id2path->{$_}), "\n" foreach (@queue);
 
-			# print delimiter line if something to do
-			print '#' x 78, "\n";
+			# reset merge cache
+			%{$config->{'merged'}} = ();
 
 			# resolve to merge blocks and remove duplicates
 			my @todo = uniq map { @{$blocks->[$_]} } @queue;
@@ -177,11 +181,27 @@ sub child ($$$$$)
 				# re-load the config for this block
 				$config->apply($merge->{'_conf'})->finalize;
 
+				# check if type is disabled by config
+				next unless ($config->{$type});
+				# check if merge is disabled by config
+				next unless ($config->{'merge'});
+
+				# print delimiter line if something to do
+				print '=' x 78, "\n";
+
+				# print some information about the block to be processed
+				print sprintf "processing block %s (%s)\n",
+				      $merge->{'id'} || '', $merge->{'type'};
+
+				# print delimiter line if something to do
+				print '-' x 78, "\n";
+
 				# now dispatch to merge this entry in eval
 				eval { $merger{$type}->($config, $merge); };
 
 				# check if eval had an error
 				print $@ if $@;
+				$beeps ++ if $@;
 
 			}
 			# EO if can dequeue
@@ -198,11 +218,11 @@ sub child ($$$$$)
 			$config->{'temps'} = [];
 
 			# ring the bell
-			print "\a";
+			print "\a" x ($beeps);
 			# clear queue
 			undef @queue;
 			# print delimiter line
-			print '#' x 78, "\n";
+			print '=' x 78, "\n";
 
 		}
 		# EO can dequeue
@@ -265,8 +285,10 @@ sub watchdog
 	sub collectMerge
 	{
 
-		my ($config, $xml, $files, $type) = @_;
+		# get input arguments
+		my ($config, $xml, $type, $files) = @_;
 
+		# create lexical config scope
 		my $scope = $config->scope($xml);
 
 		# get nodes to process
@@ -291,7 +313,7 @@ sub watchdog
 			for (my $i = $#{$nodes}; $i != -1; -- $i)
 			{
 				# setup blocks recursively
-				collectMerge($config, $nodes->[$i], $files, $type);
+				collectMerge($config, $nodes->[$i], $type, $files);
 			}
 
 		}
@@ -306,20 +328,73 @@ sub watchdog
 			# $xml->{'block'} = $block;
 
 			# loop all input elements to watch for
-			foreach my $input (@{$xml->{'input'} || []})
+			foreach my $input
+			(
+				@{$xml->{'prefix'} || []},
+				@{$xml->{'prepend'} || []},
+				@{$xml->{'input'} || []},
+				@{$xml->{'append'} || []},
+				@{$xml->{'suffix'} || []}
+			)
 			{
 
-				# resolve the input path
-				my $path = check_path($input->{'path'});
+				# files to watch
+				my @paths;
 
-				# create array by filepath if it does not exist
-				$files->{$path} = [] unless exists $files->{$path};
+				# only supported type so far
+				if ($input->{'path'})
+				{
 
-				# push merge block to this path
-				push(@{$files->{$path}}, $xml);
+					# resolve the input path
+					push @paths, check_path($input->{'path'});
 
-				# make the merge blocks unique for path
-				@{$files->{$path}} = uniq @{$files->{$path}};
+				}
+				elsif ($input->{'id'})
+				{
+
+					# get src block that has been referenced
+					my $src = $config->{'ids'}->{$type}->{$input->{'id'}};
+
+					# make sure that the reference block is available
+					die "Fatal: referenced block not found ", $input->{'id'} unless $src;
+
+					# collect references
+					my $includes = {};
+
+					# create new config scope
+					my $scope = $config->stage;
+
+					# re-load the config for this block
+					$config->apply($src->{'_conf'})->finalize;
+
+					# setup blocks recursively
+					collectMerge($config, $src, $type, $includes);
+
+					# connect includes to this block
+					push @paths, keys %{$includes};
+
+				}
+				else
+				{
+					# could ignore them without big problems
+					die "Fatal: unknown input for watchdog";
+				}
+
+				# now process all files
+				foreach my $path (@paths)
+				{
+
+					# create array by filepath if it does not exist
+					$files->{$path} = [] unless exists $files->{$path};
+
+					# push merge block to this path
+					push(@{$files->{$path}}, $xml);
+
+					# make the merge blocks unique for path
+					@{$files->{$path}} = uniq @{$files->{$path}};
+
+				}
+				# EO each path
 
 			}
 			# EO each input
@@ -330,7 +405,8 @@ sub watchdog
 	}
 	# EO sub collectMerge
 
-	collectMerge($config, $xml, \%files, 'xml');
+	# collect all inputs for
+	collectMerge($config, $xml, 'xml', \%files);
 
 	# create file array and lookup index
 	foreach my $path (keys %files)
