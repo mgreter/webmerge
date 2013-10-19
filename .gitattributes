@@ -3,14 +3,16 @@
 
 # Explicitly declare text files we want to always be normalized and converted
 # to native line endings on checkout.
-*.pm text
-*.pl text
 
 # Declare files that will always have LF line endings on checkout.
-*.sh text eol=lf
-*.js text eol=lf
-*.css text eol=lf
-*.scss text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.pm text eol=lf
+*.pl text eol=lf
+*.xml text eol=lf
+*.php text eol=lf
+*.dev text eol=lf
+*.live text eol=lf
 
 # Declare files that will always have CRLF line endings on checkout.
 *.bat text eol=crlf
