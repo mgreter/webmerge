@@ -445,6 +445,7 @@ sub setupBlocks
 	my $scope = $config->scope($xml);
 
 	# remember the current config
+	$xml->{'_config'} = $config;
 	$xml->{'_conf'} = { %{$scope} };
 
 	# have input arguments and a step name

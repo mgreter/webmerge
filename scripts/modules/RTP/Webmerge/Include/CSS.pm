@@ -32,25 +32,79 @@ our $css_dev_header = '';
 
 ###################################################################################################
 
+use RTP::Webmerge::Merge qw(collectInputs);
+
+###################################################################################################
+
 # called via array map
 #**************************************************************************************************
 sub includeCSS
 {
 
 	# get passed variables
-	my ($config) = @_;
+	my ($block) = @_;
 
 	# magick map variable
-	my $data = $_;
+	my $input = $_;
 
 	# define the template for the script includes (don't care about doctype versions, dev only)
 	my $css_include_tmpl = '@import url(\'%s\');' . "\n";
 
-	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
+	# referenced id
+	if ($input->{'id'})
+	{
 
-	# return the script include string
-	return sprintf($css_include_tmpl, $path);
+		# collect all inputs for
+		my %files;
+
+		# collect references
+		my $includes = [];
+
+		# get config from block
+		my $config = $block->{'_config'};
+
+		# create new config scope
+		my $scope = $config->stage;
+
+		# re-load the config for this block
+		$config->apply($block->{'_conf'})->finalize;
+
+		# call collect merge to collect includes array
+		collectInputs($config, $block, 'css', $includes);
+
+		# collect data
+		my $data = '';
+
+		# process each include for id
+		foreach my $include (@{$includes})
+		{
+
+			# get variables from array
+			my ($path, $block) = @{$include};
+
+			# get a unique path with added fingerprint (query or directory)
+			$path = fingerprint($block, 'dev', $path);
+
+			# return the script include string
+			$data .= sprintf($css_include_tmpl, $path);
+
+		}
+
+		# return includes
+		return $data;
+
+	}
+	# simple input
+	else
+	{
+
+		# get a unique path with added fingerprint (query or directory)
+		my $path = fingerprint($block, 'dev', $input->{'local_path'}, $input->{'org'});
+
+		# return the script include string
+		return sprintf($css_include_tmpl, $path);
+
+	}
 
 }
 # EO sub includeCSS

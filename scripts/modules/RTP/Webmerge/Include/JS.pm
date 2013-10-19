@@ -66,25 +66,82 @@ if (typeof webmerge.includeJS != \'function\')
 
 ###################################################################################################
 
+use RTP::Webmerge::Merge qw(collectInputs);
+
+###################################################################################################
+
 # called via array map
 #**************************************************************************************************
 sub includeJS
 {
 
 	# get passed variables
-	my ($config) = @_;
+	my ($block) = @_;
 
 	# magick map variable
-	my $data = $_;
+	my $input = $_;
 
 	# define the template for the script includes
 	my $js_include_tmpl = 'webmerge.includeJS(\'%s\');' . "\n";
 
-	# get a unique path with added fingerprint (query or directory)
-	my $path = fingerprint($config, 'dev', $data->{'local_path'}, $data->{'org'});
+	# referenced id
+	if ($input->{'id'})
+	{
 
-	# return the script include string
-	return sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
+		# collect all inputs for
+		my %files;
+
+		# collect references
+		my $includes = [];
+
+		# get config from block
+		my $config = $block->{'_config'};
+
+		# create new config scope
+		my $scope = $config->stage;
+
+		# re-load the config for this block
+		$config->apply($block->{'_conf'})->finalize;
+
+		# call collect merge to collect includes array
+		collectInputs($config, $block, 'js', $includes);
+
+		# call deconstructor
+		undef $scope;
+
+		# collect data
+		my $data = '';
+
+		# process each include for id
+		foreach my $include (@{$includes})
+		{
+
+			# get variables from array
+			my ($path, $block) = @{$include};
+
+			# get a unique path with added fingerprint (query or directory)
+			$path = fingerprint($block, 'dev', $path);
+
+			# return the script include string
+			$data .= sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
+
+		}
+
+		# return includes
+		return $data;
+
+	}
+	# simple input
+	else
+	{
+
+		# get a unique path with added fingerprint (query or directory)
+		my $path = fingerprint($block, 'dev', $input->{'local_path'}, $input->{'org'});
+
+		# return the script include string
+		return sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
+
+	}
 
 }
 # EO includeJS

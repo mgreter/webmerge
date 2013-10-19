@@ -22,6 +22,7 @@ BEGIN { our @EXPORT = qw(%merger); }
 
 # define our functions to be exported
 BEGIN { our @EXPORT_OK = qw (
+	collectInputs
 	merge %reader %writer %importer %exporter
 	%joiner %includer %prefixer %processor %suffixer
 ); }
@@ -69,6 +70,123 @@ use RTP::Webmerge::Merge::JS;
 use RTP::Webmerge::Merge::CSS;
 use RTP::Webmerge::Include::JS;
 use RTP::Webmerge::Include::CSS;
+
+###################################################################################################
+
+our %merger;
+
+###################################################################################################
+
+# collect inputs recursively
+sub collectInputs
+{
+
+	# get input arguments
+	my ($config, $xml, $type, $inputs) = @_;
+
+	# create lexical config scope
+	my $scope = $config->scope($xml);
+
+	# nested blocks
+	foreach my $item
+	(
+		([ $type, $xml->{$type} || [] ]),
+		([ 'block', $xml->{'block'} || [] ]),
+		([ 'merge', $xml->{'merge'} || [] ])
+	)
+	{
+
+		# get variables from item
+		my ($type, $nodes) = @{$item};
+
+		# loop from behind so we can splice items out
+		for (my $i = $#{$nodes}; $i != -1; -- $i)
+		{
+			# setup blocks recursively
+			collectInputs($config, $nodes->[$i], $type, $inputs);
+		}
+
+	}
+	# EO each item
+
+	# check if type is a merger
+	if (exists $merger{$type})
+	{
+
+		# attach some variables
+		$xml->{'type'} = $type;
+
+		# loop all input elements to watch for
+		foreach my $input
+		(
+			@{$xml->{'prefix'} || []},
+			@{$xml->{'prepend'} || []},
+			@{$xml->{'input'} || []},
+			@{$xml->{'append'} || []},
+			@{$xml->{'suffix'} || []}
+		)
+		{
+
+			# inputs to watch
+			my @paths;
+
+			# only supported type so far
+			if ($input->{'path'})
+			{
+
+				# resolve the input path
+				push @paths, check_path($input->{'path'});
+
+			}
+			elsif ($input->{'id'})
+			{
+
+				# get src block that has been referenced
+				my $src = $config->{'ids'}->{$type}->{$input->{'id'}};
+
+				# make sure that the reference block is available
+				die "Fatal: referenced block not found ", $input->{'id'} unless $src;
+
+				# collect references
+				my $includes = {};
+
+				# create new config scope
+				my $scope = $config->stage;
+
+				# re-load the config for this block
+				$config->apply($src->{'_conf'})->finalize;
+
+				# setup blocks recursively
+				collectInputs($config, $src, $type, $includes);
+
+				# connect includes to this block
+				push @paths, keys %{$includes};
+
+			}
+			else
+			{
+				# could ignore them without big problems
+				die "Fatal: unknown input for watchdog";
+			}
+
+			# now process all inputs
+			foreach my $path (@paths)
+			{
+
+				# push path and block to inputs
+				push(@{$inputs}, [$path, $xml]);
+
+			}
+			# EO each path
+
+		}
+		# EO each input
+
+	}
+	# EO if is merger
+
+}
+# EO sub collectInputs
 
 ###################################################################################################
 
@@ -519,7 +637,7 @@ my $merger; $merger = sub
 
 ###################################################################################################
 
-our %merger = (
+%merger = (
 	'js' => sub { $merger->($_[0], 'js', $_[1]); },
 	'css' => sub { $merger->($_[0], 'css', $_[1]); }
 );

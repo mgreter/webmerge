@@ -374,16 +374,16 @@ sub DESTROY
 	return unless scalar @{$stages{$self}};
 
 	# get the stage object (config copy)
-	my $stage = pop @{$stages{$self}};
+	my $staged = pop @{$stages{$self}};
 
 	# make sure to release all memory we may consume
 	delete $stages{$self} unless scalar @{$stages{$self}};
 
 	# restore previous settings
-	%{$stage->[0]} = %{$stage->[1]};
+	%{$staged->[0]} = %{$staged->[1]};
 
 	# finalize again
-	$stage->[0]->finalize;
+	$staged->[0]->finalize;
 
 }
 # EO destructor
