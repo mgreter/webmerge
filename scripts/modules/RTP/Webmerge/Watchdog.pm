@@ -186,14 +186,12 @@ sub child ($$$$$)
 				# check if merge is disabled by config
 				next unless ($config->{'merge'});
 
-				# print delimiter line if something to do
+				# print delimiter line
 				print '=' x 78, "\n";
-
-				# print some information about the block to be processed
+						# print info about the block to be processed
 				print sprintf "processing block %s (%s)\n",
 				      $merge->{'id'} || '', $merge->{'type'};
-
-				# print delimiter line if something to do
+				# print delimiter line
 				print '-' x 78, "\n";
 
 				# now dispatch to merge this entry in eval

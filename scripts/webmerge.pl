@@ -552,6 +552,19 @@ sub process
 				{
 					# create lexical config scope
 					my $scoped = $config->scope($block);
+
+					# print some debug information for merger
+					if ($config->{'debug'} && $merger{$action})
+					{
+						# print delimiter line
+						print '=' x 78, "\n";
+						# print info about the block to be processed
+						print sprintf "processing block %s (%s)\n",
+						      $block->{'id'} || '', $action;
+						# print delimiter line
+						print '-' x 78, "\n";
+					}
+
 					# pass execution over to action handler
 					&{$actions{$action}}($config, $block);
 				}
