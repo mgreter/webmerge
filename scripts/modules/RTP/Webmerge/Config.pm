@@ -296,56 +296,57 @@ sub xml
 	{
 
 		# get input
-		my ($config, $xml) = @_;
-
-		# call uniqueIDs recursively on nested blocks
-		collectIDs($_) foreach (@{$xml->{'block'} || []});
+		my ($config, $xml, $type) = @_;
 
 		# get nodes arrays to clean
 		foreach my $item
 		(
+			([ 'js', $xml->{'js'} || [] ]),
+			([ 'css', $xml->{'css'} || [] ]),
+			([ 'block', $xml->{'block'} || [] ]),
+			([ 'merge', $xml->{'merge'} || [] ]),
 			([ 'prepare', $xml->{'prepare'} || [] ]),
 			([ 'headinc', $xml->{'headinc'} || [] ]),
 			([ 'feature', $xml->{'feature'} || [] ]),
 			([ 'embedder', $xml->{'embedder'} || [] ]),
 			([ 'optimize', $xml->{'optimize'} || [] ]),
-			(map { [ 'js', $_->{'js'} || [] ] } @{$xml->{'merge'} || []}),
-			(map { [ 'css', $_->{'css'} || [] ] } @{$xml->{'merge'} || []})
 		)
 		{
 
 			# get variables from item
-			my ($prefix, $nodes) = @{$item};
+			my ($type, $nodes) = @{$item};
 
 			# loop from behind so we can splice items out
 			for (my $i = $#{$nodes}; $i != -1; -- $i)
 			{
 
-				# the the id of this block (skip if undefined)
-				my $id = $nodes->[$i]->{'id'} || next;
-
-				# check if store for prefix exists
-				unless (exists $config->{'ids'}->{$prefix})
-				{ $config->{'ids'}->{$prefix} = {}; }
-				my $ids = $config->{'ids'}->{$prefix};
-
-				# skip if id is already known
-				next if exists $ids->{$id};
-
-				# increment id counter
-				# will init automatically
-				$ids->{$id} = $nodes->[$i];
+				# setup blocks recursively
+				collectIDs($config, $nodes->[$i], $type);
 
 			}
 
 		}
 		# EO loop arrays to clean
 
+		# the the id of this block (skip if undefined)
+		my $id = $xml->{'id'} || return;
+
+		# check if store for prefix exists
+		unless (exists $config->{'ids'}->{$type})
+		{ $config->{'ids'}->{$type} = {}; }
+		my $ids = $config->{'ids'}->{$type};
+
+		# skip if id is already known
+		return if exists $ids->{$id};
+
+		# assign our block
+		$ids->{$id} = $xml;
+
 	}
 	# EO sub uniqueIDs
 
 	# collect ids
-	collectIDs($self, $xml);
+	collectIDs($self, $xml, 'xml');
 
 	# store xml reference
 	$self->{'xml'} = $xml;

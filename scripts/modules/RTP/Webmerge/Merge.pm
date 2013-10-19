@@ -18,7 +18,7 @@ BEGIN { $RTP::Webmerge::Merge::VERSION = "0.9.0" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our functions to be exported
-BEGIN { our @EXPORT = qw(merger); }
+BEGIN { our @EXPORT = qw(%merger); }
 
 # define our functions to be exported
 BEGIN { our @EXPORT_OK = qw (
@@ -510,43 +510,10 @@ my $merger; $merger = sub
 
 ###################################################################################################
 
-# merge all blocks in config
-# ***********************************************************************************************
-sub merger
-{
-
-	# get input variables
-	my ($config, $block) = @_;
-
-	# should we commit filesystem changes?
-	my $commit = $block->{'commit'} || 0;
-
-	# commit all changes to the filesystem if configured
-	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
-
-	# do not process if disabled attribute is given and set to true
-	unless ($block->{'disabled'} && lc $block->{'disabled'} eq 'true')
-	{
-		# process each type (js/css)
-		foreach my $type ('css', 'js')
-		{
-			# process each merge block for type
-			foreach my $merge (@{$block->{$type} || []})
-			{
-				# create lexical config scope
-				my $scoped = $config->scope($merge);
-				# EO if block has config
-				# call sub to merge a single block
-				$merger->($config, $type, $merge);
-			}
-		}
-	}
-
-	# commit all changes to the filesystem if configured
-	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|af)/i;
-
-}
-# EO sub merge
+our %merger = (
+	'js' => sub { $merger->($_[0], 'js', $_[1]); },
+	'css' => sub { $merger->($_[0], 'css', $_[1]); }
+);
 
 ###################################################################################################
 ###################################################################################################

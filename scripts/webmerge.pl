@@ -97,7 +97,7 @@ $default->apply({
 	# optimize level
 	'level' => 2,
 	# merge configured stuff
-	'merge' => 1,
+	'js' => 1, 'css' => 1,
 	# create head includes
 	'headinc' => 0,
 	# create embedder
@@ -399,150 +399,8 @@ checkConfig($config) or die "config check failed";
 # remove xml for not mentioned steps
 ################################################################################
 
-# if some arguments are given we only want to merge given steps
-# therefore remove all other steps from the configuration file
-if (scalar(@ARGV))
-{
-
-	# create regular expression to match steps
-	my $re_argv = join('|', @ARGV);
-
-	# loop all operation nodes (which could have an step)
-	foreach my $node
-	(
-		@{$xml->{'merge'} || []},
-		@{$xml->{'prepare'} || []},
-		@{$xml->{'headinc'} || []},
-		@{$xml->{'embedder'} || []},
-		@{$xml->{'optimize'} || []},
-	)
-	{
-
-		# get all subnodes from the main operation nodes
-		my @subnodes = grep { ref($_) eq 'ARRAY' } values %{$node};
-
-		# should we keep the root node
-		# otheriwse it may be disabled
-		my $keep_root = 0;
-
-		# keep all subnodes if the root node should be generated
-		my $keep_sub = $node->{'step'} && $node->{'step'} =~ m/^(?:$re_argv)$/;
-
-		# process each subnode
-		foreach my $subnode (map { @{$_} } @subnodes)
-		{
-
-			# abort loop if we want to keep all subnodes
-			# othwerwise it may be disabled if step doesn't match
-			next if $keep_sub || ref($subnode) ne 'HASH';
-
-			# only can remove items with step
-			next unless $subnode->{'step'};
-
-			# test if we should disable this node from the xml
-			unless ($subnode->{'step'} =~ m/^(?:$re_argv)$/)
-			{
-
-				# simply disable this subnode
-				$subnode->{'disabled'} = 'true';
-
-			}
-			else
-			{
-
-				# keep this root node
-				$keep_root = 1;
-
-			}
-			# EO if step matches argv
-
-		}
-		# EO each subnode
-
-		# abort loop if we want to keep the root node
-		# othwerwise it may be disabled if step doesn't match
-		next if $keep_root;
-
-		# only can remove items with step
-		next unless $node->{'step'};
-
-		# test if we should disable this node from the xml
-		unless ($node->{'step'} =~ m/^(?:$re_argv)$/)
-		{
-
-			# simply disable this node
-			$node->{'disabled'} = 'true';
-
-		}
-		# EO if disable node
-
-	}
-	# EO foreach nodes
-
-}
-# EO input arguments
-
-
-################################################################################
-# remove xml for dublicate ids (only use last)
-################################################################################
-
-sub uniqueIDs
-{
-
-	# get input
-	my ($xml) = @_;
-
-	# call uniqueIDs recursively on nested blocks
-	uniqueIDs($_) foreach (@{$xml->{'block'} || []});
-
-	# get nodes arrays to clean
-	foreach my $nodes
-	(
-		($xml->{'prepare'} || []),
-		($xml->{'headinc'} || []),
-		($xml->{'feature'} || []),
-		($xml->{'embedder'} || []),
-		($xml->{'optimize'} || []),
-		(map { $_->{'js'} || [] } @{$xml->{'merge'} || []}),
-		(map { $_->{'css'} || [] } @{$xml->{'merge'} || []})
-	)
-	{
-
-		# count block occurences
-		# blocks identified by id
-		my %known_id;
-
-		# loop from behind so we can splice items out
-		for (my $i = $#{$nodes}; $i != -1; -- $i)
-		{
-
-			# the the id of this block (skip if undefined)
-			my $id = $nodes->[$i]->{'id'} || next;
-
-			# increment id counter
-			# will init automatically
-			$known_id{$id} += 1;
-
-			# always keep the first node
-			# the loop is going from behind
-			# so this is actually the last node
-			next if ($known_id{$id} == 1);
-
-			# splice out all other nodes with
-			# the same type and identifier
-			splice(@{$nodes}, $i, 1);
-
-		}
-
-	}
-	# EO loop arrays to clean
-
-}
-# EO sub uniqueIDs
-
-# make ids unique
-uniqueIDs($xml);
+# create regular expression to match steps
+my $re_argv = join('|', @ARGV);
 
 
 ################################################################################
@@ -555,7 +413,7 @@ sub setupBlocks
 {
 
 	# get input
-	my ($config, $xml) = @_;
+	my ($config, $xml, $type) = @_;
 
 	# create lexical config scope
 	my $scope = $config->scope($xml);
@@ -563,41 +421,58 @@ sub setupBlocks
 	# remember the current config
 	$xml->{'_conf'} = { %{$scope} };
 
-	# setup blocks recursively (for nested blocks)
-	setupBlocks($config, $_) foreach (@{$xml->{'block'} || []});
-	setupBlocks($config, $_) foreach (@{$xml->{'merge'} || []});
+	# have input arguments and a step name
+	if ($xml->{'step'} && scalar(@ARGV))
+	{
+		# step must be named within arguments
+		unless ($xml->{'step'} =~ m/^(?:$re_argv)$/)
+		{
+			# give a debug message to console
+			print "Disable step: ", $xml->{'step'}, "\n";
+			# disable this block completely
+			$xml->{'disabled'} = 'true';
+		}
+	}
+	# EO if step and arguments
+
+	# have input arguments and a step name
+	if ($xml->{'id'} && $config->{'ids'}->{$type}->{$xml->{'id'}})
+	{
+		# check if current block is not registered one
+		if ($config->{'ids'}->{$type}->{$xml->{'id'}} ne $xml)
+		{
+			# give a debug message to console
+			print "Disable duplicate id: ", $xml->{'id'}, "\n";
+			# disable this block completely
+			$xml->{'disabled'} = 'true';
+		}
+	}
+	# EO if id and already known
 
 	# get nodes to process
 	foreach my $item
 	(
 		([ 'js', $xml->{'js'} || [] ]),
 		([ 'css', $xml->{'css'} || [] ]),
+		([ 'block', $xml->{'block'} || [] ]),
+		([ 'merge', $xml->{'merge'} || [] ]),
 		([ 'prepare', $xml->{'prepare'} || [] ]),
 		([ 'headinc', $xml->{'headinc'} || [] ]),
 		([ 'feature', $xml->{'feature'} || [] ]),
 		([ 'embedder', $xml->{'embedder'} || [] ]),
-		([ 'optimize', $xml->{'optimize'} || [] ])
+		([ 'optimize', $xml->{'optimize'} || [] ]),
 	)
 	{
 
 		# get variables from item
-		my ($prefix, $nodes) = @{$item};
+		my ($type, $nodes) = @{$item};
 
 		# loop from behind so we can splice items out
 		for (my $i = $#{$nodes}; $i != -1; -- $i)
 		{
-
-			# get current xml node
-			my $xml = $nodes->[$i];
-
-			# create lexical config scope
-			my $scoped = $config->scope($xml);
-
-			# remember the current config
-			$xml->{'_conf'} = { %{$scoped } };
-
+			# setup blocks recursively
+			setupBlocks($config, $nodes->[$i], $type);
 		}
-		# EO each node in block
 
 	}
 	# EO each item
@@ -606,45 +481,57 @@ sub setupBlocks
 # EO sub setupBlocks
 
 # setup all context blocks
-setupBlocks($config, $xml);
+setupBlocks($config, $xml, 'xml');
 
 
 ################################################################################
-# main execution of the operations
+# setup webmerge actions
 ################################################################################
 
-unless ($config->{'watchdog'})
+# action handlers
+my %actions = (
+	'prepare' => \&prepare,
+	'headinc' => \&headinc,
+	'embedder' => \&embedder,
+	'optimize' => \&optimizer
+);
+
+# additional merger types
+foreach my $type (keys %merger)
+{ $actions{$type} = $merger{$type}; }
+
+
+################################################################################
+# process an xml block
+################################################################################
+
+# call initial process
+# recursive on chdir blocks
+sub process
 {
 
-	# action handlers
-	my %actions = (
-		'merge' => \&merger,
-		'prepare' => \&prepare,
-		'headinc' => \&headinc,
-		'embedder' => \&embedder,
-		'optimize' => \&optimizer
-	);
+	# get input arguments
+	my ($config, $xml, $action) = @_;
 
-	# call initial process
-	# recursive on chdir blocks
-	sub process
+	# create lexical config scope
+	my $scope = $config->scope($xml);
+
+	# should we commit filesystem changes?
+	my $commit = $xml->{'commit'} || 0;
+
+	# commit all changes to the filesystem if configured
+	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|be)/i;
+
+	# do not process if disabled attribute is given and set to true
+	unless ($xml->{'disabled'} && lc $xml->{'disabled'} eq 'true')
 	{
 
-		# get input arguments
-		my ($config, $xml, $action) = @_;
-
-		# create lexical config scope
-		my $scope = $config->scope($xml);
-
-		# process each given block
+		# pass on to recursively process blocks
 		foreach my $block ( @{$xml->{'block'} || []} )
-		{
-			# pass on to recursively process blocks
-			&process($config, $block, $action);
-		}
+		{ &process($config, $block, $action); }
 
-		# call the given action
-		if ($config->{$action} && $xml->{$action})
+		# process the given action
+		if ($xml->{$action})
 		{
 			# process each given block
 			foreach my $block ( @{$xml->{$action}} )
@@ -656,10 +543,27 @@ unless ($config->{'watchdog'})
 			}
 		}
 
-	};
-	# EO sub process
+		# pass on to recursively process blocks
+		foreach my $block ( @{$xml->{'merge'} || []} )
+		{ &process($config, $block, $action); }
 
-	# call the action step first
+	}
+	# EO unless disabled
+
+	# commit all changes to the filesystem if configured
+	$config->{'atomic'} = {} if $commit =~ m/^\s*(?:bo|af)/i;
+
+};
+# EO sub process
+
+################################################################################
+# main webmerge routine
+################################################################################
+
+unless ($config->{'watchdog'})
+{
+
+	# call the prepare step first
 	# this will create directories
 	process($config, $xml, 'prepare');
 
@@ -669,7 +573,7 @@ unless ($config->{'watchdog'})
 
 	# next we will continue with the merge step
 	# this will write generated and processed files
-	process($config, $xml, 'merge');
+	process($config, $xml, $_) foreach sort keys %merger;
 
 	# call headinc function to generate headers
 	# these can be included as standalone files
@@ -682,6 +586,7 @@ unless ($config->{'watchdog'})
 	process($config, $xml, 'embedder');
 
 }
+# EO unless watchdog
 
 ################################################################################
 # now commit all changes
