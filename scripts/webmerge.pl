@@ -59,6 +59,13 @@ use RTP::Webmerge::Optimize::GZ qw();
 my $pid = $$;
 
 ################################################################################
+# warn strings (for sprintf)
+################################################################################
+
+my $warn_dis_step = "Disable step: %s\n";
+my $warn_dis_dup = "Disable duplicate id: %s\n";
+
+################################################################################
 # declare and init configuration options
 ################################################################################
 
@@ -428,7 +435,7 @@ sub setupBlocks
 		unless ($xml->{'step'} =~ m/^(?:$re_argv)$/)
 		{
 			# give a debug message to console
-			print "Disable step: ", $xml->{'step'}, "\n";
+			warn sprintf $warn_dis_step, $xml->{'step'} if $config->{'debug'};
 			# disable this block completely
 			$xml->{'disabled'} = 'true';
 		}
@@ -442,7 +449,7 @@ sub setupBlocks
 		if ($config->{'ids'}->{$type}->{$xml->{'id'}} ne $xml)
 		{
 			# give a debug message to console
-			print "Disable duplicate id: ", $xml->{'id'}, "\n";
+			warn sprintf $warn_dis_dup, $xml->{'id'} if $config->{'debug'};
 			# disable this block completely
 			$xml->{'disabled'} = 'true';
 		}

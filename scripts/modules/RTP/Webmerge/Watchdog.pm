@@ -40,6 +40,10 @@ use RTP::Webmerge::Merge qw(merge);
 
 ###################################################################################################
 
+use RTP::Webmerge::Merge;
+
+###################################################################################################
+
 # declare package variables
 my ($child_pid, $mother_pid);
 
@@ -59,6 +63,16 @@ sub mother ($$$$$)
 
 	# create the watcher object on all filepaths
 	my $watcher = Filesys::Notify::Simple->new([keys %{$path2id}]);
+
+	# print all filenames?
+	if ($config->{'debug'})
+	{
+		print '#' x 78, "\n";
+		print join("\n",
+		        map { substr($_, -60) }
+		          sort keys %{$path2id});
+		print "\n";
+	}
 
 	# print delimiter line
 	print '#' x 78, "\n";
@@ -156,16 +170,15 @@ sub child ($$$$$)
 
 				# get some vars from hash
 				my $type = $merge->{'type'};
-				my $block = $merge->{'block'};
 
-				# change directory (restore previous state after this block)
-				my $block_dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
+				# create new config scope
+				my $scope = $config->stage;
 
-				# change directory (restore previous state after this block)
-				my $merge_dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
+				# re-load the config for this block
+				$config->apply($merge->{'_conf'})->finalize;
 
 				# now dispatch to merge this entry in eval
-				eval { merge($config, $merge, $type); };
+				eval { $merger{$type}->($config, $merge); };
 
 				# check if eval had an error
 				print $@ if $@;
@@ -249,55 +262,75 @@ sub watchdog
 	};
 	# EO sig term handler
 
-	# loop all merge blocks within xml settings
-	foreach my $block (@{$xml->{'merge'} || []})
+	sub collectMerge
 	{
 
-		# change directory (restore previous state after this block)
-		my $dir = RTP::Webmerge::Path->chdir($block->{'chdir'});
+		my ($config, $xml, $files, $type) = @_;
 
-		# loop all possible merge types
-		foreach my $type ('js', 'css')
+		my $scope = $config->scope($xml);
+
+		# get nodes to process
+		foreach my $item
+		(
+			([ 'js', $xml->{'js'} || [] ]),
+			([ 'css', $xml->{'css'} || [] ]),
+			([ 'block', $xml->{'block'} || [] ]),
+			([ 'merge', $xml->{'merge'} || [] ]),
+			([ 'prepare', $xml->{'prepare'} || [] ]),
+			([ 'headinc', $xml->{'headinc'} || [] ]),
+			([ 'feature', $xml->{'feature'} || [] ]),
+			([ 'embedder', $xml->{'embedder'} || [] ]),
+			([ 'optimize', $xml->{'optimize'} || [] ]),
+		)
 		{
 
-			# loop all inner merge blocks (by given type)
-			foreach my $merge (@{$block->{$type} || []})
+			# get variables from item
+			my ($type, $nodes) = @{$item};
+
+			# loop from behind so we can splice items out
+			for (my $i = $#{$nodes}; $i != -1; -- $i)
 			{
-
-				# change directory (restore previous state after this block)
-				my $dir = RTP::Webmerge::Path->chdir($merge->{'chdir'});
-
-				# loop all input elements to watch for
-				foreach my $input (@{$merge->{'input'} || []})
-				{
-
-					# attach some variables
-					$merge->{'type'} = $type;
-					$merge->{'block'} = $block;
-
-					# resolve the input path
-					my $path = check_path($input->{'path'});
-
-					# create array by filepath if it does not exist
-					$files{$path} = [] unless exists $files{$path};
-
-					# push merge block to this path
-					push(@{$files{$path}}, $merge);
-
-					# make the merge blocks unique for path
-					@{$files{$path}} = uniq @{$files{$path}};
-
-				}
-				# EO foreach input tag
-
+				# setup blocks recursively
+				collectMerge($config, $nodes->[$i], $files, $type);
 			}
-			# EO foreach merge tag
 
 		}
-		# EO foreach merge type
+		# EO each item
+
+		# check if type is a merger
+		if (exists $merger{$type})
+		{
+
+			# attach some variables
+			$xml->{'type'} = $type;
+			# $xml->{'block'} = $block;
+
+			# loop all input elements to watch for
+			foreach my $input (@{$xml->{'input'} || []})
+			{
+
+				# resolve the input path
+				my $path = check_path($input->{'path'});
+
+				# create array by filepath if it does not exist
+				$files->{$path} = [] unless exists $files->{$path};
+
+				# push merge block to this path
+				push(@{$files->{$path}}, $xml);
+
+				# make the merge blocks unique for path
+				@{$files->{$path}} = uniq @{$files->{$path}};
+
+			}
+			# EO each input
+
+		}
+		# EO if is merger
 
 	}
-	# EO foreach merge block
+	# EO sub collectMerge
+
+	collectMerge($config, $xml, \%files, 'xml');
 
 	# create file array and lookup index
 	foreach my $path (keys %files)
