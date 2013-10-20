@@ -23,6 +23,8 @@ To Do
 
 More ideas
 ==========
+- Allow to merge multiple spritesets
+- Means we'll have to re-use same src
 - Add smart locks to ensure parallel execution
 - Implement parallel workers for unrelated blocks
 - Put more usefull information to the console
