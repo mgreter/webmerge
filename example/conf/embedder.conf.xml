@@ -24,7 +24,7 @@
 	</config>
 
 	<!-- prepare operations -->
-	<prepare id="prepare" step="prepare" disabled="false" >
+	<prepare step="prepare" disabled="false" >
 		<!-- create neccessary paths -->
 		<mkdir path="admin" />
 		<mkdir path="admin/webmerge" />
@@ -223,7 +223,7 @@
 	</headinc>
 
 	<!-- create standalone embeding code -->
-	<embedder id="embedder" step="embedder" disabled="false" >
+	<embedder step="embedder" disabled="false" >
 
 		<!-- detect if we are in dev context -->
 		<detect feature="dev-context" target="context" enabled="dev" optional="false" />
