@@ -563,6 +563,14 @@ END
 
 ###################################################################################################
 
+# get working dir
+use Cwd qw(cwd);
+
+# use to parse path and filename
+use File::Basename qw(dirname);
+
+###################################################################################################
+
 sub callProcessor
 {
 
@@ -571,6 +579,12 @@ sub callProcessor
 
 	# do nothing on void input
 	return unless $processors;
+
+	# current working directory
+	my $cwd = cwd;
+	
+	# change the current working directory for all processes (if a path is given on item)
+	chdir(dirname $item->{'path'}) or die "Fatal in chdir: " . $item->{'path'} if $item->{'path'};
 
 	# call each processor (split string by whitespace)
 	foreach my $processor (split(/\s+/, $processors))
@@ -585,6 +599,9 @@ sub callProcessor
 	}
 	# EO each processor
 
+	# change back the working directory to the previous value
+	chdir($cwd) or die "Fatal in chdir: " . $cwd if $item->{'path'};
+	
 }
 # EO sub callProcessor
 
