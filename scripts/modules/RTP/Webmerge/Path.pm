@@ -159,9 +159,23 @@ sub check_path ($)
 	# resolve the path string
 	my $path = &res_path;
 
-	# create absolute path for the directory and re-add filename
-	# abs_path will error out if the given path does not exist
-	return join('/', abs_path(dirname($path)), basename($path));
+	# return value
+	my $rv = undef;
+	
+	# may die inside
+	eval
+	{
+		# create absolute path for the directory and re-add filename
+		# abs_path will error out if the given path does not exist
+		$rv = join('/', abs_path(dirname($path)), basename($path));
+	};
+
+	# return result
+	return $rv unless $@;
+
+	# check for error
+	die $@ if $@;
+	
 
 }
 

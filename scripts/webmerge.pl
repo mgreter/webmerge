@@ -290,7 +290,6 @@ unless (
 	die "please specify a config file\n";
 }
 
-
 # create the config path from config file ...
 $default->{'configpath'} = $default->{'configfile'};
 # ... and remove the trailing filename
@@ -393,6 +392,13 @@ my $xml = read_xml($default->{'configfile'})
 
 # apply the xml configuration and finalize
 $config->apply($default)->xml($xml)->finalize;
+
+
+################################################################################
+# change die handler to confess if in debug mode
+################################################################################
+
+local $SIG{__DIE__} = \&Carp::confess if $config->{'debug'};
 
 
 ################################################################################
@@ -514,10 +520,6 @@ sub setupBlocks
 }
 # EO sub setupBlocks
 
-# setup all context blocks
-setupBlocks($config, $xml, 'xml');
-
-
 ################################################################################
 # setup webmerge actions
 ################################################################################
@@ -618,12 +620,16 @@ sub process
 # main webmerge routine
 ################################################################################
 
+# call the prepare step first
+# this will create directories
+process($config, $xml, 'prepare');
+
+# setup all context blocks
+setupBlocks($config, $xml, 'xml');
+
+# merge if not starting watchdog
 unless ($config->{'watchdog'})
 {
-
-	# call the prepare step first
-	# this will create directories
-	process($config, $xml, 'prepare');
 
 	# call the optimization step next
 	# this will change some source files
