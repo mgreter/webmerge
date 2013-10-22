@@ -55,7 +55,7 @@ sub range
 ###################################################################################################
 
 # make absolute paths (file may not exist yet)
-use RTP::Webmerge::Path qw(res_path);
+use RTP::Webmerge::Path qw($directory res_path);
 
 # collect all includes
 # return result hash
@@ -583,8 +583,12 @@ sub callProcessor
 	# current working directory
 	my $cwd = cwd;
 	
-	# change the current working directory for all processes (if a path is given on item)
-	chdir(dirname $item->{'path'}) or die "Fatal in chdir: " . $item->{'path'} if $item->{'path'};
+	my $path = dirname $item->{'path'};
+	unless ($path =~ m /^(?:\/|[a-zA-Z]:)/)
+	{ $path = join('/', $directory, $path); }
+
+	# change the current working directory for all processes
+	chdir($path) or die "Fatal in chdir: " . $path if $path;
 
 	# call each processor (split string by whitespace)
 	foreach my $processor (split(/\s+/, $processors))
@@ -600,7 +604,7 @@ sub callProcessor
 	# EO each processor
 
 	# change back the working directory to the previous value
-	chdir($cwd) or die "Fatal in chdir: " . $cwd if $item->{'path'};
+	chdir($cwd) or die "Fatal in chdir: " . $cwd if $path;
 	
 }
 # EO sub callProcessor

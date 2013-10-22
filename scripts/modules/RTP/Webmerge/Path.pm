@@ -102,6 +102,15 @@ sub exportURI ($;$$)
 	# get input variables
 	my ($path, $relpath, $abs) = @_;
 
+	# return if path is relative (not imported)
+	return $path unless $path =~ m /^(?:\/|[a-zA-Z]:)/;
+	
+	# htc files need to be referenced absolute
+	# I don't know of any other use case than
+	# in the IE specific behaviour css property
+	if ($path =~ m/\.(?:htc)(?:\z|\?)/)
+	{ $relpath  = undef; $abs = 1; }
+
 	# set relpath to webroot if nothin else given
 	$relpath = $webroot unless defined $relpath;
 
@@ -142,7 +151,7 @@ sub res_path ($)
 	$path =~ s/\$?\{CONF\}/$confroot/gm if $confroot;
 
 	# return if path is already absolute
-	return $path if $path =~m /^(?:\/|[a-zA-Z]:)/;
+	return $path if $path =~ m /^(?:\/|[a-zA-Z]:)/;
 
 	# prepended current directory and return
 	return join('/', $directory || '.', $path);
