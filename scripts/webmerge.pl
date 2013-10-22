@@ -282,7 +282,14 @@ unless ( $default->{'configfile'} =~ m/^\// )
 }
 
 # abort if the configuration file was not found
-die "configfile not found" unless $default->{'configfile'};
+unless (
+	defined $default->{'configfile'}
+	&& $default->{'configfile'} ne ''
+)
+{
+	die "please specify a config file\n";
+}
+
 
 # create the config path from config file ...
 $default->{'configpath'} = $default->{'configfile'};
@@ -354,8 +361,8 @@ sub read_xml
 	# read the complete xml file
 	my $data = readfile($file) || return;
 
-	# die if config file is empty
-	die "empty config file <$file>" if ${$data} eq "";
+	# die if config file is empty (without line number)
+	die "config file is empty:\n<$file>\n" if ${$data} eq "";
 
 	# replace include tags with the real content of the file to be included
 	${$data} =~ s/<include\s+src=(?:\'([^\']+)\'|\"([^\"]+)\"|(\w+))\s*\/?>/get_xml($1||$2||$3)/egm;
