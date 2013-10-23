@@ -15,6 +15,10 @@ BEGIN { $RTP::Webmerge::Process::CSS::SCSS::VERSION = "0.9.0" }
 
 ###################################################################################################
 
+use Cwd qw(cwd);
+
+###################################################################################################
+
 # process spritesets with additional modules
 # try to keep them as standalone as possible
 sub scss
@@ -35,7 +39,10 @@ sub scss
 		# always output in nice formated way
 		# will compress later by our own compilers
 		output_style => CSS::Sass::SASS_STYLE_NESTED(),
-
+		
+		# needed for watchdog (fork?)
+		include_paths   => [ cwd ],
+		
 		# output debug comments
 		source_comments => $config->{'debug'},
 
