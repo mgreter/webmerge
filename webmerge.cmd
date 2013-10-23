@@ -12,7 +12,7 @@ REM find the exec within paths
 REM http://stackoverflow.com/a/12570623
 FOR %%P IN (%PATHEXT%) DO (
 	FOR %%I IN (%~0 %~0%%P) DO (
-		if exist "%%~$PATH:I" (
+		IF EXIST "%%~$PATH:I" (
 			SET EXEC=%%~$PATH:I
 			GOTO processExec
 		)
@@ -33,6 +33,13 @@ SET PERLPATH=%FOLDER%\..\perl
 SET UTILSPATH=%FOLDER%\..\utils
 
 :installLocals
+
+IF NOT EXIST "%GMPATH%" GOTO noLocalGM
+
+REM add local gm to global path
+SET PATH=%GMPATH%;%PATH%
+
+:noLocalGM
 
 IF NOT EXIST "%IMPATH%" GOTO noLocalIM
 

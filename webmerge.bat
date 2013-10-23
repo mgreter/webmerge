@@ -34,6 +34,13 @@ SET UTILSPATH=%FOLDER%\..\utils
 
 :installLocals
 
+IF NOT EXIST "%GMPATH%" GOTO noLocalGM
+
+REM add local gm to global path
+SET PATH=%GMPATH%;%PATH%
+
+:noLocalGM
+
 IF NOT EXIST "%IMPATH%" GOTO noLocalIM
 
 REM add local im to global path
