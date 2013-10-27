@@ -588,7 +588,7 @@ sub callProcessor
 	{ $path = join('/', $directory, $path); }
 
 	# change the current working directory for all processes
-	chdir($path) or die "Fatal in chdir: " . $path if $path;
+	Cwd::chdir($path) or die "Fatal in chdir: " . $path if $path;
 
 	# call each processor (split string by whitespace)
 	foreach my $processor (split(/\s+/, $processors))
@@ -604,7 +604,7 @@ sub callProcessor
 	# EO each processor
 
 	# change back the working directory to the previous value
-	chdir($cwd) or die "Fatal in chdir: " . $cwd if $path;
+	Cwd::chdir($cwd) or die "Fatal in chdir: " . $cwd if $path;
 	
 }
 # EO sub callProcessor

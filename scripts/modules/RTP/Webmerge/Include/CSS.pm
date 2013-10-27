@@ -47,7 +47,8 @@ sub includeCSS
 	# magick map variable
 	my $input = $_;
 
-	# define the template for the script includes (don't care about doctype versions, dev only)
+	# define the template for the script includes
+	# don't care about doctype versions, dev only
 	my $css_include_tmpl = '@import url(\'%s\');' . "\n";
 
 	# referenced id

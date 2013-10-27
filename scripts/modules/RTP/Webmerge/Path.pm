@@ -5,6 +5,7 @@
 package RTP::Webmerge::Path;
 ###################################################################################################
 
+use Cwd;
 use Carp;
 use strict;
 use warnings;
@@ -76,8 +77,9 @@ sub importURI
 	}
 	else
 	{
-		# relative uris load from parent cssfile
-		$path = realpath(rel2abs($path, $relpath));
+		# relative uris load from parent css file
+		# or from the current working directory (bugfix)
+		$path = realpath(rel2abs($path, realpath($relpath)));
 	}
 
 	# assert that at least the path of the URI exists on the actual filesystem
@@ -231,6 +233,9 @@ sub chdir
 	# resolve to an absolute path
 	$directory = abs_path($directory);
 
+	# change current working directory
+	Cwd::chdir $directory or die "pushd $directory";
+
 	# bless scalar reference
 	return bless \ $dir, $self;
 
@@ -247,6 +252,9 @@ sub DESTROY
 
 	# restore old directory
 	$directory = ${$self};
+
+	# change current working directory back
+	Cwd::chdir $directory or die "popd $directory";
 
 	# give a message to the console for debug
 	# print "restored directory => $directory\n";
