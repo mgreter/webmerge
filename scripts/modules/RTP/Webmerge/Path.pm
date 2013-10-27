@@ -106,7 +106,7 @@ sub exportURI ($;$$)
 
 	# return if path is relative (not imported)
 	return $path unless $path =~ m /^(?:\/|[a-zA-Z]:)/;
-	
+
 	# htc files need to be referenced absolute
 	# I don't know of any other use case than
 	# in the IE specific behaviour css property
@@ -172,7 +172,7 @@ sub check_path ($)
 
 	# return value
 	my $rv = undef;
-	
+
 	# may die inside
 	eval
 	{
@@ -186,7 +186,6 @@ sub check_path ($)
 
 	# check for error
 	die $@ if $@;
-	
 
 }
 

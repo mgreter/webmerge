@@ -17,6 +17,26 @@ use warnings;
 # do a lousy match for better performance
 our $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
 
+# parse different string types
+our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
+our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
+
+###################################################################################################
+
+# parse imports with a strict match
+# use same pattern as found in libsass
+our $re_import = qr/
+                   (?:url\(\s*(?:
+                                  \'($re_apo+)\' |
+                                  \"($re_quot+)\"
+                                  |(?!data:)([^\)]+)
+                            )\s*\)|
+                            \'($re_apo+)\'|
+                            \"($re_quot+)\"
+                    )
+                    (?:\s|\n|;)*
+/x;
+
 ###################################################################################################
 
 # define our version string
@@ -73,11 +93,17 @@ sub wrapURL
 sub incCSS
 {
 
+	# return the first defined value found in arguments
+	my $defined = sub { foreach my $rv (@_) { return $rv if defined $rv; } };
+
 	# get input variables
-	my ($cssfile, $config) = @_;
+	my ($cssfile, $config, $includes, $rec) = @_;
 
 	# read complete css file
 	my $data = readfile($cssfile);
+
+	# collect every include within array
+	push @{$includes}, $cssfile if $includes;
 
 	# die with an error message that css file is not found
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
@@ -86,8 +112,37 @@ sub incCSS
 	# also changes urls in comments (needed for the spriteset feature)
 	${$data} =~ s/$re_url/wrapURL(importURI($1, dirname($cssfile), $config))/egm;
 
+	# change current working directory so we are able
+	# to find further includes relative to the directory
+	my $dir = RTP::Webmerge::Path->chdir(dirname($cssfile));
+
 	# resolve all css imports and include the stylesheets (recursive resolve url paths)
-	${$data} =~ s/\@import\s+$re_url/${incCSS($1, $config)}/gme if $config->{'import-css'};
+	if ($config->{'import-css'})
+	{
+		# find import statements
+		${$data} =~
+		s/
+			\@import\s+$re_import
+		/
+			# call recursive
+			${ incCSS (
+				# change uri to be relative
+				# to the current input file
+				importURI(
+					# only one match will be found
+					$defined->($1, $2, $3, $4, $5),
+					# normalize to current css
+					dirname($cssfile),
+					$config
+				),
+				# EO importURI
+				$config,
+				$includes
+			) }
+			# EO incCSS
+		/gmex;
+	}
+	# EO if conf import-css
 
 	# return scalar
 	return $data;
@@ -105,15 +160,18 @@ sub readCSS
 	# get input variables
 	my ($cssfile, $config) = @_;
 
+	# collect includes
+	my $includes = [];
+
 	# read and normalize the stylesheet
-	my $data = incCSS($cssfile, $config);
+	my $data = incCSS($cssfile, $config, $includes);
 
 	# resolve all local paths in the stylesheet to web uris
 	# also changes urls in comments (needed for the spriteset feature)
 	${$data} =~ s/$re_url/wrapURL(exportURI($1, undef))/egm;
 
-	# return scalar
-	return $data;
+	# return array structure if wanted
+	return wantarray ? [ $data, $includes ] : $data;
 
 }
 # EO sub readCSS

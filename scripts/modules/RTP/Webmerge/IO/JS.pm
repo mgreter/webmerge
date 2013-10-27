@@ -43,8 +43,8 @@ sub readJS
 	# die with an error message that js file is not found
 	die "js file <$jsfile> could not be read: $!\n" unless $data;
 
-	# return as string
-	return $data;
+	# return array structure if wanted
+	return wantarray ? [ $data, [ $jsfile ] ] : $data;
 
 }
 # EO sub readJS

@@ -40,7 +40,7 @@ use RTP::Webmerge::Merge qw(merge);
 
 ###################################################################################################
 
-use RTP::Webmerge::Merge;
+use RTP::Webmerge::Merge qw(%reader %merger);
 
 ###################################################################################################
 
@@ -69,7 +69,7 @@ sub mother ($$$$$)
 	{
 		print '=' x 78, "\n";
 		print join("\n",
-		        map { substr($_, -60) }
+		        map { substr($_, - 76) }
 		          sort keys %{$path2id});
 		print "\n";
 	}
@@ -343,8 +343,15 @@ sub watchdog
 				if ($input->{'path'})
 				{
 
-					# resolve the input path
-					push @paths, check_path($input->{'path'});
+					# override core glob (case insensitive)
+					use RTP::Webmerge::Path qw(dirname);
+					use File::Glob qw(:globally :nocase bsd_glob);
+					foreach my $local_path (bsd_glob(check_path $input->{'path'}))
+					{
+						my ($ret) = $reader{$type}->($local_path, $config);
+						die "could not read <$local_path>: $!" unless $ret;
+						push @paths, check_path($_) foreach @{$ret->[1]};
+					}
 
 				}
 				elsif ($input->{'id'})

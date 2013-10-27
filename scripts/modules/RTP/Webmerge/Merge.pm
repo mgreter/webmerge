@@ -351,7 +351,11 @@ sub collect
 					my $web_path = exportURI $local_path;
 
 					# readfile will return a string reference (pointer to the file content)
-					my $data = $reader{$type}->($local_path, $config) or die "could not read <$local_path>: $!";
+					my $ret = $reader{$type}->($local_path, $config) or die "could not read <$local_path>: $!";
+
+					# get variables from reader "struct" array
+					my $data = ref $ret eq "ARRAY" ? $ret->[0] : $ret;
+					my $includes = ref $ret eq "ARRAY" ? $ret->[1] : [];
 
 					# get the md5sum of the unaltered data (otherwise crc may not be correct)
 					my $md5sum = md5sum(my $org = \ "${$data}") or die "could not get md5sum from data: $!";
@@ -369,6 +373,7 @@ sub collect
 						'data' => $data,
 						'item' => $item,
 						'md5sum' => $md5sum,
+						'includes' => $includes,
 						'web_path' => $web_path,
 						'local_path' => $local_path,
 						# 'deferred' => $deferred,
@@ -504,7 +509,6 @@ my $merger; $merger = sub
 		# usefull for including stuff only in dev or live
 		my $collect = sub
 		{
-
 			map
 			{
 				unless ($_->{'data'})
@@ -517,7 +521,6 @@ my $merger; $merger = sub
 					$_->{'data'} = \ $data; $_->{'md5sum'} = \ $md5sum;
 				}
 			$_ }
-
 			grep
 			{
 				# item has no target - include

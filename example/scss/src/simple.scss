@@ -3,6 +3,7 @@
 #navbar {
   width: 80%;
   height: 23px;
+  background-image: url(assets/play-active.png);
 
   ul { list-style-type: none; }
   li {
@@ -10,3 +11,5 @@
     a { font-weight: bold; }
   }
 }
+
+@import "import/import-1.scss";
