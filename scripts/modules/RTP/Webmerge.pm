@@ -57,6 +57,8 @@ sub range
 # make absolute paths (file may not exist yet)
 use RTP::Webmerge::Path qw($directory res_path);
 
+my $count = 1;
+
 # collect all includes
 # return result hash
 sub collectOutputs
@@ -122,6 +124,8 @@ sub collectOutputs
 
 					# get id of this merge
 					my $id = $merge->{'id'};
+
+					if (!$id) { $id = $merge->{'id'} = sprintf('anon-%d', $count ++); }
 
 					# create and assign info hash for this merge
 					my $info = $config->{'outpaths'}->{$id} = { 'out' => {} };

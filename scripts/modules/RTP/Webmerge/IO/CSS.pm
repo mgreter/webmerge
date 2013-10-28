@@ -57,7 +57,10 @@ BEGIN { our @EXPORT_OK = qw($re_url wrapURL); }
 use RTP::Webmerge::IO qw(readfile writefile);
 
 # import local webroot path
-use RTP::Webmerge::Path qw(dirname exportURI importURI);
+use RTP::Webmerge::Path qw(exportURI importURI);
+
+# import base filename functions
+use RTP::Webmerge::Path qw(dirname basename);
 
 ###################################################################################################
 
@@ -98,6 +101,25 @@ sub incCSS
 
 	# get input variables
 	my ($cssfile, $config, $includes, $rec) = @_;
+
+	# find the css files
+	# support for libsass
+	unless (-e $cssfile)
+	{
+		# try different extensions in order
+		foreach my $ext ('scss', 'css')
+		{
+			my $dir = dirname $cssfile;
+			my $name = basename $cssfile;
+
+			# check for extension only
+			if (-e join('.', join('/', $dir, $name), $ext))
+			{ $cssfile = join('.', join('/', $dir, $name), $ext); }
+			# check for special libsass case
+			elsif (-e join('.', join('/', $dir, '_' . $name), $ext))
+			{ $cssfile = join('.', join('/', $dir, '_' . $name), $ext); }
+		}
+	}
 
 	# read complete css file
 	my $data = readfile($cssfile);
