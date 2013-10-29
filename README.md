@@ -18,7 +18,6 @@ To Do
 - Prepare code for v1.0.0 release
 - Implement @license header handling
 - Test more edge cases (specially css parser)
-- Handle imports correctly (specially for scss)
 - Invoke processors according to file extensions
 
 More ideas

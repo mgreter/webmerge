@@ -100,7 +100,11 @@ sub incCSS
 	my $defined = sub { foreach my $rv (@_) { return $rv if defined $rv; } };
 
 	# get input variables
-	my ($cssfile, $config, $includes, $rec) = @_;
+	my ($cssfile, $config, $deps) = @_;
+
+	# should we really import the data
+	# implement special case for libsass (scss)
+	my $no_import = undef;
 
 	# find the css files
 	# support for libsass
@@ -117,7 +121,13 @@ sub incCSS
 			{ $cssfile = join('.', join('/', $dir, $name), $ext); }
 			# check for special libsass case
 			elsif (-e join('.', join('/', $dir, '_' . $name), $ext))
-			{ $cssfile = join('.', join('/', $dir, '_' . $name), $ext); }
+			{
+				$no_import = $cssfile;
+				# detected a scss partial import
+				# but still fallow to really learn about
+				# all the dependencies (just for watchdog)
+				$cssfile = join('.', join('/', $dir, '_' . $name), $ext);
+			}
 		}
 	}
 
@@ -125,7 +135,7 @@ sub incCSS
 	my $data = readfile($cssfile);
 
 	# collect every include within array
-	push @{$includes}, $cssfile if $includes;
+	push @{$deps}, $cssfile if $deps;
 
 	# die with an error message that css file is not found
 	die "css import <$cssfile> could not be read: $!\n" unless $data;
@@ -159,12 +169,15 @@ sub incCSS
 				),
 				# EO importURI
 				$config,
-				$includes
+				$deps
 			) }
 			# EO incCSS
 		/gmex;
 	}
 	# EO if conf import-css
+
+	# implementation for special case (libsas/scss)
+	return \ sprintf '@import "%s";', $no_import if $no_import;
 
 	# return scalar
 	return $data;
