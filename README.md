@@ -16,19 +16,22 @@ To Do
 =====
 - Write documentation
 - Prepare code for v1.0.0 release
-- Load more modules conditionally
 - Implement @license header handling
-- Maybe add support for ImageMagick too
-- Test more edge cases (specially with css parser)
+- Test more edge cases (specially css parser)
+- Handle imports correctly (specially for scss)
+- Invoke processors according to file extensions
 
 More ideas
 ==========
 - Allow to merge multiple spritesets
 - Means we'll have to re-use same src
+- Add CoffeeScript and LESS processor
+- Maybe add support for ImageMagick too
 - Add smart locks to ensure parallel execution
 - Implement parallel workers for unrelated blocks
 - Put more usefull information to the console
 - i.e. files imported, files created, time needed ...
+- Include a tiny webserver to serve the project files from
 
 Installing on Windows
 =====================

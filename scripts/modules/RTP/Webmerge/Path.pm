@@ -27,7 +27,7 @@ BEGIN { $RTP::Webmerge::Path::VERSION = "0.9.0" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(dirname res_path check_path exportURI importURI); }
+BEGIN { our @EXPORT = qw(canonpath dirname res_path check_path exportURI importURI); }
 
 # define our functions to be exported
 BEGIN { our @EXPORT_OK = qw(EOD basename $webroot $confroot $extroot $directory); }
@@ -40,8 +40,8 @@ use Cwd qw(realpath abs_path);
 # use to parse path and filename
 use File::Basename qw(dirname basename);
 
-# import system path conversion functions
-use File::Spec::Functions qw(rel2abs abs2rel);
+# import file path normalization/conversion functions
+use File::Spec::Functions qw(canonpath rel2abs abs2rel);
 
 ###################################################################################################
 

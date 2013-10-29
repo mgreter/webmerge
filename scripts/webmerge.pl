@@ -140,6 +140,9 @@ $default->apply({
 	# parallel jobs
 	'jobs' => 2,
 
+	# start webserver
+	'webserver' => 0,
+
 	# the order in which to prefer to include stuff
 	'incorder' =>
 	{
@@ -209,6 +212,9 @@ my @opts = (
 
 	# number of commands to run simultaneously
 	'jobs|j=i' => \$default->{'cmd_jobs'},
+
+	# fork a simple webserver to host project
+	'webserver|www!' => \$default->{'cmd_webserver'},
 
 	# usage/help options
 	'help|?' => \$help,
@@ -432,6 +438,55 @@ END
 # check config will assert the configuration
 # call after you have read command line options
 checkConfig($config) or die "config check failed";
+
+
+################################################################################
+# Experimental webserver
+################################################################################
+
+# merge if not starting watchdog
+if ($config->{'webserver'})
+{
+
+	require HTTP::Daemon;
+	require HTTP::Status;
+
+	local $SIG{'INT'} = undef;
+
+	use File::Spec::Functions;
+	use File::Spec::Functions qw(rel2abs);
+
+	my $d = HTTP::Daemon->new(
+		LocalPort => 8080,
+		# LocalAddr => '127.0.0.1',
+	) || die "Fatal: ", $!;
+
+	while (my $c = $d->accept)
+	{
+		while (my $r = $c->get_request)
+		{
+			if ($r->method eq 'GET')
+			{
+				my $path = canonpath($r->uri->path);
+				my $root = canonpath(check_path($config->{'webroot'}));
+				my $file = canonpath(catfile($root, $path));
+				die "hack attempt" unless $file =~ m /^\Q$root\E/;
+				$c->send_file_response($file);
+			}
+			else
+			{
+				$c->send_error(HTTP::Status::RC_FORBIDDEN())
+			}
+			# needed?
+			$c->close;
+		}
+		$c->close;
+		undef($c);
+	}
+
+	exit;
+
+}
 
 
 ################################################################################

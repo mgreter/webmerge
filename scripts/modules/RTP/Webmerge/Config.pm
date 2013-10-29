@@ -370,6 +370,9 @@ sub DESTROY
 	# destroy arguments
 	my ($self) = @_;
 
+	# may exit early without any stage
+	return unless exists $stages{$self};
+
 	# check if we have some stage for us
 	return unless scalar @{$stages{$self}};
 
