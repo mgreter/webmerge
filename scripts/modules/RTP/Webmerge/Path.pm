@@ -68,6 +68,9 @@ sub importURI
 	my $path = dirname $uri;
 	my $file = basename $uri;
 
+	# do nothing if uri is empty
+	return $uri . $suffix if $uri eq '';
+
 	# check if URI is absolute
 	if ($uri =~ m/^\//)
 	{
@@ -88,7 +91,7 @@ sub importURI
 	# return the final absolute local path
 	# the suffix is lost as we convert the
 	# URI to a real absolute local filepath
-	return join('/', $path, $file);
+	return join('/', $path, $file . $suffix);
 
 }
 # EO sub importURI
