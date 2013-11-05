@@ -39,10 +39,10 @@ sub scss
 		# always output in nice formated way
 		# will compress later by our own compilers
 		output_style => CSS::Sass::SASS_STYLE_NESTED(),
-		
+
 		# needed for watchdog (fork?)
 		include_paths   => [ cwd ],
-		
+
 		# output debug comments
 		source_comments => $config->{'debug'},
 
@@ -53,8 +53,25 @@ sub scss
 	);
 	# init scss object
 
+	# import local webroot path
+	# import base filename functions
+	use RTP::Webmerge::Path qw(dirname basename);
+	use RTP::Webmerge::IO::CSS qw(wrapURL);
+	use RTP::Webmerge::Path qw(exportURI importURI $directory);
+	# parse urls out of the css file
+	# do a lousy match for better performance
+	our $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
+	# change all web uris in the stylesheet to absolute local paths
+	# also changes urls in comments (needed for the spriteset feature)
+	${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($1, cwd))/egm;
+
 	# compile the passed scss data
 	${$data} = $scss->compile(${$data});
+
+	# resolve all local paths in the stylesheet to web uris
+	# also changes urls in comments (needed for the spriteset feature)
+	${$data} =~ s/$re_url/wrapURL(importURI($1, cwd, $config))/egm;
 
 	# check if compile was ok
 	unless (defined ${$data})
