@@ -465,12 +465,14 @@ if ($config->{'webserver'})
 	{
 		while (my $r = $c->get_request)
 		{
-			if ($r->method eq 'GET')
+			if ($r->method eq 'GET' || $r->method eq 'POST')
 			{
-				my $path = canonpath($r->uri->path);
+				use URI::Escape qw(uri_unescape);
+				my $path = canonpath(uri_unescape($r->uri->path));
 				my $root = canonpath(check_path($config->{'webroot'}));
 				my $file = canonpath(catfile($root, $path));
 				die "hack attempt" unless $file =~ m /^\Q$root\E/;
+				$file = join('/', $file, 'index.html') if -d $file;
 				$c->send_file_response($file);
 			}
 			else
@@ -500,13 +502,15 @@ my $re_argv = join('|', @ARGV);
 ################################################################################
 # setup config for the complete tree
 # store a copy of config on each block
+# also collect all ids in a lookup object
 ################################################################################
 
 # setup blocks
 sub setupBlocks
 {
 
-	# get input
+	# get input variables
+	# independent for each type
 	my ($config, $xml, $type) = @_;
 
 	# create lexical config scope
