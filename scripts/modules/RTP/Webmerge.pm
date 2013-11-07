@@ -105,7 +105,7 @@ sub collectOutputs
 		}
 
 		# process all merge blocks for outputs
-		foreach my $block (@{$merges || []})
+		foreach my $block ($xml, @{$merges || []})
 		{
 
 			# create lexical config scope
@@ -116,7 +116,7 @@ sub collectOutputs
 			{
 
 				# process all include entries
-				foreach my $merge (map { @{$_->{$type} || []} } @{$merges || {} })
+				foreach my $merge (@{$block->{$type} || []})
 				{
 
 					# create lexical config scope
@@ -586,7 +586,7 @@ sub callProcessor
 
 	# current working directory
 	my $cwd = cwd;
-	
+
 	my $path = dirname $item->{'path'};
 	unless ($path =~ m /^(?:\/|[a-zA-Z]:)/)
 	{ $path = join('/', $directory, $path); }
@@ -609,7 +609,7 @@ sub callProcessor
 
 	# change back the working directory to the previous value
 	Cwd::chdir($cwd) or die "Fatal in chdir: " . $cwd if $path;
-	
+
 }
 # EO sub callProcessor
 
