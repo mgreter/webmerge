@@ -21,6 +21,9 @@ BEGIN { unshift @INC, "$Bin/modules"; }
 
 ################################################################################
 
+use RTP::Webmerge::Input;
+use RTP::Webmerge::Input::CSS;
+
 # load spriteset library
 use OCBNET::Spritesets;
 

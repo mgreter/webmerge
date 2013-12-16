@@ -195,18 +195,22 @@ sub readCSS
 	# get input variables
 	my ($cssfile, $config) = @_;
 
-	# collect includes
-	my $includes = [];
+	# create new css input object (partly parse the css file)
+	# this should be extended to support all css operations
+	my $input = RTP::Webmerge::Input::CSS->new($cssfile, $config);
 
-	# read and normalize the stylesheet
-	my $data = incCSS($cssfile, $config, $includes);
+	# change current working directory so we are able
+	# to find further includes relative to the directory
+	my $dir = RTP::Webmerge::Path->chdir(dirname($cssfile));
 
-	# resolve all local paths in the stylesheet to web uris
-	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(exportURI($1, undef))/egm;
+	# render the resulting css
+	my $data = $input->render;
 
-	# return array structure if wanted
-	return wantarray ? [ $data, $includes ] : $data;
+	# get our own asset path and for all dependencies
+	my ($asset, @assets) = map { $_->{'path'} } $input->assets;
+
+	# todo: return input objects and not variables
+	return wantarray ? [ $data, \@assets ] : $data;
 
 }
 # EO sub readCSS
@@ -239,11 +243,11 @@ sub exportCSS
 {
 
 	# get input variables
-	my ($file, $data, $config) = @_;
+	my ($cssfile, $data, $config) = @_;
 
 	# change all absolute local paths to web uris
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(exportURI($1, dirname($file)))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($1, dirname($cssfile)))/egm;
 
 	# return success
 	return 1;
@@ -280,6 +284,11 @@ push @initers, sub
 
 	# include imported css files
 	$config->{'import-css'} = 1;
+	$config->{'import-scss'} = 0;
+
+	# adjust url for css imports
+	$config->{'adjust-urls-css'} = 1;
+	$config->{'adjust-urls-scss'} = 0;
 
 	# should we use absolute urls
 	# otherwise includes will be relative
@@ -289,6 +298,9 @@ push @initers, sub
 	# return additional get options attribute
 	return (
 		'import-css!' => \ $config->{'cmd_import-css'},
+		'import-scss!' => \ $config->{'cmd_import-scss'},
+		'adjust-urls-css!' => \ $config->{'cmd_adjust-urls-css'},
+		'adjust-urls-scss!' => \ $config->{'cmd_adjust-urls-scss'},
 		'absoluteurls!' => \ $config->{'cmd_absoluteurls'}
 	);
 
