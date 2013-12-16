@@ -61,6 +61,9 @@ $parse_definition = sub
 
 	my ($option, $code) = @_;
 
+	# parse nothing if code is undefined
+	return $option unless defined $code;
+
 	# remove whitespace from body
 	$code =~ s/(?:\A\s+|\s+\z)//gm;
 
