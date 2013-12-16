@@ -471,12 +471,54 @@ if ($config->{'webserver'})
 			if ($r->method eq 'GET' || $r->method eq 'POST')
 			{
 				use URI::Escape qw(uri_unescape);
+				my $wwwpath = uri_unescape($r->uri->path);
 				my $path = canonpath(uri_unescape($r->uri->path));
 				my $root = canonpath(check_path($config->{'webroot'}));
 				my $file = canonpath(catfile($root, $path));
 				die "hack attempt" unless $file =~ m /^\Q$root\E/;
-				$file = join('/', $file, 'index.html') if -d $file;
-				$c->send_file_response($file);
+				if (-d $file && -e join('/', $file, 'index.html'))
+				{ $file = join('/', $file, 'index.html'); }
+				if (-d $file)
+				{
+					# check for end slash
+					# otherwise redirect ua
+					unless ($wwwpath =~ m/\/$/)
+					{
+						$c->send_redirect( $wwwpath.'/' );
+					}
+					else
+					{
+
+						my $content = "<!doctype html><html><head><title>Directory Listening</title><style>BODY,UL,LI{ font-family: verdana; }</style></head><body><h1>".$path."</h1>";
+						opendir(my $dh, $file);
+						if ($dh)
+						{
+							$content .= "<ul>";
+							$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', '..' unless $wwwpath =~ m/^\/*$/;
+							$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach grep { !m/^\.{1,2}$/ } readdir($dh);
+							$content .= "</ul>";
+						}
+						else
+						{
+							$content .= "error opening directory: $!";
+						}
+
+						$content .= "</body></html>";
+						my $response = HTTP::Response->new( 200 );
+						$response->content( $content );
+						$response->header( "Content-Type" => "text/html" );
+
+						$c->send_response( $response );
+					}
+				}
+				elsif (-e $file)
+				{
+					$c->send_file_response($file);
+				}
+				else
+				{
+					$c->send_error(HTTP::Status::RC_FORBIDDEN())
+				}
 			}
 			else
 			{
