@@ -82,7 +82,9 @@ sub importURI
 	{
 		# relative uris load from parent css file
 		# or from the current working directory (bugfix)
-		$path = realpath(rel2abs($path, realpath($relpath)));
+		eval { $path = realpath(rel2abs($path, realpath($relpath))); };
+		# report any error from parent caller
+		Carp::croak $@ if $@;
 	}
 
 	# assert that at least the path of the URI exists on the actual filesystem
