@@ -145,11 +145,15 @@ push @initers, sub
 	my ($config) = @_;
 
 	# default webserver port
-	$config->{'port'} = 8000;
+	$config->{'webport'} = 8000;
+
+	# fork a simple webserver to host project
+	$config->{'webserver'} = undef;
 
 	# return additional get options attribute
 	return (
-		'port=i' => \ $config->{'cmd_port'}
+		'port=i' => \ $config->{'cmd_port'},
+		'webserver!' => \$config->{'cmd_webserver'}
 	);
 
 };

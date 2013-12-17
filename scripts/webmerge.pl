@@ -217,9 +217,6 @@ my @opts = (
 	# number of commands to run simultaneously
 	'jobs|j=i' => \$default->{'cmd_jobs'},
 
-	# fork a simple webserver to host project
-	'webserver!' => \$default->{'cmd_webserver'},
-
 	# usage/help options
 	'help|?' => \$help,
 	'opts' => \$opts,
@@ -760,7 +757,7 @@ webmerge [options] [steps]
 
    -w, --watchdog        start the watchdog process (quit with ctrl+c)
    -webserver            start the webserver process (quit with ctrl+c)
-   -port                 port number for the webserver to listen to
+   -webport              port number for the webserver to listen to
 
    --webroot             webroot directory to render absolute urls
    --import-css          inline imported css files into stylesheet
