@@ -70,7 +70,7 @@ perl "%FOLDER%\scripts\webmerge.pl" %*
 
 @echo 
 
-@sleep 1
+@timeout /T 2
 
 @GOTO endHandling
 
