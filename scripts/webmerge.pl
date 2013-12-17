@@ -36,6 +36,7 @@ use RTP::Webmerge::Embedder;
 use RTP::Webmerge::Optimize;
 use RTP::Webmerge::Checksum;
 use RTP::Webmerge::Watchdog;
+use RTP::Webmerge::Webserver;
 
 # load additional modules (no import)
 use RTP::Webmerge::Compile::JS qw();
@@ -214,7 +215,7 @@ my @opts = (
 	'jobs|j=i' => \$default->{'cmd_jobs'},
 
 	# fork a simple webserver to host project
-	'webserver|www!' => \$default->{'cmd_webserver'},
+	'webserver!' => \$default->{'cmd_webserver'},
 
 	# usage/help options
 	'help|?' => \$help,
@@ -445,92 +446,7 @@ checkConfig($config) or die "config check failed";
 ################################################################################
 
 # merge if not starting watchdog
-if ($config->{'webserver'})
-{
-
-	require HTTP::Daemon;
-	require HTTP::Status;
-
-	local $SIG{'INT'} = undef;
-
-	use File::Spec::Functions;
-	use File::Spec::Functions qw(rel2abs);
-
-	my $d = HTTP::Daemon->new(
-		LocalPort => 8080,
-		# LocalAddr => '127.0.0.1',
-	) || die "Fatal: ", $!;
-
-	while (my $c = $d->accept)
-	{
-		while (my $r = $c->get_request)
-		{
-			if ($r->method eq 'GET' || $r->method eq 'POST')
-			{
-				use URI::Escape qw(uri_unescape);
-				my $wwwpath = uri_unescape($r->uri->path);
-				my $path = canonpath(uri_unescape($r->uri->path));
-				my $root = canonpath(check_path($config->{'webroot'}));
-				my $file = canonpath(catfile($root, $path));
-				die "hack attempt" unless $file =~ m /^\Q$root\E/;
-				if (-d $file && -e join('/', $file, 'index.html'))
-				{ $file = join('/', $file, 'index.html'); }
-				if (-d $file)
-				{
-					# check for end slash
-					# otherwise redirect ua
-					unless ($wwwpath =~ m/\/$/)
-					{
-						$c->send_redirect( $wwwpath.'/' );
-					}
-					else
-					{
-
-						my $content = "<!doctype html><html><head><title>Directory Listening</title><style>BODY,UL,LI{ font-family: verdana; }</style></head><body><h1>".$path."</h1>";
-						opendir(my $dh, $file);
-						if ($dh)
-						{
-							$content .= "<ul>";
-							$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', '..' unless $wwwpath =~ m/^\/*$/;
-							$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach grep { !m/^\.{1,2}$/ } readdir($dh);
-							$content .= "</ul>";
-						}
-						else
-						{
-							$content .= "error opening directory: $!";
-						}
-
-						$content .= "</body></html>";
-						my $response = HTTP::Response->new( 200 );
-						$response->content( $content );
-						$response->header( "Content-Type" => "text/html" );
-
-						$c->send_response( $response );
-					}
-				}
-				elsif (-e $file)
-				{
-					$c->send_file_response($file);
-				}
-				else
-				{
-					$c->send_error(HTTP::Status::RC_FORBIDDEN())
-				}
-			}
-			else
-			{
-				$c->send_error(HTTP::Status::RC_FORBIDDEN())
-			}
-			# needed?
-			$c->close;
-		}
-		$c->close;
-		undef($c);
-	}
-
-	exit;
-
-}
+webserver $config if $config->{'webserver'};
 
 
 ################################################################################
@@ -840,6 +756,8 @@ webmerge [options] [steps]
    -j, --jobs            number of jobs (commands) to run simultaneously
 
    -w, --watchdog        start the watchdog process (quit with ctrl+c)
+   -webserver            start the webserver process (quit with ctrl+c)
+   -port                 port number for the webserver to listen to
 
    --webroot             webroot directory to render absolute urls
    --import-css          inline imported css files into stylesheet

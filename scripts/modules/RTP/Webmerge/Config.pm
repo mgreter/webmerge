@@ -32,6 +32,8 @@ BEGIN { our @EXPORT = qw(); }
 BEGIN { our @EXPORT_OK = qw(); }
 
 ###################################################################################################
+# first instance should be default values with current working dir
+###################################################################################################
 
 use RTP::Webmerge::Path;
 
