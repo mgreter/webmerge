@@ -360,8 +360,14 @@ sub collect
 					# get the md5sum of the unaltered data (otherwise crc may not be correct)
 					my $md5sum = md5sum(my $org = \ "${$data}") or die "could not get md5sum from data: $!";
 
-					# importer can alter the data after the checksum has been taken
-					$importer{$type}->($data, $local_path, $config) or die "could not import <$local_path>: $!";
+					eval {
+
+						# importer can alter the data after the checksum has been taken
+						$importer{$type}->($data, $local_path, $config) or die "could not import <$local_path>: $!";
+
+					};
+
+					die "error with css import:\n\n" . ${$data} . "\n\n\n" . $@ if $@;
 
 					# call processors (will return if nothing is set)
 					callProcessor($item->{'process'}, $data, $config, $item);
