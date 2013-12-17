@@ -206,7 +206,7 @@ sub render
 	my $config = $self->{'config'};
 
 	# remove comment from raw data
-	$data =~ s/$re_comment//gm;
+	# $data =~ s/$re_comment//gm;
 
 	# make these config options local, as they should influence each other and revert automatically
 	local $self->{'config'}->{'rebase-urls-in-css'} = $self->{'config'}->{'rebase-urls-in-css'};
