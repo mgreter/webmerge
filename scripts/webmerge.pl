@@ -32,6 +32,7 @@ use RTP::Webmerge;
 use RTP::Webmerge::IO;
 use RTP::Webmerge::Path;
 use RTP::Webmerge::Config;
+use RTP::Webmerge::Finish;
 use RTP::Webmerge::Prepare;
 use RTP::Webmerge::Merge;
 use RTP::Webmerge::HeadInc;
@@ -111,6 +112,8 @@ $default->apply({
 	'level' => 2,
 	# merge blocks
 	'merge' => 1,
+	# finish blocks
+	'finish' => 1,
 	# specific merge blocks
 	'js' => 1, 'css' => 1,
 	# headinc blocks
@@ -186,6 +189,7 @@ my @opts = (
 
 	# enable/disable base operations
 	'action!' => \$default->{'cmd_action'},
+	'finish|p!' => \$default->{'cmd_finish'},
 	'prepare|p!' => \$default->{'cmd_prepare'},
 	'optimize|o!' => \$default->{'cmd_optimize'},
 	'level|l=o' => \$default->{'cmd_level'},
@@ -513,6 +517,7 @@ sub setupBlocks
 		([ 'css', $xml->{'css'} || [] ]),
 		([ 'block', $xml->{'block'} || [] ]),
 		([ 'merge', $xml->{'merge'} || [] ]),
+		([ 'finish', $xml->{'finish'} || [] ]),
 		([ 'prepare', $xml->{'prepare'} || [] ]),
 		([ 'headinc', $xml->{'headinc'} || [] ]),
 		([ 'feature', $xml->{'feature'} || [] ]),
@@ -543,6 +548,7 @@ sub setupBlocks
 
 # action handlers
 my %actions = (
+	'finish' => \&finish,
 	'prepare' => \&prepare,
 	'headinc' => \&headinc,
 	'embedder' => \&embedder,
@@ -611,8 +617,15 @@ sub process
 						print '-' x 78, "\n";
 					}
 
+					# call the prepare step first
+					&process($config, $block, 'prepare');
+
 					# pass execution over to action handler
 					&{$actions{$action}}($config, $block);
+
+					# call the finish step last
+					&process($config, $block, 'finish');
+
 				}
 				# EO each block
 			}
@@ -655,6 +668,10 @@ unless ($config->{'watchdog'})
 	# next we will continue with the merge step
 	# this will write generated and processed files
 	process($config, $xml, $_) foreach sort keys %merger;
+
+	# call the finish step last
+	# this can copy and create files
+	process($config, $xml, 'finish');
 
 	# call headinc function to generate headers
 	# these can be included as standalone files

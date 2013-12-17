@@ -201,6 +201,10 @@ sub child ($$$$$)
 				print $@ if $@;
 				$beeps ++ if $@;
 
+				# call the finish step last
+				# this can copy and create files
+				main::process($config, $merge, 'finish');
+
 			}
 			# EO if can dequeue
 

@@ -209,8 +209,8 @@ sub readCSS
 	my $data = $input->render;
 
 	# get our own asset path and for all dependencies
-	my ($asset, @assets) = map { $_->{'path'} } $input->assets;
-#die $$data;
+	my (@assets) = map { $_->{'path'} } $input->assets;
+
 	# todo: return input objects and not variables
 	return wantarray ? [ $data, \@assets ] : $data;
 
