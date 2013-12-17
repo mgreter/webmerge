@@ -91,7 +91,7 @@ global path environment variable). You can also download the compiler manually
 and extract it to the directory.
 
 - http://sourceforge.net/projects/unxutils/
-- http://closure-compiler.googlecode.com/files/compiler-latest.zip
+- http://dl.google.com/closure-compiler/compiler-latest.zip
 
 Other external optimizers
 =========================
