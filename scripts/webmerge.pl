@@ -618,13 +618,15 @@ sub process
 					}
 
 					# call the prepare step first
-					&process($config, $block, 'prepare');
+					if ($block->{'prepare'} && ref($block->{'prepare'}) eq "ARRAY")
+					{ &{$actions{'prepare'}}($config, $_) foreach @{$block->{'prepare'}}; };
 
 					# pass execution over to action handler
 					&{$actions{$action}}($config, $block);
 
 					# call the finish step last
-					&process($config, $block, 'finish');
+					if ($block->{'finish'} && ref($block->{'finish'}) eq "ARRAY")
+					{ &{$actions{'finish'}}($config, $_) foreach @{$block->{'finish'}}; };
 
 				}
 				# EO each block
