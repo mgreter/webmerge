@@ -96,6 +96,8 @@ sub wrapURL
 sub incCSS
 {
 
+	die "deprecated";
+
 	# return the first defined value found in arguments
 	my $defined = sub { foreach my $rv (@_) { return $rv if defined $rv; } };
 
@@ -208,7 +210,7 @@ sub readCSS
 
 	# get our own asset path and for all dependencies
 	my ($asset, @assets) = map { $_->{'path'} } $input->assets;
-
+#die $$data;
 	# todo: return input objects and not variables
 	return wantarray ? [ $data, \@assets ] : $data;
 
@@ -225,9 +227,13 @@ sub importCSS
 	# get input variables
 	my ($data, $cssfile, $config) = @_;
 
+	# check for config if we should do anything
+	return $data unless $config->{'rebase-urls-in-css'};
+
 	# change all web uris in the stylesheet to absolute local paths
 	# also changes urls in comments (needed for the spriteset feature)
 	${$data} =~ s/$re_url/wrapURL(importURI($1, undef, $config))/egm;
+	# ${$data} =~ s/$re_url/wrapURL(importURI($1, dirname($cssfile), $config))/egm;
 
 	# return as string
 	return $data;
@@ -286,9 +292,16 @@ push @initers, sub
 	$config->{'import-css'} = 1;
 	$config->{'import-scss'} = 0;
 
-	# adjust url for css imports
-	$config->{'adjust-urls-css'} = 1;
-	$config->{'adjust-urls-scss'} = 0;
+	# rebase urls within file types
+	# once this feature is disabled, it shall
+	# be disabled for all further includes
+	$config->{'rebase-urls-in-css'} = 1;
+	$config->{'rebase-urls-in-scss'} = 0;
+
+	# rebase remaining import urls
+	# only matter if import is disabled
+	$config->{'rebase-imports-css'} = 1;
+	$config->{'rebase-imports-scss'} = 0;
 
 	# should we use absolute urls
 	# otherwise includes will be relative
@@ -299,8 +312,10 @@ push @initers, sub
 	return (
 		'import-css!' => \ $config->{'cmd_import-css'},
 		'import-scss!' => \ $config->{'cmd_import-scss'},
-		'adjust-urls-css!' => \ $config->{'cmd_adjust-urls-css'},
-		'adjust-urls-scss!' => \ $config->{'cmd_adjust-urls-scss'},
+		'rebase-urls-in-css!' => \ $config->{'cmd_rebase-urls-in-css'},
+		'rebase-urls-in-scss!' => \ $config->{'cmd_rebase-urls-in-scss'},
+		'rebase-imports-css!' => \ $config->{'cmd_rebase-imports-css'},
+		'rebase-imports-scss!' => \ $config->{'cmd_rebase-imports-scss'},
 		'absoluteurls!' => \ $config->{'cmd_absoluteurls'}
 	);
 

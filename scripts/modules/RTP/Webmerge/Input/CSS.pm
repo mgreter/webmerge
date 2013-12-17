@@ -208,9 +208,24 @@ sub render
 	# remove comment from raw data
 	$data =~ s/$re_comment//gm;
 
+	# make these config options local, as they should influence each other and revert automatically
+	local $self->{'config'}->{'rebase-urls-in-css'} = $self->{'config'}->{'rebase-urls-in-css'};
+	local $self->{'config'}->{'rebase-urls-in-scss'} = $self->{'config'}->{'rebase-urls-in-scss'};
+
 	if ($self->{'suffix'} eq 'scss')
 	{
-		if ( $self->{'config'}->{'adjust-urls-scss'} )
+		unless ( $self->{'config'}->{'rebase-urls-in-scss'} )
+		{ $self->{'config'}->{'rebase-urls-in-css'} = 0; }
+	}
+	else
+	{
+		unless ( $self->{'config'}->{'rebase-urls-in-css'} )
+		{ $self->{'config'}->{'rebase-urls-in-scss'} = 0; }
+	}
+
+	if ($self->{'suffix'} eq 'scss')
+	{
+		if ( $self->{'config'}->{'rebase-urls-in-scss'} )
 		{
 			# change all web uris in the stylesheet to absolute local paths
 			# also changes urls in comments (needed for the spriteset feature)
@@ -219,7 +234,7 @@ sub render
 	}
 	else
 	{
-		if ( $self->{'config'}->{'adjust-urls-css'} )
+		if ( $self->{'config'}->{'rebase-urls-in-css'} )
 		{
 			# change all web uris in the stylesheet to absolute local paths
 			# also changes urls in comments (needed for the spriteset feature)
@@ -286,18 +301,22 @@ sub render
 		# this indicates some sass partials
 		if ($include && $suffix eq 'scss')
 		{
+			if ( $self->{'config'}->{'rebase-imports-scss'} )
+			{ $include = exportURI(importURI($include, $base)); }
 			unless ( $self->{'config'}->{'import-scss'} )
 			{ return sprintf $tmpl, '"' . $include . '"'; }
 			$rv = ${$dep->render($base)};
-			if ( $self->{'config'}->{'adjust-urls-scss'} )
+			if ( $self->{'config'}->{'rebase-urls-in-scss'} )
 			{ $rv =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
 		}
 		else
 		{
+			if ( $self->{'config'}->{'rebase-imports-css'} )
+			{ $include = exportURI(importURI($include, $base)); }
 			unless ( $self->{'config'}->{'import-css'} )
 			{ return sprintf $tmpl, wrapURL($include); }
 			$rv = ${$dep->render($base)};
-			if ( $self->{'config'}->{'adjust-urls-css'} )
+			if ( $self->{'config'}->{'rebase-urls-in-css'} )
 			{ $rv =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
 
 		};
@@ -319,12 +338,12 @@ sub render
 
 	if ($self->{'suffix'} eq 'scss')
 	{
-		if ( $self->{'config'}->{'adjust-urls-scss'} )
+		if ( $self->{'config'}->{'rebase-urls-in-scss'} )
 		{ $data =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
 	}
 	else
 	{
-		if ( $self->{'config'}->{'adjust-urls-css'} )
+		if ( $self->{'config'}->{'rebase-urls-in-css'} )
 		{ $data =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
 	}
 

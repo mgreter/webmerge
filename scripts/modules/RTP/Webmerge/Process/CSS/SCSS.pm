@@ -63,7 +63,7 @@ sub scss
 	our $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
 	# change all web uris in the stylesheet to absolute local paths
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
+	# ${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
 	${$data} =~ s/$re_url/wrapURL(exportURI($1, cwd))/egm;
 
 	# compile the passed scss data
@@ -71,7 +71,7 @@ sub scss
 
 	# resolve all local paths in the stylesheet to web uris
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(importURI($1, cwd, $config))/egm;
+	# ${$data} =~ s/$re_url/wrapURL(importURI($1, cwd, $config))/egm;
 
 	# check if compile was ok
 	unless (defined ${$data})
