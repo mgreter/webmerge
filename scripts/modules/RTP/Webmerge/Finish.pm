@@ -68,6 +68,20 @@ sub finish
 		# EO each mkdir
 
 		# process all directories to create
+		foreach my $run (@{$finish->{'prerun'} || []})
+		{
+
+			my $cmd = $run->{'cmd'};
+
+			my @args = @{$run->{'arg'} || []};
+
+			my $rv = system $cmd, @args;
+
+			print "executing $cmd ", join(" ", @args), "\n";
+
+		}
+
+		# process all directories to create
 		foreach my $copy (@{$finish->{'copy'} || []})
 		{
 
