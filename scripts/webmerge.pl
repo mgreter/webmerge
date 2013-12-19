@@ -47,6 +47,7 @@ use RTP::Webmerge::Compile::JS qw();
 use RTP::Webmerge::Compile::CSS qw();
 use RTP::Webmerge::Process::JS qw();
 use RTP::Webmerge::Process::CSS qw();
+use RTP::Webmerge::Process::CSS::SASS qw();
 
 # load optimizer modules (no import)
 use RTP::Webmerge::Optimize::TXT qw();
