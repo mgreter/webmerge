@@ -113,9 +113,13 @@ sub dependencies
 	# get raw data for css
 	my $data = $self->raw;
 
+	# base directory from current css path
+	my $base = dirname($self->{'path'});
+
 	# change current working directory so we are able
 	# to find further includes relative to the directory
-	my $dir = RTP::Webmerge::Path->chdir(dirname($self->{'path'}));
+	# XXX -> why does that not work with rel2abs?
+	my $dir = RTP::Webmerge::Path->chdir($base);
 
 	# remove comment from raw data
 	${$data} =~ s/$re_comment//gm;
@@ -145,7 +149,7 @@ sub dependencies
 		my $cssfile = catfile($path, $name);
 
 		# create a new input object for the dependency
-		my $abspath = rel2abs($cssfile);
+		my $abspath = rel2abs($cssfile, $base);
 
 		# parse again, suffix may has changed (should be quite cheap)
 		($name, $path, $suffix) = fileparse($cssfile, 'scss', 'css');
@@ -245,6 +249,7 @@ sub render
 
 	my $process = sub
 	{
+
 		# store full match
 		my $matched = $1;
 
