@@ -4,6 +4,7 @@
 ###################################################################################################
 package RTP::Webmerge::Webserver::Client;
 ###################################################################################################
+#		use bytes;
 
 use Carp;
 use strict;
@@ -188,6 +189,12 @@ push @readers, sub
 				# append to value
 				$val .= " $1";
 			}
+			# empty line
+			else
+			{
+				# delimiter
+				last;
+			}
 
 		}
 		# EO each line
@@ -336,7 +343,7 @@ print "foobar\n";
 	elsif ($len) {
 		# Plain body specified by "Content-Length"
 		my $missing = $len - length($sock->rbuf);
-		#print "plain upload $len\n";
+		# print "Plain body specified by Content-Length (missing: $missing of $len)\n" .  $sock->rbuf . "\n";
 		while ($missing > 0) {
 			#print "Need $missing more bytes of content\n" if $DEBUG;
 			return 0;
@@ -350,7 +357,7 @@ print "foobar\n";
 		}
 		else {
 			$r->content($sock->rbuf);
-			$sock->rbuf='';
+			$sock->rbuf = '';
 		}
 	}
 #	elsif ($ct && $ct =~ m/^multipart\/\w+\s*;.*boundary\s*=\s*(\"?)(\w+)\1/i) {
@@ -396,9 +403,9 @@ sub canRead
 
 	my $rv = sysread($sock, $sock->rbuf, 1024 * 16, length($sock->rbuf));
 
-# 	print "client has readed now $rv -> ", length($sock->rbuf), "\n";
-# print $sock->rbuf, "\n";
-	$server->captureRead($sock);
+ 	# print "client has readed now $rv -> ", length($sock->rbuf), "\n";
+	# print $sock->rbuf, "\n";
+	# $server->captureRead($sock);
 
 	unless ($rv)
 	{
@@ -457,7 +464,26 @@ my $config = $server->{'config'};
 				if (-d $file && -e join('/', $file, 'index.html'))
 				{ $file = join('/', $file, 'index.html'); }
 
-				if (-e $file)
+				if (0)
+				{
+					my $count = 0;
+						my $response = HTTP::Response->new( 200 );
+						$response->content( sub ()
+						{
+							return undef if $count ++ > 0;
+							return "<h2>Hello World</h2>" . '<form action="#" method="post" enctype="multipart/form-data">
+
+			<input name="upload-1" type="file" />
+			<input name="upload-2" type="file" />
+
+			<input type="submit" />
+
+		</form>';
+						} );
+						$response->header( "Content-Type" => "text/html" );
+						$sock->send_response( $response );
+				}
+				elsif (-e $file)
 				{
 					# print "send file response\n";
 					$sock->send_file_response($file);
@@ -494,6 +520,25 @@ sub print
 	my $server = ${*$sock}{'io_server'};
 
 	$sock->wbuf .= join("", @str);
+
+	# set file reader according to buffer size
+	# if (length($sock->wbuf) < 1024 * 16) {}
+
+	$server->captureWrite($sock);
+
+	return 1;
+
+}
+
+sub printf
+{
+
+	my ($sock, $tmpl, @str) = @_;
+
+	my $client = ${*$sock}{'io_client'};
+	my $server = ${*$sock}{'io_server'};
+
+	$sock->wbuf .= sprintf($tmpl, @str);
 
 	# set file reader according to buffer size
 	# if (length($sock->wbuf) < 1024 * 16) {}
@@ -722,15 +767,17 @@ sub send_response
 		$self->print($res->headers_as_string($CRLF));
 		$self->print($CRLF);  # separates headers and content
 	}
+
 	if ($self->head_request) {
 		# no content
 	}
 	elsif (ref($content) eq "CODE") {
 		while (1) {
+
 			my $chunk = &$content();
 			last unless defined($chunk) && length($chunk);
 			if ($chunked) {
-				printf $self "%x%s%s%s", length($chunk), $CRLF, $chunk, $CRLF;
+				$self->printf("%x%s%s%s", length($chunk), $CRLF, $chunk, $CRLF);
 			}
 			else {
 				$self->print($chunk);
@@ -762,7 +809,11 @@ sub antique_client
     my $self = shift;
     ${*$self}{'io_client'}->{'proto'} < $HTTP_1_0;
 }
-
+sub proto_ge
+{
+    my $self = shift;
+    ${*$self}{'httpd_client_proto'} >= _http_version(shift);
+}
 sub send_status_line
 {
     my($self, $status, $message, $proto) = @_;
