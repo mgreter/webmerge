@@ -50,7 +50,7 @@ sub canRead
 	my $client = ${*$fh}{'io_client'};
 	my $server = ${*$fh}{'io_server'};
 
-	my $rv = sysread($fh, $client->{'wbuf'}, 1024 * 16, length($client->{'wbuf'}));
+	my $rv = sysread($fh, $conn->wbuf, 1024 * 16, length($conn->wbuf));
 
 	$server->captureWrite($conn);
 

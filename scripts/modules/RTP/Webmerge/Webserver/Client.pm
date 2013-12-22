@@ -44,165 +44,184 @@ my $HTTP_1_1 = _http_version("HTTP/1.1");
 
 ###################################################################################################
 
-sub newXX
-{
+sub rbuf : lvalue { my $self = $_[0]; ${*$self}{'httpc_rbuf'} }
+sub wbuf : lvalue { my $self = $_[0]; ${*$self}{'httpc_wbuf'} }
+sub state : lvalue { my $self = $_[0]; ${*$self}{'httpc_state'} }
 
-	my ($pkg, $client, $server, @args) = @_;
-die $client;
-	${*$client}{'io_client'} = {
-		'state' => 0, 'rbuf' => '', 'wbuf' => ''
-	};
-	${*$client}{'io_server'} = $server;
+sub client : lvalue { my $self = $_[0]; ${*$self}{'io_client'} }
+sub server : lvalue { my $self = $_[0]; ${*$self}{'io_server'} }
 
-	bless $client, $pkg;
+sub proto : lvalue { my $self = $_[0]; ${*$self}{'io_proto'} }
+sub request : lvalue { my $self = $_[0]; ${*$self}{'io_request'} }
 
-	return $client;
-
-}
+###################################################################################################
 
 my @readers;
 
-
-$readers[0] = sub
+# read complete header
+push @readers, sub
 {
 
-	my ($sock) = @_;
-
-	my $client = ${*$sock}{'io_client'};
-	my $server = ${*$sock}{'io_server'};
-
-	my $buf = $client->{'rbuf'};
+	my ($conn) = @_;
 
 	# ignore leading blank lines
-	$client->{'rbuf'} =~ s/^(?:\015?\012)+//;
+	$conn->rbuf =~ s/^(?:\015?\012)+//;
 
-	# potential, has at least one line
-	if ($client->{'rbuf'} =~ /\012/)
+	# check for a complete line
+	if ($conn->rbuf =~ /\012/)
 	{
-		if ($client->{'rbuf'} =~ /^\w+[^\012]+HTTP\/\d+\.\d+\015?\012/)
+		# check for valid http header with method, uri and version
+		if ($conn->rbuf =~ /^\w+[^\012]+HTTP\/\d+\.\d+\015?\012/)
 		{
-			if ($client->{'rbuf'} =~ /\015?\012\015?\012/)
-			{
-				# print "reader 0 -> 1\n";
-				return 1;
-			}
-			elsif (length($client->{'rbuf'}) > 16*1024)
+			# check if we have readed the complete header
+			return 1 if $conn->rbuf =~ /\015?\012\015?\012/;
+			# protect us from reading more than reasonable
+			if (length($conn->rbuf) > 1024 * 64)
 			{
 				die "REQUEST_ENTITY_TOO_LARGE";
-				$sock->send_error(413);
-				$sock->reason("Very long header");
+				$conn->send_error(413);
+				$conn->reason("Very long header");
 				return -1;
 			}
 		}
 		else
 		{
 			# HTTP/0.9 client
-# print "reader 0 -> 1\n";
 			return 1;
 		}
 	}
-	elsif (length($client->{'rbuf'}) > 16*1024)
+	# the first line is not yet finished
+	# protect us from reading more than reasonable
+	elsif (length($conn->rbuf) > 1024 * 16)
 	{
 		die "REQUEST_URI_TOO_LARGE";
-		$sock->send_error(414);
-		$sock->reason("Very long first line");
+		$conn->send_error(414);
+		$conn->reason("Very long first line");
 		return -1;
 	}
 
+	# want more
 	return 0;
 
 };
+
+
 use URI;
 use HTTP::Request;
 $HTTP::URI_CLASS = "URI";
-$readers[1] = sub
+
+###################################################################################################
+
+# parse request header
+push @readers, sub
 {
 
-	my ($sock) = @_;
+	my ($conn) = @_;
 
-	my $client = ${*$sock}{'io_client'};
-	my $server = ${*$sock}{'io_server'};
+	my $client = ${*$conn}{'io_client'};
+	my $server = ${*$conn}{'io_server'};
 
-	if ($client->{'rbuf'} !~ s/^(\S+)[ \t]+(\S+)(?:[ \t]+(HTTP\/\d+\.\d+))?[^\012]*\012//)
+	if ($conn->rbuf !~ s/^(\S+)[ \t]+(\S+)(?:[ \t]+(HTTP\/\d+\.\d+))?[^\012]*\012//)
 	{
-		die "BAD_REQUEST ", $client->{'rbuf'};
-		${*$sock}{'httpd_client_proto'} = _http_version("HTTP/1.0");
-		$sock->send_error(400);  # BAD_REQUEST
-		$sock->reason("Bad request line: " . $client->{'rbuf'});
+		die "BAD_REQUEST ", $conn->rbuf;
+		${*$conn}{'httpd_client_proto'} = _http_version("HTTP/1.0");
+		$conn->send_error(400);  # BAD_REQUEST
+		$conn->reason("Bad request line: " . $conn->rbuf);
 		return -1;
 	}
 
-	$client->{'method'} = $1;
-	$client->{'uri'} = $2;
-	$client->{'proto'} = $3 || "HTTP/0.9";
+	# declare and assign local variables
+	my ($method, $uri, $proto) = ($1, $2, $3 || "HTTP/0.9");
 
-	$client->{'uri'} = "http://" . $client->{'uri'} if $client->{'method'} eq "CONNECT";
-	$client->{'uri'} = $HTTP::URI_CLASS->new($client->{'uri'}); #, $sock->daemon->url);
-	$client->{'request'} = HTTP::Request->new($client->{'method'}, $client->{'uri'});
+	# create the final uri to access actually
+	$uri = "http://" . $uri if $method eq "CONNECT";
+	$uri = $HTTP::URI_CLASS->new($uri); #, $conn->daemon->url);
 
-	$client->{'request'}->protocol($client->{'proto'});
+	# create the request object
+	my $request = HTTP::Request->new($method, $uri);
 
-	${*$sock}{'httpd_client_proto'} = $client->{'proto'} = _http_version($client->{'proto'});
-	${*$sock}{'httpd_head'} = ($client->{'method'} eq "HEAD");
+	# set the request protocol
+	$request->protocol($proto);
 
-	return 1;
+	${*$conn}{'httpd_client_proto'} = $proto = _http_version($proto);
+	${*$conn}{'httpd_head'} = ($method eq "HEAD");
 
-};
+	# assign some variables
+	$client->{'uri'} = $uri;
+	$client->{'proto'} = $proto;
+	$client->{'method'} = $method;
+	$client->{'request'} = $request;
 
-$readers[2] = sub
-{
 
-	my ($sock) = @_;
 
-	my $client = ${*$sock}{'io_client'};
-	my $server = ${*$sock}{'io_server'};
 
-	my $buf = \ $client->{'rbuf'};
 	my $req = $client->{'request'};
-	my $proto = $client->{'proto'};
+	# my $proto = $client->{'proto'};
 
-	if ($proto >= $HTTP_1_0) {
+	# parse headers for HTTP/1.1
+	if ($proto >= $HTTP_1_0)
+	{
 
-		# print "hi $buf\n";
-		# we expect to find some headers
-		my($key, $val);
+		# declare variables
+		my ($key, $val);
 
-		while ($client->{'rbuf'} =~ s/^([^\012]*)\012//) {
+		# process each line by itself
+		while ($conn->rbuf =~ s/^([^\012]*)\012//)
+		{
+
+			# create copy
 			my $data = $1;
+			# remove carriage returns
 			$data =~ s/\015$//;
+
+			# check for key : value delmited line
 			if ($data =~ /^([^:\s]+)\s*:\s*(.*)/)
 			{
-				# print "push header $key $val\n" if $key;
+				# push the current/old key to header
 				$req->push_header($key, $val) if $key;
+				# next key with value
 				($key, $val) = ($1, $2);
 			}
+			# append all other data
 			elsif ($data =~ /^\s+(.*)/)
 			{
+				# append to value
 				$val .= " $1";
 			}
-			else
-			{
-				last;
-			}
+
 		}
-		#print "push header $key $val\n" if $key;
+		# EO each line
+
+		# push the current/old key to header
 		$req->push_header($key, $val) if $key;
+
+	}
+	# EO if proto > 1.0
+
+	# test if we close connection
+	my $fin = $req->header('Connection');
+
+	# protocol specific
+	if ($proto >= $HTTP_1_1)
+	{
+		# close connection when set to close (HTTP/1.1)
+		$conn->fin if $fin && $fin =~ /\bclose\b/i;
+	}
+	else
+	{
+		# close connection when not set to keep-alive (HTTP/1.0)
+		$conn->fin unless $fin && $fin =~ /\bkeep-alive\b/i;
 	}
 
 	return 1;
 
 };
+# EO parse header
 
-sub client
-{
+###################################################################################################
 
-	my ($sock) = @_;
-
-	return ${*$sock}{'io_client'};
-
-}
-
-$readers[3] = sub
+# read request body
+push @readers, sub
 {
 
 	my ($sock) = @_;
@@ -210,42 +229,6 @@ $readers[3] = sub
 	my $client = ${*$sock}{'io_client'};
 	my $server = ${*$sock}{'io_server'};
 
-	my $buf = $client->{'rbuf'};
-	my $req = $client->{'request'};
-	my $proto = $client->{'proto'};
-
-	my $conn = $req->header('Connection');
-	# print "CONN $conn\n";
-	if ($proto >= $HTTP_1_1) {
-		# ${*$self}{'httpd_nomore'}++
-		die "close 1" if $conn && lc($conn) =~ /\bclose\b/;
-	}
-	else {
-		# ${*$self}{'httpd_nomore'}++
-		die "close 2" unless $conn &&
-		                                       lc($conn) =~ /\bkeep-alive\b/;
-	}
-
- # Find out how much content to read
-	#my $te  = $req->header('Transfer-Encoding');
-	#my $ct  = $req->header('Content-Type');
-	#my $len = $req->header('Content-Length');
-
-	#print "$te $ct $len\n";
-
-	return 1;
-
-};
-
-$readers[4] = sub
-{
-
-	my ($sock) = @_;
-
-	my $client = ${*$sock}{'io_client'};
-	my $server = ${*$sock}{'io_server'};
-
-	my $buf = $client->{'rbuf'};
 	my $req = $client->{'request'};
 	my $proto = $client->{'proto'};
 
@@ -282,7 +265,7 @@ my $DEBUG = 1;
 		CHUNK:
 		while (1) {
 			print STDERR "Chunked\n" if $DEBUG;
-			if ($client->{'rbuf'} =~ s/^([^\012]*)\012//) {
+			if ($sock->rbuf =~ s/^([^\012]*)\012//) {
 				my $chunk_head = $1;
 				unless ($chunk_head =~ /^([0-9A-Fa-f]+)/) {
 					$self->send_error(400);
@@ -291,22 +274,22 @@ my $DEBUG = 1;
 				}
 				my $size = hex($1);
 				last CHUNK if $size == 0;
-				my $missing = $size - length($client->{'rbuf'}) + 2; # 2=CRLF at chunk end
+				my $missing = $size - length($sock->rbuf) + 2; # 2=CRLF at chunk end
 				# must read until we have a complete chunk
 				while ($missing > 0) {
 					print STDERR "Need $missing more bytes\n" if $DEBUG;
 					return 0;
-					# my $n = $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
+					# my $n = $self->_need_more($sock->rbuf, $timeout, $fdset);
 					# return unless $n;
 					# $missing -= $n;
 				}
-				$body .= substr($client->{'rbuf'}, 0, $size);
-				substr($client->{'rbuf'}, 0, $size+2) = '';
+				$body .= substr($sock->rbuf, 0, $size);
+				substr($sock->rbuf, 0, $size+2) = '';
 			}
 			else {
 				# need more data in order to have a complete chunk header
 				return 0;
-				# return unless $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
+				# return unless $self->_need_more($sock->rbuf, $timeout, $fdset);
 			}
 		}
 		$r->content($body);
@@ -317,13 +300,13 @@ my $DEBUG = 1;
 
 		my($key, $val);
 		while (1) {
-			if ($client->{'rbuf'} !~ /\012/) {
+			if ($sock->rbuf !~ /\012/) {
 				# need at least one line to look at
 				return 0;
-				# return unless $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
+				# return unless $self->_need_more($sock->rbuf, $timeout, $fdset);
 			}
 			else {
-				$client->{'rbuf'} =~ s/^([^\012]*)\012//;
+				$sock->rbuf =~ s/^([^\012]*)\012//;
 				$_ = $1;
 				s/\015$//;
 				if (/^([\w\-]+)\s*:\s*(.*)/) {
@@ -348,26 +331,26 @@ my $DEBUG = 1;
 print "foobar\n";
 		$self->send_error(501); 	# Unknown transfer encoding
 		$self->reason("Unknown transfer encoding '$te'");
-		return;
+		return -1;
 	}
 	elsif ($len) {
 		# Plain body specified by "Content-Length"
-		my $missing = $len - length($client->{'rbuf'});
+		my $missing = $len - length($sock->rbuf);
 		#print "plain upload $len\n";
 		while ($missing > 0) {
 			#print "Need $missing more bytes of content\n" if $DEBUG;
 			return 0;
-			# my $n = $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
+			# my $n = $self->_need_more($sock->rbuf, $timeout, $fdset);
 			# return unless $n;
 			# $missing -= $n;
 		}
-		if (length($client->{'rbuf'}) > $len) {
-			$r->content(substr($client->{'rbuf'},0,$len));
-			substr($client->{'rbuf'}, 0, $len) = '';
+		if (length($sock->rbuf) > $len) {
+			$r->content(substr($sock->rbuf,0,$len));
+			substr($sock->rbuf, 0, $len) = '';
 		}
 		else {
-			$r->content($client->{'rbuf'});
-			$client->{'rbuf'}='';
+			$r->content($sock->rbuf);
+			$sock->rbuf='';
 		}
 	}
 #	elsif ($ct && $ct =~ m/^multipart\/\w+\s*;.*boundary\s*=\s*(\"?)(\w+)\1/i) {
@@ -377,26 +360,26 @@ print "foobar\n";
 		my $boundary = "--" . ($1 || $2) . "--";
 		my $index;
 		while (1) {
-			# print "reading ", length($client->{'rbuf'}), "\n";
-			$index = index($client->{'rbuf'}, $boundary);
-			# print "search for $boundary ==> $index\n", $client->{'rbuf'}, "\n";
+			# print "reading ", length($sock->rbuf), "\n";
+			$index = index($sock->rbuf, $boundary);
+			# print "search for $boundary ==> $index\n", $sock->rbuf, "\n";
 			# die "last" if $index >= 0;
 			last if $index >= 0;
 			# end marker not yet found
 			return 0;
-			# return unless $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
+			# return unless $self->_need_more($sock->rbuf, $timeout, $fdset);
 		}
 		# print "im out of this?\n";
 		$index += length($boundary);
-		$r->content(substr($client->{'rbuf'}, 0, $index));
-		substr($client->{'rbuf'}, 0, $index) = '';
+		$r->content(substr($sock->rbuf, 0, $index));
+		substr($sock->rbuf, 0, $index) = '';
 	}
 	else
 	{
 		# no upload at all
 		# print "damn\n";
 	}
-	${*$self}{'httpd_rbuf'} = $client->{'rbuf'};
+	${*$self}{'httpd_rbuf'} = $sock->rbuf;
 
 	return 1;
 };
@@ -409,12 +392,12 @@ sub canRead
 	my $client = ${*$sock}{'io_client'};
 	my $server = ${*$sock}{'io_server'};
 
-#	print "client can read now ", length($client->{'rbuf'}), "\n";
+#	print "client can read now ", length($sock->rbuf), "\n";
 
-	my $rv = sysread($sock, $client->{'rbuf'}, 1024 * 16, length($client->{'rbuf'}));
+	my $rv = sysread($sock, $sock->rbuf, 1024 * 16, length($sock->rbuf));
 
-# 	print "client has readed now $rv -> ", length($client->{'rbuf'}), "\n";
-# print $client->{'rbuf'}, "\n";
+# 	print "client has readed now $rv -> ", length($sock->rbuf), "\n";
+# print $sock->rbuf, "\n";
 	$server->captureRead($sock);
 
 	unless ($rv)
@@ -432,11 +415,8 @@ sub canRead
 	# $client->{'state'} = 0 unless $readers[$client->{'state'}];
 
 	# read as much as possible
-	while (1)
+	while ($readers[$client->{'state'}])
 	{
-# print "readers $client->{'state'}\n";
-
-		last unless $readers[$client->{'state'}];
 
 		# call the reader function for current state
 		$rv = $readers[$client->{'state'}]->($sock);
@@ -456,7 +436,7 @@ sub canRead
 	use File::Spec::Functions;
 	use File::Spec::Functions qw(rel2abs);
 # print "out ", $client->{'state'}, "\n";
-if ( $client->{'state'} >= 5)
+if ( $rv eq 1 && $client->{'state'} >= scalar(@readers))
 {
 
 	# now we have the request
@@ -513,10 +493,10 @@ sub print
 	my $client = ${*$sock}{'io_client'};
 	my $server = ${*$sock}{'io_server'};
 
-	$client->{'wbuf'} .= join("", @str);
+	$sock->wbuf .= join("", @str);
 
 	# set file reader according to buffer size
-	# if (length($client->{'wbuf'}) < 1024 * 16) {}
+	# if (length($sock->wbuf) < 1024 * 16) {}
 
 	$server->captureWrite($sock);
 
@@ -546,29 +526,29 @@ sub canWrite
 	my $server = ${*$sock}{'io_server'};
 
 
-	my $rv = syswrite($sock, $client->{'wbuf'}, 1024 * 64);
+	my $rv = syswrite($sock, $sock->wbuf, 1024 * 64);
 
 	# print "client has written now ", $rv, "\n";
 
 	die "client write error" unless defined $rv;
 	die "client write closed" unless $rv;
 
-	substr($client->{'wbuf'}, 0, $rv, "");
+	substr($sock->wbuf, 0, $rv) = "";
 
-	while (${*$sock}{'io_stream'} && length($client->{'wbuf'}) < 1024 * 16 * 4)
+	while (${*$sock}{'io_stream'} && length($sock->wbuf) < 1024 * 16 * 4)
 	{
-		# print "Buf 1: ", length($client->{'wbuf'}), "\n";
+		# print "Buf 1: ", length($sock->wbuf), "\n";
 		my $stream = ${*$sock}{'io_stream'};
 		$stream->canRead();
-		# print "Buf 2: ", length($client->{'wbuf'}), "\n";
+		# print "Buf 2: ", length($sock->wbuf), "\n";
 	}
 
-	if (length($client->{'wbuf'}) eq 0)
+	if (length($sock->wbuf) eq 0)
 	{
 		$server->uncaptureWrite($sock);
 	}
 
-	# print "client has written $rv -> left: ", length($client->{'wbuf'}), "\n";
+	# print "client has written $rv -> left: ", length($sock->wbuf), "\n";
 
 }
 

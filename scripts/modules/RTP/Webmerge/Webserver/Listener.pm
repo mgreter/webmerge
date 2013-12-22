@@ -69,10 +69,17 @@ sub canRead
 
 	my $handle = $sock->accept("RTP::Webmerge::Webserver::Client");
 
+
+	${*$handle}{'test_wbuf'} = '';
+
 	${*$handle}{'io_client'} = {
-		'state' => 0, 'rbuf' => '', 'wbuf' => ''
+		'state' => 0
 	};
+
 	${*$handle}{'io_server'} = $server;
+
+	$handle->rbuf = '';
+	$handle->wbuf = '';
 
 
 #print "client ", $client->fileno, "\n";

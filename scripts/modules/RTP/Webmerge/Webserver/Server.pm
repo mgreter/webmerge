@@ -128,7 +128,7 @@ sub run
 		# printf "in ebit %0*v8b\n", " ", $ebit;
 
 		# wait for handles with action
-		my $rv = select($rbit, $wbit, $ebit, 3);
+		my $rv = select($rbit, $wbit, $ebit, 0.25);
 
 		# print "select returns $rv $!\n";
 
@@ -159,21 +159,14 @@ sub run
 			}
 		}
 
-		my @fds = @{$fds};
-
 		# collect actions
-		foreach my $fd (@fds)
+		foreach my $fd (@{$fds})
 		{
-#print $fd->[0], " : ", $fd->[1], " => ", vec($rbit, $fd->[0], 1), "\n";
 			# collect all handles with action bit set
 			$fd->[1]->canRead if vec($rbit, $fd->[0], 1);
 			$fd->[1]->canWrite if vec($wbit, $fd->[0], 1);
 			$fd->[1]->hasError if vec($ebit, $fd->[0], 1);
-
-			$fd->[1]->flush;
 		}
-#print "==========", "\n";
-		# sleep 1;
 
 	}
 
