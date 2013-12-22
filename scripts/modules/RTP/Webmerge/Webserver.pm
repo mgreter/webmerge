@@ -27,10 +27,52 @@ use RTP::Webmerge::IO;
 # load core path module
 use RTP::Webmerge::Path;
 
-###################################################################################################
+use RTP::Webmerge::Webserver::Server;
 
 # webserver
 sub webserver ($)
+{
+
+	# get input variables
+	my ($config) = @_;
+
+	my $server = RTP::Webmerge::Webserver::Server->new($config);
+
+	$server->run();
+
+}
+
+###################################################################################################
+
+# extend the configurator
+use RTP::Webmerge qw(@initers);
+
+# register initializer
+push @initers, sub
+{
+
+	# get input variables
+	my ($config) = @_;
+
+	# default webserver port
+	$config->{'webport'} = 8000;
+
+	# fork a simple webserver to host project
+	$config->{'webserver'} = undef;
+
+	# return additional get options attribute
+	return (
+		'port=i' => \ $config->{'cmd_port'},
+		'webserver!' => \$config->{'cmd_webserver'}
+	);
+
+};
+# EO plugin initer
+
+###################################################################################################
+
+# webserver
+sub webserver3 ($)
 {
 
 	# get input variables
@@ -55,7 +97,11 @@ sub webserver ($)
 
 	while (my $c = $d->accept)
 	{
-		print "new connection\n";
+#		my $pid = fork();
+# if ($pid == 0)
+  {
+
+  			print "new connection\n";
 		while (my $r = $c->get_request)
 		{
 			print "new request\n";
@@ -120,44 +166,21 @@ sub webserver ($)
 				$c->send_error(HTTP::Status::RC_FORBIDDEN())
 			}
 			# needed?
-			$c->close;
+			#$c->close;
+			$c->flush ;
 		}
 		print "close connection\n";
 		$c->close;
 		undef($c);
-	}
+    core::exit(0);
+  }
+
+  	}
 
 	exit;
 
 }
 # EO sub webserver
-
-###################################################################################################
-
-# extend the configurator
-use RTP::Webmerge qw(@initers);
-
-# register initializer
-push @initers, sub
-{
-
-	# get input variables
-	my ($config) = @_;
-
-	# default webserver port
-	$config->{'webport'} = 8000;
-
-	# fork a simple webserver to host project
-	$config->{'webserver'} = undef;
-
-	# return additional get options attribute
-	return (
-		'port=i' => \ $config->{'cmd_port'},
-		'webserver!' => \$config->{'cmd_webserver'}
-	);
-
-};
-# EO plugin initer
 
 ###################################################################################################
 ###################################################################################################
