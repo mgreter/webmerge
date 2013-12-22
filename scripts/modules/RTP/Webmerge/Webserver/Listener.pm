@@ -37,12 +37,16 @@ sub new
 {
 
 	my ($pkg, $server, @args) = @_;
-print "CREATING ", , "\n";
+
+	my $port = 8080;
+
+	print "listening on port ", $port, "\n";
+
 	# call parent to create object
 	my $sock = ref $pkg ? $pkg
 	            : $pkg->SUPER::new(
 	              	Listen => 5,
-	              	LocalPort => '8080',
+	              	LocalPort => $port,
 	              	Proto => 'tcp'
 	            ) or die $!;
 

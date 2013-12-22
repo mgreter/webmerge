@@ -276,7 +276,7 @@ my $DEBUG = 1;
 
 	if ($te && lc($te) eq 'chunked')
 	{
-		print "CHUNKED\n";
+		die "CHUNKED ENCODING\n";
 		# Handle chunked transfer encoding
 		my $body = "";
 		CHUNK:
@@ -353,9 +353,9 @@ print "foobar\n";
 	elsif ($len) {
 		# Plain body specified by "Content-Length"
 		my $missing = $len - length($client->{'rbuf'});
-		print "plain upload $len\n";
+		#print "plain upload $len\n";
 		while ($missing > 0) {
-			print "Need $missing more bytes of content\n" if $DEBUG;
+			#print "Need $missing more bytes of content\n" if $DEBUG;
 			return 0;
 			# my $n = $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
 			# return unless $n;
@@ -372,7 +372,7 @@ print "foobar\n";
 	}
 #	elsif ($ct && $ct =~ m/^multipart\/\w+\s*;.*boundary\s*=\s*(\"?)(\w+)\1/i) {
 	elsif ($ct && $ct =~ m/^multipart\/(?:\w|-)+\s*;.*boundary\s*=\s*(?:\"((?:\w|-)+)\"|((?:\w|-)+))/i) {
-		# print "multipart upload \"$1\" $2\n";
+		#print "multipart upload \"$1\" $2\n";
 		# Handle multipart content type
 		my $boundary = "--" . ($1 || $2) . "--";
 		my $index;
@@ -505,10 +505,70 @@ my $config = $server->{'config'};
 
 }
 
+sub print
+{
+
+	my ($sock, @str) = @_;
+
+	my $client = ${*$sock}{'io_client'};
+	my $server = ${*$sock}{'io_server'};
+
+	$client->{'wbuf'} .= join("", @str);
+
+	# set file reader according to buffer size
+	# if (length($client->{'wbuf'}) < 1024 * 16) {}
+
+	$server->captureWrite($sock);
+
+	return 1;
+
+}
+
+sub stream
+{
+
+	my ($sock, $stream) = @_;
+
+	my $client = ${*$sock}{'io_client'};
+	my $server = ${*$sock}{'io_server'};
+	${*$sock}{'io_stream'} = $stream;
+
+	$stream->canRead();
+
+}
+
 sub canWrite
 {
 
-	# print "client can write\n";
+	my ($sock) = @_;
+
+	my $client = ${*$sock}{'io_client'};
+	my $server = ${*$sock}{'io_server'};
+
+
+	my $rv = syswrite($sock, $client->{'wbuf'}, 1024 * 64);
+
+	# print "client has written now ", $rv, "\n";
+
+	die "client write error" unless defined $rv;
+	die "client write closed" unless $rv;
+
+	substr($client->{'wbuf'}, 0, $rv, "");
+
+	while (${*$sock}{'io_stream'} && length($client->{'wbuf'}) < 1024 * 16 * 4)
+	{
+		# print "Buf 1: ", length($client->{'wbuf'}), "\n";
+		my $stream = ${*$sock}{'io_stream'};
+		$stream->canRead();
+		# print "Buf 2: ", length($client->{'wbuf'}), "\n";
+	}
+
+	if (length($client->{'wbuf'}) eq 0)
+	{
+		$server->uncaptureWrite($sock);
+	}
+
+	# print "client has written $rv -> left: ", length($client->{'wbuf'}), "\n";
 
 }
 
@@ -547,11 +607,11 @@ $error
 EOT
     unless ($self->antique_client) {
         $self->send_basic_header($status);
-        print $self "Content-Type: text/html$CRLF";
-	print $self "Content-Length: " . length($mess) . $CRLF;
-        print $self $CRLF;
+        $self->print("Content-Type: text/html$CRLF");
+	$self->print("Content-Length: " . length($mess) . $CRLF);
+        $self->print($CRLF);
     }
-    print $self $mess unless $self->head_request;
+    $self->print($mess) unless $self->head_request;
     $status;
 }
 
@@ -563,22 +623,37 @@ sub send_file_response
 	$self->send_dir($file);
     }
     elsif (-f _) {
+
 	# plain file
-	local(*F);
-	sysopen(F, $file, 0) or
+	my $client = ${*$self}{'io_client'};
+	my $server = ${*$self}{'io_server'};
+
+use RTP::Webmerge::Webserver::File;
+my $fh = RTP::Webmerge::Webserver::File->new($client, $server, $self);
+
+	$fh->open($file, "r") or
 	  return $self->send_error(RC_FORBIDDEN);
-	binmode(F);
+	# $fh->binmode;
 	my($ct,$ce) = guess_media_type($file);
 	my($size,$mtime) = (stat _)[7,9];
 	unless ($self->antique_client) {
 	    $self->send_basic_header;
-	    print $self "Content-Type: $ct$CRLF";
-	    print $self "Content-Encoding: $ce$CRLF" if $ce;
-	    print $self "Content-Length: $size$CRLF" if $size;
-	    print $self "Last-Modified: ", time2str($mtime), "$CRLF" if $mtime;
-	    print $self $CRLF;
+	    $self->print("Content-Type: $ct$CRLF");
+	    # $self->print("Connection: Close$CRLF");
+	    $self->print("Content-Encoding: $ce$CRLF") if $ce;
+	    $self->print("Content-Length: $size$CRLF") if $size;
+	    $self->print("Last-Modified: ", time2str($mtime), "$CRLF") if $mtime;
+	    $self->print($CRLF);
 	}
-	$self->send_file(\*F) unless $self->head_request;
+	#$self->send_file(\*F) unless $self->head_request;
+# print "open filehandle ", $fh->fileno, "\n";
+$self->stream($fh);
+# not on windows
+# select only sockets
+#$server->addHandle($fh);
+#$server->captureRead($fh);
+#$server->uncaptureWrite($self);
+#$server->captureError($fh);
 	return RC_OK;
     }
     else {
@@ -599,6 +674,15 @@ sub send_file
 {
     my($self, $file) = @_;
     my $opened = 0;
+	my $client = ${*$self}{'io_client'};
+	my $server = ${*$self}{'io_server'};
+
+use RTP::Webmerge::Webserver::File;
+my $fh = RTP::Webmerge::Webserver::File->new($client, $server);
+print "go open $file\n";
+$fh->open($file) || die $!;
+
+die $server;
     local(*FILE);
     if (!ref($file)) {
 	open(FILE, $file) || return undef;
@@ -612,7 +696,7 @@ sub send_file
     while ($n = sysread($file, $buf, 8*1024)) {
 	last if !$n;
 	$cnt += $n;
-	print $self $buf;
+	$self->print($buf);
     }
     close($file) if $opened;
     $cnt;
@@ -655,8 +739,8 @@ sub send_response
 			$self->force_last_request;
 			$res->header('connection','close');
 		}
-		print $self $res->headers_as_string($CRLF);
-		print $self $CRLF;  # separates headers and content
+		$self->print($res->headers_as_string($CRLF));
+		$self->print($CRLF);  # separates headers and content
 	}
 	if ($self->head_request) {
 		# no content
@@ -669,13 +753,13 @@ sub send_response
 				printf $self "%x%s%s%s", length($chunk), $CRLF, $chunk, $CRLF;
 			}
 			else {
-				print $self $chunk;
+				$self->print($chunk);
 			}
 		}
-		print $self "0$CRLF$CRLF" if $chunked;  # no trailers either
+		$self->print("0$CRLF$CRLF") if $chunked;  # no trailers either
 	}
 	elsif (length $content) {
-		print $self $content;
+		$self->print($content);
 	}
 }
 
@@ -706,16 +790,16 @@ sub send_status_line
     $status  ||= RC_OK;
     $message ||= status_message($status) || "";
     $proto   ||= $HTTP::Daemon::PROTO || "HTTP/1.1";
-    print $self "$proto $status $message$CRLF";
+    $self->print("$proto $status $message$CRLF");
 }
 sub send_basic_header
 {
     my $self = shift;
     return if $self->antique_client;
     $self->send_status_line(@_);
-    print $self "Date: ", time2str(time), $CRLF;
+    $self->print("Date: ", time2str(time), $CRLF);
     my $product = $self->product_tokens;
-    print $self "Server: $product$CRLF" if $product;
+    $self->print("Server: $product$CRLF") if $product;
 }
 sub product_tokens
 {

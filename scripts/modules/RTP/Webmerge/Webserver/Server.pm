@@ -85,6 +85,8 @@ sub addHandle
 
 	my ($self, $handle) = @_;
 
+# print "add handle $handle\n";
+
 	push(@{$self->{'fds'}}, [$handle->fileno, $handle]);
 
 	return $handle;
@@ -95,7 +97,7 @@ sub addHandle
 
 # register/unregister interest in the events
 sub captureRead { vec($_[0]->{'rbit'}, $_[1]->fileno, 1) = 1 }
-sub captureWrite { vec($_[0]->{'wbit'}, $_[1->fileno], 1) = 1 }
+sub captureWrite { vec($_[0]->{'wbit'}, $_[1]->fileno, 1) = 1 }
 sub captureError { vec($_[0]->{'ebit'}, $_[1]->fileno, 1) = 1 }
 sub uncaptureRead { vec($_[0]->{'rbit'}, $_[1]->fileno, 1) = 0 }
 sub uncaptureWrite { vec($_[0]->{'wbit'}, $_[1]->fileno, 1) = 0 }
@@ -140,7 +142,7 @@ sub run
 		# collect actions
 		foreach my $fd (@{$fds})
 		{
-			last;
+				last;
 
 			if (ref($fd->[1]) eq "RTP::Webmerge::Webserver::Client")
 			{
@@ -148,7 +150,7 @@ sub run
 				my $hersockaddr = getpeername($fd->[1]);
 				my ($port, $iaddr) = sockaddr_in($hersockaddr);
 
-				print $fd->[0], " : ", $fd->[1]->client->{'state'}, " -- ", $fd->[1]->client->{'rbuf'}, " \@ ", $port, "\n";
+				print $fd->[0], " : client -> ", $fd->[1]->client->{'state'}, " -- \@ ", $port, "\n";
 
 			}
 			else
@@ -157,10 +159,12 @@ sub run
 			}
 		}
 
-		# collect actions
-		foreach my $fd (@{$fds})
-		{
+		my @fds = @{$fds};
 
+		# collect actions
+		foreach my $fd (@fds)
+		{
+#print $fd->[0], " : ", $fd->[1], " => ", vec($rbit, $fd->[0], 1), "\n";
 			# collect all handles with action bit set
 			$fd->[1]->canRead if vec($rbit, $fd->[0], 1);
 			$fd->[1]->canWrite if vec($wbit, $fd->[0], 1);
@@ -168,7 +172,7 @@ sub run
 
 			$fd->[1]->flush;
 		}
-
+#print "==========", "\n";
 		# sleep 1;
 
 	}
