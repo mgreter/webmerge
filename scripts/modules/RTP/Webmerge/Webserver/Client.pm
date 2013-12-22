@@ -74,19 +74,19 @@ $readers[0] = sub
 	my $buf = $client->{'rbuf'};
 
 	# ignore leading blank lines
-	$buf =~ s/^(?:\015?\012)+//;
+	$client->{'rbuf'} =~ s/^(?:\015?\012)+//;
 
 	# potential, has at least one line
-	if ($buf =~ /\012/)
+	if ($client->{'rbuf'} =~ /\012/)
 	{
-		if ($buf =~ /^\w+[^\012]+HTTP\/\d+\.\d+\015?\012/)
+		if ($client->{'rbuf'} =~ /^\w+[^\012]+HTTP\/\d+\.\d+\015?\012/)
 		{
-			if ($buf =~ /\015?\012\015?\012/)
+			if ($client->{'rbuf'} =~ /\015?\012\015?\012/)
 			{
 				# print "reader 0 -> 1\n";
 				return 1;
 			}
-			elsif (length($buf) > 16*1024)
+			elsif (length($client->{'rbuf'}) > 16*1024)
 			{
 				die "REQUEST_ENTITY_TOO_LARGE";
 				$sock->send_error(413);
@@ -101,7 +101,7 @@ $readers[0] = sub
 			return 1;
 		}
 	}
-	elsif (length($buf) > 16*1024)
+	elsif (length($client->{'rbuf'}) > 16*1024)
 	{
 		die "REQUEST_URI_TOO_LARGE";
 		$sock->send_error(414);
@@ -125,7 +125,7 @@ $readers[1] = sub
 
 	if ($client->{'rbuf'} !~ s/^(\S+)[ \t]+(\S+)(?:[ \t]+(HTTP\/\d+\.\d+))?[^\012]*\012//)
 	{
-		die "BAD_REQUEST";
+		die "BAD_REQUEST ", $client->{'rbuf'};
 		${*$sock}{'httpd_client_proto'} = _http_version("HTTP/1.0");
 		$sock->send_error(400);  # BAD_REQUEST
 		$sock->reason("Bad request line: " . $client->{'rbuf'});
@@ -167,7 +167,7 @@ $readers[2] = sub
 		# we expect to find some headers
 		my($key, $val);
 
-		while (${$buf} =~ s/^([^\012]*)\012//) {
+		while ($client->{'rbuf'} =~ s/^([^\012]*)\012//) {
 			my $data = $1;
 			$data =~ s/\015$//;
 			if ($data =~ /^([^:\s]+)\s*:\s*(.*)/)
@@ -182,10 +182,10 @@ $readers[2] = sub
 			}
 			else
 			{
-				return 1;
-				last HEADER;
+				last;
 			}
 		}
+		#print "push header $key $val\n" if $key;
 		$req->push_header($key, $val) if $key;
 	}
 
@@ -258,6 +258,7 @@ my $DEBUG = 1;
 	my $te  = $r->header('Transfer-Encoding');
 	my $ct  = $r->header('Content-Type');
 	my $len = $r->header('Content-Length');
+		# print "READ PPOST DATA $ct $len\n";
 
 	# Act on the Expect header, if it's there
 	for my $e ( $r->header('Expect') ) {
@@ -268,18 +269,20 @@ my $DEBUG = 1;
 		else {
 			$self->send_error(417);
 			$self->reason("Unsupported Expect header value");
+		print "bad\n";
 			return;
 		}
 	}
 
 	if ($te && lc($te) eq 'chunked')
 	{
+		print "CHUNKED\n";
 		# Handle chunked transfer encoding
 		my $body = "";
 		CHUNK:
 		while (1) {
 			print STDERR "Chunked\n" if $DEBUG;
-			if ($buf =~ s/^([^\012]*)\012//) {
+			if ($client->{'rbuf'} =~ s/^([^\012]*)\012//) {
 				my $chunk_head = $1;
 				unless ($chunk_head =~ /^([0-9A-Fa-f]+)/) {
 					$self->send_error(400);
@@ -288,22 +291,22 @@ my $DEBUG = 1;
 				}
 				my $size = hex($1);
 				last CHUNK if $size == 0;
-				my $missing = $size - length($buf) + 2; # 2=CRLF at chunk end
+				my $missing = $size - length($client->{'rbuf'}) + 2; # 2=CRLF at chunk end
 				# must read until we have a complete chunk
 				while ($missing > 0) {
 					print STDERR "Need $missing more bytes\n" if $DEBUG;
 					return 0;
-					# my $n = $self->_need_more($buf, $timeout, $fdset);
+					# my $n = $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
 					# return unless $n;
 					# $missing -= $n;
 				}
-				$body .= substr($buf, 0, $size);
-				substr($buf, 0, $size+2) = '';
+				$body .= substr($client->{'rbuf'}, 0, $size);
+				substr($client->{'rbuf'}, 0, $size+2) = '';
 			}
 			else {
 				# need more data in order to have a complete chunk header
 				return 0;
-				# return unless $self->_need_more($buf, $timeout, $fdset);
+				# return unless $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
 			}
 		}
 		$r->content($body);
@@ -314,13 +317,13 @@ my $DEBUG = 1;
 
 		my($key, $val);
 		while (1) {
-			if ($buf !~ /\012/) {
+			if ($client->{'rbuf'} !~ /\012/) {
 				# need at least one line to look at
 				return 0;
-				# return unless $self->_need_more($buf, $timeout, $fdset);
+				# return unless $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
 			}
 			else {
-				$buf =~ s/^([^\012]*)\012//;
+				$client->{'rbuf'} =~ s/^([^\012]*)\012//;
 				$_ = $1;
 				s/\015$//;
 				if (/^([\w\-]+)\s*:\s*(.*)/) {
@@ -342,45 +345,58 @@ my $DEBUG = 1;
 		$r->push_header($key, $val) if $key;
 	}
 	elsif ($te) {
+print "foobar\n";
 		$self->send_error(501); 	# Unknown transfer encoding
 		$self->reason("Unknown transfer encoding '$te'");
 		return;
 	}
 	elsif ($len) {
 		# Plain body specified by "Content-Length"
-		my $missing = $len - length($buf);
+		my $missing = $len - length($client->{'rbuf'});
+		print "plain upload $len\n";
 		while ($missing > 0) {
 			print "Need $missing more bytes of content\n" if $DEBUG;
 			return 0;
-			# my $n = $self->_need_more($buf, $timeout, $fdset);
+			# my $n = $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
 			# return unless $n;
 			# $missing -= $n;
 		}
-		if (length($buf) > $len) {
-			$r->content(substr($buf,0,$len));
-			substr($buf, 0, $len) = '';
+		if (length($client->{'rbuf'}) > $len) {
+			$r->content(substr($client->{'rbuf'},0,$len));
+			substr($client->{'rbuf'}, 0, $len) = '';
 		}
 		else {
-			$r->content($buf);
-			$buf='';
+			$r->content($client->{'rbuf'});
+			$client->{'rbuf'}='';
 		}
 	}
-	elsif ($ct && $ct =~ m/^multipart\/\w+\s*;.*boundary\s*=\s*(\"?)(\w+)\1/i) {
+#	elsif ($ct && $ct =~ m/^multipart\/\w+\s*;.*boundary\s*=\s*(\"?)(\w+)\1/i) {
+	elsif ($ct && $ct =~ m/^multipart\/(?:\w|-)+\s*;.*boundary\s*=\s*(?:\"((?:\w|-)+)\"|((?:\w|-)+))/i) {
+		# print "multipart upload \"$1\" $2\n";
 		# Handle multipart content type
-		my $boundary = "$CRLF--$2--";
+		my $boundary = "--" . ($1 || $2) . "--";
 		my $index;
 		while (1) {
-			$index = index($buf, $boundary);
+			# print "reading ", length($client->{'rbuf'}), "\n";
+			$index = index($client->{'rbuf'}, $boundary);
+			# print "search for $boundary ==> $index\n", $client->{'rbuf'}, "\n";
+			# die "last" if $index >= 0;
 			last if $index >= 0;
 			# end marker not yet found
 			return 0;
-			# return unless $self->_need_more($buf, $timeout, $fdset);
+			# return unless $self->_need_more($client->{'rbuf'}, $timeout, $fdset);
 		}
+		# print "im out of this?\n";
 		$index += length($boundary);
-		$r->content(substr($buf, 0, $index));
-		substr($buf, 0, $index) = '';
+		$r->content(substr($client->{'rbuf'}, 0, $index));
+		substr($client->{'rbuf'}, 0, $index) = '';
 	}
-	${*$self}{'httpd_rbuf'} = $buf;
+	else
+	{
+		# no upload at all
+		# print "damn\n";
+	}
+	${*$self}{'httpd_rbuf'} = $client->{'rbuf'};
 
 	return 1;
 };
@@ -393,11 +409,13 @@ sub canRead
 	my $client = ${*$sock}{'io_client'};
 	my $server = ${*$sock}{'io_server'};
 
-	# print "client can read now\n";
+#	print "client can read now ", length($client->{'rbuf'}), "\n";
 
-	my $rv = sysread($sock, $client->{'rbuf'}, 2048, length($client->{'rbuf'}));
+	my $rv = sysread($sock, $client->{'rbuf'}, 1024 * 16, length($client->{'rbuf'}));
 
-	# print "client has readed now\n";
+# 	print "client has readed now $rv -> ", length($client->{'rbuf'}), "\n";
+# print $client->{'rbuf'}, "\n";
+	$server->captureRead($sock);
 
 	unless ($rv)
 	{
@@ -428,16 +446,16 @@ sub canRead
 		$client->{'state'} ++ if $rv eq 1;
 
 		# reader tells us it needs more data
-		last if $client->{'state'} eq 0;
+		last if $rv eq 0;
 
 		# reader tells us that we have an error
-		last if $client->{'state'} eq -1;
+		last if $rv eq -1;
 
 	}
 
 	use File::Spec::Functions;
 	use File::Spec::Functions qw(rel2abs);
-
+# print "out ", $client->{'state'}, "\n";
 if ( $client->{'state'} >= 5)
 {
 
