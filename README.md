@@ -5,12 +5,14 @@ Asset Manager for Front End Development (JS, CSS, Images)
 Features
 ========
 - Merge, join and optimize SCSS, CSS and JavaScript files
+- Compile SCSS via libsass or alternatively via ruby sass
 - Optimize images etc. with external tools (in parallel jobs)
 - Create spritesets by simply annotating your css stylesheets
 - Can handle sprites optimized for high resolution displays (retina)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
 - Commits all file changes only after a successfull merge ("atomic")
 - File watcher to recompile automatically when a source file has changed
+- Tiny webserver (todo: set bandwidth and latency for loading/render tests)
 
 To Do
 =====
@@ -18,19 +20,18 @@ To Do
 - Prepare code for v1.0.0 release
 - Implement @license header handling
 - Test more edge cases (specially css parser)
-- Invoke processors according to file extensions
+- Update the portable dependency downloads
+- Allow to merge multiple spritesets
+- Means we'll have to re-use same src
 
 More ideas
 ==========
-- Allow to merge multiple spritesets
-- Means we'll have to re-use same src
 - Add CoffeeScript and LESS processor
 - Maybe add support for ImageMagick too
 - Add smart locks to ensure parallel execution
 - Implement parallel workers for unrelated blocks
 - Put more usefull information to the console
 - i.e. files imported, files created, time needed ...
-- Include a tiny webserver to serve the project files from
 
 Installing on Windows
 =====================
