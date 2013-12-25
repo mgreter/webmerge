@@ -176,8 +176,8 @@ Command Line Options
     --import-scss          inline imported scss files into stylesheet
     --rebase-urls-in-css   adjust urls in css files to parent stylesheet
     --rebase-urls-in-scss  adjust urls to scss files to parent stylesheet
-    --rebase-imports-css   adjust import urls for css files (only if not imported)
-    --rebase-imports-scss  adjust import urls for scss files (only if not imported)
+    --rebase-imports-css   adjust import urls for css files (only if not inlined)
+    --rebase-imports-scss  adjust import urls for scss files (only if not inlined)
 
     --referer              optional referer url for external downloads
     --inlinedataexts       file extensions to inline (comma separated)
