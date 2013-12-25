@@ -5,14 +5,12 @@ Asset Manager for Front End Development (JS, CSS, Images)
 Features
 ========
 - Merge, join and optimize SCSS, CSS and JavaScript files
-- Compile SCSS via libsass or alternatively via ruby sass
 - Optimize images etc. with external tools (in parallel jobs)
 - Create spritesets by simply annotating your css stylesheets
 - Can handle sprites optimized for high resolution displays (retina)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
 - Commits all file changes only after a successfull merge ("atomic")
 - File watcher to recompile automatically when a source file has changed
-- Tiny webserver (todo: set bandwidth and latency for loading/render tests)
 
 To Do
 =====
@@ -20,18 +18,19 @@ To Do
 - Prepare code for v1.0.0 release
 - Implement @license header handling
 - Test more edge cases (specially css parser)
-- Update the portable dependency downloads
-- Allow to merge multiple spritesets
-- Means we'll have to re-use same src
+- Invoke processors according to file extensions
 
 More ideas
 ==========
+- Allow to merge multiple spritesets
+- Means we'll have to re-use same src
 - Add CoffeeScript and LESS processor
 - Maybe add support for ImageMagick too
 - Add smart locks to ensure parallel execution
 - Implement parallel workers for unrelated blocks
 - Put more usefull information to the console
 - i.e. files imported, files created, time needed ...
+- Include a tiny webserver to serve the project files from
 
 Installing on Windows
 =====================
@@ -162,70 +161,76 @@ You can view a NYTPROF Performance Profile of the sprite example here:
 
 Command Line Options
 ====================
-    -f, --configfile      main xml configuration
-    -d, --doctype         how to render includes [html|xhtml|html5]
-    -j, --jobs            number of jobs (commands) to run simultaneously
+    -f, --configfile       main xml configuration
+    -d, --doctype          how to render includes [html|xhtml|html5]
+    -j, --jobs             number of jobs (commands) to run simultaneously
 
-    -w, --watchdog        start the watchdog process (quit with ctrl+c)
-    -webserver            start the webserver process (quit with ctrl+c)
-    -webport              port number for the webserver (default 8000)
+    -w, --watchdog         start the watchdog process (quit with ctrl+c)
+    -webserver             start the webserver process (quit with ctrl+c)
+    -webport               port number for the webserver (default 8000)
 
-    --webroot             webroot directory to render absolute urls
-    --import-css          inline imported css files into stylesheet
-    --absoluteurls        export urls as absolute urls (from webroot)
+    --webroot              webroot directory to render absolute urls
+    --absoluteurls         export urls as absolute urls (from webroot)
 
-    --referer             optional referer url for external downloads
-    --inlinedataexts      file extensions to inline (comma separated)
-    --inlinedatamax       maximum file sizes to inline into stylesheets
+    --import-css           inline imported css files into stylesheet
+    --import-scss          inline imported scss files into stylesheet
+    --rebase-urls-in-css   adjust urls in css files to parent stylesheet
+    --rebase-urls-in-scss  adjust urls to scss files to parent stylesheet
+    --rebase-imports-css   adjust import urls for css files (only if not imported)
+    --rebase-imports-scss  adjust import urls for scss files (only if not imported)
 
-    --crc-check           run crc check before exiting
-    --crc-file            write crc file beside generated files
-    --crc-comment         append crc comment into generated files
+    --referer              optional referer url for external downloads
+    --inlinedataexts       file extensions to inline (comma separated)
+    --inlinedatamax        maximum file sizes to inline into stylesheets
 
-    --fingerprint         add fingerprints to includes (--fp)
-    --fingerprint-dev     for dev context [query|directory|file] (--fp-dev)
-    --fingerprint-live    for live context [query|directory|file] (--fp-live)
+    --crc-check            run crc check before exiting
+    --crc-file             write crc file beside generated files
+    --crc-comment          append crc comment into generated files
 
-    --txt-type            text type [nix|mac|win]
-    --txt-remove-bom      remove superfluous utf boms
-    --txt-normalize-eol   normalize line endings to given type
-    --txt-trim-trailing   trim trailing whitespace in text files
+    --fingerprint          add fingerprints to includes (--fp)
+    --fingerprint-dev      for dev context [query|directory|file] (--fp-dev)
+    --fingerprint-live     for live context [query|directory|file] (--fp-live)
 
-    --headtmpl            text to prepend to generated files
-    --jsdeferer           javascript loader for defered loading
-    --tmpl-embed-js       template for js embedder generator
-    --tmpl-embed-php      template for php embedder generator
+    --txt-type             text type [nix|mac|win]
+    --txt-remove-bom       remove superfluous utf boms
+    --txt-normalize-eol    normalize line endings to given type
+    --txt-trim-trailing    trim trailing whitespace in text files
 
-        --action          use to disable all actions
-    -p, --prepare         enable/disable prepare blocks
-    -o, --optimize        enable/disable optimizer blocks
-    -m, --merge           use to disable all merge blocks
-        --css             enable/disable css merge blocks
-        --js              enable/disable js merge blocks
-    -i, --headinc         enable/disable headinc blocks
-    -e, --embedder        enable/disable embedder blocks
+    --headtmpl             text to prepend to generated files
+    --jsdeferer            javascript loader for defered loading
+    --tmpl-embed-js        template for js embedder generator
+    --tmpl-embed-php       template for php embedder generator
 
-    -l, --level           set optimization level (0-9)
+        --action           use to disable all actions
+    -p, --prepare          enable/disable prepare blocks
+    -o, --optimize         enable/disable optimizer blocks
+    -m, --merge            use to disable all merge blocks
+        --css              enable/disable css merge blocks
+        --js               enable/disable js merge blocks
+    -i, --headinc          enable/disable headinc blocks
+    -e, --embedder         enable/disable embedder blocks
 
-    --dev                 enable/disable dev targets
-    --join                enable/disable join targets
-    --minify              enable/disable minify targets
-    --compile             enable/disable compile targets
-    --license             enable/disable license targets
+    -l, --level            set optimization level (0-9)
 
-    --optimize-txt        enable/disable optimizer for text files (--txt)
-    --optimize-jpg        enable/disable optimizer for jpg images (--jpg)
-    --optimize-gif        enable/disable optimizer for gif images (--gif)
-    --optimize-png        enable/disable optimizer for png images (--png)
-    --optimize-mng        enable/disable optimizer for mng images (--mng)
-    --optimize-zip        enable/disable optimizer for zip archives (--zip)
-    --optimize-gz         enable/disable optimizer for gz archive files (--gz)
+    --dev                  enable/disable dev targets
+    --join                 enable/disable join targets
+    --minify               enable/disable minify targets
+    --compile              enable/disable compile targets
+    --license              enable/disable license targets
 
-    -dbg, --debug         enable/disable debug mode
+    --optimize-txt         enable/disable optimizer for text files (--txt)
+    --optimize-jpg         enable/disable optimizer for jpg images (--jpg)
+    --optimize-gif         enable/disable optimizer for gif images (--gif)
+    --optimize-png         enable/disable optimizer for png images (--png)
+    --optimize-mng         enable/disable optimizer for mng images (--mng)
+    --optimize-zip         enable/disable optimizer for zip archives (--zip)
+    --optimize-gz          enable/disable optimizer for gz archive files (--gz)
 
-    --man                 full documentation
-    --opts                list command line options
-    -?, --help            brief help message with options
+    -dbg, --debug          enable/disable debug mode
+
+    --man                  full documentation
+    --opts                 list command line options
+    -?, --help             brief help message with options
 
 
 Credits
