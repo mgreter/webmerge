@@ -170,8 +170,24 @@ sub finalize
 	$RTP::Webmerge::Path::confroot = $self->{'configpath'};
 
 	# set htdocs root directory and current working directory
-	$RTP::Webmerge::Path::webroot = check_path($self->{'webroot'} || '.');
-	$RTP::Webmerge::Path::directory = check_path($self->{'directory'} || '.');
+	# these may contain template variables to other directories
+	$RTP::Webmerge::Path::webroot = $self->{'webroot'};
+
+	# make sure config is resolved here, otherwise
+	# a change to i.e. webroot can influence all other
+	# paths when they have the template variable used
+	# attention: the order is quite important as it defines
+	# how we can use variables and interpolation (rethink that!)
+
+	# set and resolve current working directory first
+	$RTP::Webmerge::Path::directory = $self->{'directory'};
+	$self->{'directory'} = check_path($self->{'directory'} || '.');
+	$RTP::Webmerge::Path::directory = $self->{'directory'};
+
+	# set and resolve htdocs root directory afterwards
+	$RTP::Webmerge::Path::webroot = $self->{'webroot'};
+	$self->{'webroot'} = check_path($self->{'webroot'} || '.');
+	$RTP::Webmerge::Path::webroot = $self->{'webroot'};
 
 	# only allow directory or query option to be given for fingerprinting
 	if ($self->{'fingerprint-dev'} && !($self->{'fingerprint-dev'} =~ m/^[qfn]/i))
