@@ -180,13 +180,9 @@ sub finalize
 	# how we can use variables and interpolation (rethink that!)
 
 	# set and resolve current working directory first
-	$RTP::Webmerge::Path::directory = $self->{'directory'};
 	$self->{'directory'} = check_path($self->{'directory'} || '.');
-	$RTP::Webmerge::Path::directory = $self->{'directory'};
-
-	# set and resolve htdocs root directory afterwards
-	$RTP::Webmerge::Path::webroot = $self->{'webroot'};
 	$self->{'webroot'} = check_path($self->{'webroot'} || '.');
+	$RTP::Webmerge::Path::directory = $self->{'directory'};
 	$RTP::Webmerge::Path::webroot = $self->{'webroot'};
 
 	# only allow directory or query option to be given for fingerprinting
