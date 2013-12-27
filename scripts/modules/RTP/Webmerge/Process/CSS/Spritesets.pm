@@ -45,6 +45,9 @@ sub spritesets
 	# get input variables
 	my ($data, $config, $output) = @_;
 
+	use RTP::Webmerge::Path qw(dirname basename);
+	my $dir = RTP::Webmerge::Path->chdir(dirname($output->{'path'}));
+
 	# create a new ocbnet spriteset css parser object
 	my $css = OCBNET::Spritesets::CSS::Parser->new($config);
 

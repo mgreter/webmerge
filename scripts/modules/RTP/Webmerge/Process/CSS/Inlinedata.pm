@@ -97,7 +97,10 @@ sub inlinedata
 {
 
 	# get input variables
-	my ($data, $config) = @_;
+	my ($data, $config, $output) = @_;
+
+	use RTP::Webmerge::Path qw(dirname basename);
+	my $dir = RTP::Webmerge::Path->chdir(dirname($output->{'path'}));
 
 	# declare lexical variables
 	my $info = {};

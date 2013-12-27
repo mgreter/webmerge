@@ -584,16 +584,6 @@ sub callProcessor
 	# do nothing on void input
 	return unless $processors;
 
-	# current working directory
-	my $cwd = cwd;
-
-	my $path = dirname $item->{'path'};
-	unless ($path =~ m /^(?:\/|[a-zA-Z]:)/)
-	{ $path = join('/', $directory, $path); }
-
-	# change the current working directory for all processes
-	Cwd::chdir($path) or die "Fatal in chdir: " . $path if $path;
-
 	# call each processor (split string by whitespace)
 	foreach my $processor (split(/\s+/, $processors))
 	{
@@ -606,9 +596,6 @@ sub callProcessor
 
 	}
 	# EO each processor
-
-	# change back the working directory to the previous value
-	Cwd::chdir($cwd) or die "Fatal in chdir: " . $cwd if $path;
 
 }
 # EO sub callProcessor
