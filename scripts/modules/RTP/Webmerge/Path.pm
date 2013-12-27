@@ -27,7 +27,7 @@ BEGIN { $RTP::Webmerge::Path::VERSION = "0.9.0" }
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter) }
 
 # define our variables to be exported
-BEGIN { our @EXPORT = qw(canonpath dirname res_path check_path exportURI importURI); }
+BEGIN { our @EXPORT = qw(canonpath dirname res_path check_path exportURI importURI resolveURI); }
 
 # define our functions to be exported
 BEGIN { our @EXPORT_OK = qw(EOD basename $webroot $confroot $extroot $directory); }
@@ -41,7 +41,7 @@ use Cwd qw(realpath abs_path);
 use File::Basename qw(dirname basename);
 
 # import file path normalization/conversion functions
-use File::Spec::Functions qw(canonpath rel2abs abs2rel);
+use File::Spec::Functions qw(catfile canonpath rel2abs abs2rel);
 
 ###################################################################################################
 
@@ -49,6 +49,32 @@ use File::Spec::Functions qw(canonpath rel2abs abs2rel);
 sub EOD { $^O eq "MSWin32" ? '\\' : '/'; }
 
 ###################################################################################################
+
+# find correct URI by given base paths
+# search all base paths for existing node
+sub resolveURI
+{
+
+	# get URI and base paths
+	my ($uri, $bases) = @_;
+
+	# force bases to array
+	if (ref $bases ne 'ARRAY')
+	{ $bases = [ $bases ]; }
+
+	# process all base paths
+	foreach my $base (@{$bases})
+	{
+		# search for existing node
+		if ( -e catfile($base, $uri) )
+		{ return catfile($base, $uri) }
+	}
+
+	# indicate error
+	return undef;
+
+}
+# EO sub resolveURI
 
 # resolve URI to an absolute path on filesystem
 # directory has to exist, but not the actual file
@@ -58,8 +84,10 @@ sub importURI
 	# get URI and local path
 	my ($uri, $relpath) = @_;
 
+	Carp::confess "deprecated importURI call" unless defined $relpath;
+
 	# set relpath to webroot if nothin else given
-	$relpath = $webroot unless defined $relpath;
+	$relpath = $directory unless defined $relpath;
 
 	# remove hash tag and query string for URI
 	my $suffix = $uri =~ s/([\;\?\#].*?)$// ? $1 : '';
@@ -82,9 +110,7 @@ sub importURI
 	{
 		# relative uris load from parent css file
 		# or from the current working directory (bugfix)
-		eval { $path = realpath(rel2abs($path, realpath($relpath))); };
-		# report any error from parent caller
-		Carp::croak $@ if $@;
+		$path = resolveURI($path, [$relpath, $directory]);
 	}
 
 	# assert that at least the path of the URI exists on the actual filesystem
@@ -190,7 +216,7 @@ sub check_path ($)
 	return $rv unless $@;
 
 	# check for error
-	die $@ if $@;
+	Carp::croak $@ if $@;
 
 }
 

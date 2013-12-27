@@ -61,25 +61,32 @@ sub scss
 	# parse urls out of the css file
 	# do a lousy match for better performance
 	our $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
-	# change all web uris in the stylesheet to absolute local paths
+
+	# make all absolute local paths relative to current directory
 	# also changes urls in comments (needed for the spriteset feature)
-	# ${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
-	${$data} =~ s/$re_url/wrapURL(exportURI($1, cwd))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($1, $directory))/egm;
 
 	# compile the passed scss data
 	${$data} = $scss->compile(${$data});
-
-	# resolve all local paths in the stylesheet to web uris
-	# also changes urls in comments (needed for the spriteset feature)
-	# ${$data} =~ s/$re_url/wrapURL(importURI($1, cwd, $config))/egm;
 
 	# check if compile was ok
 	unless (defined ${$data})
 	{
 		# output an error message (it may not tell much)
 		die "Fatal error when compiling scss:\n",
-		    " in ", $output->{'path'}, "\n", $scss->last_error;
+		    " in ", $output->{'path'}, "\n",
+		    join("\n", split('error:', $scss->last_error)),
+		    "cwd: ", $directory, "\n";
 	}
+
+	# add an indicator about the processor
+	${$data} = "/* libsass ($directory) */\n\n" . ${$data};
+
+	# change all uris to absolute paths (relative to local directory)
+	# also changes urls in comments (needed for the spriteset feature)
+	# this way, new urls inserted by sass processor will also be imported
+	${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
+
 
 	# return success
 	return 1;

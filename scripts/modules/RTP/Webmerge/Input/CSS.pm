@@ -9,7 +9,7 @@ use Carp;
 use strict;
 use warnings;
 
-use RTP::Webmerge::Path qw(dirname basename $directory);
+use RTP::Webmerge::Path qw(dirname basename $directory resolveURI);
 use File::Basename qw(fileparse);
 
 ###################################################################################################
@@ -231,6 +231,31 @@ sub render
 	          # otherwise do not change cwd
 	          RTP::Webmerge::Path->chdir('.');
 
+	my $resolver = sub
+	{
+
+		my ($uri, $paths) = @_;
+
+		# parse uri into it's parts
+		my ($name, $path) = fileparse($uri);
+
+		foreach my $path (
+			catfile($directory, $path),
+			catfile(dirname($self->{'path'}), $path)
+		)
+		{
+			foreach my $srch ('%s', '_%s', '%s.scss', '_%s.scss')
+			{
+				if (-e catfile($path, sprintf($srch, $name)))
+				{ return catfile($path, sprintf($srch, $name)); }
+			}
+		}
+
+		return $uri;
+
+	};
+	# EO sub $resolver
+
 	# process imports
 	my $importer = sub
 	{
@@ -246,6 +271,10 @@ sub render
 		my $partial = $defined->($5, $6);
 		my $wrapped = $defined->($2, $3, $4);
 		my $import = $partial || $wrapped;
+
+		# resolve import filename
+		# try to load scss partials
+		$import = $resolver->($import);
 
 		# parse the import filename into its parts
 		my ($name, $path, $suffix) = fileparse($import, 'scss', 'css');
@@ -269,9 +298,10 @@ sub render
 		else
 		{
 
+			my $export = exportURI($import, $expbase);
 			# wrap the same type as before (add options to rewrite)
-			if ($partial) { return sprintf $tmpl, '"' . $import . '"' }
-			elsif ($wrapped) { return sprintf $tmpl, wrapURL($import) }
+			if ($partial) { return sprintf $tmpl, '"' . $export . '"' }
+			elsif ($wrapped) { return sprintf $tmpl, wrapURL($export) }
 
 		}
 
