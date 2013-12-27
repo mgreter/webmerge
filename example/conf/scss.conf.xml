@@ -28,7 +28,7 @@
 	<!-- main merge operations -->
 	<merge disabled="false">
 
-		<!-- build fam spriteset -->
+		<!-- css block -->
 		<css id="scss" step="scss" disabled="false" >
 
 			<!-- explicitly set the directory again -->
@@ -40,6 +40,20 @@
 			<!-- create output css files and the spriteset image -->
 			<output path="../dst/simple.dev.css" target="dev" />
 			<output path="../dst/simple.join.css" target="join" />
+
+		</css>
+
+		<!-- css block -->
+		<css id="test-01" step="test" disabled="false" >
+
+			<!-- explicitly set the directory again -->
+			<config><directory>{WWW}</directory></config>
+
+			<!-- use generated css as input file -->
+			<input path="test-01/test.in.scss" process="sass" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="test-01/test.out.css" target="join" />
 
 		</css>
 
