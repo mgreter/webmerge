@@ -61,6 +61,11 @@ our $re_comment = qr/\/\*[^\*]*\*+([^\/\*][^\*]*\*+)*\//s;
 
 ###################################################################################################
 
+sub isabs
+{
+	$_[0] =~ m /^(?:\/|[a-zA-Z]:)/;
+}
+
 sub new
 {
 
@@ -72,6 +77,9 @@ sub new
 
 	# default type is css
 	$self->{'type'} = 'css';
+
+	# store by base paths
+	$self->{'rendered'} = {};
 
 	# return instance
 	return $self;
@@ -131,9 +139,9 @@ sub dependencies
 
 		# get from the various styles
 		# either wrapped in url or string
-		my $url = $defined->($1, $2, $3);
-		my $include = $defined->($4, $5);
-		my $src = $url || $include;
+		my $wrapped = $defined->($1, $2, $3);
+		my $partial = $defined->($4, $5);
+		my $src = $wrapped || $partial;
 
 		# parse path and filename first (and also the suffix)
 		my ($name, $path, $suffix) = fileparse($src, 'scss');
@@ -163,7 +171,7 @@ sub dependencies
 
 		# import was not wrapped with url
 		# this indicates some sass partials
-		if ($include && $suffix eq 'scss') { }
+		if ($partial && $suffix eq 'scss') { }
 
 		# create and load a new css input object
 		my $dep = RTP::Webmerge::Input::CSS->new($abspath);
@@ -189,66 +197,42 @@ sub dependencies
 use RTP::Webmerge::Path qw(exportURI importURI);
 use RTP::Webmerge::IO::CSS qw(wrapURL);
 
+my $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
+
+###################################################################################################
+# adjust urls in stylesheets and include imports according to config
+# base can be explicitly set to undef to not touch any urls in the file
+# by default the base is set to the current working directory ($base = '.')
+# you can pass specific paths to search for included imports (not urls yet)
+###################################################################################################
+
+# render urls into base
 sub render
 {
 
-		my $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
+	# get instance and paramenters
+	my ($self, $expbase) = @_;
 
-	# get instance
-	my ($self, $normalize) = @_;
-
-	# only init once for each input
-	return if ($self->{'rendered'});
+	# set export base to current directory
+	# only set this once and keep for imports
+	$expbase = $directory unless $expbase;
 
 	# get raw data for css
 	my $data = ${$self->raw};
 
-	# change current working directory so we are able
-	# to find further includes relative to the directory
-	my $dir = RTP::Webmerge::Path->chdir(dirname($self->{'path'}));
-
-	my $cssfile = $self->{'path'};
+	# get the configuration hash
 	my $config = $self->{'config'};
 
-	# remove comment from raw data
-	# $data =~ s/$re_comment//gm;
+	# rebase uris to current scss or css file base (if configured)
+	my $dir = $config->{'rebase-urls-in-scss'} && $self->{'suffix'} eq 'scss' ?
+	          RTP::Webmerge::Path->chdir(dirname($self->{'path'})) :
+	          $config->{'rebase-urls-in-css'} && $self->{'suffix'} eq 'css' ?
+	          RTP::Webmerge::Path->chdir(dirname($self->{'path'})) :
+	          # otherwise do not change cwd
+	          RTP::Webmerge::Path->chdir('.');
 
-	# make these config options local, as they should influence each other and revert automatically
-	local $self->{'config'}->{'rebase-urls-in-css'} = $self->{'config'}->{'rebase-urls-in-css'};
-	local $self->{'config'}->{'rebase-urls-in-scss'} = $self->{'config'}->{'rebase-urls-in-scss'};
-
-	if ($self->{'suffix'} eq 'scss')
-	{
-		unless ( $self->{'config'}->{'rebase-urls-in-scss'} )
-		{ $self->{'config'}->{'rebase-urls-in-css'} = 0; }
-	}
-	else
-	{
-		unless ( $self->{'config'}->{'rebase-urls-in-css'} )
-		{ $self->{'config'}->{'rebase-urls-in-scss'} = 0; }
-	}
-
-	if ($self->{'suffix'} eq 'scss')
-	{
-		if ( $self->{'config'}->{'rebase-urls-in-scss'} )
-		{
-			# change all web uris in the stylesheet to absolute local paths
-			# also changes urls in comments (needed for the spriteset feature)
-			$data =~ s/$re_url/wrapURL(importURI($1, dirname($cssfile), $config))/egm;
-		}
-	}
-	else
-	{
-		if ( $self->{'config'}->{'rebase-urls-in-css'} )
-		{
-			# change all web uris in the stylesheet to absolute local paths
-			# also changes urls in comments (needed for the spriteset feature)
-			$data =~ s/$re_url/wrapURL(importURI($1, dirname($cssfile), $config))/egm;
-		}
-	}
-
-
-	my $process = sub
+	# process imports
+	my $importer = sub
 	{
 
 		# store full match
@@ -259,104 +243,58 @@ sub render
 
 		# get from the various styles
 		# either wrapped in url or string
-		my $url = $defined->($2, $3, $4);
-		my $include = $defined->($5, $6);
+		my $partial = $defined->($5, $6);
+		my $wrapped = $defined->($2, $3, $4);
+		my $import = $partial || $wrapped;
 
-		# parse path and filename first (and also the suffix)
-		my ($name, $path, $suffix) = fileparse($url || $include, 'scss');
+		# parse the import filename into its parts
+		my ($name, $path, $suffix) = fileparse($import, 'scss', 'css');
 
-		# search for alternative names for sass partials
-		# the order may not be 100% correct, need more tests
-		foreach my $srch ('_%s.scss', '_%s', '%s.scss')
+		# create template to check for specific option according to import type
+		my $cfg = sprintf '%%s-%s-%s', $self->{'suffix'}, $partial ? 'partials' : 'imports';
+
+		# check if we should embed this import
+		if ($config->{ sprintf $cfg, 'embed' })
 		{
-			if (-e catfile($path, sprintf($srch, $name)))
-			{ $name = sprintf($srch, $name); last; }
+
+			# load the referenced stylesheet (don't parse yet)
+			# ToDo: for scss this may be from current scss file or cwd
+			my $css = RTP::Webmerge::Input::CSS->new($import, $config);
+
+			# render scss relative to old base
+			return ${ $css->render($expbase) };
+
 		}
-
-		# final import path for cssfile
-		my $cssfile = catfile($path, $name);
-
-		# create a new input object for the dependency
-		my $abspath = rel2abs($cssfile);
-
-		# parse again, suffix may has changed (should be quite cheap)
-		($name, $path, $suffix) = fileparse($cssfile, 'scss', 'css');
-
-		# store value to object
-		$self->{'name'} = $name;
-		$self->{'suffix'} = $suffix;
-		$self->{'directory'} = $path;
-
-		my $depconf = $self->{'config'};
-
-		# create and load a new css input object
-		my $dep = RTP::Webmerge::Input::CSS->new($abspath, $depconf);
-
-		# change current working directory so we are able
-		# to find further includes relative to the directory
-		my $dir = RTP::Webmerge::Path->chdir(dirname($dep->{'path'}));
-
-		# my $path = File::Spec->abs2rel(dirname($dep->{'path'}), dirname($self->{'path'}));
-
-		my $rv;
-
-		my $base = dirname($self->{'path'});
-
-
-		# import was not wrapped with url
-		# this indicates some sass partials
-		if ($include && $suffix eq 'scss')
-		{
-			if ( $self->{'config'}->{'rebase-imports-scss'} )
-			{ $include = exportURI(importURI($include, $base)); }
-			unless ( $self->{'config'}->{'import-scss'} )
-			{ return sprintf $tmpl, '"' . $include . '"'; }
-			$rv = ${$dep->render($base)};
-			if ( $self->{'config'}->{'rebase-urls-in-scss'} )
-			{ $rv =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
-		}
+		# otherwise preserve import statement
 		else
 		{
-			if ( $self->{'config'}->{'rebase-imports-css'} )
-			{ $include = exportURI(importURI($include, $base)); }
-			unless ( $self->{'config'}->{'import-css'} )
-			{ return sprintf $tmpl, wrapURL($include); }
-			$rv = ${$dep->render($base)};
-			if ( $self->{'config'}->{'rebase-urls-in-css'} )
-			{ $rv =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
 
-		};
+			# wrap the same type as before (add options to rewrite)
+			if ($partial) { return sprintf $tmpl, '"' . $import . '"' }
+			elsif ($wrapped) { return sprintf $tmpl, wrapURL($import) }
 
-		return $rv;
+		}
 
 	};
+	# EO sub importer
+
+	# import all relative urls to absolute paths
+	# so far we are only relative to the current directory
+	# current directory is changed when rebase options is set
+	$data =~ s/$re_url/wrapURL(importURI($1, $directory))/egm;
 
 	# process each import statement in data
-	$data =~ s/
+	$data =~ s/(\@import\s+$re_import)/$importer->()/gmex;
 
-		(\@import\s+$re_import)
+	# export all absolute paths to relative urls again
+	# make them relative to export base (pass to all imports)
+	$data =~ s/$re_url/wrapURL(exportURI($1, $expbase))/egm;
 
-	/
-
-		$process->();
-
-	/gmex;
-
-	if ($self->{'suffix'} eq 'scss')
-	{
-		if ( $self->{'config'}->{'rebase-urls-in-scss'} )
-		{ $data =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
-	}
-	else
-	{
-		if ( $self->{'config'}->{'rebase-urls-in-css'} )
-		{ $data =~ s/$re_url/wrapURL(exportURI($1, undef))/egm; }
-	}
-
-	# return cached copy of data
-	return $self->{'rendered'} = \ $data;
+	# reference data
+	return \ $data;
 
 }
+# EO sub render
 
 # register class/package in type dispatcher
 $RTP::Webmerge::Input::types{'css'} = __PACKAGE__;
@@ -365,34 +303,4 @@ $RTP::Webmerge::Input::types{'scss'} = __PACKAGE__;
 ###################################################################################################
 ###################################################################################################
 1;
-
-__DATA__
-
-	# resolve all css imports and include the stylesheets (recursive resolve url paths)
-	if ($config->{'import-css'})
-	{
-		# find import statements
-		${$data} =~
-		s/
-			\@import\s+$re_import
-		/
-			# call recursive
-			${ incCSS (
-				# change uri to be relative
-				# to the current input file
-				importURI(
-					# only one match will be found
-					$defined->($1, $2, $3, $4, $5),
-					# normalize to current css
-					dirname($cssfile),
-					$config
-				),
-				# EO importURI
-				$config,
-				$deps
-			) }
-			# EO incCSS
-		/gmex;
-	}
-	# EO if conf import-css
 

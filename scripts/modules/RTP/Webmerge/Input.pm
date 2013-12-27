@@ -25,7 +25,7 @@ our %types;
 use RTP::Webmerge::IO qw(readfile);
 
 ###################################################################################################
- use File::Basename qw(fileparse);
+use File::Basename qw(fileparse);
 use RTP::Webmerge::IO::CSS qw(wrapURL);
 use RTP::Webmerge::Path qw(dirname basename);
 use RTP::Webmerge::Path qw(exportURI importURI $directory);
@@ -45,7 +45,8 @@ sub new
 	# find out the file suffix for object type
 	my $type = $uri =~ m/\.([a-zA-Z]+)$/ ? $1 : undef;
 
-	my $path = abs_path($uri);
+	my $path = eval { abs_path($uri); };
+	Carp::confess $@ if $@;
 
 	# parse again, suffix may has changed (should be quite cheap)
 	my ($name, $dir, $suffix) = fileparse($path, 'scss', 'css');

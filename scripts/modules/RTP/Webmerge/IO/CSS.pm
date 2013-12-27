@@ -57,7 +57,7 @@ BEGIN { our @EXPORT_OK = qw($re_url wrapURL); }
 use RTP::Webmerge::IO qw(readfile writefile);
 
 # import local webroot path
-use RTP::Webmerge::Path qw(exportURI importURI);
+use RTP::Webmerge::Path qw(exportURI importURI $directory);
 
 # import base filename functions
 use RTP::Webmerge::Path qw(dirname basename);
@@ -90,105 +90,6 @@ sub wrapURL
 
 ###################################################################################################
 
-# include a css file
-# resolve import statements
-# normalize uris to webroot
-sub incCSS
-{
-
-	die "deprecated";
-
-	# return the first defined value found in arguments
-	my $defined = sub { foreach my $rv (@_) { return $rv if defined $rv; } };
-
-	# get input variables
-	my ($cssfile, $config, $deps) = @_;
-
-	# should we really import the data
-	# implement special case for libsass (scss)
-	my $no_import = undef;
-
-	# find the css files
-	# support for libsass
-	unless (-e $cssfile)
-	{
-		# try different extensions in order
-		foreach my $ext ('scss', 'css')
-		{
-			my $dir = dirname $cssfile;
-			my $name = basename $cssfile;
-
-			# check for extension only
-			if (-e join('.', join('/', $dir, $name), $ext))
-			{ $cssfile = join('.', join('/', $dir, $name), $ext); }
-			# check for special libsass case
-			elsif (-e join('.', join('/', $dir, '_' . $name), $ext))
-			{
-				$no_import = $cssfile;
-				# detected a scss partial import
-				# but still fallow to really learn about
-				# all the dependencies (just for watchdog)
-				$cssfile = join('.', join('/', $dir, '_' . $name), $ext);
-			}
-		}
-	}
-
-	# read complete css file
-	my $data = readfile($cssfile);
-
-	# collect every include within array
-	push @{$deps}, $cssfile if $deps;
-
-	# die with an error message that css file is not found
-	die "css import <$cssfile> could not be read: $!\n" unless $data;
-
-	# change all web uris in the stylesheet to absolute local paths
-	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(importURI($1, dirname($cssfile), $config))/egm;
-
-	# change current working directory so we are able
-	# to find further includes relative to the directory
-	my $dir = RTP::Webmerge::Path->chdir(dirname($cssfile));
-
-	# resolve all css imports and include the stylesheets (recursive resolve url paths)
-	if ($config->{'import-css'})
-	{
-		# find import statements
-		${$data} =~
-		s/
-			\@import\s+$re_import
-		/
-			# call recursive
-			${ incCSS (
-				# change uri to be relative
-				# to the current input file
-				importURI(
-					# only one match will be found
-					$defined->($1, $2, $3, $4, $5),
-					# normalize to current css
-					dirname($cssfile),
-					$config
-				),
-				# EO importURI
-				$config,
-				$deps
-			) }
-			# EO incCSS
-		/gmex;
-	}
-	# EO if conf import-css
-
-	# implementation for special case (libsas/scss)
-	return \ sprintf '@import "%s";', $no_import if $no_import;
-
-	# return scalar
-	return $data;
-
-}
-# EO sub incCSS
-
-###################################################################################################
-
 # read a css file from the disk
 # normalize uris to absolute web uris
 sub readCSS
@@ -201,18 +102,11 @@ sub readCSS
 	# this should be extended to support all css operations
 	my $input = RTP::Webmerge::Input::CSS->new($cssfile, $config);
 
-	# change current working directory so we are able
-	# to find further includes relative to the directory
-	my $dir = RTP::Webmerge::Path->chdir(dirname($cssfile));
+	# used to return dependecies
+	die "deprecated" if wantarray;
 
-	# render the resulting css
-	my $data = $input->render;
-
-	# get our own asset path and for all dependencies
-	my (@assets) = map { $_->{'path'} } $input->assets;
-
-	# todo: return input objects and not variables
-	return wantarray ? [ $data, \@assets ] : $data;
+	# render stylesheet (resolve assets)
+	return $input ? $input->render  : undef;
 
 }
 # EO sub readCSS
@@ -232,8 +126,7 @@ sub importCSS
 
 	# change all web uris in the stylesheet to absolute local paths
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(importURI($1, undef, $config))/egm;
-	# ${$data} =~ s/$re_url/wrapURL(importURI($1, dirname($cssfile), $config))/egm;
+	${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
 
 	# return as string
 	return $data;
@@ -288,9 +181,12 @@ push @initers, sub
 	# get input variables
 	my ($config) = @_;
 
-	# include imported css files
-	$config->{'import-css'} = 1;
-	$config->{'import-scss'} = 0;
+	# embed imported files and partials
+	# partials are not wrapped inside urls
+	$config->{'embed-css-imports'} = 1;
+	$config->{'embed-css-partials'} = 1;
+	$config->{'embed-scss-imports'} = 0;
+	$config->{'embed-scss-partials'} = 0;
 
 	# rebase urls within file types
 	# once this feature is disabled, it shall
@@ -298,10 +194,23 @@ push @initers, sub
 	$config->{'rebase-urls-in-css'} = 1;
 	$config->{'rebase-urls-in-scss'} = 0;
 
+	# $config->{'rebase-css-imports'} = 1;
+	# $config->{'rebase-css-partials'} = 1;
+	# $config->{'rebase-scss-imports'} = 0;
+	# $config->{'rebase-scss-partials'} = 0;
+
+	# $config->{'rebase-urls-in-css-imports'} = 1;
+	# $config->{'rebase-urls-in-css-partials'} = 1;
+	# $config->{'rebase-urls-in-scss-imports'} = 0;
+	# $config->{'rebase-urls-in-scss-partials'} = 0;
+
+	# $config->{'rewrite-urls-in-css-imports'} = 1;
+	# $config->{'rewrite-urls-in-css-partials'} = 1;
+	# $config->{'rewrite-urls-in-scss-imports'} = 0;
+	# $config->{'rewrite-urls-in-scss-partials'} = 0;
+
 	# rebase remaining import urls
 	# only matter if import is disabled
-	$config->{'rebase-imports-css'} = 1;
-	$config->{'rebase-imports-scss'} = 0;
 
 	# should we use absolute urls
 	# otherwise includes will be relative
@@ -314,8 +223,6 @@ push @initers, sub
 		'import-scss!' => \ $config->{'cmd_import-scss'},
 		'rebase-urls-in-css!' => \ $config->{'cmd_rebase-urls-in-css'},
 		'rebase-urls-in-scss!' => \ $config->{'cmd_rebase-urls-in-scss'},
-		'rebase-imports-css!' => \ $config->{'cmd_rebase-imports-css'},
-		'rebase-imports-scss!' => \ $config->{'cmd_rebase-imports-scss'},
 		'absoluteurls!' => \ $config->{'cmd_absoluteurls'}
 	);
 
