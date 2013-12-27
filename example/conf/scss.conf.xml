@@ -31,12 +31,15 @@
 		<!-- build fam spriteset -->
 		<css id="scss" step="scss" disabled="false" >
 
+			<!-- explicitly set the directory again -->
+			<config><directory>{WWW}/src</directory></config>
+
 			<!-- use generated css as input file -->
-			<input path="src/simple.scss" process="scss" />
+			<input path="simple.scss" process="scss" />
 
 			<!-- create output css files and the spriteset image -->
-			<output path="dst/simple.dev.css" target="dev" />
-			<output path="dst/simple.join.css" target="join" />
+			<output path="../dst/simple.dev.css" target="dev" />
+			<output path="../dst/simple.join.css" target="join" />
 
 		</css>
 
