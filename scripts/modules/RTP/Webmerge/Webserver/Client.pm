@@ -65,7 +65,13 @@ push @readers, sub
 
 	my ($conn) = @_;
 
-	# ignore leading blank lines
+	if (${*$conn}{'httpd_nomore'}) {
+        die "No more";
+        #$conn->reason("No more requests from this connection");
+	return -1;
+    }
+
+ 	# ignore leading blank lines
 	$conn->rbuf =~ s/^(?:\015?\012)+//;
 
 	# check for a complete line
@@ -461,7 +467,12 @@ my $config = $server->{'config'};
 				my $file = canonpath(catfile($root, $path));
 				die "hack attempt" unless $file =~ m /^\Q$root\E/;
 				print $r->method, " ", $wwwpath, "\n";
-				if (-d $file && -e join('/', $file, 'index.html'))
+				if (-d $file && not $r->uri->path =~ m/\/$/)
+				{
+					$sock->send_redirect("http://localhost:8080".$r->uri->path.'/');
+
+				}
+				elsif (-d $file && -e join('/', $file, 'index.html'))
 				{ $file = join('/', $file, 'index.html'); }
 
 				if (0)
@@ -616,6 +627,23 @@ sub hasError
 
 	undef $sock;
 
+}
+
+sub send_redirect
+{
+    my($self, $loc, $status, $content) = @_;
+    $status ||= RC_MOVED_PERMANENTLY;
+    Carp::croak("Status '$status' is not redirect") unless is_redirect($status);
+    $self->send_basic_header($status);
+    $loc = $HTTP::URI_CLASS->new($loc) unless ref($loc);
+    $self->print("Location: $loc$CRLF");
+    if ($content) {
+	my $ct = $content =~ /^\s*</ ? "text/html" : "text/plain";
+	$self->print("Content-Type: $ct$CRLF");
+    }
+    $self->print($CRLF);
+    $self->print($content) if $content && !$self->head_request;
+    $self->force_last_request;  # no use keeping the connection open
 }
 
 sub send_error
@@ -808,6 +836,12 @@ sub antique_client
 {
     my $self = shift;
     ${*$self}{'io_client'}->{'proto'} < $HTTP_1_0;
+}
+
+sub force_last_request
+{
+    my $self = shift;
+    ${*$self}{'httpd_nomore'}++;
 }
 sub proto_ge
 {
