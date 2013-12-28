@@ -719,7 +719,31 @@ sub send_dir
 {
     my($self, $dir) = @_;
     $self->send_error(RC_NOT_FOUND) unless -d $dir;
-    $self->send_error(RC_NOT_IMPLEMENTED);
+    # $self->send_error(RC_NOT_IMPLEMENTED);
+
+	my $content = "<!doctype html><html><head><title>Directory Listening</title><style>BODY,UL,LI{ font-family: verdana; }</style></head><body><h1>".$dir."</h1>";
+	opendir(my $dh, $dir);
+	if ($dh)
+	{
+		$content .= "<ul>";
+		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', '..' unless $dir =~ m/^\/*$/;
+		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach grep { !m/^\.{1,2}$/ } readdir($dh);
+		$content .= "</ul>";
+	}
+	else
+	{
+		$content .= "error opening directory: $!";
+	}
+
+	$content .= "</body></html>";
+
+	my $response = HTTP::Response->new( 200 );
+
+	$response->content( $content );
+	$response->header( "Content-Type" => "text/html" );
+
+	$self->send_response( $response );
+
 }
 
 
