@@ -110,11 +110,11 @@ my $resolver = sub
 	my ($self, $uri, $paths) = @_;
 
 	# parse uri into it's parts
-	my ($name, $path) = fileparse($uri);
+	my ($name, $root) = fileparse($uri);
 
 	foreach my $path (
-		catfile($directory, $path),
-		catfile(dirname($self->{'path'}), $path)
+		catfile($directory, $root),
+		catfile(dirname($self->{'path'}), $root)
 	)
 	{
 		foreach my $srch ('%s', '_%s', '%s.scss', '_%s.scss')
@@ -163,7 +163,7 @@ sub dependencies
 	${$data} =~ s/$re_comment//gm;
 
 	# process each import statement in data
-	while(${$data} =~ m/\@import\s+$re_import/g)
+	while(${$data} =~ m/(\@import\s+$re_import)/g)
 	{
 
 		# get from the various styles
