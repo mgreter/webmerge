@@ -57,16 +57,16 @@
 			<output path="merged/styles.license.css.txt" target="license" />
 
 			<!-- where to store the resulting files -->
-			<output path="merged/styles.classic.dev.css" target="dev" class="default" />
-			<output path="merged/styles.classic.join.css" target="join" class="default" />
-			<output path="merged/styles.classic.mini.css" target="minify" class="default" />
-			<output path="merged/styles.classic.pack.css" target="compile" class="default" />
+			<output path="merged/styles.classic.dev.css" target="dev" class="default" process="csslint" />
+			<output path="merged/styles.classic.join.css" target="join" class="default" process="csslint" />
+			<output path="merged/styles.classic.mini.css" target="minify" class="default" process="csslint" />
+			<output path="merged/styles.classic.pack.css" target="compile" class="default" process="csslint" />
 
 			<!-- replaced url reference with inline data -->
-			<output path="merged/styles.modern.dev.css" target="dev" class="modern" process="inlinedata" />
-			<output path="merged/styles.modern.join.css" target="join" class="modern" process="inlinedata" />
-			<output path="merged/styles.modern.mini.css" target="minify" class="modern" process="inlinedata" />
-			<output path="merged/styles.modern.pack.css" target="compile" class="modern" process="inlinedata" />
+			<output path="merged/styles.modern.dev.css" target="dev" class="modern" process="inlinedata csslint" />
+			<output path="merged/styles.modern.join.css" target="join" class="modern" process="inlinedata csslint" />
+			<output path="merged/styles.modern.mini.css" target="minify" class="modern" process="inlinedata csslint" />
+			<output path="merged/styles.modern.pack.css" target="compile" class="modern" process="inlinedata csslint" />
 
 		</css>
 
