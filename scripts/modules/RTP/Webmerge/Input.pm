@@ -158,7 +158,7 @@ sub assets
 
 	# collect all assets of all dependencies
 	foreach my $deps (@{$self->dependencies})
-	{ push @assets, $deps->assets; }
+	{ push @assets, ref $deps ? $deps->assets : { 'path' => $deps }; }
 
 	# return list
 	return @assets;

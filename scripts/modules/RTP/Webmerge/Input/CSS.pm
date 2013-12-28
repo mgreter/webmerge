@@ -39,6 +39,8 @@ our %import = ( css => \&importCSS, scss => \&importSCSS );
 our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
 our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
 
+my $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
+
 ###################################################################################################
 
 # parse imports with a strict match
@@ -162,6 +164,12 @@ sub dependencies
 	# remove comment from raw data
 	${$data} =~ s/$re_comment//gm;
 
+	while (${$self->raw} =~ m/$re_url/g)
+	{
+		# get it's own dependencies and add them up
+		push(@{$self->{'import'}}, importURI($1, $directory));
+	}
+
 	# process each import statement in data
 	while(${$data} =~ m/(\@import\s+$re_import)/g)
 	{
@@ -177,7 +185,7 @@ sub dependencies
 		$import = $resolver->($self, $import);
 
 		# create and load a new css input object
-		my $dep = RTP::Webmerge::Input::CSS->new($import);
+		my $dep = RTP::Webmerge::Input::CSS->new($import, $config);
 
 		# get it's own dependencies and add them up
 		push(@{$self->{'deps'}}, @{$dep->dependencies});
@@ -200,7 +208,6 @@ sub dependencies
 use RTP::Webmerge::Path qw(exportURI importURI);
 use RTP::Webmerge::IO::CSS qw(wrapURL);
 
-my $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
 
 ###################################################################################################
 # adjust urls in stylesheets and include imports according to config
