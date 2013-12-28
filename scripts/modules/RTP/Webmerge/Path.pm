@@ -110,7 +110,7 @@ sub importURI
 	{
 		# relative uris load from parent css file
 		# or from the current working directory (bugfix)
-		$path = resolveURI($path, [$relpath, $directory]);
+		$path = realpath(resolveURI($path, [$relpath, $directory]));
 	}
 
 	# assert that at least the path of the URI exists on the actual filesystem
