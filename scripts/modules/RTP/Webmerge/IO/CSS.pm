@@ -108,7 +108,7 @@ sub readCSS
 			$input->render,
 			[
 				map { $_->{'path'} }
-				@{$input->dependencies}
+				$input->assets
 			]
 		]
 	}
