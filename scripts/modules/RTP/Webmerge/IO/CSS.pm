@@ -102,8 +102,16 @@ sub readCSS
 	# this should be extended to support all css operations
 	my $input = RTP::Webmerge::Input::CSS->new($cssfile, $config);
 
-	# used to return dependecies
-	die "deprecated" if wantarray;
+	if (wantarray)
+	{
+		return [
+			$input->render,
+			[
+				map { $_->{'path'} }
+				@{$input->dependencies}
+			]
+		]
+	}
 
 	# render stylesheet (resolve assets)
 	return $input ? $input->render  : undef;

@@ -100,6 +100,34 @@ sub initialize
 	my ($self) = @_;
 
 }
+# EO sub initialize
+
+###################################################################################################
+
+my $resolver = sub
+{
+
+	my ($self, $uri, $paths) = @_;
+
+	# parse uri into it's parts
+	my ($name, $path) = fileparse($uri);
+
+	foreach my $path (
+		catfile($directory, $path),
+		catfile(dirname($self->{'path'}), $path)
+	)
+	{
+		foreach my $srch ('%s', '_%s', '%s.scss', '_%s.scss')
+		{
+			if (-e catfile($path, sprintf($srch, $name)))
+			{ return catfile($path, sprintf($srch, $name)); }
+		}
+	}
+
+	return $uri;
+
+};
+# EO sub $resolver
 
 ###################################################################################################
 
@@ -111,24 +139,25 @@ sub dependencies
 	# get instance
 	my ($self, $recursive) = @_;
 
-	# only init once for each input
-	if (defined $self->{'import'})
-	{ return $self->{'import'}; }
-
 	# collect file imports
 	$self->{'import'} = [];
 
 	# get raw data for css
 	my $data = $self->raw;
 
+	# get the configuration hash
+	my $config = $self->{'config'};
+
+	# rebase uris to current scss or css file base (if configured)
+	my $dir = $config->{'rebase-urls-in-scss'} && $self->{'suffix'} eq 'scss' ?
+	          RTP::Webmerge::Path->chdir(dirname($self->{'path'})) :
+	          $config->{'rebase-urls-in-css'} && $self->{'suffix'} eq 'css' ?
+	          RTP::Webmerge::Path->chdir(dirname($self->{'path'})) :
+	          # otherwise do not change cwd
+	          RTP::Webmerge::Path->chdir('.');
+
 	# base directory from current css path
 	my $base = dirname($self->{'path'});
-
-	# change current working directory so we are able
-	# to find further includes relative to the directory
-	# why does that not work with rel2abs?
-	# https://rt.cpan.org/Public/Bug/Display.html?id=41755
-	my $dir = RTP::Webmerge::Path->chdir($base);
 
 	# remove comment from raw data
 	${$data} =~ s/$re_comment//gm;
@@ -139,42 +168,16 @@ sub dependencies
 
 		# get from the various styles
 		# either wrapped in url or string
-		my $wrapped = $defined->($1, $2, $3);
-		my $partial = $defined->($4, $5);
-		my $src = $wrapped || $partial;
+		my $partial = $defined->($5, $6);
+		my $wrapped = $defined->($2, $3, $4);
+		my $import = $partial || $wrapped;
 
-		# parse path and filename first (and also the suffix)
-		my ($name, $path, $suffix) = fileparse($src, 'scss');
-
-		# search for alternative names for sass partials
-		# the order may not be 100% correct, need more tests
-		foreach my $srch ('_%s.scss', '_%s', '%s.scss')
-		{
-			if (-e catfile($path, sprintf($srch, $name)))
-			{ $name = sprintf($srch, $name); last; }
-		}
-
-		# final import path for cssfile
-		my $cssfile = catfile($path, $name);
-
-		# create a new input object for the dependency
-		my $abspath = rel2abs($cssfile, ${$dir});
-
-		# parse again, suffix may has changed (should be quite cheap)
-		($name, $path, $suffix) = fileparse($cssfile, 'scss', 'css');
-
-		# store value to object
-		$self->{'name'} = $name;
-		$self->{'suffix'} = $suffix;
-		$self->{'directory'} = $path;
-		$self->{'abspath'} = $abspath;
-
-		# import was not wrapped with url
-		# this indicates some sass partials
-		if ($partial && $suffix eq 'scss') { }
+		# resolve import filename
+		# try to load scss partials
+		$import = $resolver->($self, $import);
 
 		# create and load a new css input object
-		my $dep = RTP::Webmerge::Input::CSS->new($abspath);
+		my $dep = RTP::Webmerge::Input::CSS->new($import);
 
 		# get it's own dependencies and add them up
 		push(@{$self->{'deps'}}, @{$dep->dependencies});
@@ -231,31 +234,6 @@ sub render
 	          # otherwise do not change cwd
 	          RTP::Webmerge::Path->chdir('.');
 
-	my $resolver = sub
-	{
-
-		my ($uri, $paths) = @_;
-
-		# parse uri into it's parts
-		my ($name, $path) = fileparse($uri);
-
-		foreach my $path (
-			catfile($directory, $path),
-			catfile(dirname($self->{'path'}), $path)
-		)
-		{
-			foreach my $srch ('%s', '_%s', '%s.scss', '_%s.scss')
-			{
-				if (-e catfile($path, sprintf($srch, $name)))
-				{ return catfile($path, sprintf($srch, $name)); }
-			}
-		}
-
-		return $uri;
-
-	};
-	# EO sub $resolver
-
 	# process imports
 	my $importer = sub
 	{
@@ -274,7 +252,7 @@ sub render
 
 		# resolve import filename
 		# try to load scss partials
-		$import = $resolver->($import);
+		$import = $resolver->($self, $import);
 
 		# parse the import filename into its parts
 		my ($name, $path, $suffix) = fileparse($import, 'scss', 'css');
