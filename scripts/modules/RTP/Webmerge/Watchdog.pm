@@ -208,6 +208,20 @@ sub child ($$$$$)
 			}
 			# EO if can dequeue
 
+			# call the finish step last
+			# this can copy and create files
+			main::process($config, $config->{'xml'}, 'finish');
+
+			# call headinc function to generate headers
+			# these can be included as standalone files
+			# they have includes for all the css and js files
+			main::process($config, $config->{'xml'}, 'headinc');
+
+			# call embedder to create standalone embedder code
+			# this code will sniff the environment to choose
+			# the correct headinc to be included in the html
+			main::process($config, $config->{'xml'}, 'embedder');
+
 			# reset atomic operations
 			# this will commit all changes
 			$config->{'atomic'} = {};
