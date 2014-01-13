@@ -80,8 +80,8 @@ sub sass
 	# test if ipc run3 returned success
 	die "could not run sass compiler, aborting", "\n" if $rv != 1;
 
-	# add an indicator about the processor
-	${$data} = "/* ruby sass ($directory) */\n\n" . ${$data};
+	# add an indicator about the processor (put compiled code)
+	${$data} = "/* ruby sass ($directory) */\n\n" . $compiled;
 
 	# change all uris to absolute paths (relative to local directory)
 	# also changes urls in comments (needed for the spriteset feature)
