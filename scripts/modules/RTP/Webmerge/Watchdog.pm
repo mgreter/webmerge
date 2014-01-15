@@ -149,7 +149,8 @@ sub child ($$$$$)
 			@queue = uniq @queue;
 
 		}
-		# nothing to dequeue, idle
+		# nothing to dequeue, we waited 0.5 seconds
+		# maybe we have something in our to do list
 		else
 		{
 
@@ -194,16 +195,22 @@ sub child ($$$$$)
 				# print delimiter line
 				print '-' x 78, "\n";
 
-				# now dispatch to merge this entry in eval
-				eval { $merger{$type}->($config, $merge); };
+				# process each block step
+				foreach my $step ('prepare', 'merge', 'finish')
+				{
 
-				# check if eval had an error
-				print $@ if $@;
-				$beeps ++ if $@;
+					# call the current step in eval mode
+					# do not abort process if something goes wrong
+					eval { main::process($config, $merge, $step); };
 
-				# call the finish step last
-				# this can copy and create files
-				main::process($config, $merge, 'finish');
+					# check if eval had an error
+					print $@ if $@; $beeps ++ if $@;
+
+					# abort block?
+					last if $@;
+
+				}
+				# EO each block step
 
 			}
 			# EO if can dequeue
@@ -368,7 +375,9 @@ sub watchdog
 					{
 						my ($ret) = $reader{$type}->($local_path, $config);
 						die "could not read <$local_path>: $!" unless $ret;
-						push @paths, check_path($_) foreach @{$ret->[1]};
+						# only push dependencies that can actually be readed
+						# this fixes some problems when urls are built via scss
+						eval { push @paths, check_path($_) } foreach @{$ret->[1]};
 					}
 
 				}
