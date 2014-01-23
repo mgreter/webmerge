@@ -107,6 +107,10 @@ sub new
 		push(@{$parent->{'blocks'}}, $block);
 	}
 
+	# connect collection with ourself
+	$block->{'styles'}->{'_parent'} = $block;
+	$block->{'options'}->{'_parent'} = $block;
+
 	# bless into correct package
 	return bless $block, $pckg;
 
