@@ -483,8 +483,9 @@ sub setupBlocks
 	my $scope = $config->scope($xml);
 
 	# remember the current config
-	$xml->{'_config'} = $config;
+	# $xml->{'_config'} = $config;
 	$xml->{'_conf'} = { %{$scope} };
+	$xml->{'_config'} = { %{$config} };
 
 	# have input arguments and a step name
 	if ($xml->{'step'} && scalar(@ARGV))
