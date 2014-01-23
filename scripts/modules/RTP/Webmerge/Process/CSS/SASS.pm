@@ -58,11 +58,20 @@ sub sass
 
 	use RTP::Webmerge::IO::CSS qw(wrapURL);
 	use RTP::Webmerge::Path qw(exportURI importURI $directory);
-	our $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
+
+	# parse different string types
+	our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
+	our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
+
+	our $re_url = qr/url\(\s*(?:
+		\s*\"(?!data:)(?<url>$re_quot)\" |
+		\s*\'(?!data:)(?<url>$re_apo)\' |
+		(?![\"\'])\s*(?!data:)(?<url>[^\)]*)
+	)\s*\)/xi;
 
 	# make all absolute local paths relative to current directory
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(exportURI($1, $directory))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($+{url}, $directory))/egm;
 
 	# now call run3 to compile the javascript code
 	my $rv = run3($command, $data, \ my $compiled, \ my $err);
@@ -86,7 +95,7 @@ sub sass
 	# change all uris to absolute paths (relative to local directory)
 	# also changes urls in comments (needed for the spriteset feature)
 	# this way, new urls inserted by sass processor will also be imported
-	${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
+	${$data} =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
 
 	# return compiled
 	return 1;

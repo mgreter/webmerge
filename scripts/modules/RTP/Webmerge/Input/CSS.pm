@@ -39,7 +39,11 @@ our %import = ( css => \&importCSS, scss => \&importSCSS );
 our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
 our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
 
-my $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
+my $re_url = qr/url\(\s*(?:
+	\s*\"(?!data:)(?<url>$re_quot)\" |
+	\s*\'(?!data:)(?<url>$re_apo)\' |
+	(?![\"\'])\s*(?!data:)(?<url>[^\)]*)
+)\s*\)/xi;
 
 ###################################################################################################
 
@@ -47,12 +51,12 @@ my $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
 # use same pattern as found in libsass
 our $re_import = qr/
                    (?:url\(\s*(?:
-                                  \'($re_apo+)\' |
-                                  \"($re_quot+)\"
-                                  |(?!data:)([^\)]+)
+                                    \s*\"(?!data:)(?<url>$re_quot)\" |
+                                    \s*\'(?!data:)(?<url>$re_apo)\' |
+                                    (?![\"\'])\s*(?!data:)(?<url>[^\)]*)
                             )\s*\)|
-                            \'($re_apo+)\'|
-                            \"($re_quot+)\"
+                            \s*\"(?!data:)(?<url>$re_quot)\" |
+                            \s*\'(?!data:)(?<url>$re_apo)\'
                     )
                     ((?:\s|\n|;)*)
 /x;
@@ -167,7 +171,7 @@ sub dependencies
 	while (${$self->raw} =~ m/$re_url/g)
 	{
 		# get it's own dependencies and add them up
-		push(@{$self->{'import'}}, importURI($1, $directory));
+		push(@{$self->{'import'}}, importURI($+{url}, $directory));
 	}
 
 	# process each import statement in data
@@ -296,14 +300,14 @@ sub render
 	# import all relative urls to absolute paths
 	# so far we are only relative to the current directory
 	# current directory is changed when rebase options is set
-	$data =~ s/$re_url/wrapURL(importURI($1, $directory))/egm;
+	$data =~ s/$re_url/wrapURL(importURI($+{url}, $directory))/egm;
 
 	# process each import statement in data
 	$data =~ s/(\@import\s+$re_import)/$importer->()/gmex;
 
 	# export all absolute paths to relative urls again
 	# make them relative to export base (pass to all imports)
-	$data =~ s/$re_url/wrapURL(exportURI($1, $expbase))/egm;
+	$data =~ s/$re_url/wrapURL(exportURI($+{url}, $expbase))/egm;
 
 	# reference data
 	return \ $data;

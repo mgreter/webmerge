@@ -106,7 +106,7 @@ sub inlinedata
 	my $info = {};
 
 	# start search and replace
-	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || &inline_url($config, $info, $2)/gmes;
+	${$data} =~ s/(?:(\/\*.*?\*\/)|$re_url)/$1 || &inline_url($config, $info, $+{url})/gmes;
 
 	# create lexical variables
 	my @duplicates, my $replaced = 0;

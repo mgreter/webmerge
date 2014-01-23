@@ -13,29 +13,17 @@ use warnings;
 
 ###################################################################################################
 
-# parse urls out of the css file
-# do a lousy match for better performance
-our $re_url = qr/url\(\s*[\"\']?((?!data:)[^\)]+?)[\"\']?\s*\)/x;
-
 # parse different string types
 our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
 our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
 
-###################################################################################################
-
-# parse imports with a strict match
-# use same pattern as found in libsass
-our $re_import = qr/
-                   (?:url\(\s*(?:
-                                  \'($re_apo+)\' |
-                                  \"($re_quot+)\"
-                                  |(?!data:)([^\)]+)
-                            )\s*\)|
-                            \'($re_apo+)\'|
-                            \"($re_quot+)\"
-                    )
-                    (?:\s|\n|;)*
-/x;
+# parse urls out of the css file
+# do a lousy match for better performance
+our $re_url = qr/url\(\s*(?:
+	\s*\"(?!data:)(?<url>$re_quot)\" |
+	\s*\'(?!data:)(?<url>$re_apo)\' |
+	(?![\"\'])\s*(?!data:)(?<url>[^\)]*)
+)\s*\)/xi;
 
 ###################################################################################################
 
@@ -134,7 +122,7 @@ sub importCSS
 
 	# change all web uris in the stylesheet to absolute local paths
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(importURI($1, $directory, $config))/egm;
+	${$data} =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
 
 	# return as string
 	return $data;
@@ -154,7 +142,7 @@ sub exportCSS
 
 	# change all absolute local paths to web uris
 	# also changes urls in comments (needed for the spriteset feature)
-	${$data} =~ s/$re_url/wrapURL(exportURI($1, dirname($cssfile)))/egm;
+	${$data} =~ s/$re_url/wrapURL(exportURI($+{url}, dirname($cssfile)))/egm;
 
 	# return success
 	return 1;

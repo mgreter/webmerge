@@ -84,7 +84,8 @@ sub importURI
 	# get URI and local path
 	my ($uri, $relpath) = @_;
 
-	Carp::confess "deprecated importURI call" unless defined $relpath;
+	carp "deprecated importURI call" unless defined $relpath;
+	carp "importURI with empty url called" unless defined $uri;
 
 	# set relpath to webroot if nothin else given
 	$relpath = $directory unless defined $relpath;
@@ -110,11 +111,14 @@ sub importURI
 	{
 		# relative uris load from parent css file
 		# or from the current working directory (bugfix)
-		$path = realpath(resolveURI($path, [$relpath, $directory]));
+		eval { $path = realpath(resolveURI($path, [$relpath, $directory])); };
+		# use carp to report errors
+		# will show the calling line
+		carp $@ if $@;
 	}
 
 	# assert that at least the path of the URI exists on the actual filesystem
-	die "URI($uri) could not be imported (CWD: $relpath)\n" unless $path && -d $path;
+	carp "URI($uri) could not be imported (CWD: $relpath)\n" unless $path && -d $path;
 
 	# return the final absolute local path
 	# the suffix is lost as we convert the
