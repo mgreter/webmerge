@@ -8,6 +8,10 @@ use Carp;
 use strict;
 use warnings;
 
+# min perl version
+# use modern perlre
+require 5.10.0;
+
 ################################################################################
 
 # use FindBin to find the path to the script
