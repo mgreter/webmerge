@@ -228,6 +228,8 @@ sub writer
 		# process all items for this kind of input
 		foreach my $item (@{$collection->{$kind}})
 		{
+			# skip items without a path (inline text)
+			next unless exists $item->{'local_path'};
 			# create the md5 sum for this item (only do this once for each path)
 			# $item->{'md5sum'} = md5sum($item->{'data'}) unless ($item->{'md5sum'});
 			# create a relative path from the current checksum file
