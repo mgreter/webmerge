@@ -62,7 +62,7 @@ push @initers, sub
 
 	# return additional get options attribute
 	return (
-		'port=i' => \ $config->{'cmd_port'},
+		'webport=i' => \ $config->{'cmd_webport'},
 		'webserver!' => \$config->{'cmd_webserver'}
 	);
 

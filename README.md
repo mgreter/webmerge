@@ -169,8 +169,8 @@ Command Line Options
     -j, --jobs             number of jobs (commands) to run simultaneously
 
     -w, --watchdog         start the watchdog process (quit with ctrl+c)
-    -webserver             start the webserver process (quit with ctrl+c)
-    -webport               port number for the webserver (default 8000)
+    --webserver            start the webserver process (quit with ctrl+c)
+    --webport              port number for the webserver (default 8000)
 
     --webroot              webroot directory to render absolute urls
     --absoluteurls         export urls as absolute urls (from webroot)

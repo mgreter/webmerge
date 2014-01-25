@@ -469,7 +469,10 @@ my $config = $server->{'config'};
 				print $r->method, " ", $wwwpath, "\n";
 				if (-d $file && not $r->uri->path =~ m/\/$/)
 				{
-					$sock->send_redirect("http://localhost:8080".$r->uri->path.'/');
+					my $url = "http://localhost";
+					if ($config->{'webport'} ne 80)
+					{ $url = ':' . $config->{'webport'}; }
+					$sock->send_redirect($url . $r->uri->path.'/');
 
 				}
 				elsif (-d $file && -e join('/', $file, 'index.html'))

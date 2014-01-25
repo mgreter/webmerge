@@ -48,7 +48,7 @@ sub new
 
 	bless $self, $pkg;
 
-	my $listener = RTP::Webmerge::Webserver::Listener->new($self);
+	my $listener = RTP::Webmerge::Webserver::Listener->new($self, $config);
 
 	$self->addHandle($listener);
 

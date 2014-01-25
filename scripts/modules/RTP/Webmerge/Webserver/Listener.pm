@@ -36,9 +36,11 @@ use RTP::Webmerge::Path;
 sub new
 {
 
-	my ($pkg, $server, @args) = @_;
+	my ($pkg, $server, $config, @args) = @_;
 
-	my $port = 8080;
+	unless ($config->{'webport'})
+	{ $config->{'webport'} = 8000; }
+	my $port = $config->{'webport'};
 
 	print "listening on port ", $port, "\n";
 
