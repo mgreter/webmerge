@@ -471,7 +471,7 @@ my $config = $server->{'config'};
 				{
 					my $url = "http://localhost";
 					if ($config->{'webport'} ne 80)
-					{ $url = ':' . $config->{'webport'}; }
+					{ $url .= ':' . $config->{'webport'}; }
 					$sock->send_redirect($url . $r->uri->path.'/');
 
 				}
