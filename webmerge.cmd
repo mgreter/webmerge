@@ -30,6 +30,7 @@ For %%F IN ("%EXEC%") do (
 SET GMPATH=%FOLDER%\..\gm
 SET IMPATH=%FOLDER%\..\im
 SET PERLPATH=%FOLDER%\..\perl
+SET RUBYPATH=%FOLDER%\..\ruby
 SET UTILSPATH=%FOLDER%\..\utils
 
 :installLocals
@@ -63,6 +64,13 @@ SET PATH=%PERLPATH%\perl\bin;%PATH%
 SET PATH=%PERLPATH%\c\bin;%PATH%
 
 :noLocalPerl
+
+IF NOT EXIST "%RUBYPATH%" GOTO noLocalRuby
+
+REM add local ruby to global path
+SET PATH=%RUBYPATH%\bin;%PATH%
+
+:noLocalRuby
 
 perl "%FOLDER%\scripts\webmerge.pl" %*
 

@@ -137,8 +137,11 @@ You can also use the x32 utils on x64 systems.
 - http://webmerge.ocbnet.ch/portable/webmerge-gm-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-perl-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-utils-x32.exe
-- http://webmerge.ocbnet.ch/portable/webmerge-perl-x64.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-ruby-sass-x32.exe
 - http://webmerge.ocbnet.ch/portable/webmerge-gm-x64.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-perl-x64.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-utils-x32.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-ruby-sass-x64.exe
 
 Download the appropriate versions (either x32 or x64) and
 extract the archives beside the main webmerge directory.
