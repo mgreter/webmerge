@@ -177,12 +177,17 @@ push @initers, sub
 	# get input variables
 	my ($config) = @_;
 
+	# should we use absolute urls
+	# otherwise includes will be relative
+	# for this option we need the webroot
+	$config->{'absoluteurls'} = 0;
+
 	# embed imported files and partials
 	# partials are not wrapped inside urls
 	$config->{'embed-css-imports'} = 1;
 	$config->{'embed-css-partials'} = 1;
-	$config->{'embed-scss-imports'} = 0;
-	$config->{'embed-scss-partials'} = 0;
+	$config->{'embed-scss-imports'} = 1;
+	$config->{'embed-scss-partials'} = 1;
 
 	# rebase urls within file types
 	# once this feature is disabled, it shall
@@ -190,36 +195,15 @@ push @initers, sub
 	$config->{'rebase-urls-in-css'} = 1;
 	$config->{'rebase-urls-in-scss'} = 0;
 
-	# $config->{'rebase-css-imports'} = 1;
-	# $config->{'rebase-css-partials'} = 1;
-	# $config->{'rebase-scss-imports'} = 0;
-	# $config->{'rebase-scss-partials'} = 0;
-
-	# $config->{'rebase-urls-in-css-imports'} = 1;
-	# $config->{'rebase-urls-in-css-partials'} = 1;
-	# $config->{'rebase-urls-in-scss-imports'} = 0;
-	# $config->{'rebase-urls-in-scss-partials'} = 0;
-
-	# $config->{'rewrite-urls-in-css-imports'} = 1;
-	# $config->{'rewrite-urls-in-css-partials'} = 1;
-	# $config->{'rewrite-urls-in-scss-imports'} = 0;
-	# $config->{'rewrite-urls-in-scss-partials'} = 0;
-
-	# rebase remaining import urls
-	# only matter if import is disabled
-
-	# should we use absolute urls
-	# otherwise includes will be relative
-	# for this option we need to webroot path
-	$config->{'absoluteurls'} = 0;
-
 	# return additional get options attribute
 	return (
-		'import-css!' => \ $config->{'cmd_import-css'},
-		'import-scss!' => \ $config->{'cmd_import-scss'},
+		'absoluteurls!' => \ $config->{'cmd_absoluteurls'},
+		'embed-css-imports!' => \ $config->{'cmd_embed-css-imports'},
+		'embed-css-partials!' => \ $config->{'cmd_embed-css-partials'},
+		'embed-scss-imports!' => \ $config->{'cmd_embed-scss-imports'},
+		'embed-scss-partials!' => \ $config->{'cmd_embed-scss-partials'},
 		'rebase-urls-in-css!' => \ $config->{'cmd_rebase-urls-in-css'},
-		'rebase-urls-in-scss!' => \ $config->{'cmd_rebase-urls-in-scss'},
-		'absoluteurls!' => \ $config->{'cmd_absoluteurls'}
+		'rebase-urls-in-scss!' => \ $config->{'cmd_rebase-urls-in-scss'}
 	);
 
 };

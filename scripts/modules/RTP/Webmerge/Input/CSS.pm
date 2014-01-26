@@ -269,7 +269,7 @@ sub render
 		my ($name, $path, $suffix) = fileparse($import, 'scss', 'css');
 
 		# create template to check for specific option according to import type
-		my $cfg = sprintf '%%s-%s-%s', $self->{'suffix'}, $partial ? 'partials' : 'imports';
+		my $cfg = sprintf '%%s-%s-%s', $suffix, $partial ? 'partials' : 'imports';
 
 		# check if we should embed this import
 		if ($config->{ sprintf $cfg, 'embed' })
