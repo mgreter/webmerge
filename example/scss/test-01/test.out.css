@@ -4,10 +4,17 @@
 
 /* has to be compiled from parent directory */
 /* otherwise ruby sass would not find the file */
+IMG {
+  background: url('../src/assets/play-active.png'); }
 
-IMG { background: url('../src/assets/play-active.png'); }
-IMG { background: url('../src/assets/play-active.png'); }
+IMG {
+  background: url('../src/assets/play-active.png'); }
 
-@import "test-01/partial/test.scss";
+/* partial include ok */
+IMG {
+  background: url('../src/assets/play-active.png'); }
 
-/* crc: 392C73AF852EA8280DC32392F0F548AD */
+IMG {
+  background: url('../src/assets/play-active.png'); }
+
+/* crc: 3C19C91B1CA32B9741B3699086053126 */
