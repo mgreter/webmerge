@@ -20,6 +20,7 @@ To Do
 - Write documentation
 - Add clean and test targets
 - Prepare code for v1.0.0 release
+- Handle source maps for css and js
 - Implement @license header handling
 - Test more edge cases (specially css parser)
 - Invoke processors according to file extensions
