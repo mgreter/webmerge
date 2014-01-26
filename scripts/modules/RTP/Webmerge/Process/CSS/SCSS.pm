@@ -86,14 +86,13 @@ sub scss
 		    "cwd: ", $directory, "\n";
 	}
 
-	# add an indicator about the processor
-	${$data} = "/* libsass ($directory) */\n\n" . ${$data};
-
 	# change all uris to absolute paths (relative to local directory)
 	# also changes urls in comments (needed for the spriteset feature)
 	# this way, new urls inserted by sass processor will also be imported
 	${$data} =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
 
+	# add an indicator about the processor
+	${$data} = "/* libsass root: url($directory) */\n\n" . ${$data};
 
 	# return success
 	return 1;

@@ -89,13 +89,13 @@ sub sass
 	# test if ipc run3 returned success
 	die "could not run sass compiler, aborting", "\n" if $rv != 1;
 
-	# add an indicator about the processor (put compiled code)
-	${$data} = "/* ruby sass ($directory) */\n\n" . $compiled;
-
 	# change all uris to absolute paths (relative to local directory)
 	# also changes urls in comments (needed for the spriteset feature)
 	# this way, new urls inserted by sass processor will also be imported
-	${$data} =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
+	$compiled =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
+
+	# add an indicator about the processor (put compiled code)
+	${$data} = "/* ruby sass root: url($directory) */\n\n" . $compiled;
 
 	# return compiled
 	return 1;
