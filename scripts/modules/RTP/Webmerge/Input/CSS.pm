@@ -63,7 +63,7 @@ our $re_import = qr/
 
 # match a multiline comment
 #**************************************************************************************************
-our $re_comment = qr/\/\*[^\*]*\*+([^\/\*][^\*]*\*+)*\//s;
+our $re_comment = qr/\/\*[^\*]*\*+(?:[^\/\*][^\*]*\*+)*\//s;
 
 ###################################################################################################
 
@@ -175,14 +175,17 @@ sub dependencies
 	}
 
 	# process each import statement in data
-	while(${$data} =~ m/(\@import\s+$re_import)/g)
+	while(${$data} =~ m/(?<!\/\/|\/\*)(\s*)(\@import\s+$re_import)/g)
 	{
 
 		# get from the various styles
 		# either wrapped in url or string
-		my $partial = $defined->($5, $6);
-		my $wrapped = $defined->($2, $3, $4);
+		my $partial = $defined->($6, $7);
+		my $wrapped = $defined->($3, $4, $5);
 		my $import = $partial || $wrapped;
+
+		# store additional space attached
+		my $prefix = $1; my $postfix = $8;
 
 		# resolve import filename
 		# try to load scss partials
@@ -250,16 +253,19 @@ sub render
 	{
 
 		# store full match
-		my $matched = $1;
+		my $matched = $2;
 
 		# create tmpl with whitespace
-		my $tmpl = '@import %s' . $7;
+		my $tmpl = '@import %s';
 
 		# get from the various styles
 		# either wrapped in url or string
-		my $partial = $defined->($5, $6);
-		my $wrapped = $defined->($2, $3, $4);
+		my $partial = $defined->($6, $7);
+		my $wrapped = $defined->($3, $4, $5);
 		my $import = $partial || $wrapped;
+
+		# store additional space attached
+		my $prefix = $1; my $postfix = $8;
 
 		# resolve import filename
 		# try to load scss partials
@@ -280,7 +286,7 @@ sub render
 			my $css = RTP::Webmerge::Input::CSS->new($import, $config);
 
 			# render scss relative to old base
-			return ${ $css->render($expbase) };
+			return $prefix . ${ $css->render($expbase) };
 
 		}
 		# otherwise preserve import statement
@@ -289,8 +295,8 @@ sub render
 
 			my $export = exportURI($import, $expbase);
 			# wrap the same type as before (add options to rewrite)
-			if ($partial) { return sprintf $tmpl, '"' . $export . '"' }
-			elsif ($wrapped) { return sprintf $tmpl, wrapURL($export) }
+			if ($partial) { return $prefix . sprintf($tmpl, '"' . $export . '"') }
+			elsif ($wrapped) { return $prefix . sprintf($tmpl, wrapURL($export)) }
 
 		}
 
@@ -303,7 +309,10 @@ sub render
 	$data =~ s/$re_url/wrapURL(importURI($+{url}, $directory))/egm;
 
 	# process each import statement in data
-	$data =~ s/(\@import\s+$re_import)/$importer->()/gmex;
+	# added simple protection for imports in comments
+	# this will not always work and needs to be replaced
+	$data =~ s/(?<!\/\/|\/\*)(\s*)(\@import\s+$re_import)/$importer->()/gmex;
+	# process each import statement in data
 
 	# export all absolute paths to relative urls again
 	# make them relative to export base (pass to all imports)
