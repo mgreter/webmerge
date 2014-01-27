@@ -187,30 +187,12 @@ sub child ($$$$$)
 				# check if merge is disabled by config
 				next unless ($config->{'merge'});
 
-				# print delimiter line
-				print '=' x 78, "\n";
-						# print info about the block to be processed
-				print sprintf "processing block %s (%s)\n",
-				      $merge->{'id'} || '', $merge->{'type'};
-				# print delimiter line
-				print '-' x 78, "\n";
+				# call the current step in eval mode
+				# do not abort process if something goes wrong
+				eval { main::merge($config, $merge, $type); };
 
-				# process each block step
-				foreach my $step ('prepare', 'merge', 'finish')
-				{
-
-					# call the current step in eval mode
-					# do not abort process if something goes wrong
-					eval { main::process($config, $merge, $step); };
-
-					# check if eval had an error
-					print $@ if $@; $beeps ++ if $@;
-
-					# abort block?
-					last if $@;
-
-				}
-				# EO each block step
+				# check if eval had an error
+				print $@ if $@; $beeps ++ if $@;
 
 			}
 			# EO if can dequeue

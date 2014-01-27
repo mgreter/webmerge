@@ -569,6 +569,42 @@ foreach my $type (keys %merger)
 # process an xml block
 ################################################################################
 
+# merge a single block (css or js)
+# run the local prepare and finish parts
+sub merge
+{
+
+	my ($config, $block, $type) = @_;
+
+	# create lexical config scope
+	my $scoped = $config->scope($block);
+
+	# print some debug information for merger
+	if ($config->{'debug'} && $merger{$type})
+	{
+		# print delimiter line
+		print '=' x 78, "\n";
+		# print info about the block to be processed
+		print sprintf "processing block %s (%s)\n",
+		      $block->{'id'} || '', $type;
+		# print delimiter line
+		print '-' x 78, "\n";
+	}
+
+	# call the prepare step first
+	if ($block->{'prepare'} && ref($block->{'prepare'}) eq "ARRAY")
+	{ &{$actions{'prepare'}}($config, $_) foreach @{$block->{'prepare'}}; };
+
+	# pass execution over to action handler
+	&{$actions{$type}}($config, $block);
+
+	# call the finish step last
+	if ($block->{'finish'} && ref($block->{'finish'}) eq "ARRAY")
+	{ &{$actions{'finish'}}($config, $_) foreach @{$block->{'finish'}}; };
+
+}
+# EO merge
+
 # call initial process
 # recursive on chdir blocks
 sub process
@@ -606,34 +642,7 @@ sub process
 			{
 				# process each given block
 				foreach my $block ( @{$xml->{$action}} )
-				{
-					# create lexical config scope
-					my $scoped = $config->scope($block);
-
-					# print some debug information for merger
-					if ($config->{'debug'} && $merger{$action})
-					{
-						# print delimiter line
-						print '=' x 78, "\n";
-						# print info about the block to be processed
-						print sprintf "processing block %s (%s)\n",
-						      $block->{'id'} || '', $action;
-						# print delimiter line
-						print '-' x 78, "\n";
-					}
-
-					# call the prepare step first
-					if ($block->{'prepare'} && ref($block->{'prepare'}) eq "ARRAY")
-					{ &{$actions{'prepare'}}($config, $_) foreach @{$block->{'prepare'}}; };
-
-					# pass execution over to action handler
-					&{$actions{$action}}($config, $block);
-
-					# call the finish step last
-					if ($block->{'finish'} && ref($block->{'finish'}) eq "ARRAY")
-					{ &{$actions{'finish'}}($config, $_) foreach @{$block->{'finish'}}; };
-
-				}
+				{ merge($config, $block, $action); }
 				# EO each block
 			}
 			# EO if merge enabled
