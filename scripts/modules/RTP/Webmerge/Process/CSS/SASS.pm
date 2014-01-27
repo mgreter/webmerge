@@ -69,6 +69,11 @@ sub sass
 		(?![\"\'])\s*(?!data:)(?<url>[^\)]*)
 	)\s*\)/xi;
 
+	# force unix linefeeds
+	${$data}=~s/\r\n/\n/g;
+	# had issues with doubled lfs
+	$command .= ' --unix-newlines';
+
 	# make all absolute local paths relative to current directory
 	# also changes urls in comments (needed for the spriteset feature)
 	${$data} =~ s/$re_url/wrapURL(exportURI($+{url}, $directory))/egm;
