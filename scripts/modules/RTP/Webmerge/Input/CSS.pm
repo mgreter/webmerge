@@ -256,7 +256,7 @@ sub render
 		my $matched = $2;
 
 		# create tmpl with whitespace
-		my $tmpl = '@import %s';
+		my $tmpl = '@import %s' . $8;
 
 		# get from the various styles
 		# either wrapped in url or string
@@ -286,7 +286,7 @@ sub render
 			my $css = RTP::Webmerge::Input::CSS->new($import, $config);
 
 			# render scss relative to old base
-			return $prefix . ${ $css->render($expbase) };
+			return "\n" . ${ $css->render($expbase) } . "\n";
 
 		}
 		# otherwise preserve import statement
@@ -308,18 +308,56 @@ sub render
 	# current directory is changed when rebase options is set
 	$data =~ s/$re_url/wrapURL(importURI($+{url}, $directory))/egm;
 
-	# process each import statement in data
-	# added simple protection for imports in comments
-	# this will not always work and needs to be replaced
-	$data =~ s/(?<!\/\/|\/\*)(\s*)(\@import\s+$re_import)/$importer->()/gmex;
-	# process each import statement in data
+	# resolve imports
+	my $import = '';
+
+	# called on actual css code
+	# not called for any comment
+	my $parser = sub
+	{
+		# create a copy to work on
+		my $text = $2;
+		# process each import statement in data
+		# added simple protection for imports in comments
+		# this will not always work and needs to be replaced
+		$text =~ s/()(\@import\s+$re_import)/$importer->()/gemx;
+		# return text
+		return $text;
+	};
+	# EO $parser
+
+	# process data to find imports
+	while($data ne '' && $data =~
+		s/(?:
+			((?:
+				# match different comments
+				# obey sass comments on imports
+				$re_comment|\/\/[^\n]+|\/
+			)+)
+			|
+			((?:
+				# match any other css code
+				# only try to import from these
+				[^\"\'\/]+|\"$re_quot\"|\'$re_apo\'
+			)+)
+		)/;
+		# comment or whitespace
+		if (defined $1) { $import .= $1; }
+		# actual code or partial text
+		if (defined $2) { $import .= $parser->(); }
+		# reset parsed part
+		'';
+	/emx) {}
+
+	# give an error message (this should never happen)
+	die "CSS Import parse error\n", substr($data, 0, 60) if $data ne '';
 
 	# export all absolute paths to relative urls again
 	# make them relative to export base (pass to all imports)
-	$data =~ s/$re_url/wrapURL(exportURI($+{url}, $expbase))/egm;
+	$import =~ s/$re_url/wrapURL(exportURI($+{url}, $expbase))/egm;
 
 	# reference data
-	return \ $data;
+	return \ $import;
 
 }
 # EO sub render
