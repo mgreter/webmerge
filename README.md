@@ -7,7 +7,7 @@ Features
 - Merge, join and optimize SCSS, CSS and JavaScript files
 - Compiles scss/sass either via libsass or ruby sass (external)
 - Optimize images etc. with external tools (in parallel jobs)
-- Create spritesets by simply annotating your css stylesheets
+- Sprite set generator (by simply annotating your css stylesheets)
 - Can handle sprites optimized for high resolution displays (retina)
 - Includes with a small webserver to test drive your prototypes (alpha)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
@@ -27,7 +27,7 @@ To Do
 
 More ideas
 ==========
-- Allow to merge multiple spritesets
+- Allow to merge multiple sprite sets
 - Means we'll have to re-use same src
 - Add CoffeeScript and LESS processor
 - Maybe add support for ImageMagick too
