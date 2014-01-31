@@ -6,11 +6,11 @@ echo Installing webmerge 64-bit portable
 IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO 32BIT)
 
 :64BIT
-SET installdir=%PROGRAMFILES(X86)%
+SET installdir=%PROGRAMFILES%
 GOTO GotOS
 
 :32BIT
-echo "Cannot install 64bit version on 32bit"
+echo "Cannot install 64bit software on 32bit system"
 GOTO ABORT
 
 :GotOS
@@ -93,5 +93,3 @@ GOTO END
 pause
 
 :END
-
-pause
