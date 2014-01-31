@@ -139,14 +139,10 @@ sub run
 		# printf "out wbit %0*v8b\n", " ", $wbit;
 		# printf "out ebit %0*v8b\n", " ", $ebit;
 
-		# collect actions
-		foreach my $fd (@{$fds})
-		{
-			# collect all handles with action bit set
-			$fd->[1]->canRead if vec($rbit, $fd->[0], 1);
-			$fd->[1]->canWrite if vec($wbit, $fd->[0], 1);
-			$fd->[1]->hasError if vec($ebit, $fd->[0], 1);
-		}
+		# dispatch events to interested handlers
+		foreach (@{$fds}) { $_->[1]->canRead if vec($rbit, $_->[0], 1) }
+		foreach (@{$fds}) { $_->[1]->canWrite if vec($wbit, $_->[0], 1) }
+		foreach (@{$fds}) { $_->[1]->hasError if vec($ebit, $_->[0], 1) }
 
 	}
 
