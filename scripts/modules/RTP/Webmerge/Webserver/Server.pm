@@ -142,26 +142,6 @@ sub run
 		# collect actions
 		foreach my $fd (@{$fds})
 		{
-				last;
-
-			if (ref($fd->[1]) eq "RTP::Webmerge::Webserver::Client")
-			{
-				use Socket;
-				my $hersockaddr = getpeername($fd->[1]);
-				my ($port, $iaddr) = sockaddr_in($hersockaddr);
-
-				print $fd->[0], " : client -> ", $fd->[1]->client->{'state'}, " -- \@ ", $port, "\n";
-
-			}
-			else
-			{
-				print $fd->[0], " : ", ref($fd->[1]), "\n";
-			}
-		}
-
-		# collect actions
-		foreach my $fd (@{$fds})
-		{
 			# collect all handles with action bit set
 			$fd->[1]->canRead if vec($rbit, $fd->[0], 1);
 			$fd->[1]->canWrite if vec($wbit, $fd->[0], 1);

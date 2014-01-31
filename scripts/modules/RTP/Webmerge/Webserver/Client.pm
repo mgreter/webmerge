@@ -697,7 +697,7 @@ my $fh = RTP::Webmerge::Webserver::File->new($client, $server, $self);
 	    $self->print("Content-Type: $ct$CRLF");
 	    # $self->print("Connection: Close$CRLF");
 	    $self->print("Content-Encoding: $ce$CRLF") if $ce;
-	    $self->print("Content-Length: $size$CRLF") if $size;
+	    $self->print("Content-Length: $size$CRLF") if defined $size;
 	    $self->print("Last-Modified: ", time2str($mtime), "$CRLF") if $mtime;
 	    $self->print($CRLF);
 	}
