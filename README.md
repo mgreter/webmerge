@@ -36,6 +36,16 @@ More ideas
 - Put more usefull information to the console
 - i.e. files imported, files created, time needed ...
 
+Installer for windows (alpha)
+=======================================
+
+Should download all dependencies and install it locally
+for Webmerge. Webmerge will be added to the global path.
+This is still experimental and may not work as advertised!
+
+- http://webmerge.ocbnet.ch/portable/webmerge-installer-x32.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-installer-x64.exe
+
 Installing on Windows
 =====================
 You need to install Strawberry Perl and GraphicsMagick:
