@@ -254,3 +254,9 @@ Credits
 =======
 Initial developement was done while working at http://www.rtp.ch.
 Thanks a lot to them for allowing me to publish this utility!
+
+Similar Tools (to some extent)
+==============================
+
+- https://github.com/gruntjs/grunt
+- https://github.com/chriseppstein/compass
