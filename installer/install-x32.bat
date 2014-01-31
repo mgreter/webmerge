@@ -2,6 +2,22 @@
 
 echo Installing webmerge 32-bit portable
 
+:CheckOS
+IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO 32BIT)
+
+:64BIT
+SET installdir=%PROGRAMFILES(X86)%
+GOTO GotOS
+
+:32BIT
+SET installdir=%PROGRAMFILES%
+GOTO GotOS
+
+:GotOS
+
+net session >nul 2>&1
+if %errorLevel% == 0 GOTO gotAdmin
+
 :: BatchGotAdmin
 :-------------------------------------
 REM  --> Check for permissions
@@ -27,6 +43,11 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
+echo Installing into "%installdir%"
+
+pushd "%CD%"
+CD /D "%~dp0"
+
 if not exist files\32 mkdir files\32
 
 cd files\32
@@ -38,37 +59,37 @@ cd files\32
 ..\utils\wget --no-check-certificate -c https://github.com/mgreter/webmerge/archive/master.zip -O master.zip
 ..\utils\wget "http://dl.google.com/closure-compiler/compiler-latest.zip"
 
-cd ..\..
+if not exist "%installdir%\webmerge" mkdir "%installdir%\webmerge"
 
-if not exist 32 mkdir 32
+cd "%installdir%\webmerge"
 
-cd 32
-
-..\files\32\webmerge-gm-x32.exe -y
-..\files\32\webmerge-perl-x32.exe -y
-..\files\32\webmerge-utils-x32.exe -y
-..\files\32\webmerge-ruby-sass-x32.exe -y
+"%~dp0\files\32\webmerge-gm-x32.exe" -y
+"%~dp0\files\32\webmerge-perl-x32.exe" -y
+"%~dp0\files\32\webmerge-utils-x32.exe" -y
+"%~dp0\files\32\webmerge-ruby-sass-x32.exe" -y
 
 if exist webmerge rmdir webmerge /s /q
-..\files\utils\unzip -o ..\files\32\master.zip
+"%~dp0\files\utils\unzip" -o "%~dp0\files\32\master.zip"
 rename webmerge-master webmerge
 
-..\files\utils\unzip -o "..\files\32\compiler-latest.zip" -d webmerge\scripts\google\closure
-
-cd ..
+"%~dp0\files\utils\unzip" -o "%~dp0\files\32\compiler-latest.zip" -d webmerge\scripts\google\closure
 
 echo Remove old global paths (ignore warnings)
 
-files\utils\pathed -r "%CD%\32\webmerge"
-files\utils\pathed -r "%CD%\64\webmerge"
+"%~dp0\files\utils\pathed" -r "%PROGRAMFILES%\webmerge\webmerge"
+"%~dp0\files\utils\pathed" -r "%PROGRAMFILES(X86)%\webmerge\webmerge"
 
-echo Add global path "%CD%\32\webmerge"
+echo Add global path "%installdir%\webmerge"
 
-files\utils\pathed -a "%CD%\32\webmerge"
-
-REM cscript files\vbs\DelFromSystemPath.vbs //Nologo "%CD%\32\webmerge"
-REM cscript files\vbs\DelFromSystemPath.vbs //Nologo "%CD%\64\webmerge"
-
-REM cscript files\vbs\AddToSystemPath.vbs //Nologo "%CD%\32\webmerge"
+"%~dp0\files\utils\pathed" -a "%installdir%\webmerge\webmerge"
 
 echo Finished installing webmerge 32-bit portable
+echo Installed at "%installdir%"
+
+GOTO END
+
+:ABORT
+
+pause
+
+:END
