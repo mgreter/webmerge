@@ -6,8 +6,8 @@ echo Uninstalling webmerge 64-bit portable
 IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO 32BIT)
 
 :64BIT
-IF EXIST "%PROGRAMFILES%" SET installdir=%PROGRAMFILES%
-IF EXIST "%ProgramW6432%" SET installdir=%ProgramW6432%
+IF EXIST "%PROGRAMFILES%" SET installdir=%PROGRAMFILES%\ocbnet
+IF EXIST "%ProgramW6432%" SET installdir=%ProgramW6432%\ocbnet
 GOTO GotOS
 
 :32BIT
@@ -54,17 +54,17 @@ echo Remove old global paths (ignore warnings)
 "%installdir%\installer\files\utils\pathed" -r "%PROGRAMFILES%\webmerge\webmerge"
 "%installdir%\installer\files\utils\pathed" -r "%PROGRAMFILES(X86)%\webmerge\webmerge"
 
-echo Remove Webmerge from "%installdir%\ocbnet"
+echo Remove Webmerge from "%installdir%"
 
-if exist "%installdir%\ocbnet\webmerge" rmdir "%installdir%\ocbnet\webmerge" /s /q
-if exist "%installdir%\ocbnet\utils" rmdir "%installdir%\ocbnet\utils" /s /q
-if exist "%installdir%\ocbnet\ruby" rmdir "%installdir%\ocbnet\ruby" /s /q
-if exist "%installdir%\ocbnet\perl" rmdir "%installdir%\ocbnet\perl" /s /q
-if exist "%installdir%\ocbnet\gm" rmdir "%installdir%\ocbnet\gm" /s /q
+if exist "%installdir%\webmerge" rmdir "%installdir%\webmerge" /s /q
+if exist "%installdir%\utils" rmdir "%installdir%\utils" /s /q
+if exist "%installdir%\ruby" rmdir "%installdir%\ruby" /s /q
+if exist "%installdir%\perl" rmdir "%installdir%\perl" /s /q
+if exist "%installdir%\gm" rmdir "%installdir%\gm" /s /q
 
-if exist "%installdir%\ocbnet\uninstall-webmerge.bat" del /Q "%installdir%\ocbnet\uninstall-webmerge.bat"
+if exist "%installdir%\uninstall-webmerge.bat" del /Q "%installdir%\uninstall-webmerge.bat"
 
-if exist "%installdir%\ocbnet" rmdir "%installdir%\ocbnet" /q
+if exist "%installdir%" rmdir "%installdir%" /q
 
 GOTO END
 

@@ -6,11 +6,11 @@ echo Installing webmerge 32-bit portable
 IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO 32BIT)
 
 :64BIT
-SET installdir=%PROGRAMFILES(X86)%
+SET installdir=%PROGRAMFILES(X86)%\ocbnet
 GOTO GotOS
 
 :32BIT
-SET installdir=%PROGRAMFILES%
+SET installdir=%PROGRAMFILES%\ocbnet
 GOTO GotOS
 
 :GotOS
@@ -59,9 +59,9 @@ cd files\32
 ..\utils\wget --no-check-certificate -c https://github.com/mgreter/webmerge/archive/master.zip -O master.zip
 ..\utils\wget "http://dl.google.com/closure-compiler/compiler-latest.zip"
 
-if not exist "%installdir%\ocbnet" mkdir "%installdir%\ocbnet"
+if not exist "%installdir%" mkdir "%installdir%"
 
-cd "%installdir%\ocbnet"
+cd "%installdir%"
 
 "%~dp0\files\32\webmerge-gm-x32.exe" -y
 "%~dp0\files\32\webmerge-perl-x32.exe" -y
@@ -74,18 +74,24 @@ rename webmerge-master webmerge
 
 "%~dp0\files\utils\unzip" -o "%~dp0\files\32\compiler-latest.zip" -d webmerge\scripts\google\closure
 
+echo Updating file permissions
+
+cacls "%installdir%\webmerge\conf" /t /e /g Everyone:f
+cacls "%installdir%\webmerge\example" /t /e /g Everyone:f
+
 echo Remove old global paths (ignore warnings)
 
+"%~dp0\files\utils\pathed" -r "%installdir%\webmerge"
 "%~dp0\files\utils\pathed" -r "%PROGRAMFILES%\ocbnet\webmerge"
 "%~dp0\files\utils\pathed" -r "%PROGRAMFILES(X86)%\ocbnet\webmerge"
 
-echo Add global path "%installdir%\ocbnet\webmerge"
+echo Add global path "%installdir%\webmerge"
 
-"%~dp0\files\utils\pathed" -a "%installdir%\ocbnet\webmerge"
+"%~dp0\files\utils\pathed" -a "%installdir%\webmerge"
 
-echo Copy uninstall file into "%installdir%\ocbnet"
+echo Copy uninstall file into "%installdir%"
 
-copy /Y "%~dp0\uninstall-x32.bat" "%installdir%\ocbnet\uninstall-webmerge.bat"
+copy /Y "%~dp0\uninstall-x32.bat" "%installdir%\uninstall-webmerge.bat"
 
 echo Finished installing webmerge 32-bit portable
 echo Installed at "%installdir%"
