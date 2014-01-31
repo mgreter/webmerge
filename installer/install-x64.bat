@@ -6,7 +6,8 @@ echo Installing webmerge 64-bit portable
 IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO 32BIT)
 
 :64BIT
-SET installdir=%PROGRAMFILES%
+IF EXIST "%PROGRAMFILES%" SET installdir=%PROGRAMFILES%
+IF EXIST "%ProgramW6432%" SET installdir=%ProgramW6432%
 GOTO GotOS
 
 :32BIT
@@ -59,9 +60,9 @@ cd files\64
 ..\utils\wget --no-check-certificate -c https://github.com/mgreter/webmerge/archive/master.zip -O master.zip
 ..\utils\wget "http://dl.google.com/closure-compiler/compiler-latest.zip"
 
-if not exist "%installdir%\webmerge" mkdir "%installdir%\webmerge"
+if not exist "%installdir%\ocbnet" mkdir "%installdir%\ocbnet"
 
-cd "%installdir%\webmerge"
+cd "%installdir%\ocbnet"
 
 "%~dp0\files\64\webmerge-gm-x64.exe" -y
 "%~dp0\files\64\webmerge-perl-x64.exe" -y
@@ -76,12 +77,16 @@ rename webmerge-master webmerge
 
 echo Remove old global paths (ignore warnings)
 
-"%~dp0\files\utils\pathed" -r "%PROGRAMFILES%\webmerge\webmerge"
-"%~dp0\files\utils\pathed" -r "%PROGRAMFILES(X86)%\webmerge\webmerge"
+"%~dp0\files\utils\pathed" -r "%PROGRAMFILES%\ocbnet\webmerge"
+"%~dp0\files\utils\pathed" -r "%PROGRAMFILES(X86)%\ocbnet\webmerge"
 
-echo Add global path "%installdir%\webmerge"
+echo Add global path "%installdir%\ocbnet\webmerge"
 
-"%~dp0\files\utils\pathed" -a "%installdir%\webmerge\webmerge"
+"%~dp0\files\utils\pathed" -a "%installdir%\ocbnet\webmerge"
+
+echo Copy uninstall file into "%installdir%\ocbnet"
+
+copy /Y "%~dp0\uninstall-x64.bat" "%installdir%\ocbnet\uninstall-webmerge.bat"
 
 echo Finished installing webmerge 64-bit portable
 echo Installed at "%installdir%"

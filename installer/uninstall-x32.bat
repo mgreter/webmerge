@@ -53,9 +53,17 @@ echo Remove old global paths (ignore warnings)
 "%installdir%\installer\files\utils\pathed" -r "%PROGRAMFILES%\webmerge\webmerge"
 "%installdir%\installer\files\utils\pathed" -r "%PROGRAMFILES(X86)%\webmerge\webmerge"
 
-echo Remove "%installdir%\webmerge"
+echo Remove Webmerge from "%installdir%\ocbnet"
 
-if exist "%installdir%\webmerge" rmdir "%installdir%\webmerge" /s /q
+if exist "%installdir%\ocbnet\webmerge" rmdir "%installdir%\ocbnet\webmerge" /s /q
+if exist "%installdir%\ocbnet\utils" rmdir "%installdir%\ocbnet\utils" /s /q
+if exist "%installdir%\ocbnet\ruby" rmdir "%installdir%\ocbnet\ruby" /s /q
+if exist "%installdir%\ocbnet\perl" rmdir "%installdir%\ocbnet\perl" /s /q
+if exist "%installdir%\ocbnet\gm" rmdir "%installdir%\ocbnet\gm" /s /q
+
+if exist "%installdir%\ocbnet\uninstall-webmerge.bat" del /Q "%installdir%\ocbnet\uninstall-webmerge.bat"
+
+if exist "%installdir%\ocbnet" rmdir "%installdir%\ocbnet" /q
 
 GOTO END
 
