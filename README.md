@@ -7,7 +7,7 @@ Features
 - Merge, join and optimize SCSS, CSS and JavaScript files
 - Compiles scss/sass either via libsass or ruby sass (external)
 - Optimize images etc. with external tools (in parallel jobs)
-- Create spritesets by simply annotating your css stylesheets
+- Sprite set generator (by simply annotating your css stylesheets)
 - Can handle sprites optimized for high resolution displays (retina)
 - Includes with a small webserver to test drive your prototypes (alpha)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
@@ -27,7 +27,7 @@ To Do
 
 More ideas
 ==========
-- Allow to merge multiple spritesets
+- Allow to merge multiple sprite sets
 - Means we'll have to re-use same src
 - Add CoffeeScript and LESS processor
 - Maybe add support for ImageMagick too
@@ -35,6 +35,16 @@ More ideas
 - Implement parallel workers for unrelated blocks
 - Put more usefull information to the console
 - i.e. files imported, files created, time needed ...
+
+Installer for windows (alpha)
+=======================================
+
+Should download all dependencies and install it locally
+for Webmerge. Webmerge will be added to the global path.
+This is still experimental and may not work as advertised!
+
+- http://webmerge.ocbnet.ch/portable/webmerge-installer-x32.exe
+- http://webmerge.ocbnet.ch/portable/webmerge-installer-x64.exe
 
 Installing on Windows
 =====================
@@ -244,3 +254,9 @@ Credits
 =======
 Initial developement was done while working at http://www.rtp.ch.
 Thanks a lot to them for allowing me to publish this utility!
+
+Similar Tools (to some extent)
+==============================
+
+- https://github.com/gruntjs/grunt
+- https://github.com/chriseppstein/compass

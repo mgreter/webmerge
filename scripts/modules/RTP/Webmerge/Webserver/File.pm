@@ -60,13 +60,12 @@ sub canRead
 
 	unless ($rv)
 	{
-		# print "!!!!!! file read closed\n";
 		${*$conn}{'io_stream'} = undef;
 		$fh->close;
 		return 1;
 	}
 
-	die "file read closed" unless $rv;
+	die "file read aborted" unless $rv;
 
 }
 
