@@ -76,7 +76,7 @@ sub includeJS
 {
 
 	# get passed variables
-	my ($block) = @_;
+	my ($block, $config) = @_;
 
 	# magick map variable
 	my $input = $_;
@@ -120,7 +120,7 @@ sub includeJS
 			my ($path, $block) = @{$include};
 
 			# get a unique path with added fingerprint (query or directory)
-			$path = fingerprint($block, 'dev', $path);
+			$path = fingerprint($config, 'dev', $path);
 
 			# return the script include string
 			$data .= sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
@@ -131,15 +131,22 @@ sub includeJS
 		return $data;
 
 	}
-	# simple input
-	else
+	# simple input file
+	elsif ($input->{'local_path'})
 	{
 
 		# get a unique path with added fingerprint (query or directory)
-		my $path = fingerprint($block, 'dev', $input->{'local_path'}, $input->{'org'});
+		my $path = fingerprint($config, 'dev', $input->{'local_path'}, $input->{'org'});
 
 		# return the script include string
 		return sprintf($js_include_tmpl, exportURI($path, $webroot, 1));
+
+	}
+	# input inline data
+	elsif ($input->{'data'})
+	{
+
+		return ${$input->{'data'}};
 
 	}
 

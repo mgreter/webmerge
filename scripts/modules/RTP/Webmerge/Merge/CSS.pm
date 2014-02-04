@@ -59,11 +59,11 @@ use RTP::Webmerge::Include::CSS;
 
 $includer{'css'} =
 {
-	'dev' => sub { includeCSS($_) },
+	'dev' => sub { includeCSS($_, @_) },
 	'join' => sub { ${$_->{'data'}} },
 	'minify' => sub { ${$_->{'data'}} },
 	'compile' => sub { ${$_->{'data'}} },
-	'license' => sub { getLicense($_) }
+	'license' => sub { getLicense($_, @_) }
 };
 
 $processor{'css'} =

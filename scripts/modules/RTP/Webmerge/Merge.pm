@@ -310,6 +310,11 @@ sub collect
 		foreach my $item (@{$merge->{$kind} || []})
 		{
 
+			unless (ref($item))
+			{
+				$item = { 'content' => $item };
+			}
+
 			# maybe get input from a script
 			# the script output should be static
 			if (ref $item && $item->{'script'} && $item->{'path'})
@@ -423,12 +428,12 @@ sub collect
 			}
 			# EO if id
 
-			elsif (defined $item)
+			elsif (ref($item) eq "HASH")
 			{
 
 				# get the md5sum of the unaltered data (otherwise crc may not be correct)
-				my $md5sum = md5sum(\ $item) or die "could not get md5sum for item: $!";
-				push(@{$data{$kind}}, { 'data' => \ $item, 'md5sum' => $md5sum });
+				my $md5sum = md5sum(\ $item->{'content'}) or die "could not get md5sum for item: $!";
+				push(@{$data{$kind}}, { 'data' => \ $item->{'content'}, 'item' => $item, 'md5sum' => $md5sum });
 
 			}
 

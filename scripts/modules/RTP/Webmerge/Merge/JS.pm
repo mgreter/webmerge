@@ -71,11 +71,11 @@ use RTP::Webmerge::Include::JS;
 
 $includer{'js'} =
 {
-	'dev' => sub { includeJS($_) },
+	'dev' => sub { includeJS($_, @_) },
 	'join' => sub { ${$_->{'data'}} },
 	'minify' => sub { ${$_->{'data'}} },
 	'compile' => sub { ${$_->{'data'}} },
-	'license' => sub { getLicense($_) }
+	'license' => sub { getLicense($_, @_) }
 };
 
 $processor{'js'} =
