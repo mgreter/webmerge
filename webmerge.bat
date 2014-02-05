@@ -31,6 +31,7 @@ SET GMPATH=%FOLDER%\..\gm
 SET IMPATH=%FOLDER%\..\im
 SET PERLPATH=%FOLDER%\..\perl
 SET RUBYPATH=%FOLDER%\..\ruby
+SET JAVAPATH=%FOLDER%\..\jre7
 SET UTILSPATH=%FOLDER%\..\utils
 
 :installLocals
@@ -71,6 +72,13 @@ REM add local ruby to global path
 SET PATH=%RUBYPATH%\bin;%PATH%
 
 :noLocalRuby
+
+IF NOT EXIST "%JAVAPATH%" GOTO noLocalJava
+
+REM add local java to global path
+SET PATH=%JAVAPATH%\bin;%PATH%
+
+:noLocalJava
 
 perl "%FOLDER%\scripts\webmerge.pl" %*
 
