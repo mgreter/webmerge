@@ -81,7 +81,8 @@ cd "%installdir%"
 
 if exist webmerge rmdir webmerge /s /q
 "%~dp0\files\utils\unzip" -o "%~dp0\files\32\%version%.zip"
-rename webmerge-* webmerge
+if "%version:~0,1%" == "v" set version=%version:~1%
+rename "webmerge-%version%" webmerge
 
 "%~dp0\files\utils\unzip" -o "%~dp0\files\32\compiler-latest.zip" -d webmerge\scripts\google\closure
 
@@ -104,6 +105,8 @@ echo Add global path "%installdir%\webmerge"
 echo Copy uninstall file into "%installdir%"
 
 copy /Y "%~dp0\uninstall-x32.bat" "%installdir%\uninstall-webmerge.bat"
+
+echo https://github.com/mgreter/webmerge/archive/%version%.zip (32bit) > "%installdir%\webmerge-version.txt"
 
 echo Finished installing webmerge 32-bit portable
 echo Installed %version% at "%installdir%"
