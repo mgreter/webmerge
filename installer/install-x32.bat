@@ -1,6 +1,10 @@
 @echo off
 
-echo Installing webmerge 32-bit portable
+SET version=%~1
+REM git tag or branch
+if "%version%" == "" SET version=master
+
+echo Installing webmerge 32-bit portable (%version%)
 
 :CheckOS
 IF EXIST "%PROGRAMFILES(X86)%" (GOTO 64BIT) ELSE (GOTO 32BIT)
@@ -52,12 +56,19 @@ if not exist files\32 mkdir files\32
 
 cd files\32
 
-..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-gm-x32.exe
-..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-perl-x32.exe
-..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-utils-x32.exe
-..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-ruby-sass-x32.exe
-..\utils\wget --no-check-certificate -c https://github.com/mgreter/webmerge/archive/master.zip -O master.zip
+..\utils\wget --no-check-certificate -c https://github.com/mgreter/webmerge/archive/%version%.zip -O "%version%.zip"
+for %%R in ("%version%.zip") do if %%~zR lss 1 del "%version%.zip"
+if not exist "%version%.zip" echo error downloading archive && pause && exit
 ..\utils\wget "http://dl.google.com/closure-compiler/compiler-latest.zip"
+if not exist "compiler-latest.zip" echo error downloading archive && pause && exit
+..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-gm-x32.exe
+if not exist "webmerge-gm-x32.exe" echo error downloading archive && pause && exit
+..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-perl-x32.exe
+if not exist "webmerge-perl-x32.exe" echo error downloading archive && pause && exit
+..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-utils-x32.exe
+if not exist "webmerge-utils-x32.exe" echo error downloading archive && pause && exit
+..\utils\wget -c http://webmerge.ocbnet.ch/portable/webmerge-ruby-sass-x32.exe
+if not exist "webmerge-ruby-sass-x32.exe" echo error downloading archive && pause && exit
 
 if not exist "%installdir%" mkdir "%installdir%"
 
@@ -69,13 +80,14 @@ cd "%installdir%"
 "%~dp0\files\32\webmerge-ruby-sass-x32.exe" -y
 
 if exist webmerge rmdir webmerge /s /q
-"%~dp0\files\utils\unzip" -o "%~dp0\files\32\master.zip"
-rename webmerge-master webmerge
+"%~dp0\files\utils\unzip" -o "%~dp0\files\32\%version%.zip"
+rename webmerge-* webmerge
 
 "%~dp0\files\utils\unzip" -o "%~dp0\files\32\compiler-latest.zip" -d webmerge\scripts\google\closure
 
 echo Updating file permissions
 
+cacls "%installdir%\webmerge\res" /t /e /g Everyone:f
 cacls "%installdir%\webmerge\conf" /t /e /g Everyone:f
 cacls "%installdir%\webmerge\example" /t /e /g Everyone:f
 
@@ -94,7 +106,7 @@ echo Copy uninstall file into "%installdir%"
 copy /Y "%~dp0\uninstall-x32.bat" "%installdir%\uninstall-webmerge.bat"
 
 echo Finished installing webmerge 32-bit portable
-echo Installed at "%installdir%"
+echo Installed %version% at "%installdir%"
 
 GOTO END
 

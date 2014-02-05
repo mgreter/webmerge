@@ -1,5 +1,9 @@
 @echo off
 
+SET version=%~1
+
+if "%version%" == "" SET version=master
+
 if not exist release mkdir release
 
 if exist release\installer-files-x32.7z del release\installer-files-x32.7z
@@ -8,8 +12,17 @@ files\utils\7z a release\installer-files-x32.7z files\utils\pathed.exe files\uti
 
 cd release
 
-copy /b ..\files\utils\7zS.sfx + ..\files\config\config-x32.txt + ..\release\installer-files-x32.7z webmerge-installer-x32.exe
+if exist ..\files\config\config-x32.txt del ..\files\config\config-x32.txt
 
-cd ..\..
+echo ;!@Install@!UTF-8! >> ..\files\config\config-x32.txt
+echo Title="Webmerge Portable (32bit)" >> ..\files\config\config-x32.txt
+echo BeginPrompt="Do you want to install Webmerge Portable (%version%)?" >> ..\files\config\config-x32.txt
+echo ExecuteFile="install-x32.bat" >> ..\files\config\config-x32.txt
+echo ExecuteParameters="%version%" >> ..\files\config\config-x32.txt
+echo ;!@InstallEnd@! >> ..\files\config\config-x32.txt
 
-pause
+copy /b ..\files\utils\7zS.sfx + ..\files\config\config-x32.txt + ..\release\installer-files-x32.7z webmerge-installer-%version%-x32.exe
+
+cd ..
+
+echo created webmerge-installer-%version%-x32.exe
