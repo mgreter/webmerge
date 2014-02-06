@@ -448,80 +448,52 @@ sub canRead
 
 	use File::Spec::Functions;
 	use File::Spec::Functions qw(rel2abs);
+
 # print "out ", $client->{'state'}, "\n";
-if ( $rv eq 1 && $client->{'state'} >= scalar(@readers))
-{
+	if ( $rv eq 1 && $client->{'state'} >= scalar(@readers))
+	{
 
-	# now we have the request
-	my $req = $client->{'request'};
-use HTTP::Response;
-	my $response = HTTP::Response->new( 200 );
+		use HTTP::Response;
+		# now we have the request
+		my $req = $client->{'request'};
+		my $response = HTTP::Response->new( 200 );
 
-my $r = $req;
-				# print "new request uri\n";
-				use URI::Escape qw(uri_unescape);
-				my $wwwpath = uri_unescape($r->uri->path);
-				my $path = canonpath(uri_unescape($r->uri->path));
-my $config = $server->{'config'};
-				my $root = canonpath(check_path($config->{'webroot'}));
-				my $file = canonpath(catfile($root, $path));
-				die "hack attempt" unless $file =~ m /^\Q$root\E/;
-				print $r->method, " ", $wwwpath, "\n";
-				if (-d $file && not $r->uri->path =~ m/\/$/)
-				{
-					my $url = "http://localhost";
-					if ($config->{'webport'} ne 80)
-					{ $url .= ':' . $config->{'webport'}; }
-					$sock->send_redirect($url . $r->uri->path.'/');
+		my $r = $req;
+		# print "new request uri\n";
+		use URI::Escape qw(uri_unescape);
+		my $wwwpath = uri_unescape($r->uri->path);
+		my $path = canonpath(uri_unescape($r->uri->path));
+		my $config = $server->{'config'};
+		my $root = canonpath(check_path($config->{'webroot'}));
+		my $file = canonpath(catfile($root, $path));
+		die "hack attempt" unless $file =~ m /^\Q$root\E/;
+		print $r->method, " ", $wwwpath, "\n";
+		if (-d $file && not $r->uri->path =~ m/\/$/)
+		{
+			my $url = "http://" . $sock->sockhost;
+			$url .= ':' . $sock->sockport if ($sock->sockport ne 80);
+			# $url .= ':' . $config->{'webport'} if ($config->{'webport'} ne 80);
+			$sock->send_redirect($url . $r->uri->path.'/');
 
-				}
-				elsif (-d $file && -e join('/', $file, 'index.html'))
-				{ $file = join('/', $file, 'index.html'); }
+		}
+		elsif (-d $file && -e join('/', $file, 'index.html'))
+		{ $file = join('/', $file, 'index.html'); }
 
-				if (0)
-				{
-					my $count = 0;
-						my $response = HTTP::Response->new( 200 );
-						$response->content( sub ()
-						{
-							return undef if $count ++ > 0;
-							return "<h2>Hello World</h2>" . '<form action="#" method="post" enctype="multipart/form-data">
-
-			<input name="upload-1" type="file" />
-			<input name="upload-2" type="file" />
-
-			<input type="submit" />
-
-		</form>';
-						} );
-						$response->header( "Content-Type" => "text/html" );
-						$sock->send_response( $response );
-				}
-				elsif (-e $file)
-				{
-					# print "send file response\n";
-					$sock->send_file_response($file);
-					# print "sent file response\n";
-				}
-				else
-				{
-					$sock->send_error(HTTP::Status::RC_FORBIDDEN());
-					warn "request not found $file\n";
-				}
+		if (-e $file)
+		{
+			# print "send file response\n";
+			$sock->send_file_response($file);
+			# print "sent file response\n";
+		}
+		else
+		{
+			$sock->send_error(HTTP::Status::RC_FORBIDDEN());
+			warn "request not found $file\n";
+		}
 
 		$client->{'state'} = 0;
 
-}
-
-#	$response->content( "Hello World" );
-#	$response->header( "Content-Type" => "text/html" );
-
-#	$sock->send_response( $response );
-
-#	die $req;
-
-
-	# if $rv eq -1
+	}
 
 }
 
