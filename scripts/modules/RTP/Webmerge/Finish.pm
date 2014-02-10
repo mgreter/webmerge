@@ -67,7 +67,7 @@ sub finish
 		}
 		# EO each mkdir
 
-		# process all directories to create
+		# process prerun script (feature will change)
 		foreach my $run (@{$finish->{'prerun'} || []})
 		{
 
@@ -75,9 +75,13 @@ sub finish
 
 			my @args = @{$run->{'arg'} || []};
 
+			print "executing $cmd ", join(" ", @args), "\n";
+
+			chdir $config->{'directory'} or die "chdir";
+
 			my $rv = system $cmd, @args;
 
-			print "executing $cmd ", join(" ", @args), "\n";
+			croak "prerun execution failure" if $?;
 
 		}
 
@@ -102,6 +106,24 @@ sub finish
 
 		}
 		# EO each copy
+
+		# process postrun script (feature will change)
+		foreach my $run (@{$finish->{'postrun'} || []})
+		{
+
+			my $cmd = $run->{'cmd'};
+
+			my @args = @{$run->{'arg'} || []};
+
+			print "executing $cmd ", join(" ", @args), "\n";
+
+			chdir $config->{'directory'} or die "chdir";
+
+			my $rv = system $cmd, @args;
+
+			croak "postrun execution failure" if $?;
+
+		}
 
 	}
 	# EO unless disabled
