@@ -88,7 +88,7 @@ push @initers, sub
 	$config->{'cmd_optimize-txt'} = 1;
 
 	# text file type [nix|mac|win]
-	$config->{'cmd_txt-type'} = 1;
+	$config->{'cmd_txt-type'} = 'auto';
 	# remove superfluous utf boms
 	$config->{'cmd_txt-remove-bom'} = 1;
 	# normalize line endings to given type
