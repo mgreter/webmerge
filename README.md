@@ -5,11 +5,11 @@ Asset Manager for Front End Development (JS, CSS, Images)
 Features
 ========
 - Merge, join and optimize SCSS, CSS and JavaScript files
-- Compiles scss/sass either via libsass or ruby sass (external)
+- Compiles scss (sass) either via libsass or (external) ruby sass
 - Optimize images etc. with external tools (in parallel jobs)
 - Sprite set generator (by simply annotating your css stylesheets)
 - Can handle sprites optimized for high resolution displays (retina)
-- Includes with a small webserver to test drive your prototypes (alpha)
+- Includes a small webserver to test drive your prototypes (alpha)
 - Optimize text files by removing UTF8 BOM and trailing whitespaces
 - Commits all file changes only after a successfull merge ("atomic")
 - File watcher to recompile automatically when a source file has changed
@@ -19,11 +19,17 @@ To Do
 =====
 - Write documentation
 - Add clean and test targets
+- Add sass2scss converter script
 - Prepare code for v1.0.0 release
+- Update installation docs in readme
 - Handle source maps for css and js
 - Implement @license header handling
 - Test more edge cases (specially css parser)
 - Invoke processors according to file extensions
+- Take advantage of the new css parser in OCBNET::CSS3
+- Refactor config XML handling (execute blocks in order)
+- Refactor config scope handling (relation to XML blocks)
+
 
 More ideas
 ==========
@@ -175,6 +181,17 @@ From code profiling the sprites examples, one of the most promising
 optimizations would be to implement OCBNET::Packer::2D in XS code (C).
 You can view a NYTPROF Performance Profile of the sprite example here:
 - http://webmerge.ocbnet.ch/webmerge/nytprof/
+
+Webserver
+=========
+A lot of code is copied of HTTP::Daemon and I need to credit them properly
+in the source code (ToDo). This implementation has a pretty unique feature,
+as it can handle multiple connections within a single thread via 'select'
+(non-blocking). This should be better portable as a fork implementation
+(windows and linux seem to work well). Thanks to the code of HTTP::Deamon,
+the server can handle keep-alives and other advanced HTTP 1.1 requests.
+I'm planning to add options to define latencies and/or bandwidth limits
+for certain files, etc.
 
 Command Line Options
 ====================
