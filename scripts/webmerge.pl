@@ -462,7 +462,7 @@ webserver $config if $config->{'webserver'};
 ################################################################################
 
 # create regular expression to match steps
-my $re_argv = join('|', @ARGV);
+my $re_argv = join('|', map quotemeta, @ARGV);
 
 
 ################################################################################
