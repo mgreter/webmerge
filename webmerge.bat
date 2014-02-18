@@ -5,6 +5,9 @@ SETLOCAL
 SET EXEC=%~0
 SET TERM=dumb
 
+REM be quiet if running under msbuild
+IF NOT "%MSBUILDPATH%" == "" SET QUIET=1
+
 REM check if not called global
 IF EXIST %0 GOTO processExec
 
@@ -84,9 +87,8 @@ perl "%FOLDER%\scripts\webmerge.pl" %*
 
 @IF ERRORLEVEL 1 GOTO errorHandling
 
-@echo 
-
-@timeout /T 2
+IF NOT "%QUIET%" == "1" @echo 
+IF NOT "%QUIET%" == "1" @timeout /T 2
 
 @GOTO endHandling
 
