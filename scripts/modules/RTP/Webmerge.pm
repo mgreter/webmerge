@@ -406,7 +406,7 @@ sub runProgram ($$$$;$)
 			{
 
 				# execute the executable (sprintf filename into commands)
-				my $rv = system join(' ', $executable, sprintf($tmpl, $file, $file));
+				my $rv = system $executable, sprintf($tmpl, $file, $file);
 
 				# give a warning if the executable returned an error
 				warn "executable execution did not complete successfully\n"
