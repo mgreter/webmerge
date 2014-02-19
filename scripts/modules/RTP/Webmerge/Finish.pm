@@ -85,24 +85,63 @@ sub finish
 
 		}
 
+		# override core glob (case insensitive)
+		use File::Glob qw(:globally :nocase bsd_glob);
+		use File::Basename qw (dirname basename);
+
 		# process all directories to create
 		foreach my $copy (@{$finish->{'copy'} || []})
 		{
 
 			# get path for source and destination
-			my $src = check_path $copy->{'src'};
-			my $dst = check_path $copy->{'dst'};
+			my $srcs = check_path $copy->{'src'};
+			my $dest = check_path $copy->{'dst'};
 
-			print "copying ", exportURI($src), "\n";
+			my $tmpl = $dest;
+			my $root = $tmpl;
 
-			# check if we do not copy a text file
-			my $bin = ($copy->{'text'} || '') ne "true";
+			if (-d $root)
+			{
+				$tmpl = '$(filename)';
+				$root = dirname($root);
+			}
+			else
+			{
+				$tmpl = basename($root);
+				$root = dirname($root);
+			}
 
-			# copy the file binary if text is not set to true
-			my $data = readfile($src, $config->{'atomic'}, $bin);
-			writefile($dst, $data, $config->{'atomic'}, $bin);
+			print "copy ", substr(exportURI($srcs), -40),
+			      " to ", substr(exportURI($dest), -40), "\n";
 
-			print " copied to ", exportURI($dst), "\n";
+			# get all sources files via glob
+			# this does not yet support recursive
+			foreach my $src (bsd_glob($srcs))
+			{
+
+				next if (-d $src);
+
+				my $dst = join('/', $root, $tmpl);
+
+				my %options = (
+					'filename' => basename($src)
+				);
+
+				# replace destination file place holders
+				$dst =~ s/\$\(([^\)]*)\)/$options{lc$1}/egm;
+
+				# print "copying ", exportURI($src), "\n";
+
+				# check if we do not copy a text file
+				my $bin = ($copy->{'text'} || '') ne "true";
+
+				# copy the file binary if text is not set to true
+				my $data = readfile($src, $config->{'atomic'}, $bin);
+				writefile($dst, $data, $config->{'atomic'}, $bin);
+
+				# print " copied to ", exportURI($dst), "\n";
+
+			}
 
 		}
 		# EO each copy
