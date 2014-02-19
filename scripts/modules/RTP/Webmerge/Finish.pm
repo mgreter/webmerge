@@ -89,57 +89,116 @@ sub finish
 		use File::Glob qw(:globally :nocase bsd_glob);
 		use File::Basename qw (dirname basename);
 
+		my @copy = @{$finish->{'copy'} || []};
+
 		# process all directories to create
-		foreach my $copy (@{$finish->{'copy'} || []})
+		foreach my $todo (@copy)
 		{
 
+			my @todo = ( $todo );
+
+			my $recursive = $todo->{'recursive'} || 0;
+
+			$recursive = 0 if lc $recursive eq 'false';
+			$recursive = -1 if lc $recursive eq 'true';
+
+
 			# get path for source and destination
-			my $srcs = check_path $copy->{'src'};
-			my $dest = check_path $copy->{'dst'};
-
-			my $tmpl = $dest;
-			my $root = $tmpl;
-
-			if (-d $root)
-			{
-				$tmpl = '$(filename)';
-				$root = dirname($root);
-			}
-			else
-			{
-				$tmpl = basename($root);
-				$root = dirname($root);
-			}
+			my $srcs = check_path $todo->{'src'};
+			my $dest = check_path $todo->{'dst'};
 
 			print "copy ", substr(exportURI($srcs), -40),
-			      " to ", substr(exportURI($dest), -40), "\n";
+			      " to ", substr(exportURI($dest), -40);
+			print " (recursive)" if !-f $srcs && $recursive;
+			print " (directory)" if -d $srcs && !$recursive;
+			print " (file)" if -f $srcs;
+			print "\n";
 
-			# get all sources files via glob
-			# this does not yet support recursive
-			foreach my $src (bsd_glob($srcs))
+			foreach my $copy (@todo)
 			{
 
-				next if (-d $src);
+				my $recursive = $copy->{'recursive'} || 0;
 
-				my $dst = join('/', $root, $tmpl);
+				$recursive = 0 if lc $recursive eq 'false';
+				$recursive = -1 if lc $recursive eq 'true';
 
-				my %options = (
-					'filename' => basename($src)
-				);
+				# get path for source and destination
+				my $srcs = check_path $copy->{'src'};
+				my $dest = check_path $copy->{'dst'};
 
-				# replace destination file place holders
-				$dst =~ s/\$\(([^\)]*)\)/$options{lc$1}/egm;
+				my $tmpl = $dest;
+				my $root = $tmpl;
 
-				# print "copying ", exportURI($src), "\n";
+				if (-d $root)
+				{
+					$tmpl = '$(filename)';
+					$root = $root;
+				}
+				else
+				{
+					$tmpl = basename($root);
+					$root = dirname($root);
+				}
 
-				# check if we do not copy a text file
-				my $bin = ($copy->{'text'} || '') ne "true";
 
-				# copy the file binary if text is not set to true
-				my $data = readfile($src, $config->{'atomic'}, $bin);
-				writefile($dst, $data, $config->{'atomic'}, $bin);
 
-				# print " copied to ", exportURI($dst), "\n";
+				# get all sources files via glob
+				# this does not yet support recursive
+				foreach my $src (bsd_glob($srcs))
+				{
+
+					my $dst = join('/', $root, $tmpl);
+
+					my %options = (
+						'filename' => basename($src)
+					);
+
+					# replace destination file place holders
+					$dst =~ s/\$\(([^\)]*)\)/$options{lc$1}/egm;
+
+					if (-d $src)
+					{
+
+						next unless $recursive;
+
+						mkdir $dst;
+
+						opendir(my $dh, $src) or die "error opendir: $!";
+
+						while (my $item = readdir($dh))
+						{
+
+							next if $item eq '.';
+							next if $item eq '..';
+
+							push(@todo, {
+								'src' => join('/', $src, $item),
+								'dst' => join('/', $dst, dirname($item)),
+								'recursive' => $recursive ? $recursive - 1 : 0
+							})
+
+						}
+
+						closedir($dh);
+
+					}
+					else
+					{
+
+						# print "copying ", exportURI($src), "\n";
+
+						# check if we do not copy a text file
+						my $bin = ($copy->{'text'} || '') ne "true";
+
+						# copy the file binary if text is not set to true
+						my $data = readfile($src, $config->{'atomic'}, $bin);
+						writefile($dst, $data, $config->{'atomic'}, $bin);
+
+						# print " copied to ", exportURI($dst), "\n";
+
+					}
+
+				}
 
 			}
 
