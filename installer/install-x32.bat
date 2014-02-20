@@ -89,8 +89,11 @@ rename "webmerge-%version%" webmerge
 echo Updating file permissions
 
 cacls "%installdir%\webmerge\res" /t /e /g Everyone:f
+if not %ERRORLEVEL%==0 set ABORT=1
 cacls "%installdir%\webmerge\conf" /t /e /g Everyone:f
+if not %ERRORLEVEL%==0 set ABORT=1
 cacls "%installdir%\webmerge\example" /t /e /g Everyone:f
+if not %ERRORLEVEL%==0 set ABORT=1
 
 echo Remove old global paths (ignore warnings)
 
@@ -101,15 +104,19 @@ echo Remove old global paths (ignore warnings)
 echo Add global path "%installdir%\webmerge"
 
 "%~dp0\files\utils\pathed" -a "%installdir%\webmerge"
+if not %ERRORLEVEL%==0 set ABORT=1
 
 echo Copy uninstall file into "%installdir%"
 
 copy /Y "%~dp0\uninstall-x32.bat" "%installdir%\uninstall-webmerge.bat"
+if not %ERRORLEVEL%==0 set ABORT=1
 
 echo https://github.com/mgreter/webmerge/archive/%version%.zip (32bit) > "%installdir%\webmerge-version.txt"
 
 echo Finished installing webmerge 32-bit portable
 echo Installed %version% at "%installdir%"
+
+if "%ABORT%" == "1" GOTO ABORT
 
 GOTO END
 
