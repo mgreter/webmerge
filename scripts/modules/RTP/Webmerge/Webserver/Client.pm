@@ -454,8 +454,19 @@ sub canRead
 	{
 
 		use HTTP::Response;
+		eval "use HTTP::Body;";
+
 		# now we have the request
 		my $req = $client->{'request'};
+
+		my $content_type   = $req->header('Content-Type');
+		my $content_length = $req->header('Content-Length');
+		my $body           = HTTP::Body->new( $content_type, $content_length );
+
+		$client->{'body'} = $body;
+
+		$client->{'body'}->add($req->{'_content'});
+
 		my $response = HTTP::Response->new( 200 );
 
 		my $r = $req;
@@ -468,7 +479,54 @@ sub canRead
 		my $file = canonpath(catfile($root, $path));
 		die "hack attempt" unless $file =~ m /^\Q$root\E/;
 		print $r->method, " ", $wwwpath, "\n";
-		if (-d $file && not $r->uri->path =~ m/\/$/)
+		if ($wwwpath eq '/dump/request')
+		{
+			my $response = HTTP::Response->new( 200 );
+
+			my $content = '<h1>Dump request</h1>';
+
+			$content .= '<STYLE>
+				BODY { font-family: verdana, arial; }
+				TD { padding: 5px 5px; }
+				TD:first-child { text-align: right; }
+			</STYLE>';
+
+			$content .= '<h2>Post params</h2><TABLE border=1>';
+			my %occurence;
+			foreach my $param (@{$body->{'param_order'}})
+			{
+				my $value = $body->{'param'}->{$param};
+
+				if (ref($value) eq 'ARRAY')
+				{
+					unless (exists $occurence{$param})
+					{
+						$occurence{$param} = 0;
+					}
+					else
+					{
+						$occurence{$param} ++;
+					}
+					$value = $value->[$occurence{$param}];
+				}
+
+
+				$content .= '<TR>';
+				$content .= '<TD><STRONG>' . $param . '</STRONG></TD>';
+				$content .= '<TD>' . $value . '</TD>';
+				$content .= '</TR>';
+			}
+			$content .= '</TABLE>';
+
+			$response->content( $content );
+
+			# $response->content(Data::Dumper->Dump([$r]));
+			# $response->content(Data::Dumper->Dump([$client->{'body'}]));
+
+			$response->header( "Content-Type" => "text/html" );
+			$sock->send_response( $response );
+		}
+		elsif (-d $file && not $r->uri->path =~ m/\/$/)
 		{
 			my $url = "http://" . $sock->sockhost;
 			$url .= ':' . $sock->sockport if ($sock->sockport ne 80);
@@ -561,17 +619,22 @@ sub canWrite
 
 	# print "client has written now ", $rv, "\n";
 
-	die "client write error" unless defined $rv;
-	die "client write closed" unless $rv;
+	warn "client write error: $!" unless defined $rv;
+	warn "client write closed: $!" unless $rv;
 
-	substr($sock->wbuf, 0, $rv) = "";
-
-	while (${*$sock}{'io_stream'} && length($sock->wbuf) < 1024 * 16 * 4)
+	if ($rv)
 	{
-		# print "Buf 1: ", length($sock->wbuf), "\n";
-		my $stream = ${*$sock}{'io_stream'};
-		$stream->canRead();
-		# print "Buf 2: ", length($sock->wbuf), "\n";
+
+		substr($sock->wbuf, 0, $rv) = "";
+
+		while (${*$sock}{'io_stream'} && length($sock->wbuf) < 1024 * 16 * 4)
+		{
+			# print "Buf 1: ", length($sock->wbuf), "\n";
+			my $stream = ${*$sock}{'io_stream'};
+			$stream->canRead();
+			# print "Buf 2: ", length($sock->wbuf), "\n";
+		}
+
 	}
 
 	if (length($sock->wbuf) eq 0)
