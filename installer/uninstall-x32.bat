@@ -55,15 +55,16 @@ echo Remove old global paths (ignore warnings)
 
 echo Remove Webmerge from "%installdir%"
 
-if exist "%installdir%\webmerge" rmdir "%installdir%\webmerge" /s /q
-if exist "%installdir%\utils" rmdir "%installdir%\utils" /s /q
-if exist "%installdir%\ruby" rmdir "%installdir%\ruby" /s /q
-if exist "%installdir%\perl" rmdir "%installdir%\perl" /s /q
-if exist "%installdir%\gm" rmdir "%installdir%\gm" /s /q
+if exist "%installdir%\gm" rmdir "%installdir%\gm" /S /Q
+if exist "%installdir%\ruby" rmdir "%installdir%\ruby" /S /Q
+if exist "%installdir%\perl" rmdir "%installdir%\perl" /S /Q
+if exist "%installdir%\utils" rmdir "%installdir%\utils" /S /Q
+if exist "%installdir%\webmerge" rmdir "%installdir%\webmerge" /S /Q
 
-if exist "%installdir%\uninstall-webmerge.bat" del /Q "%installdir%\uninstall-webmerge.bat"
+if exist "%installdir%\webmerge-version.txt" del "%installdir%\webmerge-version.txt" /Q
+if exist "%installdir%\uninstall-webmerge.bat" del "%installdir%\uninstall-webmerge.bat" /Q
 
-if exist "%installdir%" rmdir "%installdir%" /q
+if exist "%installdir%" rmdir "%installdir%" /Q
 
 GOTO END
 
