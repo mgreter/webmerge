@@ -8,6 +8,8 @@ echo %version%
 
 call bake-x32.bat %gitversion%
 call bake-x64.bat %gitversion%
+call bake-x32.bat webserver
+call bake-x64.bat webserver
 call bake-x32.bat develop
 call bake-x64.bat develop
 call bake-x32.bat master

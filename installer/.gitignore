@@ -3,5 +3,6 @@
 /files/dist
 /release/installer-files-x32.7z
 /release/installer-files-x64.7z
-/release/webmerge-installer-v*
-/release/webmerge-installer-develop-*
+/release/webmerge-v*
+/release/webmerge-develop-*
+/release/webmerge-webserver-*
