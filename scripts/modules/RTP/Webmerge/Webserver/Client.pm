@@ -537,7 +537,29 @@ sub canRead
 		elsif (-d $file && -e join('/', $file, 'index.html'))
 		{ $file = join('/', $file, 'index.html'); }
 
-		if (-e $file)
+		if (-f $file && $file =~ m/\.s?html?(?:\Z|\?|\#)/)
+		{
+			$file =~ s/\//\\/gm;
+			$ENV{'SERVER_PORT'} = $sock->sockport;
+			$ENV{'DOCUMENT_ROOT'} = canonpath(check_path($config->{'webroot'}));
+			eval "use CGI::SHTML;";
+			my $fh = IO::File->new();
+			my $cgi = CGI::SHTML->new;
+			$fh->open($file, "r") or
+			  return $sock->send_error(RC_FORBIDDEN);
+			my($ct,$ce) = guess_media_type($file);
+			my($size,$mtime) = (stat $file)[7,9];
+			my $content = join('', <$fh>);
+			my $response = HTTP::Response->new( 200 );
+			$content = $cgi->parse_shtml($content);
+			$response->content( $content );
+			$response->header("Content-Type" => $ct) if $ct;
+			$response->header("Content-Encoding" => $ce) if $ce;
+			$response->header("Content-Length" => $size) if defined $size;
+			$sock->send_response( $response );
+
+		}
+		elsif (-e $file)
 		{
 			# print "send file response\n";
 			$sock->send_file_response($file);
