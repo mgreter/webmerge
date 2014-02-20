@@ -788,7 +788,7 @@ sub send_dir
 	{
 		$content .= "<ul>";
 		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', '..' unless $dir =~ m/^\/*$/;
-		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach grep { !m/^\.{1,2}$/ } readdir($dh);
+		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach map { -d join('/', $dir, $_) ? $_ . '/' : $_  } grep { !m/^\.{1,2}$/ } readdir($dh);
 		$content .= "</ul>";
 	}
 	else
