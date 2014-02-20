@@ -9,6 +9,7 @@ package RTP::Webmerge::Webserver::Client;
 use Carp;
 use strict;
 use warnings;
+use CGI::SHTML;
 
 ###################################################################################################
 
@@ -542,7 +543,7 @@ sub canRead
 			$file =~ s/\//\\/gm;
 			$ENV{'SERVER_PORT'} = $sock->sockport;
 			$ENV{'DOCUMENT_ROOT'} = canonpath(check_path($config->{'webroot'}));
-			eval "use CGI::SHTML;";
+			$CGI::SHTML::ROOTDIR = $ENV{'DOCUMENT_ROOT'};
 			my $fh = IO::File->new();
 			my $cgi = CGI::SHTML->new;
 			$fh->open($file, "r") or
