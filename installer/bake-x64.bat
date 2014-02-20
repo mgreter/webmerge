@@ -21,8 +21,8 @@ echo ExecuteFile="install-x64.bat" >> ..\files\config\config-x64.txt
 echo ExecuteParameters="%version%" >> ..\files\config\config-x64.txt
 echo ;!@InstallEnd@! >> ..\files\config\config-x64.txt
 
-copy /b ..\files\utils\7zS.sfx + ..\files\config\config-x64.txt + ..\release\installer-files-x64.7z webmerge-installer-%version%-x64.exe
+copy /b ..\files\utils\7zS.sfx + ..\files\config\config-x64.txt + ..\release\installer-files-x64.7z webmerge-%version%-x64.exe
 
 cd ..
 
-echo created webmerge-installer-%version%-x64.exe
+echo created webmerge-%version%-x64.exe
