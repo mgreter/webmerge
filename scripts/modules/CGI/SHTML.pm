@@ -220,8 +220,8 @@ sub ssi {
   }
 
   if (lc $command eq 'include') {
-    if ( defined $hash{'virtual'} ) { $self->_file(_vfile( $hash{'virtual'} )) }
-    elsif ( defined $hash{'file'} ) { $self->_file( $hash{'file'} ) }
+    if ( defined $hash{'virtual'} ) { $self->_file(_vfile( $hash{'virtual'} ), $hash{'dom'}) }
+    elsif ( defined $hash{'file'} ) { $self->_file( $hash{'file'}, $hash{'dom'} ) }
     else { return "No filename offered" };
   } elsif (lc $command eq 'set') {
     my $var = $hash{'var'} || return "No variable to set";
@@ -325,12 +325,25 @@ sub _vfile {
 ## _file( FILE )
 # Open a file and parse it with parse_shtml().
 sub _file {
-  my ($self, $file) = @_;
+  my ($self, $file, $dom) = @_;
   open( FILE, "<$file" ) or warn "Couldn't open $file: $!\n" && return "";
   my @list = <FILE>;
   close (FILE);
   map { chomp } @list;
-  return $self->parse_shtml(@list);
+  if ($dom)
+  {
+		local $_;
+  	use pQuery;
+		my $pQuery = pQuery(join('', @list));
+		return "[pQuery could not parse DOM (error)]" unless $pQuery;
+		return "[pQuery could not parse DOM]" unless $pQuery->length;
+		my $node = $pQuery->find($dom) if $pQuery;
+		return "[DOM root node not found (error)]" unless $node;
+		return "[DOM root node not found]" unless $node->length;
+		@list = ($node->html) if $node;
+  }
+  # get just a certain node, remove others
+  return $self->parse_shtml(join("", @list));
 }
 
 ## _execute( CMD )
