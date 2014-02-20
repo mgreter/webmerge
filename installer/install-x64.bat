@@ -48,6 +48,10 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
+IF EXIST "%installdir%\uninstall-webmerge.bat" call "%installdir%\uninstall-webmerge.bat"
+
+:--------------------------------------
+
 echo Installing into "%installdir%"
 
 pushd "%CD%"
