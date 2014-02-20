@@ -1,6 +1,6 @@
 @echo off
 
-git describe --abbrev=0 > git-tag.txt
+git describe --tags --abbrev=0 > git-tag.txt
 SET /p gitversion=<git-tag.txt
 del git-tag.txt
 
