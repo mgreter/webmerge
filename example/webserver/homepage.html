@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>SSI Test</title>
+	</head>
+	<body>
+
+		<!--#include virtual="/header.html" dom="#include" -->
+
+		<h2>Component 01</h2>
+		<!--#include virtual="/component-01.html" dom="#include" -->
+
+		<h2>Component 02</h2>
+		<!--#include virtual="/component-02.html" dom="#include" -->
+
+		<h2>Hello World CGI</h2>
+		<p><pre><!--#exec cgi="/cgi-bin/foo.pl" --></pre></p>
+
+		<!--#include virtual="/footer.html" dom="#include" -->
+
+	</body>
+</html>
