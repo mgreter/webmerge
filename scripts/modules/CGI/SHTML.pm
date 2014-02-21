@@ -151,7 +151,9 @@ sub parse_shtml {
     }
   }
 
-  my $final = join("\n", @return);
+  my $final = join("", @return);
+  $final =~ s/\A(?:\s*[\n\r])+\s*//g;
+  $final =~ s/\s*(?:[\n\r]\s*)+\z//g;
   $rec --;
   $final;
 }
@@ -337,7 +339,7 @@ sub _file {
   {
 		local $_;
   	use pQuery;
-		my $pQuery = pQuery(join('', @list));
+		my $pQuery = pQuery(join("\n", @list));
 		return "[pQuery could not parse DOM (error)]" unless $pQuery;
 		return "[pQuery could not parse DOM]" unless $pQuery->length;
 		my $node = $pQuery->find($dom) if $pQuery;
@@ -346,7 +348,7 @@ sub _file {
 		@list = ($node->html) if $node;
   }
   # get just a certain node, remove others
-  return $self->parse_shtml(join("", @list));
+  return $self->parse_shtml(join("\n", @list));
 }
 
 ## _execute( CMD )
