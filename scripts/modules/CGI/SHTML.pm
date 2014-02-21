@@ -300,6 +300,8 @@ sub end_html {
 # Gets the virtual filename out of FILENAME, based on ROOTDIR.  Also
 # performs the substitutions in C<REPLACE>.
 
+# "virtual" specifies the target relative to the domain root
+
 sub _vfile {
   my $filename = shift || return undef;
 
@@ -315,7 +317,7 @@ sub _vfile {
   if ($filename =~ m%^~(\w+)/(.*)$%) { $newname = "/home/$1/public_html/$2"; }
   elsif ( $filename =~ m%^[^/]% ) {
     my ($directory, $program) = $0 =~ m%^(.*)/(.*)$%;
-    $newname = "$directory/$filename"
+    $newname = "$ROOTDIR/$filename"
   }
   else { $newname = "$ROOTDIR/$filename" }
   $newname =~ s%/+%/%g;  # Remove doubled-up /'s
@@ -324,6 +326,7 @@ sub _vfile {
 
 ## _file( FILE )
 # Open a file and parse it with parse_shtml().
+# "file" specifies the path relative to the directory of the current file
 sub _file {
   my ($self, $file, $dom) = @_;
   open( FILE, "<$file" ) or warn "Couldn't open $file: $!\n" && return "";

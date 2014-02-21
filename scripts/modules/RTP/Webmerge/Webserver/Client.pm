@@ -542,8 +542,11 @@ sub canRead
 		{
 			$file =~ s/\//\\/gm;
 			$ENV{'SERVER_PORT'} = $sock->sockport;
+			$ENV{'HTTP_HOST'} = $req->header('Host');
+			$ENV{'HOSTNAME'} = $req->header('Host');
 			$ENV{'DOCUMENT_ROOT'} = canonpath(check_path($config->{'webroot'}));
 			$CGI::SHTML::ROOTDIR = $ENV{'DOCUMENT_ROOT'};
+			chdir dirname $file;
 			my $fh = IO::File->new();
 			my $cgi = CGI::SHTML->new;
 			$fh->open($file, "r") or
