@@ -95,7 +95,7 @@ sub includeJS
 		my $includes = [];
 
 		# get config from block
-		my $config = $block->{'_config'};
+		# my $config = $block->{'_config'};
 
 		# create new config scope
 		my $scope = $config->stage;
