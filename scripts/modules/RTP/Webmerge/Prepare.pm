@@ -85,6 +85,10 @@ sub prepare
 
 		}
 
+		# override core glob (case insensitive)
+		use File::Glob qw(:globally :nocase bsd_glob);
+		use File::Basename qw (dirname basename);
+
 		my @copy = @{$prepare->{'copy'} || []};
 
 		# process all directories to create
