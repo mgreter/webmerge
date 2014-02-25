@@ -12,8 +12,9 @@ pushd 64
 
 pp -B -o webmerge.exe ^
 -I ../../scripts/modules ^
+-M CSS::Sass ^
+-M XML::LibXML::SAX ^
 -l "%PERLPATH%/c/bin/zlib1__.dll" ^
--l "%PERLPATH%/c/bin/libz__.dll" ^
 -l "%PERLPATH%/c/bin/liblzma-5__.dll" ^
 -l "%PERLPATH%/c/bin/libxml2-2__.dll" ^
 -l "%PERLPATH%/c/bin/libiconv-2__.dll" ^

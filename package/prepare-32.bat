@@ -8,6 +8,6 @@ SET PATH=%PERLPATH%\perl\site\bin;%PATH%
 SET PATH=%PERLPATH%\perl\bin;%PATH%
 SET PATH=%PERLPATH%\c\bin;%PATH%
 
-cpanm PAR::Packer
+call cpanm PAR::Packer
 
 cmd
