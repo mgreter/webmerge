@@ -10,11 +10,21 @@ SET PATH=%PERLPATH%\c\bin;%PATH%
 
 SET PERL_DIR=%CD%\32\perl\perl
 REM you will need to copy this over from data/.cpanm
-SET PAR_PACKER_SRC=%CD%\32\perl\cpan\build\PAR-Packer-1.017
+SET PAR_PACKER_SRC=%CD%\32\perl\cpan\build
 
-copy /Y ..\res\webmerge.ico "%PAR_PACKER_SRC%\myldr\winres\pp.ico"
+REM for /D %%a in (32\perl\data\.cpanm\work) do @if exist %%a echo %%a
+for /f "tokens=*" %%a in ('dir /b /a:d "32\perl\data\.cpanm\work"') do @if exist 32\perl\data\.cpanm\work\%%a\PAR-Packer-* set workpath=%%a
+for /f "tokens=*" %%a in ('dir /b /a:d "32\perl\data\.cpanm\work\%workpath%\PAR-Packer-*"') do set workversion=%%a
 
-pushd "%PAR_PACKER_SRC%\myldr\"
+echo "got %workpath% - %workversion%"
+
+mkdir 32\perl\cpan\build
+
+xcopy /S /E /Q /Y "32\perl\data\.cpanm\work\%workpath%\%workversion%" "32\perl\cpan\build\%workversion%\"
+
+copy /Y ..\res\webmerge.ico "%PAR_PACKER_SRC%\%workversion%\myldr\winres\pp.ico"
+
+pushd "%PAR_PACKER_SRC%\%workversion%\myldr\"
 
 del ppresource.coff
 perl Makefile.PL
@@ -24,6 +34,6 @@ dmake Static.pm
 popd
 
 attrib -R "%PERL_DIR%\site\lib\PAR\StrippedPARL\Static.pm"
-copy /Y "%PAR_PACKER_SRC%\myldr\Static.pm" "%PERL_DIR%\site\lib\PAR\StrippedPARL\Static.pm"
+copy /Y "%PAR_PACKER_SRC%\%workversion%\myldr\Static.pm" "%PERL_DIR%\site\lib\PAR\StrippedPARL\Static.pm"
 
 pause
