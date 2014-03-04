@@ -330,10 +330,15 @@ sub _vfile {
 # Open a file and parse it with parse_shtml().
 # "file" specifies the path relative to the directory of the current file
 sub _file {
+  use IO::HTML qw(html_file_and_encoding);
   my ($self, $file, $dom) = @_;
-  open( FILE, "<$file" ) or warn "Couldn't open $file: $!\n" && return "";
-  my @list = <FILE>;
-  close (FILE);
+  # guess the encoding of the included html file
+  my ($fh, $enc, $bom) = html_file_and_encoding($file)
+    or warn "Couldn't open $file: $!\n"
+       && return "[pQuery could not open file]";
+  print "SSI-Inc with encoding charset: $enc\n" if $self->{'debug'};
+  my @list = <$fh>;
+  close ($fh);
   map { chomp } @list;
   if ($dom)
   {

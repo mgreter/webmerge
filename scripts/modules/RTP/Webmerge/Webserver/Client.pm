@@ -4,7 +4,6 @@
 ###################################################################################################
 package RTP::Webmerge::Webserver::Client;
 ###################################################################################################
-#		use bytes;
 
 use Carp;
 use strict;
@@ -547,15 +546,22 @@ sub canRead
 			$ENV{'DOCUMENT_ROOT'} = canonpath(check_path($config->{'webroot'}));
 			$CGI::SHTML::ROOTDIR = $ENV{'DOCUMENT_ROOT'};
 			chdir dirname $file;
-			my $fh = IO::File->new();
+			use Encode qw(encode decode);
+			use IO::HTML qw(html_file_and_encoding);
+			my ($fh, $enc, $bom) = html_file_and_encoding($file);
 			my $cgi = CGI::SHTML->new;
 			$fh->open($file, "r") or
 			  return $sock->send_error(RC_FORBIDDEN);
 			my($ct,$ce) = guess_media_type($file);
+			warn "cannot guess media type?" if ($ct ne 'text/html');
+			print "HTML with encoding charset: $enc\n" if $config->{'debug'};
+			$cgi->{'debug'} = $config->{'debug'};
 			my($size,$mtime) = (stat $file)[7,9];
 			my $content = join('', <$fh>);
 			my $response = HTTP::Response->new( 200 );
+			$content = decode($enc, $content);
 			$content = $cgi->parse_shtml($content);
+			$content = encode($enc, $content);
 			$response->content( $content );
 			$response->header("Content-Type" => $ct) if $ct;
 			$response->header("Content-Encoding" => $ce) if $ce;
