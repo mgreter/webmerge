@@ -187,18 +187,28 @@ sub dependencies
 		# store additional space attached
 		my $prefix = $1; my $postfix = $8;
 
-		# resolve import filename
-		# try to load scss partials
-		$import = $resolver->($self, $import);
+		# got something with a protocol?
+		if ($import =~ m/([a-z]+\:)?\/\//)
+		{
+		}
+		# got a regular file
+		else
+		{
 
-		# create and load a new css input object
-		my $dep = RTP::Webmerge::Input::CSS->new($import, $config);
+			# resolve import filename
+			# try to load scss partials
+			$import = $resolver->($self, $import);
 
-		# get it's own dependencies and add them up
-		push(@{$self->{'deps'}}, @{$dep->dependencies});
+			# create and load a new css input object
+			my $dep = RTP::Webmerge::Input::CSS->new($import, $config);
 
-		# add dependency to imports
-		push(@{$self->{'import'}}, $dep);
+			# get it's own dependencies and add them up
+			push(@{$self->{'deps'}}, @{$dep->dependencies});
+
+			# add dependency to imports
+			push(@{$self->{'import'}}, $dep);
+
+		}
 
 	}
 	# EO while imports
@@ -267,36 +277,49 @@ sub render
 		# store additional space attached
 		my $prefix = $1; my $postfix = $8;
 
-		# resolve import filename
-		# try to load scss partials
-		$import = $resolver->($self, $import);
-
-		# parse the import filename into its parts
-		my ($name, $path, $suffix) = fileparse($import, 'scss', 'css');
-
-		# create template to check for specific option according to import type
-		my $cfg = sprintf '%%s-%s-%s', $suffix, $partial ? 'partials' : 'imports';
-
-		# check if we should embed this import
-		if ($config->{ sprintf $cfg, 'embed' })
+		# got something with a protocol?
+		if ($import =~ m/([a-z]+\:)?\/\//)
 		{
-
-			# load the referenced stylesheet (don't parse yet)
-			# ToDo: for scss this may be from current scss file or cwd
-			my $css = RTP::Webmerge::Input::CSS->new($import, $config);
-
-			# render scss relative to old base
-			return "\n" . ${ $css->render($expbase) } . "\n";
-
+			# wrap the same type as before (add options to rewrite)
+			if ($partial) { return $prefix . sprintf($tmpl, '"' . $import . '"') }
+			elsif ($wrapped) { return $prefix . sprintf($tmpl, wrapURL($import)) }
 		}
-		# otherwise preserve import statement
+		# got a regular file
 		else
 		{
 
-			my $export = exportURI($import, $expbase);
-			# wrap the same type as before (add options to rewrite)
-			if ($partial) { return $prefix . sprintf($tmpl, '"' . $export . '"') }
-			elsif ($wrapped) { return $prefix . sprintf($tmpl, wrapURL($export)) }
+			# resolve import filename
+			# try to load scss partials
+			$import = $resolver->($self, $import);
+
+			# parse the import filename into its parts
+			my ($name, $path, $suffix) = fileparse($import, 'scss', 'css');
+
+			# create template to check for specific option according to import type
+			my $cfg = sprintf '%%s-%s-%s', $suffix, $partial ? 'partials' : 'imports';
+
+			# check if we should embed this import
+			if ($config->{ sprintf $cfg, 'embed' })
+			{
+
+				# load the referenced stylesheet (don't parse yet)
+				# ToDo: for scss this may be from current scss file or cwd
+				my $css = RTP::Webmerge::Input::CSS->new($import, $config);
+
+				# render scss relative to old base
+				return "\n" . ${ $css->render($expbase) } . "\n";
+
+			}
+			# otherwise preserve import statement
+			else
+			{
+
+				my $export = exportURI($import, $expbase);
+				# wrap the same type as before (add options to rewrite)
+				if ($partial) { return $prefix . sprintf($tmpl, '"' . $export . '"') }
+				elsif ($wrapped) { return $prefix . sprintf($tmpl, wrapURL($export)) }
+
+			}
 
 		}
 
