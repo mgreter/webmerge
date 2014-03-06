@@ -90,40 +90,52 @@ sub importURI
 	# set relpath to webroot if nothin else given
 	$relpath = $directory unless defined $relpath;
 
-	# remove hash tag and query string for URI
-	my $suffix = $uri =~ s/([\;\?\#].*?)$// ? $1 : '';
-
-	# get path and filename
-	my $path = dirname $uri;
-	my $file = basename $uri;
-
-	# do nothing if uri is empty
-	return $uri . $suffix if $uri eq '';
-
-	# check if URI is absolute
-	if ($uri =~ m/^\//)
+	# got something with a protocol?
+	if ($uri =~ m/([a-z]+\:)?\/\//)
 	{
-		# absolute uris should be loaded from webroot
-		# if you need another webroot, localize it before
-		$path = realpath(join('/', $webroot, $path));
+
+		return $uri;
+
 	}
 	else
 	{
-		# relative uris load from parent css file
-		# or from the current working directory (bugfix)
-		eval { $path = realpath(resolveURI($path, [$relpath, $directory])); };
-		# use carp to report errors
-		# will show the calling line
-		carp $@ if $@;
+
+		# remove hash tag and query string for URI
+		my $suffix = $uri =~ s/([\;\?\#].*?)$// ? $1 : '';
+
+		# get path and filename
+		my $path = dirname $uri;
+		my $file = basename $uri;
+
+		# do nothing if uri is empty
+		return $uri . $suffix if $uri eq '';
+
+		# check if URI is absolute
+		if ($uri =~ m/^\//)
+		{
+			# absolute uris should be loaded from webroot
+			# if you need another webroot, localize it before
+			$path = realpath(join('/', $webroot, $path));
+		}
+		else
+		{
+			# relative uris load from parent css file
+			# or from the current working directory (bugfix)
+			eval { $path = realpath(resolveURI($path, [$relpath, $directory])); };
+			# use carp to report errors
+			# will show the calling line
+			carp $@ if $@;
+		}
+
+		# assert that at least the path of the URI exists on the actual filesystem
+		carp "URI($uri) could not be imported (CWD: $relpath)\n" unless $path && -d $path;
+
+		# return the final absolute local path
+		# the suffix is lost as we convert the
+		# URI to a real absolute local filepath
+		return join('/', $path, $file . $suffix);
+
 	}
-
-	# assert that at least the path of the URI exists on the actual filesystem
-	carp "URI($uri) could not be imported (CWD: $relpath)\n" unless $path && -d $path;
-
-	# return the final absolute local path
-	# the suffix is lost as we convert the
-	# URI to a real absolute local filepath
-	return join('/', $path, $file . $suffix);
 
 }
 # EO sub importURI
