@@ -333,9 +333,9 @@ sub _file {
   use IO::HTML qw(html_file_and_encoding);
   my ($self, $file, $dom) = @_;
   # guess the encoding of the included html file
-  my ($fh, $enc, $bom) = html_file_and_encoding($file)
+  my ($fh, $enc, $bom) = eval { html_file_and_encoding($file) }
     or warn "Couldn't open $file: $!\n"
-       && return "[pQuery could not open file]";
+       && return "[SSI error - could not open file: $file]";
   print "SSI-Inc with encoding charset: $enc\n" if $self->{'debug'};
   my @list = <$fh>;
   close ($fh);
