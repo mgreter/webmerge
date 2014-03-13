@@ -45,6 +45,7 @@ use RTP::Webmerge::Optimize;
 use RTP::Webmerge::Checksum;
 use RTP::Webmerge::Watchdog;
 use RTP::Webmerge::Webserver;
+use RTP::Webmerge::Webdumper;
 
 # load additional modules (no import)
 use RTP::Webmerge::Compile::JS qw();
@@ -151,6 +152,11 @@ $default->apply({
 	# parallel jobs
 	'jobs' => 2,
 
+	# dump website
+	'webdump' => 0,
+	# default directory
+	'dumproot' => 'dump',
+
 	# start webserver
 	'webserver' => 0,
 
@@ -190,6 +196,10 @@ my @opts = (
 	# maybe change these in the config file
 	'webroot=s' => \$default->{'cmd_webroot'},
 	'doctype|d=s' => \$default->{'cmd_doctype'},
+
+	# options for website dumping
+	'webdump!' => \$default->{'cmd_webdump'},
+	'dumproot=s' => \$default->{'cmd_dumproot'},
 
 	# enable/disable base operations
 	'action!' => \$default->{'cmd_action'},
@@ -313,6 +323,11 @@ $default->{'configpath'} =~ s/\/[^\/]+$//;
 # register path within our path modules for later use
 $RTP::Webmerge::Path::confroot = $default->{'configpath'};
 
+# make absolute path out of dumproot now
+if ( defined $default->{'dumproot'} )
+{ $default->{'dumproot'} = check_path($default->{'dumproot'}) }
+if ( defined $default->{'cmd_dumproot'} )
+{ $default->{'cmd_dumproot'} = check_path($default->{'cmd_dumproot'}) }
 
 ################################################################################
 # xml helper function for the include directive
@@ -453,7 +468,10 @@ checkConfig($config) or die "config check failed";
 # Experimental webserver
 ################################################################################
 
-# merge if not starting watchdog
+# write webdump if configured
+webdump $config if $config->{'webdump'};
+
+# start webserver if configured
 webserver $config if $config->{'webserver'};
 
 
@@ -794,6 +812,9 @@ webmerge [options] [steps]
 
    --webroot              webroot directory to render absolute urls
    --absoluteurls         export urls as absolute urls (from webroot)
+
+   --webdump              dump a copy of all html files (resolve SSI)
+   --dumproot             directory where the dump files are written to
 
    --import-css           inline imported css files into stylesheet
    --import-scss          inline imported scss files into stylesheet
