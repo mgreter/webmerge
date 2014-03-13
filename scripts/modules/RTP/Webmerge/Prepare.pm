@@ -126,26 +126,49 @@ sub prepare
 				my $srcs = check_path $copy->{'src'};
 				my $dest = check_path $copy->{'dst'};
 
-				my $tmpl = $dest;
-				my $root = $tmpl;
+				my $root = $dest;
+				my $oldroot = $root;
 
-				if (-d $root)
-				{
-					$tmpl = '$(filename)';
-					$root = $root;
-				}
-				else
-				{
-					$tmpl = basename($root);
-					$root = dirname($root);
-				}
+				# is destination a directory?
+				# this test is rubish as it may be false
+				# before and true after the operation,
+				# and therefore leads to wrong behaviours.
 
+				# we may have multiple inputs, so how would
+				# we know how to rename a specific file or dir?
+				# so has the destination always to be the base dir?
 
+				# add a special rename task to run afterwards?
+				# or differenciate between single and bulk copy?
+
+				# we may also be able to tell if it should be a
+				# directory or a file to be renamed, but we may
+				# never know if we want to rename a directory!
+
+				my $rebase = $copy->{'rebase'} && $copy->{'rebase'} ne "false";
 
 				# get all sources files via glob
 				# this does not yet support recursive
 				foreach my $src (bsd_glob($srcs))
 				{
+
+					my $tmpl;
+
+					if ($rebase && -d $src)
+					{
+						$tmpl = basename($oldroot);
+						$root = dirname($oldroot);
+					}
+					elsif (-d $src || -d $oldroot)
+					{
+						$tmpl = '$(filename)';
+						$root = $oldroot;
+					}
+					else
+					{
+						$tmpl = basename($oldroot);
+						$root = dirname($oldroot);
+					}
 
 					my $dst = join('/', $root, $tmpl);
 
@@ -170,6 +193,8 @@ sub prepare
 
 							next if $item eq '.';
 							next if $item eq '..';
+							next if $item =~ m/\.TMP\.webmerge$/;
+
 
 							push(@todo, {
 								'src' => join('/', $src, $item),

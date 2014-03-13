@@ -154,7 +154,7 @@ sub finish
 
 					my $tmpl;
 
-					if ($rebase)
+					if ($rebase && -d $src)
 					{
 						$tmpl = basename($oldroot);
 						$root = dirname($oldroot);
