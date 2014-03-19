@@ -1,0 +1,78 @@
+################################################################################
+# Copyright 2014 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+################################################################################
+# XML root is a scope that has no parent
+# Stop certain cascading methods here
+################################################################################
+package OCBNET::Webmerge::Config::XML::Include;
+################################################################################
+use base 'OCBNET::Webmerge::Config::XML::Node';
+################################################################################
+
+use strict;
+use warnings;
+
+################################################################################
+# webmerge xml parser implementation
+################################################################################
+
+sub started
+{
+	# get arguments from parser
+	my ($node, $webmerge) = @_;
+	# invoke parent class method
+	my $rv = $node->SUPER::started($webmerge);
+	# store the include filename on this node
+	$node->scope->{'filename'} = $webmerge->{'filename'};
+	# return result
+	return $rv;
+}
+
+################################################################################
+# return information about include scope
+################################################################################
+use File::Basename qw(dirname);
+################################################################################
+
+# return the full include filename
+sub filename { $_[0]->abspath($_[0]->scope->{'filename'}) }
+
+# return the base directory of the include
+sub confroot { $_[0]->abspath(dirname $_[0]->scope->{'filename'}) }
+
+################################################################################
+# return resolved path
+################################################################################
+
+sub respath
+{
+	# get arguments
+	my ($node, $path) = @_;
+	# resolve some specific placeholders
+	$path =~ s/^\{CONF\}/$node->confroot/ei;
+	# cascade down to the parent class
+	return $node->SUPER::respath($path);
+}
+
+################################################################################
+# execute event
+################################################################################
+
+sub execute
+{
+	print " " x $_[0]->level;
+	print "exec ", $_[0]->tag, "\n";
+	shift->SUPER::execute(@_);
+}
+
+################################################################################
+# some accessor methods
+################################################################################
+
+# return node type
+sub type { 'INCLUDE' }
+
+################################################################################
+################################################################################
+1;
