@@ -222,8 +222,8 @@ sub ssi {
   }
 
   if (lc $command eq 'include') {
-    if ( defined $hash{'virtual'} ) { $self->_file(_vfile( $hash{'virtual'} ), $hash{'dom'}) }
-    elsif ( defined $hash{'file'} ) { $self->_file( $hash{'file'}, $hash{'dom'} ) }
+    if ( defined $hash{'virtual'} ) { $self->_file(_vfile( $hash{'virtual'} ), \%hash) }
+    elsif ( defined $hash{'file'} ) { $self->_file( $hash{'file'}, \%hash ) }
     else { return "No filename offered" };
   } elsif (lc $command eq 'set') {
     my $var = $hash{'var'} || return "No variable to set";
@@ -331,7 +331,7 @@ sub _vfile {
 # "file" specifies the path relative to the directory of the current file
 sub _file {
   use IO::HTML qw(html_file_and_encoding);
-  my ($self, $file, $dom) = @_;
+  my ($self, $file, $hash) = @_;
   # guess the encoding of the included html file
   my ($fh, $enc, $bom) = eval { html_file_and_encoding($file) }
     or warn "Couldn't open $file: $!\n"
@@ -340,10 +340,11 @@ sub _file {
   my @list = <$fh>;
   close ($fh);
   map { chomp } @list;
-  if ($dom)
+  if ($hash->{'dom'})
   {
 		local $_;
   	use pQuery;
+  	my $dom = $hash->{'dom'};
 		my $pQuery = pQuery(join("\n", @list));
 		return "[pQuery could not parse DOM (error)]" unless $pQuery;
 		return "[pQuery could not parse DOM]" unless $pQuery->length;
@@ -352,8 +353,15 @@ sub _file {
 		return "[DOM root node not found]" unless $node->length;
 		@list = ($node->html) if $node;
   }
+
+  # concat the fill response code
+  my $data = join("\n", @list);
+  # apply some minimalistic templating
+  $data =~ s/\$\{([a-zA-Z0-9]+)(?:\s*\|\|\s*(.*?)\s*)?\}/
+  	exists $hash->{$1} ? $hash->{$1} : $2
+  /egx;
   # get just a certain node, remove others
-  return $self->parse_shtml(join("\n", @list));
+  return $self->parse_shtml($data);
 }
 
 ## _execute( CMD )
