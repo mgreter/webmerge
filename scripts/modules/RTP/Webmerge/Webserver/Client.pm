@@ -139,7 +139,8 @@ push @readers, sub
 
 	# declare and assign local variables
 	my ($method, $uri, $proto) = ($1, $2, $3 || "HTTP/0.9");
-
+	# fixes a sepecific bug
+	$uri =~ s/\/+/\//g;
 	# create the final uri to access actually
 	$uri = "http://" . $uri if $method eq "CONNECT";
 	$uri = $HTTP::URI_CLASS->new($uri); #, $conn->daemon->url);
