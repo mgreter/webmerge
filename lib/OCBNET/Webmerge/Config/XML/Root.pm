@@ -99,5 +99,45 @@ sub respath
 }
 
 ################################################################################
+# everything should have root as a parent
+################################################################################
+
+sub hasParent
+{
+	return $_[0] eq $_[1];
+}
+
+################################################################################
+# return a list of nodes that are not children of any other node
+################################################################################
+
+sub roots
+{
+	my @roots;
+	# remove root
+	my $root = shift;
+	# process the list from behind
+	my $n = scalar(@_); while ($n--)
+	{
+		# status variable
+		my $has_parent = 0;
+		# process the list from behind
+		my $i = scalar(@_); while ($i--)
+		{
+			# dont test yourself
+			next if $i == $n;
+			# check if the node has a known parent
+			$has_parent = $_[$n]->hasParent($_[$i]);
+			# abort the loop now
+			last if $has_parent;
+		}
+		# only collect nodes that have no parent
+		push @roots, $_[$n] unless $has_parent;
+	}
+	# return nodes
+	return @roots;
+}
+
+################################################################################
 ################################################################################
 1;

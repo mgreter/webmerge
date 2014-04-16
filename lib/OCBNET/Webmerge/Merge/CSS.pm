@@ -20,6 +20,31 @@ sub execute
 	die "jo";
 }
 
+sub merge
+{
+	my ($node, $context) = @_;
+
+my $encoding = 'ISO-8859-1';
+
+$encoding = 'utf8';
+
+	foreach my $out ($node->find('OUTPUT'))
+	{
+		die $out;
+	}
+
+open(my $fh, ">>:encoding($encoding)", "d:\\output.txt");
+
+	print $fh "\@charset \"$encoding\";\n\n" if ($encoding ne "utf8");
+	foreach my $in ($node->find('INPUT'))
+	{
+		my $css = $in->read;
+		print $fh ${$css}, "\n";
+	}
+
+	return "merge css";
+}
+
 ################################################################################
 # some accessor methods
 ################################################################################

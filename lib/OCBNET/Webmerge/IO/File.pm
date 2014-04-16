@@ -61,7 +61,9 @@ sub open
 	# we only support some open modes
 	else { die "invalid open mode $mode"; }
 	# try to open the filehandle with correct encoding
-	open(my $fh, $mode, $node->path);
+	my $rv = open(my $fh, $mode, $node->path);
+	# report errors back when opening failed
+	die "could not open " . $node->path unless $rv;
 	# read raw data
 	binmode ($fh);
 	# return filehandle

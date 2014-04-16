@@ -25,8 +25,12 @@ sub open
 	my $path = $node->path;
 	# open the filehandle in raw mode
 	my $fh = $node->SUPER::open($mode);
-	# sniff and store the encoding for the css file
-	$node->{'encoding'} = sniff_encoding($fh, $path);
+	# sniff the encoding for the html file
+	my $encoding = sniff_encoding($fh, $path);
+	# store sniffed encoding on file node
+	$node->{'encoding'} = $encoding if $encoding;
+	# put a debug message to the console about the encoding
+	print "read html with encoding: ", $node->{'encoding'}, "\n";
 	# return filehandle
 	return $fh;
 }
