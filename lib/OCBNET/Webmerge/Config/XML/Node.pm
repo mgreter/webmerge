@@ -68,6 +68,9 @@ sub DESTROY { }
 # return node type
 sub type { 'NODE' }
 
+# return the id
+sub id { $_[0]->attr('id') }
+
 # return the tag name
 sub tag { $_[0]->{'tag'} }
 
@@ -128,7 +131,14 @@ sub remove
 ################################################################################
 # get node by id (or undef if not found)
 ################################################################################
+
 sub getById { $_[0]->document->{'ids'}->{$_[1]} }
+
+################################################################################
+# check if we are a child of a certain parent
+################################################################################
+
+sub hasParent { $_[0]->parent eq $_[1] || $_[0]->parent->hasParent($_[1]) }
 
 ################################################################################
 # find children by tagname
@@ -146,6 +156,7 @@ sub closest { $_[0]->tag =~ $_[1] ? $_[0] : $_[0]->parent->closest($_[1]) }
 # call method on all children
 ################################################################################
 
+sub deps { map { $_->deps } $_[0]->children }
 sub execute { $_->execute foreach $_[0]->children }
 
 ################################################################################
@@ -205,6 +216,8 @@ sub abspath
 ################################################################################
 # implement tags in different classes
 ################################################################################
+# this should be more plugin friendly
+################################################################################
 
 my %parse = (
 	'xml' => 'OCBNET::Webmerge::Config::XML::Include',
@@ -213,6 +226,8 @@ my %parse = (
 	'config' => 'OCBNET::Webmerge::Config::XML::Config',
 	'js' => 'OCBNET::Webmerge::Config::XML::Merge::JS',
 	'css' => 'OCBNET::Webmerge::Config::XML::Merge::CSS',
+
+	'echo' => 'OCBNET::Webmerge::Config::XML::Echo',
 
 	'file' => 'OCBNET::Webmerge::Config::XML::File',
 	'input' => 'OCBNET::Webmerge::Config::XML::Input',

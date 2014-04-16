@@ -10,6 +10,7 @@ use XML::Parser; use base "XML::Parser";
 ################################################################################
 require OCBNET::Webmerge::Config::XML::Node;
 require OCBNET::Webmerge::Config::XML::Root;
+require OCBNET::Webmerge::Config::XML::Echo;
 require OCBNET::Webmerge::Config::XML::File;
 require OCBNET::Webmerge::Config::XML::Merge;
 require OCBNET::Webmerge::Config::XML::Scope;
