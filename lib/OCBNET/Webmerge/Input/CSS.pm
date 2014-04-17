@@ -4,7 +4,7 @@
 ################################################################################
 package OCBNET::Webmerge::Input::CSS;
 ################################################################################
-# use base 'OCBNET::Webmerge::IO::Input';
+use base 'OCBNET::Webmerge::Input';
 ################################################################################
 use OCBNET::CSS3;
 ################################################################################
@@ -16,13 +16,6 @@ use warnings;
 # some accessor methods
 ################################################################################
 
-sub merge
-{
-
-	my ($node, $context) = @_;
-	my $src = $node->attr('src');
-
-}
 
 sub deps
 {
@@ -51,7 +44,7 @@ push @imports, $object->url if $object->type eq 'import';
 return @imports;
 
 
-	die $sheet->render eq ${$node->read} ? "ok" : "Nok";
+	print $sheet->render eq ${$node->read} ? "ok" : "Nok";
 
 	die "i have deps";
 }

@@ -7,6 +7,7 @@ package OCBNET::Webmerge::Config::XML::Input::JS;
 use base qw(
 	OCBNET::Webmerge::Config::XML::Input
 	OCBNET::Webmerge::IO::File::JS
+	OCBNET::Webmerge::Input::JS
 );
 ################################################################################
 

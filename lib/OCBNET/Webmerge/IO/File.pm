@@ -117,6 +117,11 @@ sub write
 	my ($node, $data) = @_;
 	# get path from node
 	my $path = $node->path;
+
+	# do some checking before writing to give good error messages
+	die "error\nwriting to non existent directory" unless (-d dirname($path));
+	die "error\nwriting to unwriteable directory" unless (-w dirname($path));
+
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# check if commit is pending
@@ -140,6 +145,8 @@ sub write
 		# my $closed = ${*$atomic}{'io_atomicfile_closed'};
 		# open a new writeable file handle
 		my $fh = $atomic->open($path, 'w+');
+		# error out if we could not open the file
+		die "failed\n$!" unless $fh;
 		# attach written scalar to atomic instance
 		${*$atomic}{'io_atomicfile_data'} = $data;
 		# attach atomic instance to scope
@@ -187,6 +194,67 @@ sub commit
 	my $rv = $atomic->close
 }
 
+################################################################################
+use Digest::MD5;
+use Encode qw(encode_utf8);
+###############################################################################
+
+sub md5sum
+{
+	# get the file node
+	my ($node) = @_;
+	# create a new digest object
+	my $md5 = Digest::MD5->new;
+	# add encoded string for md5 digesting
+	$md5->add(encode_utf8(${$node->read}));
+	# return uppercase hex crc
+	return uc($md5->hexdigest);
+}
+
+sub md5short
+{
+	# get the optionaly configured fingerprint length
+	my $len = $_[0]->config('fingerprint-length') || 12;
+	# return a short configurable length md5sum
+	return substr($_[0]->md5sum($_[1]), 0, $len);
+}
+
+###############################################################################
+use File::Basename;
+###############################################################################
+
+sub fingerprint
+{
+
+	# get passed variables
+	my ($input, $target, $data) = @_;
+
+	# assign variables from object
+	my $path = $input->path;
+	# read from file if no data passed
+	$data = $input->read unless $data;
+
+	# get the fingerprint config option if not explicitly given
+	my $technique = $input->config(join('-', 'fingerprint', $target));
+
+	# do not add a fingerprint at all if feature is disabled
+	return $path unless $input->config('fingerprint') && $technique;
+
+	# simply append the fingerprint as a unique query string
+	return join('?', $path, $input->md5short) if $technique eq 'q';
+
+	# insert the fingerprint as a (virtual) last directory to the given path
+	# this will not work out of the box - you'll need to add some rewrite directives
+	return join('/', dirname($path), $input->md5short, basename($path)) if $technique eq 'd';
+	return join('/', dirname($path), $input->md5short . '-' . basename($path)) if $technique eq 'f';
+
+	# exit and give an error message if technique is not known
+	die 'fingerprint technique <', $technique, '> not implemented', "\n";
+
+	# at least return something
+	return $path;
+
+}
 ################################################################################
 ################################################################################
 1;

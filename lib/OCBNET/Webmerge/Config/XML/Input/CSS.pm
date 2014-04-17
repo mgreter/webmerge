@@ -31,7 +31,7 @@ sub open
 	# store sniffed encoding on file node
 	$node->{'encoding'} = $encoding if $encoding;
 	# put a debug message to the console about the encoding
-	print "open css with encoding: ", $node->{'encoding'}, "\n";
+	# print "open css with encoding: ", $node->{'encoding'}, "\n";
 	# return filehandle
 	return $fh;
 }

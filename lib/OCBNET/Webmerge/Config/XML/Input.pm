@@ -39,6 +39,12 @@ sub new
 }
 
 ################################################################################
+# some common attribute getters
+################################################################################
+
+# sub process { $_[0]->attr('process') }
+
+################################################################################
 # upgrade into specific input input class
 ################################################################################
 
@@ -59,6 +65,7 @@ sub started
 ################################################################################
 
 sub path { return File::Spec->join($_[0]->directory, $_[0]->attr('path')); }
+sub dpath { return File::Spec->join($_[0]->directory, $_[0]->attr('path')); }
 
 ################################################################################
 # some accessor methods
@@ -66,30 +73,6 @@ sub path { return File::Spec->join($_[0]->directory, $_[0]->attr('path')); }
 
 # return node type
 sub type { 'INPUT' }
-
-sub execute
-{
-
-return;
-	my $start = $_[0]->read;
-
-	print "read: ", ${$start}, "\n";
-
-	my $count = 1 + ${$start};
-
-	my $atomic1 = $_[0]->write(\ "$count");
-	my $atomic2 = $_[0]->write(\ "$count");
-
-	print 'write: ', $atomic1, "\n";
-	print 'write: ', $atomic2	, "\n";
-
-	my $content = $_[0]->read;
-
-	print "final: ", ${$content}, "\n";
-
-
-	# die ;
-}
 
 ################################################################################
 ################################################################################

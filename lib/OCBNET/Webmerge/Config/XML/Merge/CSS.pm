@@ -19,9 +19,11 @@ use warnings;
 
 sub execute
 {
-	print " " x $_[0]->level;
-	print "exec ", $_[0]->tag, "\n";
-	shift->SUPER::execute(@_);
+
+	&OCBNET::Webmerge::Merge::CSS::execute
+	# print " " x $_[0]->level;
+	# print "exec ", $_[0]->tag, "\n";
+	# shift->SUPER::execute(@_);
 }
 
 ################################################################################

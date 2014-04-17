@@ -17,20 +17,23 @@ use warnings;
 sub execute
 {
 	my ($node, $context) = @_;
-	die "jo";
-}
 
-sub merge
-{
-	my ($node, $context) = @_;
 
 my $encoding = 'ISO-8859-1';
 
 $encoding = 'utf8';
-
-	foreach my $out ($node->find('OUTPUT'))
+print "exec merge CSS\n";
+	foreach my $output ($node->find('OUTPUT'))
 	{
-		die $out;
+		STDOUT->autoflush(1);
+		printf "render %s ... ", $output->dpath;
+		my $data = $output->render;
+		print $data ? "ok\n" : "failed\n";
+		printf "writing %s ... ", $output->dpath;
+		my $rv = $output->write($data);
+		print $rv ? "ok\n" : "failed\n";
+
+
 	}
 
 open(my $fh, ">>:encoding($encoding)", "d:\\output.txt");

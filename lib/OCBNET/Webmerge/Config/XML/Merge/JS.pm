@@ -4,7 +4,10 @@
 ################################################################################
 package OCBNET::Webmerge::Config::XML::Merge::JS;
 ################################################################################
-use base 'OCBNET::Webmerge::Config::XML::Merge';
+use base qw(
+	OCBNET::Webmerge::Config::XML::Merge
+	OCBNET::Webmerge::Merge::JS
+);
 ################################################################################
 
 use strict;
