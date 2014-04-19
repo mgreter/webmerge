@@ -16,6 +16,8 @@ my $ns = 'css::scss';
 ################################################################################
 # alter data in-place
 ################################################################################
+my $footer = "/* libsass base: url(%s) */\n\n";
+################################################################################
 
 sub process
 {
@@ -73,7 +75,7 @@ sub process
 	# ${$data} =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
 
 	# add an indicator about the processor
-	${$data} = "/* libsass root: url($file->dpath) */\n\n" . ${$data};
+	${$data} = sprintf($footer, $file->dpath ) . ${$data};
 
 }
 

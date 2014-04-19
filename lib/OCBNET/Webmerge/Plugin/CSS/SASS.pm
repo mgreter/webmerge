@@ -18,6 +18,8 @@ my $ns = 'css::sass';
 ################################################################################
 use IPC::Run3 qw(run3);
 ################################################################################
+my $footer = "/* roby sass base: url(%s) */\n\n";
+################################################################################
 
 sub process
 {
@@ -63,7 +65,7 @@ sub process
 	# $compiled =~ s/$re_url/wrapURL(importURI($+{url}, $directory, $config))/egm;
 
 	# add an indicator about the processor (put compiled code)
-	${$data} = "/* ruby sass root: url($file->dpath) */\n\n" . $compiled;
+	${$data} = sprintf($footer, $file->dpath ) . ${$data};
 
 }
 

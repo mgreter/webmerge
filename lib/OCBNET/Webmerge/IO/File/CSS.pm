@@ -17,17 +17,17 @@ use IO::CSS qw(sniff_encoding);
 sub open
 {
 	# get arguments
-	my ($node, $mode) = @_;
+	my ($file, $mode) = @_;
 	# get path for node
-	my $path = $node->path;
+	my $path = $file->path;
 	# open the filehandle in raw mode
-	my $fh = $node->SUPER::open($mode);
+	my $fh = $file->SUPER::open($mode);
 	# sniff the encoding for the css file
 	my $encoding = sniff_encoding($fh, $path);
 	# store sniffed encoding on file node
-	$node->{'encoding'} = $encoding if $encoding;
+	$file->{'encoding'} = $encoding if $encoding;
 	# put a debug message to the console about the encoding
-	# print "open css with encoding: ", $node->{'encoding'}, "\n";
+	# print "open css with encoding: ", $file->{'encoding'}, "\n";
 	# return filehandle
 	return $fh;
 }
@@ -42,16 +42,16 @@ sub sheet
 {
 
 	# get arguments
-	my ($node) = @_;
+	my ($file, $data) = @_;
 	# check if we have it cached
-	if (exists $node->{'sheet'})
-	{ return $node->{'sheet'}; }
+	if (exists $file->{'sheet'})
+	{ return $file->{'sheet'}; }
 	# create a new stylesheet
 	my $sheet = OCBNET::CSS3->new;
-	# parse the content node
-	$sheet->parse(${$node->content});
+	# parse the passed data or read from file
+	$sheet->parse(${$data || $file->content});
 	# store to cache and return sheet
-	return $node->{'sheet'} = $sheet;
+	return $file->{'sheet'} = $sheet;
 
 }
 
@@ -62,21 +62,21 @@ sub sheet
 sub revert
 {
 	# shift context
-	my $node = shift;
+	my $file = shift;
 	# call parent class
-	$node->SUPER::revert(@_);
+	$file->SUPER::revert(@_);
 	# remove cached items
-	delete $node->{'sheet'};
+	delete $file->{'sheet'};
 }
 
 sub commit
 {
 	# shift context
-	my $node = shift;
+	my $file = shift;
 	# call parent class
-	$node->SUPER::revert(@_);
+	$file->SUPER::revert(@_);
 	# remove cached items
-	delete $node->{'sheet'};
+	delete $file->{'sheet'};
 }
 
 ################################################################################

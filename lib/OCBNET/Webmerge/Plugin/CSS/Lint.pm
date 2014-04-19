@@ -31,7 +31,7 @@ sub process
 	my ($data, $file, $scope) = @_;
 
 	# parse sheet and fetch stats
-	my $stats = $file->sheet->stats;
+	my $stats = $file->sheet($data)->stats;
 
 	# get array references from stats
 	my $imports = $stats->{'imports'} || [];

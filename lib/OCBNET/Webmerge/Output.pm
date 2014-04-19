@@ -4,7 +4,7 @@
 ################################################################################
 package OCBNET::Webmerge::Output;
 ################################################################################
-use base OCBNET::Webmerge::IO::File;
+use base OCBNET::Webmerge::File;
 ################################################################################
 
 use strict;
@@ -39,6 +39,9 @@ sub postprocess
 
 	# log action to console
 	$output->logFile('process');
+
+	# call parent post processor
+	$output->SUPER::postprocess($data);
 
 	# act upon different targets
 	if ($output->target eq 'minify')
