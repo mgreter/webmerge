@@ -47,7 +47,8 @@ sub process
 
 	# I should only listen for my own children
 	# IPC::Run3 will spawn it's own children
-	local $SIG{CHLD} = undef;
+	local $SIG{INT} = sub {};
+	local $SIG{CHLD} = sub {};
 
 	# now call run3 to compile the javascript code
 	my $rv = run3($command, $data, $data, \ my $err);

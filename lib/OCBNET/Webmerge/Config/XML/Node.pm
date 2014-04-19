@@ -18,6 +18,13 @@ use strict;
 use warnings;
 
 ################################################################################
+
+sub enabled
+{
+	return 1;
+}
+
+################################################################################
 # constructor
 ################################################################################
 
@@ -77,13 +84,13 @@ sub logBlock
 sub logFile
 {
 	print " " x $_[0]->level;
-	printf "%s: %s\n", $_[1], $_[0]->dpath;
+	printf "% 10s: %s\n", $_[1], $_[0]->dpath;
 }
 
 sub logAction
 {
-	print " " x shift->level;
-	printf shift . "\n", @_;
+	print " " x $_[0]->level;
+	printf "% 10s: %s\n", $_[1], $_[0]->dpath;
 }
 
 sub logSuccess
@@ -127,6 +134,13 @@ sub children { @{$_[0]->{'children'}} }
 
 # get attribute value for given key
 sub attr : lvalue { $_[0]->{'attr'}->{$_[1]} }
+
+################################################################################
+# simply pass call to children
+################################################################################
+
+sub revert { $_->revert(@_) foreach shift->children }
+sub commit { $_->commit(@_) foreach shift->children }
 
 ################################################################################
 # count number of parent levels

@@ -27,7 +27,7 @@ sub process
 	my ($file, $data) = @_;
 
 	# get data from file if not passed
-	$data = $file->content unless $data;
+	$data = $file->contents unless $data;
 
 	# implement processing to alter the data
 	foreach my $name ($file->processors)
@@ -92,7 +92,7 @@ sub localurl
 	$base = $file->directory unless defined $base;
 
 	# allow to overwrite this flag
-	$abs = 1 unless defined $abs;
+	$abs = 0 unless defined $abs;
 
 	# call function with correct arguments
 	return exportUrl($file->path, $base, $abs);

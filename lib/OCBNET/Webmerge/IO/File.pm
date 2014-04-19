@@ -16,8 +16,12 @@ sub new
 {
 	# get arguments
 	my ($node, $parent) = @_;
+	# create a new object if required
+	$node = bless {}, $node if ref $node eq '';
 	# default encoding is utf8
 	$node->{'encoding'} = 'utf8';
+	# return object
+	return $node;
 }
 
 ################################################################################
@@ -130,10 +134,10 @@ sub read
 # same as read but cached
 ################################################################################
 
-sub content
+sub contents
 {
 	# log action to console
-	$_[0]->logFile('content');
+	$_[0]->logFile('contents');
 	# return written content
 	if (exists $_[0]->{'written'})
 	{ return $_[0]->{'written'}; }
@@ -240,9 +244,11 @@ sub revert
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# die if there is nothing to revert
-	die "file never written" unless $atomic;
+	die "file never written: $path" unless $atomic;
+	# also call on possible children
+	$_->revert foreach $node->children;
 	# revert changes
-	my $rv = $atomic->delete
+	my $rv = $atomic->delete;
 }
 
 ################################################################################
@@ -261,6 +267,8 @@ sub commit
 	my $atomic = $node->atomic($path);
 	# die if there is nothing to revert
 	die "file never written" unless $atomic;
+	# also call on possible children
+	$_->commit foreach $node->children;
 	# commit changes
 	my $rv = $atomic->close
 }
@@ -278,7 +286,7 @@ sub md5sum
 	# create a new digest object
 	my $md5 = Digest::MD5->new;
 	# add encoded string for md5 digesting
-	$md5->add(encode_utf8(${$data || $node->content}));
+	$md5->add(encode_utf8(${$data || $node->contents}));
 	# return uppercase hex crc
 	return uc($md5->hexdigest);
 }

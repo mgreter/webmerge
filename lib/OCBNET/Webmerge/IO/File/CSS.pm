@@ -49,7 +49,7 @@ sub sheet
 	# create a new stylesheet
 	my $sheet = OCBNET::CSS3->new;
 	# parse the passed data or read from file
-	$sheet->parse(${$data || $file->content});
+	$sheet->parse(${$data || $file->contents});
 	# store to cache and return sheet
 	return $file->{'sheet'} = $sheet;
 
@@ -74,7 +74,7 @@ sub commit
 	# shift context
 	my $file = shift;
 	# call parent class
-	$file->SUPER::revert(@_);
+	$file->SUPER::commit(@_);
 	# remove cached items
 	delete $file->{'sheet'};
 }

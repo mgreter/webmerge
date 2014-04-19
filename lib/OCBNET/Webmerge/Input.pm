@@ -17,6 +17,13 @@ use warnings;
 sub import { $_[0]->logFile('import') }
 
 ################################################################################
+# read only
+################################################################################
+
+sub revert { }
+sub commit { }
+
+################################################################################
 # render input for output (target)
 ################################################################################
 
@@ -34,7 +41,23 @@ sub render
 	return $input->license($output) if ($target eq 'license');
 
 	# otherwise read the input
-	${$input->content};
+	${$input->contents};
+
+}
+
+################################################################################
+
+sub inputs
+{
+
+	# get arguments
+	my ($input) = @_;
+
+	# we are a single input if we have no ref
+	return $input unless $input->attr('ref');
+
+	# to be implemented
+	die "have a input ref";
 
 }
 

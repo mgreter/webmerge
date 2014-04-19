@@ -68,6 +68,7 @@ sub defaults { \%defaults }
 sub config { $values{$_[1]} }
 
 ################################################################################
+use OCBNET::Webmerge::Checksum;
 use OCBNET::Webmerge::Config::XML;
 ################################################################################
 
@@ -150,6 +151,39 @@ sub load
 
 
 ################################################################################
+# get the mother pid
+################################################################################
+
+my $pid = $$;
+
+################################################################################
+# setup teardown handlers before main program
+################################################################################
+
+# main instance
+our $webmerge;
+
+# clean up
+sub cleanup
+{
+	# kill webmerge if still living
+	if ($pid == $$ && $webmerge)
+	{ undef $webmerge; exit 1; }
+	# call exit
+	exit 0;
+}
+
+# exit on ctrl+c, this make sure
+# that the end handler is called
+# seems not to work on windows
+$SIG{'INT'} = \&cleanup;
+
+# this will always be called
+# when the main script exists
+END { &cleanup }
+
+
+################################################################################
 use Getopt::Long qw(GetOptions);
 use Pod::Usage qw(pod2usage);
 ################################################################################
@@ -169,7 +203,7 @@ sub main
 	or die("Error in command line arguments\n");
 
 	# create a new main webmerge object
-	my $webmerge = OCBNET::Webmerge->new;
+	$webmerge = OCBNET::Webmerge->new;
 
 	# try to load our main config file
 	# this may load additional plugins
@@ -197,7 +231,19 @@ sub main
 	$_->execute foreach (uniq @blocks);
 
 	# execute headinc, embedder (again inside?)
+$webmerge->revert;
+print "in sleep\n";
+	for(my $i = 0; $i < 10; $i++)
+	{
+		select(undef, undef, undef, 0.05);
+	}
 
+}
+
+sub DESTROY
+{
+	warn "DESTROY ME";
+	# $_[0]->revert;
 }
 
 ################################################################################

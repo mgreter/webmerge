@@ -61,10 +61,15 @@ sub atomic
 		# get parent atomic scope
 		my $parent = parent($node->parent);
 		# otherwise call on parent scope
-		$parent->atomic($path) if $parent;
+		return $parent->atomic($path) if $parent;
 		# or return failure
 		return ();
 	}
+}
+
+sub DESTROY
+{
+	warn "destroyed";
 }
 
 ################################################################################
