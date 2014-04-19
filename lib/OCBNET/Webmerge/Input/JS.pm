@@ -25,10 +25,6 @@ our $js_include_tmpl = 'webmerge.includeJS(\'%s\');' . "\n";
 # add support for data or reference id
 ################################################################################
 
-
-sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
-sub exportURL ($;$$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
-
 sub include
 {
 

@@ -16,6 +16,7 @@ use warnings;
 
 sub export { $_[0]->logAction('export') }
 sub checksum { $_[0]->logAction('checksum') }
+sub finalize { $_[0]->logAction('finalize') }
 
 ################################################################################
 # implement for specific types and targets

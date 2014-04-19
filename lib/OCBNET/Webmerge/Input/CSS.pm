@@ -45,8 +45,10 @@ sub include
 # helper to rebase a url
 ################################################################################
 
-sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
-sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
+# sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
+# sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
+
+
 
 ################################################################################
 # import the css content
@@ -54,19 +56,24 @@ sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
 ################################################################################
 use OCBNET::CSS3::Regex::Base qw($re_url);
 ################################################################################
+use OCBNET::CSS3::URI qw(wrapUrl importUrl fromUrl);
+################################################################################
 
 sub import
 {
+
 	# get arguments
 	my ($node, $data) = @_;
+
 	# otherwise import format
 	$node->logFile('import');
+
 	# get import base dir
 	my $base = $node->dirname;
-	# alter all urls to absolute paths
-	${$data} =~ s/($re_url)/importURL $1, $base/ge;
-	# update cache and return altered data
-	return $data;
+
+	# alter all urls to absolute paths (relative to base directory)
+	${$data} =~ s/($re_url)/wrapUrl(importUrl(fromUrl($1), $base))/ge;
+
 }
 
 ################################################################################

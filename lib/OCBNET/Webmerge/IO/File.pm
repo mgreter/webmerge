@@ -173,6 +173,8 @@ sub write
 	$node->export($data);
 	# create output checksum
 	$node->checksum($data);
+	# finalize for writing
+	$node->finalize($data);
 
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
