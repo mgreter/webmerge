@@ -17,57 +17,21 @@ use warnings;
 use OCBNET::CSS3::Regex::Base qw($re_url);
 ################################################################################
 
+sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
+sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
+
+################################################################################
+
 sub export
 {
 	# get arguments
-	my ($node, $data) = @_;
+	my ($output, $data) = @_;
 	# call export on parent class
-	$node->SUPER::export($data);
+	$output->SUPER::export($data);
 	# get new export base dir
-	my $base = $node->dirname;
+	my $base = $output->dirname;
 	# alter all urls to paths relative to the base directory
 	${$data} =~ s/($re_url)/OCBNET::CSS3::URI->new($1)->export($base)/ge;
-}
-
-################################################################################
-
-sub compile
-{
-
-	# get input variables
-	my ($output, $content) = @_;
-
-	# print debug message
-	$output->logAction('compile');
-
-	# module is optional
-	require OCBNET::CSS3::Minifier;
-
-	# define options hash for minifier
-	my $options = { 'level' => 9, 'pretty' => 0 };
-
-	# minify via our own css minifyer
-	OCBNET::CSS3::Minifier::minify($content, $options);
-
-}
-
-################################################################################
-
-sub minify
-{
-
-	# get input variables
-	my ($output, $content) = @_;
-
-	# print debug message
-	$output->logAction('minify');
-
-	# module is optional
-	require CSS::Minifier;
-
-	# minify via the perl cpan minifyer
-	CSS::Minifier::minify('input' => $content);
-
 }
 
 ################################################################################

@@ -4,7 +4,7 @@
 ################################################################################
 package OCBNET::Webmerge::Config::XML::Input;
 ################################################################################
-use base 'OCBNET::Webmerge::Config::XML::Node';
+use base OCBNET::Webmerge::Config::XML::Node;
 ################################################################################
 require OCBNET::Webmerge::Config::XML::Input::JS;
 require OCBNET::Webmerge::Config::XML::Input::CSS;

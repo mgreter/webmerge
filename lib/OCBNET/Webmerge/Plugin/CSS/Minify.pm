@@ -21,7 +21,16 @@ sub process
 {
 
 	# get arguments
-	my ($data, $file, $scope) = @_;
+	my ($file, $data) = @_;
+
+	# module is optional
+	require CSS::Minifier;
+
+	# call minifer and store data
+	${$data} = CSS::Minifier::minify('input' => ${$data});
+
+	# check if minfier had any issues or errors
+	die "CSS::Minfier had an error" unless defined ${data};
 
 }
 

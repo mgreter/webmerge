@@ -14,8 +14,8 @@ use warnings;
 # no implementation yet
 ################################################################################
 
-sub export { $_[0]->logFile('export') }
-sub checksum { $_[0]->logFile('checksum') }
+sub export { $_[0]->logAction('export') }
+sub checksum { $_[0]->logAction('checksum') }
 
 ################################################################################
 # implement for specific types and targets
@@ -25,39 +25,24 @@ sub prefix { }
 sub suffix { }
 
 ################################################################################
+# extend processors list for targets
+################################################################################
+
+sub processors
+{
+	# get processors from attributes
+	my @processors = $_[0]->SUPER::processors;
+	# add more processors for certain targets
+	push @processors, 'minify' if $_[0]->target eq 'minify';
+	push @processors, 'compile' if $_[0]->target eq 'compile';
+	# return list with names
+	return @processors;
+}
+
+################################################################################
 # process for output target
 ################################################################################
 use Encode qw(encode);
-################################################################################
-
-sub postprocess
-{
-
-	# get node and data
-	# alter original data
-	my ($output, $data) = @_;
-
-	# log action to console
-	$output->logFile('process');
-
-	# call parent post processor
-	$output->SUPER::postprocess($data);
-
-	# act upon different targets
-	if ($output->target eq 'minify')
-	{
-		# minify via the perl cpan minifyer
-		${$data} = $output->minify(${$data});
-	}
-	# compile has the best compression
-	elsif ($output->target eq 'compile')
-	{
-		# compile via our own implementation
-		${$data} = $output->compile(${$data});
-	}
-
-}
-
 ################################################################################
 
 sub render
@@ -90,10 +75,10 @@ sub render
 	push @parts, $output->suffix;
 
 	# join the final data (filter undefined or empty parts)
-	my $data = join(';', grep { defined $_ && $_ ne '' } @parts);
+	my $data = join("\n", grep { defined $_ && $_ ne '' } @parts) . "\n";
 
 	# encode data into requested encoding
-	$data = encode($output->{'encoding'}, $data);
+	$data = encode($output->encoding, $data);
 
 	# return scalar ref
 	return \ $data;

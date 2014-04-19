@@ -25,9 +25,9 @@ sub open
 	# sniff the encoding for the html file
 	my $encoding = sniff_encoding($fh, $path);
 	# store sniffed encoding on file node
-	$node->{'encoding'} = $encoding if $encoding;
+	$node->encoding = $encoding if $encoding;
 	# put a debug message to the console about the encoding
-	# print "read html with encoding: ", $node->{'encoding'}, "\n";
+	# print "read html with encoding: ", $node->encoding, "\n";
 	# return filehandle
 	return $fh;
 }

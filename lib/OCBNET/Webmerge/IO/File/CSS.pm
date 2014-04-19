@@ -25,9 +25,9 @@ sub open
 	# sniff the encoding for the css file
 	my $encoding = sniff_encoding($fh, $path);
 	# store sniffed encoding on file node
-	$file->{'encoding'} = $encoding if $encoding;
+	$file->encoding = $encoding if $encoding;
 	# put a debug message to the console about the encoding
-	# print "open css with encoding: ", $file->{'encoding'}, "\n";
+	# print "open css with encoding: ", $file->encoding, "\n";
 	# return filehandle
 	return $fh;
 }

@@ -25,7 +25,7 @@ sub process
 {
 
 	# get arguments
-	my ($data, $file, $scope) = @_;
+	my ($file, $data) = @_;
 
 	# create the command to execute the closure compiler
 	my $command = 'sass -s --scss';

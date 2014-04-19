@@ -23,8 +23,7 @@ sub process
 {
 
 	# get arguments
-	my ($data, $file, $scope) = @_;
-
+	my ($file, $data) = @_;
 
 	# load the cscc compiler
 	require CSS::Sass;
@@ -64,7 +63,6 @@ sub process
 	{
 		# output an error message (it may not tell much)
 		die "Fatal error when compiling scss:\n",
-		    " in ", $scope->dpath, "\n",
 		    join("\n", split('error:', $scss->last_error)),
 		    "cwd: ", $file->dpath, "\n";
 	}

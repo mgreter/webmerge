@@ -28,7 +28,7 @@ sub process
 {
 
 	# get arguments
-	my ($data, $file, $scope) = @_;
+	my ($file, $data) = @_;
 
 	# parse sheet and fetch stats
 	my $stats = $file->sheet($data)->stats;

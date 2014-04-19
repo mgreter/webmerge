@@ -9,6 +9,8 @@ use strict;
 use warnings;
 
 ################################################################################
+use IPC::Run3 qw(run3);
+################################################################################
 
 # plugin namespace
 my $ns = 'js::compile';
@@ -23,12 +25,10 @@ sub process
 {
 
 	# get arguments
-	my ($data, $file, $scope) = @_;
+	my ($file, $data) = @_;
 
 	# make these configurable again
 	my $java_bin = '/usr/bin/java';
-
-	die $file->logFile('js::compile');
 
 	# hotfix for windows operating system
 	# all windows (even x64) report MSWin32!
@@ -41,7 +41,7 @@ sub process
 	# create the command to execute the closure compiler
 	my $command = '"' . $java_bin . '" -jar ' .
 			# reference the closure compiler relative from extension
-			'"' . $file->respath('{EXT}/scripts/google/closure/compiler.jar') . '"' .
+			'"' . $file->respath('{EXT}/vendor/google/closure/compiler.jar') . '"' .
 			# use quiet warning level and safe compilation options
 			' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';
 
@@ -50,11 +50,11 @@ sub process
 	local $SIG{CHLD} = undef;
 
 	# now call run3 to compile the javascript code
-	my $rv = run3($command, $data, \ my $compiled, \ my $err);
+	my $rv = run3($command, $data, $data, \ my $err);
 
 	# print content to console if we have errors
 	# this should only ever print error messages
-	print $compiled if $err || $? || $rv != 1;
+	print ${$data} if $err || $? || $rv != 1;
 
 	# check if there was any error given by closure compiler
 	die "closure compiler had an error, aborting\n$err", "\n" if $err;
@@ -65,8 +65,6 @@ sub process
 	# test if ipc run3 returned success
 	die "could not run closure compiler, aborting", "\n" if $rv != 1;
 
-	# return compiled
-	return \ $compiled;
 }
 
 ################################################################################

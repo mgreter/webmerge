@@ -20,12 +20,9 @@ sub execute
 	# $node->log("execute MERGE::JS");
 	foreach my $output ($node->find('OUTPUT'))
 	{
-		STDOUT->autoflush(1);
-		$node->logAction('render');
 		my $data = $output->render;
-		$node->logAction('write');
 		my $rv = $output->write($data);
-		$node->logSuccess($rv);
+		# $node->logSuccess($rv);
 	}
 }
 

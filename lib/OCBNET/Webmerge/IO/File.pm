@@ -11,10 +11,6 @@ use warnings;
 ################################################################################
 use OCBNET::Webmerge qw();
 ################################################################################
-use IO::AtomicFile qw();
-################################################################################
-use Encode qw(encode decode);
-################################################################################
 
 sub new
 {
@@ -25,7 +21,15 @@ sub new
 }
 
 ################################################################################
+use Encode qw(encode decode);
+################################################################################
+
+sub encoding : lvalue { $_[0]->{'encoding'} }
+
+################################################################################
 # get or set atomic instance
+################################################################################
+use IO::AtomicFile qw();
 ################################################################################
 
 sub atomic
@@ -79,6 +83,8 @@ sub read
 	my $data;
 	# get arguments
 	my ($node) = @_;
+	# log action to console
+	$node->logFile('read');
 	# get path from node
 	my $path = $node->path;
 	# get atomic entry if available
@@ -97,7 +103,8 @@ sub read
 		# implement proper error handling
 		die "error ", $path unless $fh;
 		# slurp the while file into memory and decode unicode
-		my $content = decode($node->{'encoding'}, join('', <$fh>));
+		# $fh->binmode(sprintf(':encoding(%s)', $node->encoding));
+		my $content = decode($node->encoding, join('', <$fh>));
 		# attach written scalar to atomic instance
 		${*$fh}{'io_atomicfile_data'} = \ $content;
 		# store handle as atomic handle
@@ -107,13 +114,13 @@ sub read
 		$data = \ $content;
 	}
 	# also set the read cache
-	$node->{'content'} = $data;
+	$node->{'readed'} = $data;
 	# create and store the checksum
-	$node->{'crc'} = $node->md5sum;
+	$node->{'crc'} = $node->md5sum($data);
 	# call the importer
 	$node->import($data);
 	# call the processors
-	$node->preprocess($data);
+	$node->process($data);
 	# store copy to cache
 	return $data;
 
@@ -125,10 +132,24 @@ sub read
 
 sub content
 {
-	$_[0]->logFile(' input');
-	&read unless exists $_[0]->{'content'};
-	return $_[0]->{'content'};
+	# log action to console
+	$_[0]->logFile('content');
+	# return written content
+	if (exists $_[0]->{'written'})
+	{ return $_[0]->{'written'}; }
+	# read from disk if not cached yet
+	unless (exists $_[0]->{'readed'})
+	{ $_[0]->{'readed'} = &read; }
+	# return cached reference
+	return $_[0]->{'readed'};
 }
+
+################################################################################
+# access the cached values
+################################################################################
+
+sub readed : lvalue { $_[0]->{'readed'} }
+sub written : lvalue { $_[0]->{'written'} }
 
 ################################################################################
 # write scalar atomic
@@ -147,7 +168,7 @@ sub write
 	die "error\nwriting to unwriteable directory" unless (-w $node->dirname);
 
 	# call the processors
-	$node->postprocess($data);
+	$node->process($data);
 	# alter data for output
 	$node->export($data);
 	# create output checksum
@@ -165,11 +186,11 @@ sub write
 		else { die "writing different content to the same file"; }
 	}
 	# check if file has been read
-	elsif ($node->{'contents'})
+	elsif ($node->{'readed'})
 	{
 		$_[0]->logFile('write[c]');
 		# check if the new data matches the previous commit
-		if (${$data} eq ${$node->{'contents'}})
+		if (${$data} eq ${$node->{'readed'}})
 		{ warn "overwriting same content more than once"; }
 		else { die "overwriting different content to the same file"; }
 	}
@@ -194,7 +215,7 @@ sub write
 		# attach atomic instance to scope
 		$node->atomic($path, $atomic);
 		# also set the read cache
-		$node->{'contents'} = $data;
+		$node->{'readed'} = $data;
 		# return scalar reference
 		print $fh ${$data};
 	}
@@ -213,7 +234,7 @@ sub revert
 	# get path from node
 	my $path = $node->path;
 	# read from disk next time
-	delete $node->{'content'};
+	delete $node->{'readed'};
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# die if there is nothing to revert
@@ -233,7 +254,7 @@ sub commit
 	# get path from node
 	my $path = $node->path;
 	# read from disk next time
-	delete $node->{'content'};
+	delete $node->{'readed'};
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# die if there is nothing to revert
@@ -251,11 +272,11 @@ use Encode qw(encode_utf8);
 sub md5sum
 {
 	# get the file node
-	my ($node) = @_;
+	my ($node, $data) = @_;
 	# create a new digest object
 	my $md5 = Digest::MD5->new;
 	# add encoded string for md5 digesting
-	$md5->add(encode_utf8(${$node->content}));
+	$md5->add(encode_utf8(${$data || $node->content}));
 	# return uppercase hex crc
 	return uc($md5->hexdigest);
 }
@@ -265,7 +286,7 @@ sub md5short
 	# get the optionaly configured fingerprint length
 	my $len = $_[0]->config('fingerprint-length') || 12;
 	# return a short configurable length md5sum
-	return substr($_[0]->md5sum($_[1]), 0, $len);
+	return substr($_[0]->md5sum($_[1], $_[2]), 0, $len);
 }
 
 ###############################################################################

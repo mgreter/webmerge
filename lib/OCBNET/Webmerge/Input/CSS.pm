@@ -16,11 +16,6 @@ use strict;
 use warnings;
 
 ################################################################################
-# some accessor methods
-################################################################################
-
-
-################################################################################
 
 # define the template for the script includes
 # don't care about doctype versions, dev only
@@ -45,6 +40,49 @@ sub include
 	return sprintf($css_include_tmpl, $path);
 
 }
+
+################################################################################
+# helper to rebase a url
+################################################################################
+
+sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
+sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
+
+################################################################################
+# import the css content
+# resolve urls to abs paths
+################################################################################
+use OCBNET::CSS3::Regex::Base qw($re_url);
+################################################################################
+
+sub import
+{
+	# get arguments
+	my ($node, $data) = @_;
+	# otherwise import format
+	$node->logFile('import');
+	# get import base dir
+	my $base = $node->dirname;
+	# alter all urls to absolute paths
+	${$data} =~ s/($re_url)/importURL $1, $base/ge;
+	# update cache and return altered data
+	return $data;
+}
+
+################################################################################
+# some accessor methods
+################################################################################
+
+# return node type
+sub type { 'INPUT::CSS' }
+
+
+################################################################################
+################################################################################
+1;
+
+__DATA__
+
 
 sub deps
 {
@@ -76,42 +114,3 @@ return @imports;
 
 	die "i have deps";
 }
-
-################################################################################
-use OCBNET::CSS3::Regex::Base qw($re_url wrapUrl fromUrl);
-################################################################################
-
-
-sub import
-{
-
-	my ($node) = @_; # , $data
-
-	# check if cache exists
-	if (exists $node->{'import'})
-	{
-		$node->logFile('  import[I]');
-		return $node->{'import'};
-	}
-	# otherwise import format
-	$node->logFile('  import[i]');
-	# get import base dir
-	my $base = $node->dirname;
-	print $node, " - ", $base, "\n";
-	# get data from parent class
-	my $data = $node->content(@_);
-	# alter all urls to absolute paths
-	${$data} =~ s/($re_url)/OCBNET::CSS3::URI->new($1, $base)->wrap()/ge;
-	# update cache and return altered data
-	return $node->{'import'} = $data;
-}
-
-
-
-# return node type
-sub type { 'INPUT::CSS' }
-
-
-################################################################################
-################################################################################
-1;

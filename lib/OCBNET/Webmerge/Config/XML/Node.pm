@@ -82,7 +82,8 @@ sub logFile
 
 sub logAction
 {
-	# printf " %s ...", $_[1];
+	print " " x shift->level;
+	printf shift . "\n", @_;
 }
 
 sub logSuccess
@@ -90,6 +91,8 @@ sub logSuccess
 	# print $_[1] ? "ok\n" : "err\n";
 }
 
+
+sub dpath { $_[0]->type }
 
 ################################################################################
 # some accessor methods
