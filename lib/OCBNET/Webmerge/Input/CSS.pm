@@ -38,6 +38,7 @@ sub include
 	my ($input, $output) = @_;
 
 	# get a unique path with added fingerprint
+	# is guess target is always dev here, or is it?
 	my $path = $input->fingerprint($output->target);
 
 	# return the script include string

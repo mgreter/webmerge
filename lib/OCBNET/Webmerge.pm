@@ -24,10 +24,13 @@ sub options
 }
 
 ################################################################################
-# return command line option
+
+
+################################################################################
+# return command line option or node config
 ################################################################################
 
-sub option
+sub setting
 {
 	# get from command line options
 	if ( exists $values{$_[1]} )
@@ -39,6 +42,18 @@ sub option
 	{ $rv = $defaults{$_[1]}; }
 	# return result
 	return $rv;
+}
+
+################################################################################
+# return config for root block or setting
+################################################################################
+
+sub option
+{
+	# config on most outer block overrules it
+	if ( exists $_[0]->{'config'}->{$_[1]} )
+	{ return $_[0]->{'config'}->{$_[1]}; }
+	else { return $_[0]->setting($_[1]); }
 }
 
 ################################################################################
@@ -145,10 +160,10 @@ sub main
 {
 
 	# main entrance
-	my $configfile;
+	my $configfile = 'webmerge.conf.xml';
 
-	# first only parse the configfile option
-	# we may need to load plugin before first
+	# only parse the config file option
+	# load plugins first for more options
 	Getopt::Long::Configure("pass_through");
 	GetOptions ("configfile|f=s", \$configfile)
 	or die("Error in command line arguments\n");
@@ -157,9 +172,10 @@ sub main
 	my $webmerge = OCBNET::Webmerge->new;
 
 	# try to load our main config file
+	# this may load additional plugins
 	$webmerge->load($configfile);
 
-	# connect long opts, final scalars and defaults together;
+	# collect longopts and assign variables to options
 	my %options = (%{$webmerge->{'options'}}, %OCBNET::Webmerge::longopts);
 	my @options = map { ($options{$_}, \$values{$_}) } keys %options;
 
@@ -168,14 +184,19 @@ sub main
 	# get all options from commandline
 	GetOptions(@options) or pod2usage(2);
 
-die $webmerge->getById('po')->option('fingerprint');
-
-	# collect block to be executed
+	# collect block to be executed (ids from argv or all)
 	my @blocks = grep { $_ } map { $webmerge->getById($_) } @ARGV;
 	push @blocks, $webmerge unless scalar(@blocks) + scalar(@ARGV);
 
+#die $webmerge->getById('po')->option('fingerprint');
+	# run handlers for webserver, watchdog, etc
+
+	# execute optimize (can be inside block?)
+
 	# call execute on all unique blocks
 	$_->execute foreach (uniq @blocks);
+
+	# execute headinc, embedder (again inside?)
 
 }
 
