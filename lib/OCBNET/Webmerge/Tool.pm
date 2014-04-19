@@ -36,11 +36,9 @@ sub register
 
 sub run
 {
-	# get arguments
-	my ($webmerge, $blocks) = @_;
 	# run all tools that are enabled by settings
 	foreach my $tool (sort { $a->[2] - $b->[2] } @tools)
-	{ &{$tool->[1]}(@_) if $webmerge->setting($tool->[0]); }
+	{ foreach (@_) { &{$tool->[1]}($_) if $_->setting($tool->[0]) } }
 }
 
 ################################################################################

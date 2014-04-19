@@ -18,7 +18,7 @@ sub export { $_[0]->logAction('export') }
 sub finalize { $_[0]->logAction('finalize') }
 
 ################################################################################
-# create the checksum file
+# get all input sources
 ################################################################################
 
 sub inputs
@@ -82,12 +82,14 @@ sub checksum
 	foreach my $input (@{$inputs->[1]}, @{$inputs->[0]}, @{$inputs->[2]})
 	{
 		# get md5sum for input and append to sums
-		push @md5sum, my $md5sum = $input->md5sum;
+		$input->contents;
+
+		push @md5sum, my $md5sum = $input->{'crc'};
 		# create checksum for every input file for final crc file
-		push @inputs, join(': ', $input->localurl, $md5sum);
+		push @inputs, join(': ', $input->localurl($output->dirname), $md5sum);
 	}
 
-	# create a hash
+	# create an md5 out of all joined input md5s
 	my $md5_inputs = $output->md5sum(\join("::", @md5sum));
 
 	# append the crc of all joined checksums
@@ -103,7 +105,84 @@ sub checksum
 	# create path to store checksum of this output
 	my $checksum = OCBNET::Webmerge::CRC->new($output);
 
+	# finally write the crc
 	$checksum->write(\$crc);
+
+}
+
+################################################################################
+# check agains saved checksum
+################################################################################
+use File::Spec::Functions qw(catfile);
+################################################################################
+
+sub check
+{
+
+	# get arguments
+	my ($output, $crc) = @_;
+
+	# split checksum file content into lines
+	my @crcs = split(/\s*(?:\r?\n)+\s*/, ${$crc});
+
+	# remove leading checksums
+	my $checksum_result = shift(@crcs);
+	my $checksum_joined = shift(@crcs);
+
+	# check if the generated content changed
+	if ($output->md5sum ne $checksum_result)
+	{
+		printf "FAIL - dst: %s\n", substr($output->dpath, - 45);
+		printf "=> %s vs %s\n", $output->md5sum, $checksum_result;
+	}
+	else
+	{
+		printf "PASS - dst: %s\n", substr($output->dpath, - 45);
+	}
+
+	# declare local variable
+	my @md5sums;
+
+	# process all source files
+	foreach my $source (@crcs)
+	{
+
+		# split the line into path and checksum
+		my ($path, $checksum) = split(/:\s*/, $source, 2);
+
+		# path is always relative to the checksum
+		$path = catfile($output->dirname, $path);
+
+		# load the css file with the given path name
+		my $input = OCBNET::Webmerge::IO::File::CSS->new($path);
+
+		# check against stored value
+		if ($input->crc ne $checksum)
+		{
+			printf "  FAIL - src: %s\n", substr($input->dpath, - 45);
+			printf "  => expected: %s\n", $checksum;
+			printf "  => generated: %s\n", $input->md5sum;
+		}
+		else
+		{
+			printf "  PASS - src: %s\n", substr($input->dpath, - 45);
+		}
+
+
+	}
+
+			#my $crc_joined = md5sum(\$crcs_joined);
+
+			#if ($crc_joined ne $checksum_joined)
+			#{
+			#	printf "FAIL - tst: %s\n", substr(exportURI(check_path($result_path)), - 45);
+			#}
+			#else
+			#{
+			#	printf "PASS - tst: %s\n", substr(exportURI(check_path($result_path)), - 45);
+			#}
+
+	# die "check ${$crc}";
 
 }
 

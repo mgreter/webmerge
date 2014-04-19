@@ -173,7 +173,7 @@ sub find_charset_in
       \'($re_apo)\' |
       \"($re_quot)\" |
       ($re_name)
-    );?)/x)
+    )(?:\r?\n|\s)*;?)/x)
     {
       my $charset;
       if (defined $2) { $charset = $2; }

@@ -9,19 +9,43 @@ use strict;
 use warnings;
 
 ################################################################################
+# create a new IO::File
+################################################################################
 use OCBNET::Webmerge qw();
 ################################################################################
 
 sub new
 {
 	# get arguments
-	my ($node, $parent) = @_;
-	# create a new object if required
-	$node = bless {}, $node if ref $node eq '';
+	my ($pkg, $path) = @_;
+	# create a new object
+	my $file = bless {}, $pkg;
 	# default encoding is utf8
-	$node->{'encoding'} = 'utf8';
+	$file->{'encoding'} = 'utf8';
+	# assertion that we have some input
+	die "no path given for new" unless $path;
+	die "ref path given for new" if ref $path;
+	# emulate old deprecated key
+	$file->{'attr'}->{'path'} = $path;
+	# store directly on object
+	$file->{'path'} = $path;
 	# return object
-	return $node;
+	return $file;
+}
+
+################################################################################
+# normaly we just need to call init
+################################################################################
+
+sub init
+{
+	# get arguments
+	my ($file, $parent) = @_;
+	# default encoding is utf8
+	unless (exists $file->{'encoding'})
+	{ $file->{'encoding'} = 'utf8'; }
+	# return object
+	return $file;
 }
 
 ################################################################################
@@ -53,6 +77,65 @@ sub atomic
 	# call atomic method on IO::Atomic
 	return $node->atomic($path, $atomic);
 }
+################################################################################
+# return false if lock could not be
+# aquired after the given timeout (in s)
+################################################################################
+use Fcntl qw(O_RDWR O_RDONLY SEEK_SET);
+use Fcntl qw(LOCK_SH LOCK_EX LOCK_UN LOCK_NB);
+################################################################################
+
+sub lockfile
+{
+
+	# get input variables
+	my ($fh, $flag, $timeout) = @_;
+
+	# simply lock with blocking when no timeout given
+	return flock($fh, $flag) unless defined $timeout;
+
+	# this is an alternative locking mechanism with timeout
+	# it has the disadvantage that while we are waiting in the
+	# select call another process might get the lock before us
+	# my $time = time; while($time + $timeout > time) {
+	# 	return 1 if(flock($fh, $lock | LOCK_NB));
+	# select(undef, undef, undef, $intervall) }
+
+	# eval in perl is a bit like try/catch
+	eval
+	{
+
+		# die needs the "\n" to not append trace
+		local $SIG{ALRM} = sub { die "alarm\n" };
+
+		# setup the alarm
+		alarm $timeout;
+
+		# try to lock the file
+		flock($fh, $flag);
+
+		# reset alarm
+		alarm 0;
+
+	};
+
+	# there was an error
+	if ($@)
+	{
+
+		# propagate unexpected errors
+		die unless $@ eq "alarm\n";
+
+		# return failure
+		return 0;
+
+	}
+
+	# return success
+	return 1;
+
+}
+# EO lock_file
 
 ################################################################################
 # open a filehandle
@@ -61,19 +144,23 @@ sub atomic
 sub open
 {
 	# get arguments
-	my ($node, $mode, $encoding) = @_;
+	my ($node, $mode) = @_;
 	# resolve mode strings
-	if ($mode eq 'r') { $mode = '<:raw'; }
-	elsif ($mode eq 'w') { $mode = '>:raw'; }
-	elsif ($mode eq 'rw') { $mode = '<+:raw'; }
+	if ($mode eq 'r') { $mode = '<'; }
+	elsif ($mode eq 'w') { $mode = '>'; }
+	elsif ($mode eq 'rw') { $mode = '<+'; }
 	# we only support some open modes
-	else { die "invalid open mode $mode"; }
-	# try to open the filehandle with correct encoding
+	# else { die "invalid open mode $mode"; }
+	# try to open the filehandle with mode
 	my $rv = open(my $fh, $mode, $node->path);
 	# report errors back when opening failed
 	die "could not open " . $node->path unless $rv;
-	# read raw data
-	binmode ($fh);
+	# aquire a file lock (wait for a certain amount of time)
+	$rv = lockfile($fh, $mode eq '<' ? LOCK_SH : LOCK_EX, 4);
+	# error out if we could not aquire a lock in time
+	die "could not aquire file lock for ", $node->dpath, "\n" unless $rv;
+	# do not change data
+	$fh->binmode(':raw');
 	# return filehandle
 	return $fh;
 }
@@ -84,7 +171,7 @@ sub open
 
 sub read
 {
-	my $data;
+	my ($data, $pos);
 	# get arguments
 	my ($node) = @_;
 	# log action to console
@@ -98,6 +185,8 @@ sub read
 	{
 		# simply return the last written data
 		$data = ${*$atomic}{'io_atomicfile_data'};
+		# restore offset position from header sniffing
+		$pos = ${*$atomic}{'io_atomicfile_pos'} || 0;
 	}
 	# read from the disk
 	else
@@ -106,21 +195,27 @@ sub read
 		my $fh = $node->open('r');
 		# implement proper error handling
 		die "error ", $path unless $fh;
+		# store filehandle offset after sniffing
+		$pos = ${*$fh}{'io_atomicfile_off'} = tell $fh;
+		# read in the whole content event if we should discharge
+		seek $fh, 0, 0 or Carp::croak "could not seek $path: $!";
 		# slurp the while file into memory and decode unicode
-		# $fh->binmode(sprintf(':encoding(%s)', $node->encoding));
-		my $content = decode($node->encoding, join('', <$fh>));
+		# $fh->binmode(sprintf(':raw:encoding(%s)', $node->encoding));
+		my $content = $node->{'loaded'} = join('', <$fh>);
+		# now decode to loaded data into encoding
+		$content = decode($node->encoding, $content);
 		# attach written scalar to atomic instance
-		${*$fh}{'io_atomicfile_data'} = \ $content;
+		$data = ${*$fh}{'io_atomicfile_data'} = \ $content;
 		# store handle as atomic handle
 		# disallow changes from this point
 		$node->atomic($path, $fh);
 		# return scalar reference
-		$data = \ $content;
+		$node->{'readed'} = $data = \ $content;
 	}
-	# also set the read cache
-	$node->{'readed'} = $data;
 	# create and store the checksum
 	$node->{'crc'} = $node->md5sum($data);
+	# remove leading file header
+	substr(${$data}, 0, $pos) = '';
 	# call the importer
 	$node->import($data);
 	# call the processors
@@ -175,10 +270,10 @@ sub write
 	$node->process($data);
 	# alter data for output
 	$node->export($data);
-	# create output checksum
-	$node->checksum($data);
 	# finalize for writing
 	$node->finalize($data);
+	# create output checksum
+	$node->checksum($data);
 
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
@@ -215,13 +310,15 @@ sub write
 		# open a new writeable file handle
 		my $fh = $atomic->open($path, 'w+');
 		# error out if we could not open the file
-		die "failed\n$!" unless $fh;
+		die "could not open ", $_[0]->path, "\n$!" unless $fh;
+		# truncate the file and ensure encoding
+		$fh->truncate(0); $fh->binmode(':raw');
 		# attach written scalar to atomic instance
 		${*$atomic}{'io_atomicfile_data'} = $data;
 		# attach atomic instance to scope
 		$node->atomic($path, $atomic);
 		# also set the read cache
-		$node->{'readed'} = $data;
+		$node->{'written'} = $data;
 		# return scalar reference
 		print $fh ${$data};
 	}
@@ -236,13 +333,16 @@ sub write
 sub revert
 {
 	# get arguments
-	my ($node) = @_;
+	my ($node, $quiet) = @_;
 	# get path from node
 	my $path = $node->path;
 	# read from disk next time
 	delete $node->{'readed'};
+	delete $node->{'written'};
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
+	# silently return if node is unknown
+	return 1 if $quiet && !$atomic;
 	# die if there is nothing to revert
 	die "file never written: $path" unless $atomic;
 	# also call on possible children
@@ -258,15 +358,18 @@ sub revert
 sub commit
 {
 	# get arguments
-	my ($node) = @_;
+	my ($node, $quiet) = @_;
 	# get path from node
 	my $path = $node->path;
 	# read from disk next time
 	delete $node->{'readed'};
+	delete $node->{'written'};
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
+	# silently return if node is unknown
+	return 1 if $quiet && !$atomic;
 	# die if there is nothing to revert
-	die "file never written" unless $atomic;
+	die "file never written: $path" unless $atomic;
 	# also call on possible children
 	$_->commit foreach $node->children;
 	# commit changes
@@ -276,7 +379,7 @@ sub commit
 ################################################################################
 use Digest::MD5;
 ###############################################################################
-use Encode qw(encode_utf8);
+use Encode qw(encode_utf8 decode_utf8);
 ###############################################################################
 
 sub md5sum
@@ -285,8 +388,10 @@ sub md5sum
 	my ($node, $data) = @_;
 	# create a new digest object
 	my $md5 = Digest::MD5->new;
+	# read from node if no data is passed
+	$data = $node->contents unless $data;
 	# add encoded string for md5 digesting
-	$md5->add(encode_utf8(${$data || $node->contents}));
+	$md5->add(encode($node->encoding, ${$data}));
 	# return uppercase hex crc
 	return uc($md5->hexdigest);
 }
@@ -298,6 +403,13 @@ sub md5short
 	# return a short configurable length md5sum
 	return substr($_[0]->md5sum($_[1], $_[2]), 0, $len);
 }
+
+###############################################################################
+# is different from md5sum for css files
+# as we remove the charset declaration on load
+###############################################################################
+
+sub crc { &read unless $_[0]->{'crc'}; $_[0]->{'crc'} }
 
 ###############################################################################
 # return path with added fingerprint
@@ -332,6 +444,57 @@ sub fingerprint
 	return $node->path;
 
 }
+
+
+
+################################################################################
+################################################################################
+
+sub level
+{
+	return 0;
+}
+
+sub log
+{
+	print " " x shift->level, @_, "\n";
+}
+
+sub logBlock
+{
+	print " " x shift->level, @_, "\n";
+}
+
+sub logFile
+{
+	print " " x $_[0]->level;
+	printf "% 10s: %s\n", $_[1], $_[0]->dpath;
+}
+
+sub logAction
+{
+	print " " x $_[0]->level;
+	printf "% 10s: %s\n", $_[1], $_[0]->dpath;
+}
+
+sub logSuccess
+{
+	# print $_[1] ? "ok\n" : "err\n";
+}
+
+sub path {	$_[0]->{'path'} }
+
+sub dpath { $_[0]->path }
+
+sub export { return $_[1] }
+sub process { return $_[1] }
+sub checksum { return $_[1] }
+sub finalize { return $_[1] }
+
+sub parent {}
+sub collect {}
+sub children {}
+
 ################################################################################
 ################################################################################
 1;

@@ -141,6 +141,7 @@ sub attr : lvalue { $_[0]->{'attr'}->{$_[1]} }
 
 sub revert { $_->revert(@_) foreach shift->children }
 sub commit { $_->commit(@_) foreach shift->children }
+# sub check { $_->check(@_) foreach shift->children }
 
 ################################################################################
 # count number of parent levels
@@ -192,6 +193,12 @@ sub hasParent { $_[0]->parent eq $_[1] || $_[0]->parent->hasParent($_[1]) }
 ################################################################################
 
 sub find { grep { lc $_->{'tag'} eq lc $_[1] } $_[0]->children }
+
+################################################################################
+# collect children by tagname (recursive)
+################################################################################
+
+sub collect { $_[0]->find($_[1]), map { $_->collect($_[1]) } $_[0]->children }
 
 ################################################################################
 # find closest parent by tag name regexp

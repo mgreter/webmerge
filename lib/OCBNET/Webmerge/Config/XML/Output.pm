@@ -28,7 +28,7 @@ sub new
 	my $node = $pkg->SUPER::new($parent);
 
 	# call new for additional class initialization
-	$node->OCBNET::Webmerge::IO::File::new($parent);
+	$node->OCBNET::Webmerge::IO::File::init($parent);
 
 	# return object
 	return $node;
@@ -81,6 +81,11 @@ sub type { 'OUTPUT' }
 
 # abort exection
 sub execute { 1 }
+
+################################################################################
+################################################################################
+
+sub parent { shift->SUPER::parent(@_) }
 
 ################################################################################
 ################################################################################

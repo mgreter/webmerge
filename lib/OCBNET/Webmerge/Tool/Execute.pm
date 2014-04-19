@@ -14,10 +14,8 @@ use List::MoreUtils qw(uniq);
 
 sub execute
 {
-	# get arguments
-	my ($webmerge, $blocks) = @_;
 	# call execute on all unique blocks
-	$_->execute foreach (uniq @{$blocks});
+	$_->execute foreach (uniq @_);
 }
 
 ################################################################################

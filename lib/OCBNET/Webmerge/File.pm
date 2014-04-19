@@ -4,7 +4,7 @@
 ################################################################################
 package OCBNET::Webmerge::File;
 ################################################################################
-use base OCBNET::Webmerge::IO::File;
+# use base OCBNET::Webmerge::IO::File;
 ################################################################################
 
 use strict;
@@ -19,6 +19,33 @@ sub processors { split /\s*\|\s*/, $_[0]->attr('process') || '' }
 ################################################################################
 # process passed data or node content
 ################################################################################
+
+sub log
+{
+	print " " x shift->level, @_, "\n";
+}
+
+sub logBlock
+{
+	print " " x shift->level, @_, "\n";
+}
+
+sub logFile
+{
+	print " " x $_[0]->level;
+	printf "% 10s: %s\n", $_[1], $_[0]->dpath;
+}
+
+sub logAction
+{
+	print " " x $_[0]->level;
+	printf "% 10s: %s\n", $_[1], $_[0]->dpath;
+}
+
+sub logSuccess
+{
+	# print $_[1] ? "ok\n" : "err\n";
+}
 
 sub process
 {
@@ -86,7 +113,7 @@ sub localurl
 {
 
 	# get arguments
-	my ($file, $abs, $base) = @_;
+	my ($file, $base, $abs) = @_;
 
 	# use webroot if no specific based passed
 	$base = $file->directory unless defined $base;

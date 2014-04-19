@@ -14,15 +14,12 @@ use strict;
 use warnings;
 
 ################################################################################
-# render output context
+# route some method to specific packages
+# otherwise they would be consumed by others
 ################################################################################
 
-sub render
-{
-
-	return \ "render html";
-
-}
+sub path { &OCBNET::Webmerge::Config::XML::Output::path }
+sub parent { &OCBNET::Webmerge::Config::XML::Output::parent }
 
 ################################################################################
 # some accessor methods

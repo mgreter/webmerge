@@ -18,7 +18,8 @@ use warnings;
 # otherwise they would be consumed by others
 ################################################################################
 
-sub deps { &OCBNET::Webmerge::Input::CSS::deps }
+sub path { &OCBNET::Webmerge::Config::XML::Input::path }
+sub parent { &OCBNET::Webmerge::Config::XML::Input::parent }
 
 ################################################################################
 # some accessor methods

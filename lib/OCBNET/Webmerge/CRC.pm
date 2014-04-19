@@ -24,7 +24,7 @@ sub new
 	my $node = bless { 'parent' => $parent, 'children' => [] }, $pkg;
 
 	# call new for additional class initialization
-	$node->OCBNET::Webmerge::IO::File::new($parent);
+	$node->OCBNET::Webmerge::IO::File::init($parent);
 
 	push @{$parent->{'children'}}, $node;
 
@@ -33,27 +33,31 @@ sub new
 
 }
 
+sub path { join('.', $_[0]->parent->path, 'md5') }
+
 sub parent { $_[0]->{'parent'} }
 
 
-sub dirname { $_[0]->parent->dirname }
 
-sub export { return $_[1] }
-sub process { return $_[1] }
-sub checksum { return $_[1] }
-sub finalize { return $_[1] }
-
-sub children { @{$_[0]->{'children'}} }
 
 sub logFile {}
 
+sub collect {}
 
-sub path
-{
-	# create path to store checksum of this output
-	join('.', $_[0]->parent->path, 'md5');
+################################################################################
+# return debug path
+################################################################################
 
-}
+sub dpath { substr($_[0]->path, - 45) }
+sub children { @{$_[0]->{'children'} || []} }
+
+################################################################################
+use File::Basename qw();
+################################################################################
+
+sub dirname { File::Basename::dirname($_[0]->path) }
+sub basename { File::Basename::basename($_[0]->path) }
+sub parsefile { File::Basename::basename($_[0]->path) }
 
 ################################################################################
 ################################################################################

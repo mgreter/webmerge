@@ -14,6 +14,14 @@ use strict;
 use warnings;
 
 ################################################################################
+# route some method to specific packages
+# otherwise they would be consumed by others
+################################################################################
+
+sub path { &OCBNET::Webmerge::Config::XML::Output::path }
+sub parent { &OCBNET::Webmerge::Config::XML::Output::parent }
+
+################################################################################
 # some accessor methods
 ################################################################################
 

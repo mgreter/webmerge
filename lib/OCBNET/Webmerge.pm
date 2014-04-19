@@ -189,8 +189,6 @@ END { &cleanup }
 use Getopt::Long qw(GetOptions);
 use Pod::Usage qw(pod2usage);
 ################################################################################
-use List::MoreUtils qw(uniq);
-################################################################################
 
 sub main
 {
@@ -224,8 +222,10 @@ sub main
 	my @blocks = grep { $_ } map { $webmerge->getById($_) } @ARGV;
 	push @blocks, $webmerge unless scalar(@blocks) + scalar(@ARGV);
 
-	# pass execution to tool module (run all tools)
-	OCBNET::Webmerge::Tool::run($webmerge, \@blocks);
+	# pass execution to tools (run blocks)
+	OCBNET::Webmerge::Tool::run(@blocks);
+
+	print "finished\n";
 
 }
 
