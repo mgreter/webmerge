@@ -4,6 +4,8 @@
 ################################################################################
 package OCBNET::Webmerge::Input;
 ################################################################################
+use base OCBNET::Webmerge::IO::File;
+################################################################################
 
 use strict;
 use warnings;
@@ -13,29 +15,6 @@ use warnings;
 ################################################################################
 
 sub import { $_[0]->logFile('import') }
-
-
-################################################################################
-# render input for output (target)
-################################################################################
-
-sub render
-{
-
-	# get arguments
-	my ($input, $output) = @_;
-
-	# get the target for the include
-	my $target = lc ($output->target || 'join');
-
-	# implement some special target handling
-	return $input->include($output) if ($target eq 'dev');
-	return $input->license($output) if ($target eq 'license');
-
-	# otherwise read the input
-	${$input->content};
-
-}
 
 ################################################################################
 # return the processed data
@@ -70,8 +49,31 @@ sub preprocess
 			&{$processor}($data, $input, $output);
 		}
 	}
+	# EO if attr process
 
 $data }
+
+################################################################################
+# render input for output (target)
+################################################################################
+
+sub render
+{
+
+	# get arguments
+	my ($input, $output) = @_;
+
+	# get the target for the include
+	my $target = lc ($output->target || 'join');
+
+	# implement some special target handling
+	return $input->include($output) if ($target eq 'dev');
+	return $input->license($output) if ($target eq 'license');
+
+	# otherwise read the input
+	${$input->content};
+
+}
 
 ################################################################################
 ################################################################################

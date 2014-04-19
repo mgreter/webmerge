@@ -49,9 +49,8 @@ sub deps
 {
 	my ($node) = @_;
 
-	my $sheet = OCBNET::CSS3->new;
+	my $sheet = $node->sheet;
 
-	$sheet->parse(${$node->read});
 
 
 my @objects = ($sheet);

@@ -146,7 +146,7 @@ sub config
 }
 
 ################################################################################
-# execute event
+# needed for some strange reason
 ################################################################################
 
 sub execute { &OCBNET::Webmerge::Config::XML::Node::execute }

@@ -18,6 +18,13 @@ sub export { $_[0]->logFile('export') }
 sub checksum { $_[0]->logFile('checksum') }
 
 ################################################################################
+# implement for specific types and targets
+################################################################################
+
+sub prefix { }
+sub suffix { }
+
+################################################################################
 # process for output target
 ################################################################################
 use Encode qw(encode);
@@ -72,7 +79,7 @@ sub render
 	push @parts, $output->prefix;
 	push @parts, ${$_->content} foreach $parent->find('prefix');
 	# add in order of their naming via includer
-		push @parts, $_->render($output) foreach $parent->find('prepend');
+	push @parts, $_->render($output) foreach $parent->find('prepend');
 	push @parts, $_->render($output) foreach $parent->find('input');
 	push @parts, $_->render($output) foreach $parent->find('append');
 	# always add suffix unaltered
@@ -89,13 +96,6 @@ sub render
 	return \ $data;
 
 }
-
-################################################################################
-# implement on specific types and targets
-################################################################################
-
-sub prefix { }
-sub suffix { }
 
 ################################################################################
 ################################################################################
