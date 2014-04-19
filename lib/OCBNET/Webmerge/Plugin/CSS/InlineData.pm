@@ -23,7 +23,11 @@ sub process
 	# get arguments
 	my ($file, $data) = @_;
 
+	# return reference
+	return $data;
+
 }
+# EO process
 
 ################################################################################
 # called via perl loaded

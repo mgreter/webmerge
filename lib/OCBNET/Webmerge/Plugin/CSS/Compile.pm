@@ -35,7 +35,11 @@ sub process
 	# check if minfier had any issues or errors
 	die "OCBNET::CSS3::Minifier had an error" unless defined ${data};
 
+	# return reference
+	return $data;
+
 }
+# EO process
 
 ################################################################################
 # called via perl loaded

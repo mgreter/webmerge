@@ -39,19 +39,28 @@ sub process
 		# get the processor by name from the document
 		my $processor = $file->document->processor($alt) ||
 		                $file->document->processor($name);
+		# check if the processor name is valid
+		# maybe you forgot to load some plugins
 		die "processor $name not found" unless $processor;
 		# execute processor and pass data
-		&{$processor}($file, $data);
+		$data = &{$processor}($file, $data);
+		# check if processor returned with success
+		die "processor $name had an error" unless $data;
 	}
-	# EO if attr process
+	# EO foreach processor name
 
-$data }
+	# return reference
+	return $data;
+
+}
+# EO process
 
 ################################################################################
 use OCBNET::CSS3::URI qw(exportUrl);
 ################################################################################
 
-# return absolute url to base (or current webroot)
+# return (absolute) url to current webroot or given base
+# if relative or absolute depends on the current config
 # ******************************************************************************
 sub weburl
 {
@@ -70,9 +79,10 @@ sub weburl
 
 }
 
-# return relative url to base (or current directory)
+# return (relative) url current directory or given base
+# if relative or absolute depends on the current config
 # ******************************************************************************
-sub dirurl
+sub localurl
 {
 
 	# get arguments

@@ -50,7 +50,11 @@ sub process
 	warn "Too many selectors in css file for IE\n" if (scalar(@{$selectors}) > 4000);
 	sleep 2 if scalar(@{$imports}) > 30 || scalar(@{$selectors}) > 4000;
 
+	# return reference
+	return $data;
+
 }
+# EO process
 
 ################################################################################
 # called via perl loaded

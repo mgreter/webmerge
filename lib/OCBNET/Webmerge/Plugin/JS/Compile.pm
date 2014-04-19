@@ -65,7 +65,11 @@ sub process
 	# test if ipc run3 returned success
 	die "could not run closure compiler, aborting", "\n" if $rv != 1;
 
+	# return reference
+	return $data;
+
 }
+# EO process
 
 ################################################################################
 # called via perl loaded

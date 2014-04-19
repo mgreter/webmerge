@@ -67,7 +67,11 @@ sub process
 	# add an indicator about the processor (put compiled code)
 	${$data} = sprintf($footer, $file->dpath ) . ${$data};
 
+	# return reference
+	return $data;
+
 }
+# EO process
 
 ################################################################################
 # called via perl loaded
