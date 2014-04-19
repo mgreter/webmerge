@@ -68,7 +68,9 @@ sub defaults { \%defaults }
 sub config { $values{$_[1]} }
 
 ################################################################################
-use OCBNET::Webmerge::Checksum;
+use OCBNET::Webmerge::CRC;
+use OCBNET::Webmerge::Tool;
+################################################################################
 use OCBNET::Webmerge::Config::XML;
 ################################################################################
 
@@ -222,29 +224,17 @@ sub main
 	my @blocks = grep { $_ } map { $webmerge->getById($_) } @ARGV;
 	push @blocks, $webmerge unless scalar(@blocks) + scalar(@ARGV);
 
-#die $webmerge->getById('po')->option('fingerprint');
-	# run handlers for webserver, watchdog, etc
-
-	# execute optimize (can be inside block?)
-
-	# call execute on all unique blocks
-	$_->execute foreach (uniq @blocks);
-
-	# execute headinc, embedder (again inside?)
-$webmerge->revert;
-print "in sleep\n";
-	for(my $i = 0; $i < 10; $i++)
-	{
-		select(undef, undef, undef, 0.05);
-	}
+	# pass execution to tool module (run all tools)
+	OCBNET::Webmerge::Tool::run($webmerge, \@blocks);
 
 }
 
-sub DESTROY
-{
-	warn "DESTROY ME";
-	# $_[0]->revert;
-}
+################################################################################
+# change behaviour if you want to force the
+# user to call commit explicitly by himself
+################################################################################
+
+# sub DESTROY { $_[0]->revert; }
 
 ################################################################################
 ################################################################################

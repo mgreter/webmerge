@@ -101,7 +101,7 @@ sub checksum
 	$crc .= join("\n", @inputs) . "\n";
 
 	# create path to store checksum of this output
-	my $checksum = OCBNET::Webmerge::Checksum->new($output);
+	my $checksum = OCBNET::Webmerge::CRC->new($output);
 
 	$checksum->write(\$crc);
 
