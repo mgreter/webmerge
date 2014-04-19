@@ -17,13 +17,6 @@ use warnings;
 # some accessor methods
 ################################################################################
 
-sub execute
-{
-	print " " x $_[0]->level;
-	print "exec ", $_[0]->tag, "\n";
-	shift->SUPER::execute(@_);
-}
-
 # return node type
 sub type { 'ACTION' }
 
