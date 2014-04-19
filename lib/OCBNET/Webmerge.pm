@@ -6,7 +6,6 @@ package OCBNET::Webmerge;
 ################################################################################
 use base OCBNET::Webmerge::Config::XML::Root;
 ################################################################################
-use OCBNET::Webmerge::Process;
 use OCBNET::Webmerge::Config::XML;
 ################################################################################
 
@@ -35,17 +34,18 @@ sub new
 }
 
 ################################################################################
+# get or set processors
+################################################################################
 
 sub processor
 {
 
-	# get arguments (variable)
+	# get arguments (most optional)
 	my ($webmerge, $name, $fn) = @_;
 
 	# has a function
 	if (scalar(@_) > 2)
 	{
-		print "reg $webmerge, $name, $fn\n";
 		# register the processor by name
 		$webmerge->{'processors'}->{$name} = $fn;
 	}
@@ -57,7 +57,7 @@ sub processor
 	}
 	else
 	{
-		# return the hash
+		# return the hash ref
 		$webmerge->{'processors'};
 	}
 
@@ -77,12 +77,8 @@ sub load
 	my $parser = OCBNET::Webmerge::Config::XML->new;
 
 	# parse the config file and fill webmerge config tree
-	return $parser->parse_file('t/test.conf.xml', $webmerge);
+	return $parser->parse_file($configfile, $webmerge);
 
-}
-
-sub plugin
-{
 }
 
 ################################################################################
