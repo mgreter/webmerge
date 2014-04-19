@@ -20,6 +20,31 @@ use warnings;
 ################################################################################
 
 
+################################################################################
+
+# define the template for the script includes
+# don't care about doctype versions, dev only
+our $css_include_tmpl = '@import url(\'%s\');' . "\n";
+
+################################################################################
+# generate a css include (@import)
+# add support for data or reference id
+################################################################################
+
+sub include
+{
+
+	# get arguments
+	my ($input, $output) = @_;
+
+	# get a unique path with added fingerprint
+	my $path = $input->fingerprint($output->target);
+
+	# return the script include string
+	return sprintf($css_include_tmpl, $path);
+
+}
+
 sub deps
 {
 	my ($node) = @_;
