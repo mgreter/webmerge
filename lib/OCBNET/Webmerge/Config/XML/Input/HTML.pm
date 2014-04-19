@@ -5,8 +5,8 @@
 package OCBNET::Webmerge::Config::XML::Input::HTML;
 ################################################################################
 use base qw(
-	OCBNET::Webmerge::Config::XML::Input
 	OCBNET::Webmerge::IO::File::HTML
+	OCBNET::Webmerge::Config::XML::Input
 );
 ################################################################################
 

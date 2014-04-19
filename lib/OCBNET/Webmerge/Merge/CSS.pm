@@ -17,35 +17,16 @@ use warnings;
 sub execute
 {
 	my ($node, $context) = @_;
-
-
-my $encoding = 'ISO-8859-1';
-
-$encoding = 'utf8';
-print "exec merge CSS\n";
+	# $node->log("execute MERGE::CSS");
 	foreach my $output ($node->find('OUTPUT'))
 	{
 		STDOUT->autoflush(1);
-		printf "render %s ... ", $output->dpath;
+		$node->logAction('render');
 		my $data = $output->render;
-		print $data ? "ok\n" : "failed\n";
-		printf "writing %s ... ", $output->dpath;
+		$node->logAction('write');
 		my $rv = $output->write($data);
-		print $rv ? "ok\n" : "failed\n";
-
-
+		$node->logSuccess($rv);
 	}
-
-open(my $fh, ">>:encoding($encoding)", "d:\\output.txt");
-
-	print $fh "\@charset \"$encoding\";\n\n" if ($encoding ne "utf8");
-	foreach my $in ($node->find('INPUT'))
-	{
-		my $css = $in->read;
-		print $fh ${$css}, "\n";
-	}
-
-	return "merge css";
 }
 
 ################################################################################

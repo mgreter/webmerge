@@ -16,11 +16,11 @@ use warnings;
 
 sub execute
 {
+	# execute also on parent
+	# shift->SUPER::execute(@_);
 	# print text to stdout
 	# maybe add more options
-	print $_[0]->text, "\n";
-	# execute also on parent
-	shift->SUPER::execute(@_);
+	# print "ECHO: ", $_[0]->text, "\n";
 }
 
 # return node type

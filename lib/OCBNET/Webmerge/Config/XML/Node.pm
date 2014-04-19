@@ -62,6 +62,36 @@ sub new
 sub DESTROY { }
 
 ################################################################################
+################################################################################
+
+sub log
+{
+	print " " x shift->level, @_, "\n";
+}
+
+sub logBlock
+{
+	print " " x shift->level, @_, "\n";
+}
+
+sub logFile
+{
+	print " " x $_[0]->level;
+	printf "%s: %s\n", $_[1], $_[0]->dpath;
+}
+
+sub logAction
+{
+	# printf " %s ...", $_[1];
+}
+
+sub logSuccess
+{
+	# print $_[1] ? "ok\n" : "err\n";
+}
+
+
+################################################################################
 # some accessor methods
 ################################################################################
 
@@ -157,7 +187,10 @@ sub closest { $_[0]->tag =~ $_[1] ? $_[0] : $_[0]->parent->closest($_[1]) }
 ################################################################################
 
 sub deps { map { $_->deps } $_[0]->children }
-sub execute { $_->execute foreach $_[0]->children }
+sub execute {
+	$_[0]->log("execute " . $_[0]->type);
+	$_->execute foreach $_[0]->children;
+}
 
 ################################################################################
 # resolve path placeholders
@@ -228,6 +261,7 @@ my %parse = (
 	'css' => 'OCBNET::Webmerge::Config::XML::Merge::CSS',
 
 	'echo' => 'OCBNET::Webmerge::Config::XML::Echo',
+	'eval' => 'OCBNET::Webmerge::Config::XML::Eval',
 
 	'file' => 'OCBNET::Webmerge::Config::XML::File',
 	'input' => 'OCBNET::Webmerge::Config::XML::Input',

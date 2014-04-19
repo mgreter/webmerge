@@ -5,9 +5,8 @@
 package OCBNET::Webmerge::Config::XML::Input::CSS;
 ################################################################################
 use base qw(
-	OCBNET::Webmerge::Config::XML::Input
-	OCBNET::Webmerge::IO::File::CSS
 	OCBNET::Webmerge::Input::CSS
+	OCBNET::Webmerge::Config::XML::Input
 );
 ################################################################################
 

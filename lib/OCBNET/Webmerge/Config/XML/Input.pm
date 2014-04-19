@@ -4,10 +4,7 @@
 ################################################################################
 package OCBNET::Webmerge::Config::XML::Input;
 ################################################################################
-use base qw(
-	OCBNET::Webmerge::Config::XML::Node
-	OCBNET::Webmerge::IO::File
-);
+use base 'OCBNET::Webmerge::Config::XML::Node';
 ################################################################################
 require OCBNET::Webmerge::Config::XML::Input::JS;
 require OCBNET::Webmerge::Config::XML::Input::CSS;
@@ -39,12 +36,6 @@ sub new
 }
 
 ################################################################################
-# some common attribute getters
-################################################################################
-
-# sub process { $_[0]->attr('process') }
-
-################################################################################
 # upgrade into specific input input class
 ################################################################################
 
@@ -64,8 +55,16 @@ sub started
 # return absolute path for the given input file
 ################################################################################
 
-sub path { return File::Spec->join($_[0]->directory, $_[0]->attr('path')); }
-sub dpath { return File::Spec->join($_[0]->directory, $_[0]->attr('path')); }
+sub path { return $_[0]->abspath($_[0]->attr('path'), $_[0]->directory); }
+sub dpath { return $_[0]->abspath($_[0]->attr('path'), $_[0]->directory); }
+
+################################################################################
+use File::Basename qw();
+################################################################################
+
+sub dirname { File::Basename::dirname(shift->path, @_) }
+sub basename { File::Basename::basename(shift->path, @_) }
+sub fileparse { File::Basename::fileparse(shift->path, @_) }
 
 ################################################################################
 # some accessor methods
@@ -73,6 +72,9 @@ sub dpath { return File::Spec->join($_[0]->directory, $_[0]->attr('path')); }
 
 # return node type
 sub type { 'INPUT' }
+
+# abort exection
+sub execute { 1 }
 
 ################################################################################
 ################################################################################

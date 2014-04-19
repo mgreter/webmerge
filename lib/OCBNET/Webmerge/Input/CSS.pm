@@ -4,7 +4,10 @@
 ################################################################################
 package OCBNET::Webmerge::Input::CSS;
 ################################################################################
-use base 'OCBNET::Webmerge::Input';
+use base qw(
+	OCBNET::Webmerge::Input
+	OCBNET::Webmerge::IO::File::CSS
+);
 ################################################################################
 use OCBNET::CSS3;
 ################################################################################
@@ -48,6 +51,37 @@ return @imports;
 
 	die "i have deps";
 }
+
+################################################################################
+use OCBNET::CSS3::Regex::Base qw($re_url wrapUrl fromUrl);
+################################################################################
+
+
+sub import
+{
+
+	my ($node) = @_; # , $data
+
+	# check if cache exists
+	if (exists $node->{'import'})
+	{
+		$node->logFile('  import[I]');
+		return $node->{'import'};
+	}
+	# otherwise import format
+	$node->logFile('  import[i]');
+	# get import base dir
+	my $base = $node->dirname;
+	print $node, " - ", $base, "\n";
+	# get data from parent class
+	my $data = $node->content(@_);
+	# alter all urls to absolute paths
+	${$data} =~ s/($re_url)/OCBNET::CSS3::URI->new($1, $base)->wrap()/ge;
+	# update cache and return altered data
+	return $node->{'import'} = $data;
+}
+
+
 
 # return node type
 sub type { 'INPUT::CSS' }

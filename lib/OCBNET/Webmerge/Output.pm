@@ -4,27 +4,34 @@
 ################################################################################
 package OCBNET::Webmerge::Output;
 ################################################################################
+use base OCBNET::Webmerge::IO::File;
+################################################################################
 
 use strict;
 use warnings;
 
 ################################################################################
-# some accessor methods
+# no implementation yet
 ################################################################################
 
+sub export { $_[0]->logFile('export') }
+sub checksum { $_[0]->logFile('checksum') }
+
 ################################################################################
-# render output context
+# process for output target
 ################################################################################
 use Encode qw(encode);
 ################################################################################
 
-
-sub process
+sub postprocess
 {
 
 	# get node and data
 	# alter original data
 	my ($output, $data) = @_;
+
+	# log action to console
+	$output->logFile('process');
 
 	# act upon different targets
 	if ($output->target eq 'minify')
@@ -49,46 +56,46 @@ sub render
 	# get arguments
 	my ($output) = @_;
 
+	# log action to console
+	$output->logFile('render');
+
 	# get list of all outputs
 	my $parent = $output->parent;
 
-	# get list of all input blocks
-	my @prefix = $parent->find('prefix');
-	my @prepend = $parent->find('prepend');
-	my @input = $parent->find('input');
-	my @append = $parent->find('append');
-	my @suffix = $parent->find('suffix');
-
 	# get some options from attributes
-	my $target = $output->attr('target');
+	my $target = $output->target;
 
-	# join sources
-	my $data = "";
+	# collect parts
+	my @parts;
 
 	# always add prefix unaltered
-	$data .= ${$_->read} foreach @prefix;
+	push @parts, $output->prefix;
+	push @parts, ${$_->content} foreach $parent->find('prefix');
 	# add in order of their naming via includer
-	$data .= $_->render($output) foreach @prepend;
-	$data .= $_->render($output) foreach @input;
-	$data .= $_->render($output) foreach @append;
+		push @parts, $_->render($output) foreach $parent->find('prepend');
+	push @parts, $_->render($output) foreach $parent->find('input');
+	push @parts, $_->render($output) foreach $parent->find('append');
 	# always add suffix unaltered
-	$data .= ${$_->read} foreach @suffix;
+	push @parts, ${$_->content} foreach $parent->find('suffix');
+	push @parts, $output->suffix;
+
+	# join the final data (filter undefined or empty parts)
+	my $data = join(';', grep { defined $_ && $_ ne '' } @parts);
 
 	# encode data into requested encoding
 	$data = encode($output->{'encoding'}, $data);
-
-	$output->process(\$data);
-
-
-	# compile the output
-	# post process output
 
 	# return scalar ref
 	return \ $data;
 
 }
 
+################################################################################
+# implement on specific types and targets
+################################################################################
 
+sub prefix { }
+sub suffix { }
 
 ################################################################################
 ################################################################################

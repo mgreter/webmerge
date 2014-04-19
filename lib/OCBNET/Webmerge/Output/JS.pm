@@ -4,24 +4,34 @@
 ################################################################################
 package OCBNET::Webmerge::Output::JS;
 ################################################################################
-use base 'OCBNET::Webmerge::Output';
+use base qw(
+	OCBNET::Webmerge::Output
+	OCBNET::Webmerge::IO::File::JS
+);
 ################################################################################
 
 use strict;
 use warnings;
 
+################################################################################
 # run3 to get stdout and stderr
 use IPC::Run3 qw(run3);
+################################################################################
 
 use constant EOD => "\\";
 
+################################################################################
 # compile js via google closure compiler
-#**************************************************************************************************
+################################################################################
+
 sub compile
 {
 
 	# get input variables
 	my ($output, $content) = @_;
+
+	# print debug message
+	$output->logAction('compile');
 
 	# make this configurable again
 	my $java_bin = '/usr/bin/java';
@@ -75,6 +85,9 @@ sub minify
 	# get input variables
 	my ($output, $content) = @_;
 
+	# print debug message
+	$output->logAction('minify');
+
 	# module is optional
 	require JavaScript::Minifier;
 
@@ -82,14 +95,6 @@ sub minify
 	JavaScript::Minifier::minify('input' => $content)
 
 }
-
-
-################################################################################
-# render output context
-################################################################################
-
-
-
 
 ################################################################################
 ################################################################################

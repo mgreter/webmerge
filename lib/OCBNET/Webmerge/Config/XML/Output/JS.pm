@@ -6,7 +6,6 @@ package OCBNET::Webmerge::Config::XML::Output::JS;
 ################################################################################
 use base qw(
 	OCBNET::Webmerge::Config::XML::Output
-	OCBNET::Webmerge::IO::File::JS
 	OCBNET::Webmerge::Output::JS
 );
 ################################################################################

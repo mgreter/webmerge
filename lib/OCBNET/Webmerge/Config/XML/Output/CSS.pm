@@ -6,7 +6,6 @@ package OCBNET::Webmerge::Config::XML::Output::CSS;
 ################################################################################
 use base qw(
 	OCBNET::Webmerge::Config::XML::Output
-	OCBNET::Webmerge::IO::File::CSS
 	OCBNET::Webmerge::Output::CSS
 );
 ################################################################################
@@ -20,6 +19,7 @@ use IO::CSS qw(sniff_encoding);
 
 sub open
 {
+	die "open css out";
 	# get arguments
 	my ($node, $mode) = @_;
 	# get path for node

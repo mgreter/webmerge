@@ -19,6 +19,7 @@ use IO::HTML qw(sniff_encoding);
 
 sub open
 {
+	die "open html out";
 	# get arguments
 	my ($node, $mode) = @_;
 	# get path for node

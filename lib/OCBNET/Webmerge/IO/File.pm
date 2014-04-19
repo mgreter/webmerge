@@ -4,8 +4,6 @@
 ################################################################################
 package OCBNET::Webmerge::IO::File;
 ################################################################################
-# use base 'OCBNET::Webmerge::Merge';
-################################################################################
 
 use strict;
 use warnings;
@@ -76,6 +74,7 @@ sub open
 
 sub read
 {
+	my $data;
 	# get arguments
 	my ($node) = @_;
 	# get path from node
@@ -86,7 +85,7 @@ sub read
 	if (defined $atomic)
 	{
 		# simply return the last written data
-		return ${*$atomic}{'io_atomicfile_data'};
+		$data = ${*$atomic}{'io_atomicfile_data'};
 	}
 	# read from the disk
 	else
@@ -96,15 +95,37 @@ sub read
 		# implement proper error handling
 		die "error ", $path unless $fh;
 		# slurp the while file into memory and decode unicode
-		my $data = decode($node->{'encoding'}, join('', <$fh>));
+		my $content = decode($node->{'encoding'}, join('', <$fh>));
 		# attach written scalar to atomic instance
-		${*$fh}{'io_atomicfile_data'} = \ $data;
+		${*$fh}{'io_atomicfile_data'} = \ $content;
 		# store handle as atomic handle
 		# disallow changes from this point
 		$node->atomic($path, $fh);
 		# return scalar reference
-		return \ $data;
+		$data = \ $content;
 	}
+	# also set the read cache
+	$node->{'content'} = $data;
+	# create and store the checksum
+	$node->{'crc'} = $node->md5sum;
+	# call the importer
+	$node->import($data);
+	# call the processors
+	$node->preprocess($data);
+	# store copy to cache
+	return $data;
+
+}
+
+################################################################################
+# same as read but cached
+################################################################################
+
+sub content
+{
+	$_[0]->logFile(' input');
+	&read unless exists $_[0]->{'content'};
+	return $_[0]->{'content'};
 }
 
 ################################################################################
@@ -115,26 +136,45 @@ sub write
 {
 	# get arguments
 	my ($node, $data) = @_;
+
 	# get path from node
 	my $path = $node->path;
 
 	# do some checking before writing to give good error messages
-	die "error\nwriting to non existent directory" unless (-d dirname($path));
-	die "error\nwriting to unwriteable directory" unless (-w dirname($path));
+	die "error\nwriting to non existent directory" unless (-d $node->dirname);
+	die "error\nwriting to unwriteable directory" unless (-w $node->dirname);
+
+	# call the processors
+	$node->postprocess($data);
+	# alter data for output
+	$node->export($data);
+	# create output checksum
+	$node->checksum($data);
 
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# check if commit is pending
 	if (defined $atomic)
 	{
+		$_[0]->logFile('write[a]');
 		# check if the new data matches the previous commit
 		if (${$data} eq ${${*$atomic}{'io_atomicfile_data'}})
 		{ warn "writing same content more than once"; }
 		else { die "writing different content to the same file"; }
 	}
-	# read from the disk
+	# check if file has been read
+	elsif ($node->{'contents'})
+	{
+		$_[0]->logFile('write[c]');
+		# check if the new data matches the previous commit
+		if (${$data} eq ${$node->{'contents'}})
+		{ warn "overwriting same content more than once"; }
+		else { die "overwriting different content to the same file"; }
+	}
+	# write to the disk
 	else
 	{
+		$_[0]->logFile('write[w]');
 		# create a new atomic instance
 		$atomic = IO::AtomicFile->new;
 		# add specific webmerge suffix to temp files
@@ -151,6 +191,8 @@ sub write
 		${*$atomic}{'io_atomicfile_data'} = $data;
 		# attach atomic instance to scope
 		$node->atomic($path, $atomic);
+		# also set the read cache
+		$node->{'contents'} = $data;
 		# return scalar reference
 		print $fh ${$data};
 	}
@@ -168,6 +210,8 @@ sub revert
 	my ($node) = @_;
 	# get path from node
 	my $path = $node->path;
+	# read from disk next time
+	delete $node->{'content'};
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# die if there is nothing to revert
@@ -186,6 +230,8 @@ sub commit
 	my ($node) = @_;
 	# get path from node
 	my $path = $node->path;
+	# read from disk next time
+	delete $node->{'content'};
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
 	# die if there is nothing to revert
@@ -196,6 +242,7 @@ sub commit
 
 ################################################################################
 use Digest::MD5;
+###############################################################################
 use Encode qw(encode_utf8);
 ###############################################################################
 
@@ -206,7 +253,7 @@ sub md5sum
 	# create a new digest object
 	my $md5 = Digest::MD5->new;
 	# add encoded string for md5 digesting
-	$md5->add(encode_utf8(${$node->read}));
+	$md5->add(encode_utf8(${$node->content}));
 	# return uppercase hex crc
 	return uc($md5->hexdigest);
 }
@@ -220,39 +267,34 @@ sub md5short
 }
 
 ###############################################################################
-use File::Basename;
+# return path with added fingerprint
 ###############################################################################
 
 sub fingerprint
 {
 
 	# get passed variables
-	my ($input, $target, $data) = @_;
-
-	# assign variables from object
-	my $path = $input->path;
-	# read from file if no data passed
-	$data = $input->read unless $data;
+	my ($node, $target, $data) = @_;
 
 	# get the fingerprint config option if not explicitly given
-	my $technique = $input->config(join('-', 'fingerprint', $target));
+	my $technique = $node->config(join('-', 'fingerprint', $target));
 
 	# do not add a fingerprint at all if feature is disabled
-	return $path unless $input->config('fingerprint') && $technique;
+	return $node->path unless $node->config('fingerprint') && $technique;
 
 	# simply append the fingerprint as a unique query string
-	return join('?', $path, $input->md5short) if $technique eq 'q';
+	return join('?', $node->path, $node->md5short) if $technique eq 'q';
 
 	# insert the fingerprint as a (virtual) last directory to the given path
 	# this will not work out of the box - you'll need to add some rewrite directives
-	return join('/', dirname($path), $input->md5short, basename($path)) if $technique eq 'd';
-	return join('/', dirname($path), $input->md5short . '-' . basename($path)) if $technique eq 'f';
+	return join('/', $node->dirname, $node->md5short, $node->basename) if $technique eq 'd';
+	return join('/', $node->dirname, $node->md5short . '-' . $node->basename) if $technique eq 'f';
 
 	# exit and give an error message if technique is not known
 	die 'fingerprint technique <', $technique, '> not implemented', "\n";
 
 	# at least return something
-	return $path;
+	return $node->path;
 
 }
 ################################################################################
