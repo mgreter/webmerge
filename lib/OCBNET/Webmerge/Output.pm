@@ -14,8 +14,8 @@ use warnings;
 # no implementation yet
 ################################################################################
 
-sub export { $_[0]->logAction('export') }
-sub finalize { $_[0]->logAction('finalize') }
+sub export2 { $_[0]->logAction('export') }
+sub finalize2 { $_[0]->logAction('finalize') }
 
 ################################################################################
 # get all input sources

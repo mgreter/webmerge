@@ -251,7 +251,7 @@ sub main
 	OCBNET::Webmerge::Tool::run(@blocks);
 
 	# commit all changes
-	$webmerge->commit;
+	$webmerge->commit(1);
 
 	# return the object
 	return $webmerge;

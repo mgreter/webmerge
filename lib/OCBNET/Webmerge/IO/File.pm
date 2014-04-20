@@ -237,6 +237,9 @@ sub read
 	$node->import($data);
 	# call the processors
 	$node->process($data);
+	# convert if needed
+	# $node->export($data);
+	# $node->import($data);
 	# return reference
 	return $data;
 }
@@ -368,7 +371,7 @@ sub revert
 	# silently return if node is unknown
 	return 1 if $quiet && !$atomic;
 	# die if there is nothing to revert
-	die "file never written: $path" unless $atomic;
+	Carp::croak "file never written: $path" unless $atomic;
 	# also call on possible children
 	$_->revert foreach $node->children;
 	# revert changes
@@ -394,7 +397,7 @@ sub commit
 	# silently return if node is unknown
 	return 1 if $quiet && !$atomic;
 	# die if there is nothing to revert
-	die "file never written: $path" unless $atomic;
+	Carp::croak "file never written: $path" unless $atomic;
 	# also call on possible children
 	$_->commit foreach $node->children;
 	# commit changes

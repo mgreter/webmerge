@@ -11,6 +11,110 @@ use strict;
 use warnings;
 
 ################################################################################
+use OCBNET::CSS3::Regex::Base qw($re_url);
+################################################################################
+use OCBNET::CSS3::URI qw(wrapUrl exportUrl fromUrl);
+################################################################################
+
+sub export
+{
+
+	# get arguments
+	my ($output, $data) = @_;
+
+	# call export on parent class
+	$output->SUPER::export($data);
+
+	# get new export base dir
+	my $base = $output->dirname;
+
+	# alter all urls to paths relative to the base directory
+	${$data} =~ s/($re_url)/wrapUrl(exportUrl(fromUrl($1), $base, 0))/ge;
+
+}
+
+################################################################################
+
+# define the template for the script includes
+# don't care about doctype versions, dev only
+our $css_include_tmpl = '@import url(\'%s\');' . "\n";
+
+################################################################################
+# generate a css include (@import)
+# add support for data or reference id
+################################################################################
+
+sub include
+{
+
+	# get arguments
+	my ($input, $output) = @_;
+
+	# get a unique path with added fingerprint
+	# is guess target is always dev here, or is it?
+	my $path = $input->fingerprint($output->target);
+
+	# return the script include string
+	return sprintf($css_include_tmpl, $path);
+
+}
+
+################################################################################
+# helper to rebase a url
+################################################################################
+
+# sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
+# sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
+
+
+
+################################################################################
+# import the css content
+# resolve urls to abs paths
+################################################################################
+use OCBNET::CSS3::Regex::Base qw($re_url);
+################################################################################
+use OCBNET::CSS3::URI qw(wrapUrl importUrl fromUrl);
+################################################################################
+
+sub import
+{
+
+	# get arguments
+	my ($node, $data) = @_;
+
+	# otherwise import format
+	$node->logFile('import');
+
+	# get import base dir
+	my $base = $node->dirname;
+
+	# alter all urls to absolute paths (relative to base directory)
+	${$data} =~ s/($re_url)/wrapUrl(importUrl(fromUrl($1), $base))/ge;
+
+}
+
+################################################################################
+################################################################################
+
+sub finalize
+{
+
+	# get arguments
+	my ($output, $data) = @_;
+
+	# call export on parent class
+	$output->SUPER::export($data);
+
+	# get new export base dir
+	my $base = $output->webroot;
+
+	# alter all urls to paths relative to the base directory
+	${$data} =~ s/($re_url)/wrapUrl(exportUrl(fromUrl($1), $base, 1))/ge;
+
+}
+
+################################################################################
 use IO::CSS qw(sniff_encoding);
 ################################################################################
 
