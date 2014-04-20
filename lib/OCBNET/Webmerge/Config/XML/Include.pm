@@ -35,6 +35,9 @@ sub started
 use File::Basename qw(dirname);
 ################################################################################
 
+# return the include filename
+sub file233 { $_[0]->{'filename'} }
+
 # return the full include filename
 sub filename { $_[0]->abspath($_[0]->{'filename'}) }
 

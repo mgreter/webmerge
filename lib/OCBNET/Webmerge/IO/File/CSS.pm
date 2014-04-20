@@ -23,10 +23,10 @@ use OCBNET::CSS3::URI qw(wrapUrl exportUrl fromUrl);
 # partials are not wrapped inside urls
 ################################################################################
 
-OCBNET::Webmerge::options('embed-css-imports', 'embed-css-imports!', 1);
-OCBNET::Webmerge::options('embed-css-partials', 'embed-css-partials!', 1);
-OCBNET::Webmerge::options('embed-scss-imports', 'embed-css-imports!', 1);
-OCBNET::Webmerge::options('embed-scss-partials', 'embed-css-partials!', 1);
+OCBNET::Webmerge::options('embed-css-imports', '!', 1);
+OCBNET::Webmerge::options('embed-css-partials', '!', 1);
+OCBNET::Webmerge::options('embed-scss-imports', '!', 1);
+OCBNET::Webmerge::options('embed-scss-partials', '!', 1);
 
 ################################################################################
 # rebase urls within file types
@@ -34,8 +34,10 @@ OCBNET::Webmerge::options('embed-scss-partials', 'embed-css-partials!', 1);
 # be disabled for all further includes
 ################################################################################
 
-OCBNET::Webmerge::options('rebase-urls-in-css', 'rebase-urls-in-css!', 1);
-OCBNET::Webmerge::options('rebase-urls-in-scss', 'rebase-urls-in-scss!', 0);
+OCBNET::Webmerge::options('rebase-urls-in-any', '!', 1);
+OCBNET::Webmerge::options('rebase-urls-in-css', '!', 1);
+OCBNET::Webmerge::options('rebase-urls-in-scss', '!', 0);
+OCBNET::Webmerge::options('rebase-urls-in-sass', '!', 0);
 
 ################################################################################
 
@@ -92,6 +94,13 @@ use File::Basename qw();
 # helper to rebase a url
 ################################################################################
 
+my @variants = (
+	'%s', '_%s',
+	'%s.scss', '_%s.scss',
+	'%s.sass', '_%s.sass',
+	'%s.css', '_%s.css',
+);
+
 # sub importURL ($;$) { OCBNET::CSS3::URI->new($_[0], $_[1])->wrap }
 # sub exportURL ($;$) { OCBNET::CSS3::URI->new($_[0])->export($_[1]) }
 
@@ -109,7 +118,7 @@ sub resolver
 		catfile($node->dirname, $root)
 	)
 	{
-		foreach my $srch ('%s', '_%s', '%s.scss', '_%s.scss')
+		foreach my $srch (@variants)
 		{
 			if (-e catfile($path, sprintf($srch, $name)))
 			{ return catfile($path, sprintf($srch, $name)); }

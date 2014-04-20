@@ -14,6 +14,11 @@ use warnings;
 use OCBNET::Webmerge qw();
 ################################################################################
 
+sub file233
+{
+	return $_[0]->{'attr'}->{'path'} || $_[0]->{'path'};
+}
+
 sub new
 {
 	# get arguments
@@ -444,8 +449,8 @@ sub crc { &load unless $_[0]->{'crc'}; $_[0]->{'crc'} }
 ###############################################################################
 # return path with added fingerprint
 ###############################################################################
-OCBNET::Webmerge::options('fingerprint', 'fingerprint|f=s', 'q');
-OCBNET::Webmerge::options('fingerprint-length', 'fingerprint-length=s', 8);
+OCBNET::Webmerge::options('fingerprint', '|f=s', 'q');
+OCBNET::Webmerge::options('fingerprint-length', '=s', 8);
 ###############################################################################
 
 sub fingerprint

@@ -24,10 +24,15 @@ sub parent { &OCBNET::Webmerge::Config::XML::Input::parent }
 
 sub directory {
 
-my ($dirname, $basename, $ext) = File::Basename::fileparse($_[0]->{'path'}|| $_[0]->{'attr'}->{'path'}, '.scss', '.css');
+	my $path = $_[0]->file233;
 
-	return $_[0]->SUPER::directory if lc $ext eq '.css' && ! $_[0]->config('rebase-urls-in-css');
-	return $_[0]->SUPER::directory if lc $ext eq '.scss' && ! $_[0]->config('rebase-urls-in-scss');
+	my ($dirname, $basename, $ext) = File::Basename::fileparse($path, '.scss', '.sass', '.css');
+
+	$ext = $ext || '.any';
+
+	substr($ext, 0, 1) = '-';
+
+	return $_[0]->SUPER::directory unless $_[0]->config('rebase-urls-in' . lc $ext);
 
 	File::Spec->rel2abs(File::Basename::dirname($_[0]->{'path'} || $_[0]->{'attr'}->{'path'}), $_[0]->SUPER::directory);
 

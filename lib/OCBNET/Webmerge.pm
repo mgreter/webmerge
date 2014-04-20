@@ -18,18 +18,19 @@ our (%longopts, %defaults, %values);
 
 sub options
 {
-	$longopts{$_[0]} = $_[1];
-	$defaults{$_[0]} = $_[2];
 	$values{$_[0]} = $_[2];
+	$defaults{$_[0]} = $_[2];
+	# second argument is optional
+	$longopts{$_[0]} = $_[0] . $_[1];
 }
 
 ################################################################################
 # register some default configs
 ################################################################################
 
-options('help', 'help|?!', 0);
-options('opts', 'opts!', 0);
-options('man', 'man!', 0);
+options('help', '|?!', 0);
+options('opts', '!', 0);
+options('man', '!', 0);
 
 ################################################################################
 # return command line option or node config
@@ -48,8 +49,11 @@ sub setting
 	# get from command line options
 	if ( exists $values{$_[1]} )
 	{ return $values{$_[1]}; }
+	# might not be needed, but safety first
+	if ( exists $_[0]->{'config'}->{$_[1]} )
+	{ return $_[0]->{'config'}->{$_[1]}; }
 	# or get from node config
-	my $rv = $_[0]->config($_[1]);
+	my $rv = $_[0]->SUPER::config($_[1]);
 	# or use defaults value
 	unless ( defined $rv )
 	{ $rv = $defaults{$_[1]}; }

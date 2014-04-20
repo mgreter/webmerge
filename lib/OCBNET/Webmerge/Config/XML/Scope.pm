@@ -135,7 +135,6 @@ sub config
 {
 	# get arguments
 	my ($node, $key) = @_;
-	print "||| fetch config $key\n";
 	# check if config key exists here
 	if (exists $node->{'config'}->{$key})
 	{ return $node->{'config'}->{$key}; }

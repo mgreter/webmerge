@@ -459,6 +459,7 @@ sub end
 ################################################################################
 ################################################################################
 
+sub file233 { shift->parent->file233(@_) }
 sub config { shift->parent->config(@_) }
 sub option { shift->parent->option(@_) }
 sub setting { shift->parent->setting(@_) }

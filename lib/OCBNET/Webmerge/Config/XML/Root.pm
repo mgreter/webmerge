@@ -19,6 +19,10 @@ use warnings;
 ################################################################################
 # constructor
 ################################################################################
+sub file233
+{
+die "Hi";
+}
 
 sub new
 {
@@ -84,6 +88,8 @@ sub level { $_[1] || 0 }
 # they have implementation in scope class
 ################################################################################
 
+# sub file { shift->OCBNET::Webmerge::Config::XML::Include::file(@_) }
+# sub path { shift->OCBNET::Webmerge::Config::XML::Include::path(@_) }
 sub started { shift->OCBNET::Webmerge::Config::XML::Include::started(@_) }
 sub confroot { shift->OCBNET::Webmerge::Config::XML::Include::confroot(@_) }
 sub filename { shift->OCBNET::Webmerge::Config::XML::Include::filename(@_) }
