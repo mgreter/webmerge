@@ -95,7 +95,7 @@ sub checksum
 	# append the crc of all joined checksums
 	${$data} .= "\n/* crc: " . $md5_inputs . " */\n"; # if $config->{'crc-comment'};
 
-	# now calculate the output md5sum
+	# now calculate the output md5sum (have raw data)
 	my $crc = $output->md5sum($data) . "\n\n";
 	# add checksum over all inputs
 	$crc .= $md5_inputs . "\n";
@@ -130,10 +130,11 @@ sub check
 	my $checksum_joined = shift(@crcs);
 
 	# check if the generated content changed
-	if ($output->md5sum ne $checksum_result)
+	if ($output->crc ne $checksum_result)
 	{
 		printf "FAIL - dst: %s\n", substr($output->dpath, - 45);
-		printf "=> %s vs %s\n", $output->md5sum, $checksum_result;
+		printf "=> expect: %s\n", $checksum_result;
+		printf "=> gotten: %s\n", $output->crc;
 	}
 	else
 	{
@@ -156,33 +157,30 @@ sub check
 		# load the css file with the given path name
 		my $input = OCBNET::Webmerge::IO::File::CSS->new($path);
 
+		push @md5sums, $input->crc;
+
 		# check against stored value
 		if ($input->crc ne $checksum)
 		{
 			printf "  FAIL - src: %s\n", substr($input->dpath, - 45);
-			printf "  => expected: %s\n", $checksum;
-			printf "  => generated: %s\n", $input->md5sum;
+			printf "  => expect: %s\n", $checksum;
+			printf "  => gotten: %s\n", $input->crc;
 		}
 		else
 		{
 			printf "  PASS - src: %s\n", substr($input->dpath, - 45);
 		}
 
-
 	}
 
-			#my $crc_joined = md5sum(\$crcs_joined);
-
-			#if ($crc_joined ne $checksum_joined)
-			#{
-			#	printf "FAIL - tst: %s\n", substr(exportURI(check_path($result_path)), - 45);
-			#}
-			#else
-			#{
-			#	printf "PASS - tst: %s\n", substr(exportURI(check_path($result_path)), - 45);
-			#}
-
-	# die "check ${$crc}";
+	if ($output->md5sum(\join('::', @md5sums)) ne $checksum_joined)
+	{
+		printf "FAIL - all: %s\n", substr($output->dpath, - 45);
+	}
+	else
+	{
+		printf "PASS - all: %s\n", substr($output->dpath, - 45);
+	}
 
 }
 
@@ -247,7 +245,7 @@ sub render
 	my $data = join("\n", grep { defined $_ && $_ ne '' } @parts) . "\n";
 
 	# encode data into requested encoding
-	$data = encode($output->encoding, $data);
+	# $data = encode($output->encoding, $data);
 
 	# return scalar ref
 	return \ $data;

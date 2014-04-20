@@ -169,7 +169,7 @@ sub open
 # read file path into scalar
 ################################################################################
 
-sub read
+sub load
 {
 	my ($data, $pos);
 	# get arguments
@@ -201,28 +201,44 @@ sub read
 		seek $fh, 0, 0 or Carp::croak "could not seek $path: $!";
 		# slurp the while file into memory and decode unicode
 		# $fh->binmode(sprintf(':raw:encoding(%s)', $node->encoding));
-		my $content = $node->{'loaded'} = join('', <$fh>);
+		my $raw = $node->{'loaded'} = join('', <$fh>);
 		# now decode to loaded data into encoding
-		$content = decode($node->encoding, $content);
+		my $content = decode($node->encoding, $raw);
 		# attach written scalar to atomic instance
 		$data = ${*$fh}{'io_atomicfile_data'} = \ $content;
 		# store handle as atomic handle
 		# disallow changes from this point
 		$node->atomic($path, $fh);
+		# story a copy to our object
+		$node->{'readed'} = \ "$content";
 		# return scalar reference
-		$node->{'readed'} = $data = \ $content;
+		$data = \ $content;
 	}
 	# create and store the checksum
 	$node->{'crc'} = $node->md5sum($data);
+	# print "== ", $node->{'crc'}, "\n";
 	# remove leading file header
 	substr(${$data}, 0, $pos) = '';
+	# return reference
+	return $data;
+}
+
+################################################################################
+# read and import file
+################################################################################
+
+sub read
+{
+	# get arguments
+	my ($node) = @_;
+	# load from disk
+	my $data = &load;
 	# call the importer
 	$node->import($data);
 	# call the processors
 	$node->process($data);
-	# store copy to cache
+	# return reference
 	return $data;
-
 }
 
 ################################################################################
@@ -277,10 +293,13 @@ sub write
 
 	# get atomic entry if available
 	my $atomic = $node->atomic($path);
+
 	# check if commit is pending
 	if (defined $atomic)
 	{
 		$_[0]->logFile('write[a]');
+		# reset the offset for sniffed headers
+		${*$atomic}{'io_atomicfile_pos'} = 0;
 		# check if the new data matches the previous commit
 		if (${$data} eq ${${*$atomic}{'io_atomicfile_data'}})
 		{ warn "writing same content more than once"; }
@@ -319,7 +338,11 @@ sub write
 		$node->atomic($path, $atomic);
 		# also set the read cache
 		$node->{'written'} = $data;
-		# return scalar reference
+		# encode the data for raw output handle
+		${$data} = encode($node->encoding, ${$data});
+		# update the checksum (have raw data)
+		$node->{'crc'} = $node->md5sum($data, 1);
+		# print to raw handle
 		print $fh ${$data};
 	}
 	# return atomic instance
@@ -337,6 +360,7 @@ sub revert
 	# get path from node
 	my $path = $node->path;
 	# read from disk next time
+	delete $node->{'loaded'};
 	delete $node->{'readed'};
 	delete $node->{'written'};
 	# get atomic entry if available
@@ -362,6 +386,7 @@ sub commit
 	# get path from node
 	my $path = $node->path;
 	# read from disk next time
+	delete $node->{'loaded'};
 	delete $node->{'readed'};
 	delete $node->{'written'};
 	# get atomic entry if available
@@ -385,15 +410,15 @@ use Encode qw(encode_utf8 decode_utf8);
 sub md5sum
 {
 	# get the file node
-	my ($node, $data) = @_;
+	my ($node, $data, $raw) = @_;
 	# create a new digest object
 	my $md5 = Digest::MD5->new;
 	# read from node if no data is passed
 	$data = $node->contents unless $data;
-	# add encoded string for md5 digesting
-	$md5->add(encode($node->encoding, ${$data}));
-	# return uppercase hex crc
-	return uc($md5->hexdigest);
+	# convert data into encoding if we have no raw data
+	$data = \ encode($node->encoding, ${$data}) unless $raw;
+	# add raw data and return final digest
+	return uc($md5->add(${$data})->hexdigest);
 }
 
 sub md5short
@@ -409,7 +434,7 @@ sub md5short
 # as we remove the charset declaration on load
 ###############################################################################
 
-sub crc { &read unless $_[0]->{'crc'}; $_[0]->{'crc'} }
+sub crc { &load unless $_[0]->{'crc'}; $_[0]->{'crc'} }
 
 ###############################################################################
 # return path with added fingerprint
