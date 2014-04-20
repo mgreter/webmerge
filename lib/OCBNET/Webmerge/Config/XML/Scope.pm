@@ -141,7 +141,7 @@ sub config
 	{ return $node->{'config'}->{$key}; }
 	# otherwise try to pass to parent
 	elsif (defined $node->parent)
-	{ $node->parent->scope->config($key); }
+	{ $node->parent->config($key); }
 	# issue a warning about missing config
 	else { warn "no config for $key"; () }
 }

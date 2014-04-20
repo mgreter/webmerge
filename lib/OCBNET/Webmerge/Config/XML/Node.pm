@@ -225,7 +225,6 @@ my $respath = {
 	'www' => sub { $_[0]->parent ? $_[0]->parent->webroot :
 		do
 		{
-			print "==== $_[0] : ", $_[0]->setting('webroot'), "\n";
 			$_[0]->config('webroot')
 		}
 	}
@@ -262,7 +261,7 @@ sub abspath
 	my ($node, $path, $root) = @_;
 	# assign default directory if no other base is given
 	$root = $Bin unless defined $root && $_[0]->parent;
-	$root = $_[0]->parent->directory unless defined $root;
+	$root = $_[0]->directory unless defined $root;
 	# resolve path placeholders
 	$root = $node->respath($root);
 	$path = $node->respath($path);

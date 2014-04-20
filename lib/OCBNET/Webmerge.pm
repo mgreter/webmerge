@@ -35,6 +35,14 @@ options('man', 'man!', 0);
 # return command line option or node config
 ################################################################################
 
+sub config
+{
+	# config on most outer block overrules it
+	if ( exists $_[0]->{'config'}->{$_[1]} )
+	{ return $_[0]->{'config'}->{$_[1]}; }
+	else { return $_[0]->setting($_[1]); }
+}
+
 sub setting
 {
 	# get from command line options

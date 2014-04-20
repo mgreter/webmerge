@@ -77,6 +77,7 @@ sub atomic
 	# call atomic method on IO::Atomic
 	return $node->atomic($path, $atomic);
 }
+
 ################################################################################
 # return false if lock could not be
 # aquired after the given timeout (in s)
@@ -216,7 +217,6 @@ sub load
 	}
 	# create and store the checksum
 	$node->{'crc'} = $node->md5sum($data);
-	# print "== ", $node->{'crc'}, "\n";
 	# remove leading file header
 	substr(${$data}, 0, $pos) = '';
 	# return reference
@@ -235,6 +235,8 @@ sub read
 	my $data = &load;
 	# call the importer
 	$node->import($data);
+	# call the resolver
+	$node->resolve($data);
 	# call the processors
 	$node->process($data);
 	# convert if needed
@@ -285,12 +287,12 @@ sub write
 	die "error\nwriting to non existent directory: ", $node->dpath unless (-d $node->dirname);
 	die "error\nwriting to unwriteable directory: ", $node->dpath unless (-w $node->dirname);
 
-	# call the processors
-	$node->process($data);
 	# alter data for output
 	$node->export($data);
+	# call the processors
+	$node->process($data);
 	# finalize for writing
-	$node->finalize($data);
+	# $node->finalize($data);
 	# create output checksum
 	$node->checksum($data);
 
@@ -511,11 +513,13 @@ sub logSuccess
 	# print $_[1] ? "ok\n" : "err\n";
 }
 
-sub path {	$_[0]->{'path'} }
+sub path { $_[0]->{'path'} }
 
 sub dpath { $_[0]->path }
 
+sub import { return $_[1] }
 sub export { return $_[1] }
+sub resolve { return $_[1] }
 sub process { return $_[1] }
 sub checksum { return $_[1] }
 sub finalize { return $_[1] }
@@ -523,6 +527,14 @@ sub finalize { return $_[1] }
 sub parent {}
 sub collect {}
 sub children {}
+
+####################################################################################################
+# map to basename functions
+####################################################################################################
+
+sub dirname { File::Basename::dirname(shift->path, @_) }
+sub basename { File::Basename::basename(shift->path, @_) }
+sub fileparse { File::Basename::fileparse(shift->path, @_) }
 
 ################################################################################
 ################################################################################

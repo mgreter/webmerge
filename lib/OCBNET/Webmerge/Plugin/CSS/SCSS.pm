@@ -55,6 +55,8 @@ sub process
 	# also changes urls in comments (needed for the spriteset feature)
 	# ${$data} =~ s/$re_url/wrapURL(exportURI($+{url}, $directory))/egm;
 
+	chdir $file->directory;
+
 	# compile the passed scss data
 	${$data} = $scss->compile(${$data});
 
@@ -64,7 +66,8 @@ sub process
 		# output an error message (it may not tell much)
 		die "Fatal error when compiling scss:\n",
 		    join("\n", split('error:', $scss->last_error)),
-		    "cwd: ", $file->dpath, "\n";
+		    "cwd: ", $file->directory, "\n",
+		    "path: ", $file->dpath, "\n";
 	}
 
 	# change all uris to absolute paths (relative to local directory)
