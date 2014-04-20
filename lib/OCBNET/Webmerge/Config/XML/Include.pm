@@ -24,7 +24,7 @@ sub started
 	# invoke parent class method
 	my $rv = $node->SUPER::started($webmerge);
 	# store the include filename on this node
-	$node->scope->{'filename'} = $webmerge->{'filename'};
+	$node->{'filename'} = $webmerge->{'filename'};
 	# return result
 	return $rv;
 }
@@ -36,10 +36,10 @@ use File::Basename qw(dirname);
 ################################################################################
 
 # return the full include filename
-sub filename { $_[0]->abspath($_[0]->scope->{'filename'}) }
+sub filename { $_[0]->abspath($_[0]->{'filename'}) }
 
 # return the base directory of the include
-sub confroot { $_[0]->abspath(dirname $_[0]->scope->{'filename'}) }
+sub confroot { $_[0]->abspath(dirname $_[0]->{'filename'}) }
 
 ################################################################################
 # return resolved path

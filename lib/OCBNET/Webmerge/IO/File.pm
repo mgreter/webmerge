@@ -210,9 +210,9 @@ sub load
 		# disallow changes from this point
 		$node->atomic($path, $fh);
 		# story a copy to our object
-		$node->{'readed'} = \ "$content";
+		$node->{'readed'} = \ $content;
 		# return scalar reference
-		$data = \ $content;
+		$data = \ "$content";
 	}
 	# create and store the checksum
 	$node->{'crc'} = $node->md5sum($data);
@@ -279,8 +279,8 @@ sub write
 	my $path = $node->path;
 
 	# do some checking before writing to give good error messages
-	die "error\nwriting to non existent directory" unless (-d $node->dirname);
-	die "error\nwriting to unwriteable directory" unless (-w $node->dirname);
+	die "error\nwriting to non existent directory: ", $node->dpath unless (-d $node->dirname);
+	die "error\nwriting to unwriteable directory: ", $node->dpath unless (-w $node->dirname);
 
 	# call the processors
 	$node->process($data);
@@ -440,6 +440,7 @@ sub crc { &load unless $_[0]->{'crc'}; $_[0]->{'crc'} }
 # return path with added fingerprint
 ###############################################################################
 OCBNET::Webmerge::options('fingerprint', 'fingerprint|f=s', 'q');
+OCBNET::Webmerge::options('fingerprint-length', 'fingerprint-length=s', 8);
 ###############################################################################
 
 sub fingerprint
@@ -449,7 +450,7 @@ sub fingerprint
 	my ($node, $target, $data) = @_;
 
 	# get the fingerprint config option if not explicitly given
-	my $technique = $node->config(join('-', 'fingerprint', $target));
+	my $technique = lc substr $node->config(join('-', 'fingerprint', $target)), 0, 1;
 
 	# do not add a fingerprint at all if feature is disabled
 	return $node->path unless $node->config('fingerprint') && $technique;

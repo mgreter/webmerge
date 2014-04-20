@@ -69,6 +69,8 @@ sub process
 		# check if the processor name is valid
 		# maybe you forgot to load some plugins
 		die "processor $name not found" unless $processor;
+		# change working directory
+		chdir $file->directory;
 		# execute processor and pass data
 		$data = &{$processor}($file, $data);
 		# check if processor returned with success

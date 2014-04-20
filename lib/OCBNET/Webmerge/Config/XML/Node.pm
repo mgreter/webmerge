@@ -222,7 +222,13 @@ sub execute {
 
 my $respath = {
 	'cwd' => sub { $_[0]->directory },
-	'www' => sub { $_[0]->parent->webroot }
+	'www' => sub { $_[0]->parent ? $_[0]->parent->webroot :
+		do
+		{
+			print "==== $_[0] : ", $_[0]->setting('webroot'), "\n";
+			$_[0]->config('webroot')
+		}
+	}
 };
 
 ################################################################################
@@ -293,6 +299,11 @@ my %parse = (
 
 	'finish' => 'OCBNET::Webmerge::Config::XML::Action',
 	'prepare' => 'OCBNET::Webmerge::Config::XML::Action',
+
+	'feature' => 'OCBNET::Webmerge::Config::XML::Feature',
+	'test' => 'OCBNET::Webmerge::Config::XML::Feature::Test',
+	'enable' => 'OCBNET::Webmerge::Config::XML::Feature::Test::Enable',
+	'disable' => 'OCBNET::Webmerge::Config::XML::Feature::Test::Disable',
 
 	'copy' => 'OCBNET::Webmerge::Config::XML::Action::Copy',
 	'mkdir' => 'OCBNET::Webmerge::Config::XML::Action::Make',

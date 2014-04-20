@@ -20,6 +20,7 @@ require OCBNET::Webmerge::Config::XML::Output;
 require OCBNET::Webmerge::Config::XML::Action;
 require OCBNET::Webmerge::Config::XML::Config;
 require OCBNET::Webmerge::Config::XML::Include;
+require OCBNET::Webmerge::Config::XML::Feature;
 require OCBNET::Webmerge::Config::XML::Optimize;
 ################################################################################
 
@@ -76,6 +77,9 @@ sub parse_file
 		'Char' => \&char,
 		'Start' => \&start
 	);
+
+	# resolve filename to current scope
+	$filename = $scope->respath($filename);
 
 	# try to open the filehandle
 	if (open(my $fh, '<', $filename))

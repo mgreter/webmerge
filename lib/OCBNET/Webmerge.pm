@@ -24,7 +24,12 @@ sub options
 }
 
 ################################################################################
+# register some default configs
+################################################################################
 
+options('help', 'help|?!', 0);
+options('opts', 'opts!', 0);
+options('man', 'man!', 0);
 
 ################################################################################
 # return command line option or node config
@@ -65,7 +70,7 @@ sub defaults { \%defaults }
 
 ################################################################################
 
-sub config { $values{$_[1]} }
+# sub value { $values{$_[1]} }
 
 ################################################################################
 use OCBNET::Webmerge::CRC;
@@ -205,6 +210,9 @@ sub main
 	# create a new main webmerge object
 	$webmerge = OCBNET::Webmerge->new;
 
+	# register our config filename
+	$webmerge->{'filename'} = $configfile;
+
 	# try to load our main config file
 	# this may load additional plugins
 	$webmerge->load($configfile);
@@ -218,14 +226,35 @@ sub main
 	# get all options from commandline
 	GetOptions(@options) or pod2usage(2);
 
-	# collect block to be executed (ids from argv or all)
+	# show all options
+	if ($webmerge->option('opts'))
+	{
+		# print all names
+		print join("\n", map {
+			s/(?:\!|\=.*?)$//;
+			join(', ', map { '-' . $_ } split /\|/);
+		} sort keys %longopts);
+		# exit ok
+		exit 0;
+	}
+
+	# show help page if request by cmdline
+	pod2usage(1) if $webmerge->option('help');
+	# show man page if requested by cmdline
+	pod2usage(-exitval => 0, -verbose => 2) if $webmerge->option('man');
+
+	# collect blocks to be executed (ids from argv or all)
 	my @blocks = grep { $_ } map { $webmerge->getById($_) } @ARGV;
 	push @blocks, $webmerge unless scalar(@blocks) + scalar(@ARGV);
 
 	# pass execution to tools (run blocks)
 	OCBNET::Webmerge::Tool::run(@blocks);
 
-	print "finished\n";
+	# commit all changes
+	$webmerge->commit;
+
+	# return the object
+	return $webmerge;
 
 }
 
@@ -239,3 +268,37 @@ sub main
 ################################################################################
 ################################################################################
 1;
+
+__DATA__
+
+################################################################################
+################################################################################
+
+# from mod_pagespeed src/net/instaweb/http/user_agent_matcher.cc
+#
+# const char* kImageInliningWhitelist[] = {
+#  "*Android*",
+#  "*Chrome/*",
+#  "*Firefox/*",
+#  "*iPad*",
+#  "*iPhone*",
+#  "*iPod*",
+#  "*itouch*",
+#  "*MSIE *",
+#  "*Opera*",
+#  "*Safari*",
+#  "*Wget*",
+#  // The following user agents are used only for internal testing
+#  "google command line rewriter",
+#  "webp",
+# };
+#
+# const char* kImageInliningBlacklist[] = {
+#  "*Firefox/1.*",
+#  "*Firefox/2.*",
+#  "*MSIE 5.*",
+#  "*MSIE 6.*",
+#  "*MSIE 7.*",
+#  "*Opera?5*",
+#  "*Opera?6*"
+# };
