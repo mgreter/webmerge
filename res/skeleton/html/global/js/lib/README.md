@@ -1,0 +1,1 @@
+Put jQuery and other libraries in this folder

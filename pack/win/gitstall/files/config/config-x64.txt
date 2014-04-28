@@ -1,0 +1,6 @@
+;!@Install@!UTF-8! 
+Title="Webmerge Portable (64bit)" 
+BeginPrompt="Do you want to install Webmerge Portable (master)?" 
+ExecuteFile="install-x64.bat" 
+ExecuteParameters="master" 
+;!@InstallEnd@! 

@@ -1,0 +1,15 @@
+
+# enable fingerprint of urls
+
+<FilesMatch "\.(js|css)$">
+
+	# remove fingerprint from filename
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^[0-9A-F]{12}-([^\/]+)$ $1
+	# apply this rule also to subfolders
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.*)\/[0-9A-F]{12}-([^\/]+)$ $1/$2
+	# enable rewrite engine
+	RewriteEngine On
+
+</FilesMatch>
