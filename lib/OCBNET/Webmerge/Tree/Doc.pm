@@ -132,7 +132,7 @@ options('configfile', '|f=s', 'webmerge.conf.xml');
 ################################################################################
 
 # config on most outer block overrules it
-sub config { $_[0]->setting($_[1]) }
+sub config { shift->setting(@_) }
 
 ################################################################################
 # return program setting or config

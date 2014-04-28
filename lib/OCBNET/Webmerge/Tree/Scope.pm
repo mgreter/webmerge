@@ -52,12 +52,25 @@ use OCBNET::Webmerge qw(isset %values %defaults);
 
 sub setting
 {
+	# set value if another argument was passed
+	$values{$_[1]} = $_[2] if (scalar(@_) > 2);
 	# command line options have the highest order
 	return $values{$_[1]} if isset $values{$_[1]};
 	# get configuration for current scope
 	my $rv = $_[0]->SUPER::setting($_[1]);
 	# return config if valid or use default
 	return isset $rv ? $rv : $defaults{$_[1]};
+}
+
+################################################################################
+# get or set the configuration
+################################################################################
+
+sub config
+{
+	if (scalar(@_) > 2)
+	{ $_[0]->{'config'}->{$_[1]} = $_[2] }
+	else { $_[0]->{'config'}->{$_[1]} }
 }
 
 ################################################################################

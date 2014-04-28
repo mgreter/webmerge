@@ -290,65 +290,112 @@ sub open
 	die "asd" if $fh;
 	# get arguments
 	my ($file, $mode) = @_;
-	# resolve mode strings
-	if ($mode eq 'r') { $mode = '<'; }
-	elsif ($mode eq 'w') { $mode = '>'; }
-	elsif ($mode eq 'rw') { $mode = '<+'; }
-	# create a new file handle of the given file type
-	$fh = join('::', 'OCBNET::IO::File', uc $file->ftype)->new;
-	# try to open the filehandle with mode
-	$rv = $fh->open($file->path, $mode);
-	# copy encoding from handle to object
-	$file->encoding = $fh->encoding if $fh->encoding;
-	# aquire a file lock (wait for a certain amount of time)
-	$rv = lockfile($fh, $mode eq '<' ? LOCK_SH : LOCK_EX, 4);
-	# error out if we could not aquire a lock in time
-	die "could not aquire file lock for ", $file->path, "\n" unless $rv;
-	# do not change data
-	$fh->binmode(':raw');
-	# return filehandle
-	return $fh;
+
+	if (defined $file->attr('path'))
+	{
+		# resolve mode strings
+		if ($mode eq 'r') { $mode = '<'; }
+		elsif ($mode eq 'w') { $mode = '>'; }
+		elsif ($mode eq 'rw') { $mode = '<+'; }
+		# create a new file handle of the given file type
+		$fh = join('::', 'OCBNET::IO::File', uc $file->ftype)->new;
+		# try to open the filehandle with mode
+		$rv = $fh->open($file->path, $mode);
+		# copy encoding from handle to object
+		$file->encoding = $fh->encoding if $fh->encoding;
+		# aquire a file lock (wait for a certain amount of time)
+		$rv = lockfile($fh, $mode eq '<' ? LOCK_SH : LOCK_EX, 4);
+		# error out if we could not aquire a lock in time
+		die "could not aquire file lock for ", $file->path, "\n" unless $rv;
+		# do not change data
+		$fh->binmode(':raw');
+		# return filehandle
+		return $fh;
+	}
+	else
+	{
+		die "open no";
+	}
 }
 
 
 ################################################################################
 # read file path into scalar
 ################################################################################
+use OCBNET::Webmerge qw(isset);
+################################################################################
 
 sub load
 {
-	my ($data, $pos);
 	# get arguments
 	my ($file) = @_;
 	# get path from node
 	my $path = $file->path;
-	# get atomic entry if available
-	my $atomic = $file->atomic($path);
-	# check if commit is pending
-	if (defined $atomic)
+	# declare local variables
+	my ($pos, $data) = (0);
+
+	if (isset $file->attr('script'))
 	{
-		# simply return the last written data
-		$data = ${*$atomic}{'io_atomicfile_data'};
-		# restore offset position from header sniffing
-		$pos = ${*$atomic}{'io_atomicfile_pos'} || 0;
+
+		# create absolute path to store the script output
+		# my $path = $file->respath($file->path);
+
+		# get and resolve the script executable path
+		my $script = $file->respath($file->attr('script'));
+
+		# shebang should be given by configuration
+		# otherwise the script must have execute permission
+		my $shebang = $file->attr('shebang') ? $file->attr('shebang') . ' ' : '';
+
+		# execute the script and open the stdout for us
+		my $rv = CORE::open my $fh_in, "-|", $shebang . $script;
+
+		# check if we got a valid result from open
+		die "error executing $script" unless $rv;
+
+		# read raw data
+		binmode $fh_in;
+
+		# set data to script output
+		$data = \ join('', <$fh_in>);
+
 	}
-	# read from the disk
+	elsif (isset $file->attr('path'))
+	{
+		# get atomic entry if available
+		my $atomic = $file->atomic($path);
+		# check if commit is pending
+		if (defined $atomic)
+		{
+			# simply return the last written data
+			$data = ${*$atomic}{'io_atomicfile_data'};
+			# restore offset position from header sniffing
+			$pos = ${*$atomic}{'io_atomicfile_pos'} || 0;
+		}
+		# read from the disk
+		else
+		{
+			# open readonly filehandle
+			my $fh = $file->open('r');
+			# implement proper error handling
+			die "error ", $path unless $fh;
+			# store filehandle offset after sniffing
+			$pos = ${*$fh}{'io_atomicfile_off'} = tell $fh;
+			# read in the whole content event if we should discharge
+			seek $fh, 0, 0 or Carp::croak "could not seek $path: $!";
+			# slurp the while file into memory and decode unicode
+			my $raw = $file->{'loaded'} = join('', <$fh>);
+			# attach written scalar to atomic instance
+			$data = ${*$fh}{'io_atomicfile_data'} = \ $raw;
+			# store handle as atomic handle
+			$file->atomic($path, $fh);
+		}
+	}
+
+
 	else
 	{
-		# open readonly filehandle
-		my $fh = $file->open('r');
-		# implement proper error handling
-		die "error ", $path unless $fh;
-		# store filehandle offset after sniffing
-		$pos = ${*$fh}{'io_atomicfile_off'} = tell $fh;
-		# read in the whole content event if we should discharge
-		seek $fh, 0, 0 or Carp::croak "could not seek $path: $!";
-		# slurp the while file into memory and decode unicode
-		my $raw = $file->{'loaded'} = join('', <$fh>);
-		# attach written scalar to atomic instance
-		$data = ${*$fh}{'io_atomicfile_data'} = \ $raw;
-		# store handle as atomic handle
-		$file->atomic($path, $fh);
+		die "no path for input";
 	}
 
 	# story a copy to our object
