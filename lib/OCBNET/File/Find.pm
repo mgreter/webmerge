@@ -20,11 +20,11 @@ BEGIN { use base 'Exporter'; }
 BEGIN { push @EXPORT, qw(find) }
 
 ################################################################################
+require File::Find;
+################################################################################
 use Text::Glob qw(glob_to_regex_string);
 use File::Spec::Functions qw(canonpath);
 use File::Spec::Functions qw(abs2rel rel2abs);
-################################################################################
-require File::Find;
 ################################################################################
 
 sub find
@@ -32,23 +32,29 @@ sub find
 
 	# get input arguments
 	my ($pattern, %option) = @_;
-	# force forward slashes
-	$pattern =~ tr/\\/\//;
+
+	# force forward slashes (windows only)
+	$pattern =~ tr/\\/\// if $^O eq 'MSWin32';
+
 	# setup options for regex compilation
 	local $Text::Glob::strict_leading_dot = 0;
 	local $Text::Glob::strict_wildcard_slash = 0;
+
 	# convert the glob pattern to a regex
 	$pattern = glob_to_regex_string($pattern);
 	# compile the pattern to a regex
 	my $re_pattern = qr/$pattern\Z/;
-	# get maximum directory depth from options
-	my $maxdepth = $option{'maxdepth'} || -1;
-	# get base directory from options
-	my $base = $option{'base'} || '.';
-	# format the file paths relative
-	my $rel = $option{'rel'} || 0;
+
 	# get callback from options
 	my $cb = $option{'cb'};
+	# format the file paths relative
+	my $rel = $option{'rel'} || 0;
+	# get base directory from options
+	my $base = $option{'base'} || '.';
+	# get the filter function to filter results
+	my $filter = $option{'filter'} || 0;
+	# get maximum directory depth from options
+	my $maxdepth = $option{'maxdepth'} || -1;
 
 	# make canonical path
 	$base = canonpath($base);
@@ -56,23 +62,28 @@ sub find
 	# declare and init variables
 	my ($lvl, @results) = (0);
 
-	# run finder
+	# run main find
 	File::Find::find({
 
+		# not needed
 		no_chdir => 1,
 
+		# increase levels
 		preprocess => sub
 		{
 			$lvl ++;
 			@_;
 		},
 
+		# decrease levels
 		postprocess => sub
 		{
 			$lvl --;
 			@_;
 		},
 
+		# main function
+		# see File::Find
 		wanted => sub
 		{
 
@@ -94,13 +105,14 @@ sub find
 
 			# map to relative path from base directory
 			if ($rel > 1) { $path = abs2rel $path, $base; }
+			# map to absolute path to working directory
 			elsif ($rel < 1) { $path = rel2abs $path; }
 
 			# make canonical path
 			$path = canonpath($path);
-			# force forward slashes
-			# only needed on windows
-			$path =~ tr/\\/\//;
+
+			# force forward slashes (windows only)
+			$path =~ tr/\\/\// if $^O eq 'MSWin32';
 
 			# check if file matches the pattern
 			return unless $path =~ m/$re_pattern/;
@@ -113,8 +125,11 @@ sub find
 		}
 	}, $base);
 
-	# return
-	@results;
+	# return unfiltered results
+	unless ($filter) { @results }
+	# reduce results if a filter is passed
+	# must be a function suitable for grep
+	else { grep &{$filter}, @results }
 
 }
 

@@ -78,9 +78,16 @@ sub mkpath
 	{
 		# create path from path parts
 		my $path = catdir(@path[0 .. $i]);
-		# create directory if not yet existing
-		&mkdir($path, %option) unless -d $path;
+		# skip if it exists
+		next if -d $path;
+		# fail if not directory
+		return 0 if -e $path;
+		# create directory (abort on error)
+		&mkdir($path, %option) || return 0;
 	}
+
+	# success
+	return 1;
 
 }
 

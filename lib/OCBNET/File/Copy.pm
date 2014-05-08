@@ -22,9 +22,8 @@ BEGIN { push @EXPORT, qw(xcopy fcopy) }
 ################################################################################
 use List::MoreUtils qw(uniq);
 use OCBNET::File::Find qw(find);
-use OCBNET::File::Path qw(mkdir mkpath);
+use OCBNET::File::Path qw(mkpath);
 ################################################################################
-use Text::Glob qw(glob_to_regex_string);
 use File::Spec::Functions qw(abs2rel rel2abs);
 use File::Spec::Functions qw(canonpath catfile);
 use File::Basename qw(dirname basename fileparse);
@@ -39,7 +38,7 @@ sub xcopy
 	# get callback function
 	my $cb = $option{'cb'};
 	# get base from options
-	my $base = $option{'base'};
+	my $base = $option{'base'} || '.';
 
 	my $recursive = $option{'recursive'};
 
@@ -53,11 +52,11 @@ sub xcopy
 		{
 			if ($recursive)
 			{
-				grep
-				{ ! -d $_ }
 				find(
-					'*', 'base' => $_,
-					'maxdepth' => $recursive
+					'*',
+					'maxdepth' => $recursive,
+					'filter' => sub { ! -d $_ },
+					'base' => rel2abs($_, $base)
 				);
 			}
 			else
@@ -119,10 +118,21 @@ sub fcopy
 	# die with fatal error if copying a directory
 	die "fcopy cannot copy directories" if -d $src;
 
+	if ($dst eq $src)
+	{
+		# just give a warning (non fatal)
+		warn "src equals dst: $src\n";
+	}
+	else
+	{
 	# ensure base directory exists
-	mkpath(dirname($dst), %option);
-	# call write function and pass readed data
-	$option{'write'}->($dst, $option{'read'}->($src));
+		# will also fail if not in chroot
+		if (mkpath(dirname($dst), %option))
+		{
+			# call reader callback and pass data to writer
+			$option{'write'}->($dst, $option{'read'}->($src));
+		}
+	}
 
 }
 
