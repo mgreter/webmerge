@@ -136,9 +136,13 @@ sub end
 		my $document = $node->document;
 		# remove if id is known already
 		if (exists $document->{'ids'}->{$id})
-		{ $document->{'ids'}->{$id}->remove; }
+		{
+			# but only if not removing myself
+			if ($document->{'ids'}->{$id} ne $node)
+			{ $document->{'ids'}->{$id}->remove; }
+		}
 		# store node by given id on document
-		$document->{'ids'}->{$id} = $node;
+		else { $document->{'ids'}->{$id} = $node; }
 	}
 
 }
