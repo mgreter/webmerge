@@ -31,14 +31,15 @@ use Cwd qw(getcwd);
 sub files
 {
 
-# return $_[0];
-
 	# get arguments
 	my ($input) = @_;
 
 	# fetch some attributes
 	my $path = $input->attr('path');
 	my $file = $input->attr('file');
+
+	# default to workroot if nothing is given
+	$path = $input->workroot unless $path;
 
 	# check if we should glob recursive
 	my $rec = ison $input->attr('recursive');
