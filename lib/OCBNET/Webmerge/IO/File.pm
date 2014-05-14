@@ -171,7 +171,7 @@ sub md5sum
 sub md5short
 {
 	# get the optionaly configured fingerprint length
-	my $len = $_[0]->config('fingerprint-length') || 12;
+	my $len = $_[0]->option('fingerprint-length') || 12;
 	# return a short configurable length md5sum
 	return substr($_[0]->md5sum($_[1], $_[2]), 0, $len);
 }
@@ -198,11 +198,14 @@ sub fingerprint
 	# get passed variables
 	my ($file, $target, $data) = @_;
 
+	# debug assertion to report unwanted input
+	warn "undefined target" unless defined $target;
+
 	# get the fingerprint config option if not explicitly given
-	my $technique = lc substr $file->config(join('-', 'fingerprint', $target)), 0, 1;
+	my $technique = lc substr $file->option(join('-', 'fingerprint', $target)), 0, 1;
 
 	# do not add a fingerprint at all if feature is disabled
-	return $file->path unless $file->config('fingerprint') && $technique;
+	return $file->path unless $file->option('fingerprint') && $technique;
 
 	# simply append the fingerprint as a unique query string
 	return join('?', $file->path, $file->md5short) if $technique eq 'q';

@@ -36,7 +36,7 @@ use OCBNET::Webmerge qw(range);
 sub optipng
 {
 	# get the optimization level (1 to 9)
-	my $olvl = range($_[0]->config('level'), 0.5, 6.5, 9);
+	my $olvl = range($_[0]->option('level'), 0.5, 6.5, 9);
 	# return commandline for process
 	return sprintf("-o%d --quiet \"%s\"", $olvl, $_[0]->path);
 	#
@@ -45,7 +45,7 @@ sub optipng
 sub advpng
 {
 	# get the optimization level (1 to 4)
-	my $lvl = range($_[0]->config('level'), 1, 5, 4);
+	my $lvl = range($_[0]->option('level'), 1, 5, 4);
 	# return commandline for process
 	return sprintf("-z -%d --quiet \"%s\"", $lvl, $_[0]->path);
 }
@@ -53,7 +53,7 @@ sub advpng
 sub advdef
 {
 	# get the optimization level (1 to 4)
-	my $lvl = range($_[0]->config('level'), 1, 5, 4);
+	my $lvl = range($_[0]->option('level'), 1, 5, 4);
 	# return commandline for process
 	return sprintf("-z -%d --quiet \"%s\"", $lvl, $_[0]->path);
 }

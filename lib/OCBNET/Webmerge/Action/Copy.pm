@@ -11,8 +11,8 @@ use strict;
 use warnings;
 
 ################################################################################
-use OCBNET::File::Find qw(find);
-use OCBNET::File::Copy qw(xcopy);
+require OCBNET::File::Find;
+require OCBNET::File::Copy;
 ################################################################################
 use OCBNET::Webmerge qw(ison);
 ################################################################################
@@ -45,15 +45,15 @@ sub execute
 	{
 
 		warn "cp $src($pattern) $dst\n";
-		my @files = find($pattern, %opts);
-		xcopy(\@files, $dst, %opts);
+		my @files = OCBNET::File::Find::find($pattern, %opts);
+		OCBNET::File::Copy::xcopy(\@files, $dst, %opts);
 
 	}
 	# copy to dst
 	elsif ($recursive)
 	{
 		warn "cp rec $src $dst\n";
-		xcopy($src, $dst, %opts);
+		OCBNET::File::Copy::xcopy($src, $dst, %opts);
 	}
 	else
 	{
@@ -61,7 +61,7 @@ sub execute
 	}
 
 
-#xcopy('.', 'y:\\tcp\\', %opts);
+#OCBNET::File::Copy::xcopy('.', 'y:\\tcp\\', %opts);
 
 
 #	die "copy $src $dst"

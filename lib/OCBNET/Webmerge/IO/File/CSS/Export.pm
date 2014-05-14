@@ -24,7 +24,7 @@ sub exporter
 	# $output->SUPER::exporter($data);
 
 	# check if we export urls as absolute paths
-	my $abs = $output->config('absoluteurls');
+	my $abs = $output->option('absoluteurls');
 
 	# get new export base dir according to options
 	my $base = $abs ? $output->webroot : $output->baseroot;

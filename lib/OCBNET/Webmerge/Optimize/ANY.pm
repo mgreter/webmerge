@@ -54,7 +54,7 @@ sub execute
 			}
 		}
 		warn "run ", $block->tag, " with ", scalar(@work), " items\n";
-		process \@work, $block->config('jobs') if scalar @work;
+		process \@work, $block->option('jobs') if scalar @work;
 	}
 
 }

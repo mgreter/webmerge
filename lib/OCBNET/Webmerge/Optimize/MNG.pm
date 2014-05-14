@@ -32,7 +32,7 @@ use OCBNET::Webmerge qw(range);
 sub advmng
 {
 	# get the optimization level (1 to 9)
-	my $lvl = range($_[0]->config('level'), 1, 5, 4);
+	my $lvl = range($_[0]->option('level'), 1, 5, 4);
 	# return commandline for process
 	return sprintf("-z -%d --quiet \"%s\"", $lvl, $_[0]->path);
 }
@@ -40,7 +40,7 @@ sub advmng
 sub advdef
 {
 	# get the optimization level (1 to 9)
-	my $lvl = range($_[0]->config('level'), 1, 5, 4);
+	my $lvl = range($_[0]->option('level'), 1, 5, 4);
 	# return commandline for process
 	return sprintf("-z -%d --quiet \"%s\"", $lvl, $_[0]->path);
 }

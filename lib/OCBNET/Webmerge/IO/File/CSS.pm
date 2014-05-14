@@ -37,10 +37,10 @@ sub basedir
 	# get file extension
 	my $ext = $node->ext;
 	# get base rebase option (default)
-	my $rebase = $node->config('rebase-urls-in-css');
+	my $rebase = $node->option('rebase-urls-in-css');
 	# check extension specific options
-	$rebase = $node->config('rebase-urls-in-scss') if $ext eq 'scss';
-	$rebase = $node->config('rebase-urls-in-sass') if $ext eq 'sass';
+	$rebase = $node->option('rebase-urls-in-scss') if $ext eq 'scss';
+	$rebase = $node->option('rebase-urls-in-sass') if $ext eq 'sass';
 	# conditionally handle rebase directory
 	unless ($rebase) { $node->SUPER::basedir(@_) }
 	else { File::Basename::dirname $node->path(@_); }

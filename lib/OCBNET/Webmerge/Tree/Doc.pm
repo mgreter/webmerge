@@ -116,6 +116,8 @@ sub writefile { die "writefile" }
 ################################################################################
 use OCBNET::Webmerge qw(options %longopts %defaults %values);
 ################################################################################
+use File::Spec::Functions qw(catfile);
+################################################################################
 
 # define basic options
 # ******************************************************************************
@@ -125,14 +127,7 @@ options('help', '|?!', 0);
 
 # a configfile is always a good idea
 # ******************************************************************************
-options('configfile', '|f=s', 'webmerge.conf.xml');
-
-################################################################################
-# return config or program setting
-################################################################################
-
-# config on most outer block overrules it
-sub config { shift->setting(@_) }
+options('configfile', '|f=s', catfile('conf', 'webmerge.conf.xml'));
 
 ################################################################################
 # return program setting or config
@@ -155,7 +150,8 @@ sub setting
 # will always go back to root for evaluation
 ################################################################################
 
-sub option { &config }
+sub option { &setting }
+sub config { &setting }
 
 ################################################################################
 # implement final working path access
@@ -175,11 +171,18 @@ my $Bin = rel2abs($Bin);
 sub bindir { $Bin }
 sub workdir { $cwd }
 
-sub extdir { $_[0]->bindir }
 sub webdir { $_[0]->workdir }
 sub incdir { $_[0]->workdir }
 sub confdir { $_[0]->workdir }
 sub basedir { $_[0]->workdir }
+
+################################################################################
+# this defines the internal directory layout
+################################################################################
+use File::Spec::Functions qw(catfile);
+################################################################################
+
+sub extdir { catfile($_[0]->bindir, '..') }
 
 ################################################################################
 # get or set processors

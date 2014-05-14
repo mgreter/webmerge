@@ -33,7 +33,7 @@ use OCBNET::Webmerge qw(range);
 sub gifsicle
 {
 	# get the optimization level (1 to 3)
-	my $lvl = range($_[0]->config('level'), 1, 4, 3);
+	my $lvl = range($_[0]->option('level'), 1, 4, 3);
 	# return commandline for process
 	return sprintf("-O%d -o \"%s\" \"%s\"", $lvl, $_[0]->path, $_[0]->path);
 }

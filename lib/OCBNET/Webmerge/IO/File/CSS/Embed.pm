@@ -100,7 +100,7 @@ sub resolve
 		$uri =~ s|^file\:\/\/\/||;
 
 		# check if we should embed this import
-		if ($node->config( $cfg ))
+		if ($node->option( $cfg ))
 		{
 
 			# create a new xml input node under the current input node
