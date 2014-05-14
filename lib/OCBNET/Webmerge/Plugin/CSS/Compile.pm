@@ -30,7 +30,7 @@ sub process
 	my $options = { 'level' => 9, 'pretty' => 0 };
 
 	# minify via our own css minifyer
-	${data} = OCBNET::CSS3::Minifier::minify(${data}, $options);
+	${$data} = OCBNET::CSS3::Minifier::minify(${$data}, $options);
 
 	# check if minfier had any issues or errors
 	die "OCBNET::CSS3::Minifier had an error" unless defined ${data};
