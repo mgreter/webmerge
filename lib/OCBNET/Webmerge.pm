@@ -26,7 +26,38 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 BEGIN { @EXPORT = qw(options isset notset ison isoff); }
 
 # define our functions that can be exported
-BEGIN { @EXPORT_OK = qw(range %longopts %defaults %values); }
+BEGIN { @EXPORT_OK = qw(range fixIOenc %longopts %defaults %values); }
+
+################################################################################
+# sniff encoding for output in console
+################################################################################
+
+sub fixIOenc ()
+{
+
+	# console encoding
+	my $enc = ':utf8';
+
+	# encoding on windows
+	$^O eq "MSWin32" && eval
+	{
+		# current codepage
+		my $chcp = `chcp`;
+		# check for valid result
+		if ($chcp =~ m /: (\d+)/)
+		{ $enc = sprintf  'cp%s', $1 }
+	};
+
+	# map utf codepages from windows
+	$enc = 'utf8' if $enc eq 'cp65001';
+	$enc = 'utf16' if $enc eq 'cp10000';
+
+
+	# setup codepage for output encoding
+	binmode(STDOUT => sprintf ':encoding(%s)', $enc);
+	binmode(STDERR => sprintf ':encoding(%s)', $enc);
+
+}
 
 ################################################################################
 
