@@ -5,6 +5,7 @@
 package OCBNET::Webmerge::Plugin::JS::Compile;
 ################################################################################
 
+use utf8;
 use strict;
 use warnings;
 
@@ -41,17 +42,32 @@ sub process
 	# create the command to execute the closure compiler
 	my $command = '"' . $java_bin . '" -jar ' .
 			# reference the closure compiler relative from extension
-			'"' . $file->respath('{EXT}/vendor/google/closure/compiler.jar') . '"' .
-			# use quiet warning level and safe compilation options
-			' --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS';
+			'"' . $file->respath('{EXT}/vendor/google/closure/compiler.jar') . '"'
+			# use simple and safe compilation options
+			. ' --compilation_level SIMPLE_OPTIMIZATIONS'
+			# use quiet warning level
+			. ' --warning_level QUIET'
+			# force utf8 charset
+			. ' --charset UTF8'
+	;
 
 	# I should only listen for my own children
 	# IPC::Run3 will spawn it's own children
 	local $SIG{INT} = sub {};
 	local $SIG{CHLD} = sub {};
 
+	# set encoding options
+	my $options = {
+		'binmode_stdin' => ':encoding(utf8)',
+		'binmode_stdout' => ':encoding(utf8)',
+		'binmode_stderr' => ':encoding(utf8)',
+	};
+
 	# now call run3 to compile the javascript code
-	my $rv = run3($command, $data, $data, \ my $err);
+	my $rv = run3($command, $data, $data, \ my $err, $options);
+
+	# fix input output handles
+	OCBNET::Webmerge::fixIOenc;
 
 	# print content to console if we have errors
 	# this should only ever print error messages
