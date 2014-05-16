@@ -96,7 +96,6 @@ our (%longopts, %defaults, %values);
 
 sub options
 {
-	$values{$_[0]} = $_[2];
 	$defaults{$_[0]} = $_[2];
 	# second argument is optional
 	$longopts{$_[0]} = $_[0] . $_[1];
@@ -187,6 +186,17 @@ sub loadmodule
 
 require OCBNET::Webmerge::Action::Copy;
 require OCBNET::Webmerge::Action::Mkdir;
+
+################################################################################
+use File::Spec::Functions qw(abs2rel rel2abs);
+################################################################################
+
+sub dpath ($$)
+{
+
+	substr(abs2rel($_[0], $_[1]), -60);
+
+}
 
 ################################################################################
 ################################################################################
