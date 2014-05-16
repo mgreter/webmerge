@@ -1,21 +1,45 @@
 #!/usr/bin/perl
+################################################################################
+# Copyright 2014 by Marcel Greter
+# This file is part of Webmerge (GPL3)
+################################################################################
 
+use utf8;
 use strict;
 use warnings;
 
+################################################################################
 use File::Spec::Functions qw(rel2abs);
+################################################################################
 
-use encoding "utf-8", STDOUT => "utf-8";
+BEGIN
+{
+	# load find bin
+	use FindBin qw($Bin);
+	# add local  library path
+	use lib rel2abs("../lib", $Bin);
+}
 
-BEGIN { unshift @INC, rel2abs("../lib") }
+################################################################################
+use OCBNET::Webmerge qw(fixIOenc);
+################################################################################
 
+# fix input output handles
+BEGIN { OCBNET::Webmerge::fixIOenc; }
+
+# uncomment to debug any unknown error
+# $SIG{__DIE__} = sub { Carp::confess @_ };
+
+################################################################################
+
+# load the main cmd line program
 require OCBNET::Webmerge::CmdLine;
 
+# create a new webmerge instance
 my $webmerge = OCBNET::Webmerge::CmdLine->new;
 
+# parse config and run
 $webmerge->parse->run;
-
-print "finished\n";
 
 __END__
 
