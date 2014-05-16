@@ -57,6 +57,9 @@ sub setting
 	# command line options have the highest order
 	return $values{$_[1]} if isset $values{$_[1]};
 	# get configuration for current scope
+	if (exists $_[0]->{'config'}->{$_[1]})
+	{ return $_[0]->{'config'}->{$_[1]}; }
+	# get setting from parent scope
 	my $rv = $_[0]->SUPER::setting($_[1]);
 	# return config if valid or use default
 	return isset $rv ? $rv : $defaults{$_[1]};

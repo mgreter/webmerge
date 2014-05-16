@@ -9,6 +9,8 @@
 ################################################################################
 package OCBNET::Webmerge::Optimize;
 ################################################################################
+use base 'OCBNET::Webmerge::Tree::Node';
+################################################################################
 
 use strict;
 use warnings;
@@ -19,6 +21,17 @@ use OCBNET::Webmerge qw(options);
 
 options('jobs', '|j=i', 2);
 options('level', '|lvl=f', 2);
+options('optimize', '|opt!', -1);
+
+################################################################################
+
+sub execute
+{
+	# check if the option is enabled
+	return unless $_[0]->setting('optimize');
+	# go on with the execution
+	shift->SUPER::execute(@_);
+}
 
 ################################################################################
 # load additional modules
