@@ -2,7 +2,7 @@
 # Copyright 2014 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ################################################################################
-package OCBNET::Webmerge::Plugin::JS::Compile;
+package OCBNET::Webmerge::Plugin::JS::NodeMinify;
 ################################################################################
 
 use utf8;
@@ -14,7 +14,7 @@ use IPC::Run3 qw(run3);
 ################################################################################
 
 # plugin namespace
-my $ns = 'js::compile';
+my $ns = 'js::nodemin';
 
 ################################################################################
 # alter data in-place
@@ -45,34 +45,35 @@ sub process
 	my ($file, $data) = @_;
 
 	# make these configurable again
-	my $java_bin = '/usr/bin/java';
-print "calling closule compiler\n";
+	my $node_bin = '/usr/bin/node';
+
+print "calling node minify\n";
 	# hotfix for windows operating system
 	# all windows (even x64) report MSWin32!
-	$java_bin = "java" if ($^O eq "MSWin32");
+	$node_bin = "node" if ($^O eq "MSWin32");
 
 	# if java home is given we will force to use t
-	if (exists $ENV{'JAVA_HOME'} && defined $ENV{'JAVA_HOME'})
-	{ $java_bin = catfile($ENV{'JAVA_HOME'}, 'bin', 'java'); }
+	if (exists $ENV{'NODE_HOME'} && defined $ENV{'NODE_HOME'})
+	{ $node_bin = catfile($ENV{'NODE_HOME'}, 'bin', 'node'); }
 
-warn "=== writing debug.$count.js ===\n";
-	write_file("debug.$count.js", { binmode => ':encoding(utf8)' }, ${$data});
+warn "=== writing debug.nodemin.$count.js ===\n";
+	write_file("debug.nodemin.$count.js", { binmode => ':encoding(utf8)' }, ${$data});
 
 	# temporary handle for source maps
 	my ($fh, $filename) = tempfile();
 
-	# create the command to execute the closure compiler
-	my $command = '"' . $java_bin . '" -jar ' .
-			# reference the closure compiler relative from extension
-			'"' . $file->respath('{EXT}/vendor/google/closure/compiler.jar') . '"'
+	# create the command to execute the node js minifier
+	my $command = '"' . $node_bin . '" ' .
+			# reference the node js minifier relative from extension
+			'"' . $file->respath('d:\\test.njs') . '"'
 			# add option for source map creation (use temporary file)
 			. sprintf(' --create_source_map "%s"  --source_map_format=%s', $filename, 'V3')
 			# use simple and safe compilation options
-			. ' --compilation_level SIMPLE_OPTIMIZATIONS'
+			# . ' --compilation_level SIMPLE_OPTIMIZATIONS'
 			# use quiet warning level
-			. ' --warning_level QUIET'
+			# . ' --warning_level QUIET'
 			# force utf8 charset
-			. ' --charset UTF8'
+			# . ' --charset UTF8'
 	;
 
 	# I should only listen for my own children
@@ -100,12 +101,12 @@ warn "=== writing debug.$count.js ===\n";
 	# this should only ever print error messages
 	print ${$data} if $err || $rc || $rv != 1;
 
-	# check if there was any error given by closure compiler
-	die "closure compiler had an error, aborting\n$err", "\n" if $err;
+	# check if there was any error given by node js minifier
+	die "node js minifier had an error, aborting\n$err", "\n" if $err;
 	# test if ipc run3 returned success
-	die "closure compiler exited unexpectedly (code $rc)", "\n" if $rc;
+	die "node js minifier exited unexpectedly (code $rc)", "\n" if $rc;
 	# test if ipc run3 returned success
-	die "could not run closure compiler, aborting", "\n" if $rv != 1;
+	die "could not run node js minifier, aborting", "\n" if $rv != 1;
 
 	# read generated source map
 	# ToDo: need encoding for source map?
@@ -128,9 +129,10 @@ my $dfa =$smapa->{'sources'}->[0];
 	$smapa->{'sources'}->[0] = "debug.$count.js";
 # $smapa->{'mappings'}->[0]->[0];
 	# join ", ", @{$smapa->{'mappings'}->[0]->[0]};
-use File::Slurp qw(write_file);
-	write_file("debug.$count.js.html", { binmode => ':encoding(utf8)' }, OCBNET::SourceMap::Utils::debugger($data, $smapa));
+	die Data::Dumper::Dumper($smapa) if (scalar(@{$smapa->{'mappings'}}) == 1);
 
+use File::Slurp qw(write_file);
+	write_file("debug.node.$count.js.html", { binmode => ':encoding(utf8)' }, OCBNET::SourceMap::Utils::debugger($data, $smapa));
 
 $smapa->{'sources'}->[0] = $dfa;
 	$count ++;
@@ -140,11 +142,11 @@ if (defined $data && $json)
 {
 		my $lcnt = ${$data} =~ tr/\n/\n/;
 		my $mcnt = $json->{'mappings'} =~ tr/;/;/;
-		die "== $lcnt $mcnt" if $mcnt ne $lcnt;
+		die "== $lcnt $mcnt " if $mcnt ne $lcnt;
 }
 
 	# check if there was any error while creating source maps
-	die "closure compiler did not create source map\n\n" unless $srcmap;
+	die "node js minifier did not create source map\n\n" unless $srcmap;
 
 	# return references
 	return ($data, $json);

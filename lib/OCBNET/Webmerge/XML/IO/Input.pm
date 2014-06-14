@@ -26,6 +26,10 @@ use warnings;
 ################################################################################
 
 $OCBNET::Webmerge::XML::parser{'input'} = __PACKAGE__;
+$OCBNET::Webmerge::XML::parser{'suffix'} = __PACKAGE__;
+$OCBNET::Webmerge::XML::parser{'prefix'} = __PACKAGE__;
+$OCBNET::Webmerge::XML::parser{'append'} = __PACKAGE__;
+$OCBNET::Webmerge::XML::parser{'prepend'} = __PACKAGE__;
 
 ################################################################################
 ################################################################################

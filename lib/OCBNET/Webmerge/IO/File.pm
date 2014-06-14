@@ -5,6 +5,7 @@
 package OCBNET::Webmerge::IO::File;
 ################################################################################
 use base qw(OCBNET::Webmerge::Tree::Node);
+# use base qw(OCBNET::Webmerge::IO::SourceMap);
 ################################################################################
 
 use strict;
@@ -133,12 +134,14 @@ sub basename { File::Basename::basename(shift->path, @_) }
 # dummy implementations
 ################################################################################
 
-sub importer { return $_[1] }
-sub exporter { return $_[1] }
-sub include { return $_[1] }
-sub resolve { return $_[1] }
+# sub importer { return $_[1] }
+# sub exporter { return $_[1] }
+
+# sub include { return $_[1] }
+# sub resolve { return $_[1] }
+
 sub checksum2 {
-	die $_[0];
+	die "===", $_[0];
 	return $_[1] }
 # sub finalize { return $_[1] }
 
@@ -301,6 +304,7 @@ sub open
 		elsif ($mode eq 'w') { $mode = '>'; }
 		elsif ($mode eq 'rw') { $mode = '<+'; }
 		# create a new file handle of the given file type
+		# warn $file;
 		$fh = join('::', 'OCBNET::IO::File', uc $file->ftype)->new;
 		# try to open the filehandle with mode
 		$rv = $fh->open($file->path, $mode);
@@ -398,7 +402,7 @@ sub load
 
 	else
 	{
-		die "no path for input";
+		$data = \ $file->text;
 	}
 
 	# story a copy to our object
@@ -426,8 +430,10 @@ sub read
 	my ($file) = @_;
 	# load from disk
 	my $data = &load;
+	# my ($data, $srcmap) = &load;
 	# call the importer
 	$file->importer($data);
+	# $file->importer($data, $srcmap);
 	# call the resolver
 	# resolve imports/inclues
 	$file->resolve($data);
@@ -472,7 +478,7 @@ use IO::AtomicFile qw();
 sub write
 {
 	# get arguments
-	my ($file, $data) = @_;
+	my ($file, $data, $srcmap) = @_;
 
 	# get path from node
 	my $path = $file->respath($file->path);
@@ -489,11 +495,28 @@ sub write
 	die "error\nwriting to unwriteable directory: ", $file->path unless (-w $file->dirname);
 
 	# alter data for output
-	$file->exporter($data);
+	if ($file->can('exporter'))
+	{ $file->exporter($data, $srcmap); }
 	# call the processors
-	$file->process($data);
+if (defined $data && $srcmap)
+{
+		my $lcnt = ${$data} =~ tr/\n/\n/;
+		my $mcnt = $#{$srcmap->{'mappings'}};
+		die "-=> $lcnt $mcnt" if $mcnt ne $lcnt;
+}
+
+	$file->process($data, $srcmap);
+
+if (defined $data && $srcmap)
+{
+		my $lcnt = ${$data} =~ tr/\n/\n/;
+		my $mcnt = $#{$srcmap->{'mappings'}};
+		die "+=> $lcnt $mcnt" if $mcnt ne $lcnt;
+}
+my $dodo = ${$data};
+
 	# create output checksum
-	$file->checksum($data);
+	$file->checksum($data, $srcmap);
 	# finalize for writing
 	# $file->finalizer($data);
 
@@ -521,6 +544,8 @@ sub write
 	# write to the disk
 	else
 	{
+
+
 		# create a new atomic instance
 		$atomic = IO::AtomicFile->new;
 		# add specific webmerge suffix to temp files
@@ -548,6 +573,43 @@ sub write
 		$file->{'crc'} = $file->md5sum($data, 1);
 		# print to raw handle
 		print $fh ${$data};
+
+		if ($srcmap)
+		{
+my $path2 = $path . '.map';
+my $data2 = \ $srcmap->render;
+			# create a new atomic instance
+			my $atomic2 = IO::AtomicFile->new;
+			# add specific webmerge suffix to temp files
+			${*$atomic2}{'io_atomicfile_suffix'} = '.webmerge';
+
+			my $fh2 = $atomic2->open($path2, 'w+');
+			# error out if we could not open the file
+			die "could not open ", $path2, "\n$!" unless $fh;
+			# truncate the file and ensure encoding
+			$fh2->truncate(0); $fh2->binmode(':raw');
+			# attach written scalar to atomic instance
+			${*$atomic2}{'io_atomicfile_data'} = $data2;
+			# attach atomic instance to scope
+			$file->atomic($path2, $atomic2);
+			# also set the read cache
+			# $file->{'written'} = $data2;
+			# encode the data for raw output handle
+			# warn "encode ", $file->encoding;
+			${$data2} = encode($file->encoding, ${$data2});
+			# update the checksum (have raw data)
+			# $file->{'crc'} = $file->md5sum($data2, 1);
+			# print to raw handle
+			print $fh2 ${$data2};
+	use lib 'D:\github\OCBNET-SourceMap\lib';
+
+use OCBNET::SourceMap::Utils;
+use OCBNET::SourceMap::Utils;
+use File::Slurp qw(write_file);
+	write_file($path . '.dbg.html', { binmode => ':encoding(utf8)' }, OCBNET::SourceMap::Utils::debugger(\$dodo, $srcmap));
+
+		}
+
 	}
 	# return atomic instance
 	return $atomic;
@@ -616,15 +678,17 @@ sub processors { split /(?:\s*\|\s*|\s+)/, $_[0]->attr('process') || '' }
 ################################################################################
 # process the data/content and return result
 ################################################################################
-
+my $caca = 0;
 sub process
 {
 
 	# get arguments
-	my ($file, $data) = @_;
+	my ($file, $data, $smap) = @_;
+my $qwe = OCBNET::SourceMap->new;
 
 	# get data from file if not passed
 	$data = $file->contents unless $data;
+	# $srcmap = $file->srcmap unless $srcmap;
 
 	# implement processing to alter the data
 	foreach my $name ($file->processors)
@@ -640,14 +704,58 @@ sub process
 		# change working directory
 		chdir $file->workroot;
 		# execute processor and pass data
-		$data = &{$processor}($file, $data);
+		# processor may returns a source map
+		# can already be decoded from json or scalar
+my $foo = $data;
+		my ($data, $srcmap) = &{$processor}($file, $foo);
+
+if (defined $srcmap && defined $smap)
+{
+		$qwe = OCBNET::SourceMap->new;
+		$qwe->read($srcmap);
+
+
+	use lib 'D:\github\OCBNET-SourceMap\lib';
+
+use OCBNET::SourceMap::Utils;
+use File::Slurp qw(write_file);
+	write_file("more.$caca.js.html", { binmode => ':encoding(utf8)' }, OCBNET::SourceMap::Utils::debugger($foo, $qwe));
+
+		$qwe->remap($smap);
+
+		%{$smap} = %{$qwe};
+
+use File::Slurp qw(write_file);
+	write_file("more.remapped.$caca.js.html", { binmode => ':encoding(utf8)' }, OCBNET::SourceMap::Utils::debugger($foo, $qwe));
+
+
+
+if (defined $data && $srcmap)
+{
+		my $lcnt = ${$data} =~ tr/\n/\n/;
+		my $mcnt = $#{$smap->{'mappings'}};
+#		warn Data::Dumper::Dumper($smap);
+		die "==+=> $lcnt $mcnt" if $mcnt ne $lcnt;
+}
+
+
+$caca ++;
+	}
 		# check if processor returned with success
 		die "processor $name had an error" unless $data;
 	}
 	# EO foreach processor name
 
+	# warn Data::Dumper::Dumper($smap);
+
+foreach (@{$smap->{'sources'}})
+{
+	$_ =~ s/D:\\icr\\active\\ArtBaselInternet\\//;
+	$_ =~ s/\\/\//g;
+}
+
 	# return reference
-	return $data;
+	return ($data, $smap);
 
 }
 # EO process

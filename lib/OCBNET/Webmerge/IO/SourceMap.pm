@@ -2,9 +2,9 @@
 # Copyright 2014 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ################################################################################
-package OCBNET::Webmerge::IO::Input;
+package OCBNET::Webmerge::IO::SourceMap;
 ################################################################################
-use base qw(OCBNET::Webmerge::IO::Files);
+# use base qw(OCBNET::Webmerge::IO::Files);
 ################################################################################
 
 use strict;
@@ -22,51 +22,8 @@ use warnings;
 # render input for output (target)
 ################################################################################
 
-sub render
-{
-
-	# get arguments
-	my ($input, $output) = @_;
-
-	# get the target for the include
-	my $target = lc ($output->target || 'join');
-
-	if ($input->attr('file'))
-	{
-		# implement some special target handling
-		return \ $input->include($output) if ($target eq 'dev');
-		return \ $input->license($output) if ($target eq 'license');
-	}
-
-	# return scalar ref and source map
-	($input->contents, $input->srcmap);
-
-}
-
-sub srcmap
-{
-
-	my ($input) = @_;
-
-	my $data = $input->contents;
-
-	my $srcmap = OCBNET::SourceMap::V3->new;
-#print "===========\n";
-	$srcmap->init2($data, $input->path) or die "could not init source map";
-#print ${$data};
-#use Data::Dumper;
-	#die Dumper($srcmap);
-
-	return $srcmap;
-
-}
-
-################################################################################
-# accessor methods
-################################################################################
-
-# return node type
-sub type { 'INPUT' }
+# keep together all IO::Files with source maps ... or make it on File.pm ?
+# basically I am IO::File if I want to be just an "addition"
 
 ################################################################################
 ################################################################################

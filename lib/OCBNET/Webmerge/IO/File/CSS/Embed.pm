@@ -33,6 +33,7 @@ my @variants = (
 
 ################################################################################
 use OCBNET::CSS3::Regex::Base qw($re_import unquot);
+use OCBNET::CSS3::Regex::Comments qw($re_comment $re_sass_comment);
 ################################################################################
 use File::Spec::Functions qw(catfile);
 use File::Basename qw(fileparse);
@@ -70,53 +71,72 @@ sub resolve
 {
 
 	# get arguments
-	my ($node, $data) = @_;
+	my ($node, $data, $srcmap) = @_;
 
-	# embed further includes
-	${$data} =~ s/$re_import/
+	# defaults to multiline only
+	my $re_comments = $re_comment;
 
-		# location
-		my $uri;
+	# also allow single line comment for sass/scss
+	if ($node->ext eq 'sass' || $node->ext eq 'scss')
+	{ $re_comments = $re_sass_comment; }
 
-		# store match
-		my $all = $&;
+	# embed further includes/imports
+	${$data} =~ s/(?:($re_comments)|$re_import)/
 
-		# is unwrapped uri
-		if (exists $+{uri})
-		{
-			# load partials by sass order
-			$uri = $node->resolver(unquot($+{uri}));
-		}
-		# or have wrapped url
-		elsif (exists $+{url})
-		{
-			# just unquote uril
-			$uri = unquot($+{url});
-		}
-
-		# create template to check for specific option according to import type
-		my $cfg = sprintf '%s-%s', 'css', exists $+{uri} ? 'partials' : 'imports';
-
-		$uri =~ s|^file\:\/\/\/||;
-
-		# check if we should embed this import
-		if ($node->option( $cfg ))
+		# ignore comments
+		if (defined $1) { $1 }
+		# parse further
+		else
 		{
 
-			# create a new xml input node under the current input node
-			my $css = OCBNET::Webmerge::IO::File::CSS->new($node, $uri);
-			# read from file
-			my $data = $css->read;
+			# location
+			my $uri;
 
-			die "sass2scss" if $css->ext eq 'sass';
+			# store match
+			my $all = $&;
 
-			# embed content
-			${$data};
+			# is unwrapped uri
+			if (exists $+{uri})
+			{
+				# load partials by sass order
+				$uri = $node->resolver(unquot($+{uri}));
+				# maybe check for valid file extension?
+			}
+			# or have wrapped url
+			elsif (exists $+{url})
+			{
+				# just unquote uril
+				$uri = unquot($+{url});
+			}
 
+			# create template to check for specific option according to import type
+			my $cfg = sprintf '%s-%s', 'css', exists $+{uri} ? 'partials' : 'imports';
+
+			$uri =~ s|^file\:\/\/\/||;
+
+			# check if we should embed this import
+			if ($node->option( $cfg ))
+			{
+
+				# create a new xml input node under the current input node
+				my $css = OCBNET::Webmerge::IO::File::CSS->new($node, $uri);
+
+				# read data from file
+				my $data = $css->read;
+
+				# assertion: read should protect us from this pitfall
+				# die "css pitfall" unless ${$data} =~m ~(?:;|\n)\s*\Z~;
+
+				die "sass2scss" if $css->ext eq 'sass';
+
+				# embed content
+				${$data};
+
+			}
+
+			# leave unchanged
+			else { $all }
 		}
-
-		# leave unchanged
-		else { $all }
 
 	/ge;
 	# EO each @import

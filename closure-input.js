@@ -1,0 +1,1 @@
+(function() { var abc = Math.random(), xyz = Math.random(); if (abc || xyz) debugger; }())

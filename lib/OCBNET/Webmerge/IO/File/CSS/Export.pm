@@ -28,7 +28,7 @@ sub exporter
 
 	# get new export base dir according to options
 	my $base = $abs ? $output->webroot : $output->baseroot;
-
+print "output export: ", $output->baseroot, "\n - ", $output->path, "\n";
 	# alter all urls to paths relative to the base directory
 	${$data} =~ s/($re_url)/exportWrapUrl($1, $base, $abs)/ge;
 

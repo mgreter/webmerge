@@ -41,6 +41,7 @@ sub basedir
 	# check extension specific options
 	$rebase = $node->option('rebase-urls-in-scss') if $ext eq 'scss';
 	$rebase = $node->option('rebase-urls-in-sass') if $ext eq 'sass';
+print "should rebase $rebase\n";
 	# conditionally handle rebase directory
 	unless ($rebase) { $node->SUPER::basedir(@_) }
 	else { File::Basename::dirname $node->path(@_); }
@@ -72,6 +73,32 @@ sub include
 
 	# return the script include string
 	return sprintf($css_include_tmpl, $path);
+
+}
+
+################################################################################
+################################################################################
+
+sub read
+{
+
+	# get the content from parent class
+	my $content = $_[0]->SUPER::read;
+
+	${$content} .= ";\n" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
+
+	return $content;
+}
+
+sub contents32
+{
+
+	# get the content from parent class
+	my $content = $_[0]->SUPER::contents;
+
+#	${$content} .= ";\n" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
+	# make sure it is comma delimited
+	return $content;
 
 }
 

@@ -11,6 +11,17 @@ use strict;
 use warnings;
 
 ################################################################################
+# implement for file interface
+# find out why this cannot be in IO::File
+# has def to do with multiple inheritance
+################################################################################
+
+sub include { return $_[1] }
+sub resolve { return $_[1] }
+sub importer { return $_[1] }
+sub exporter { return $_[1] }
+
+################################################################################
 
 sub ftype { 'js' }
 

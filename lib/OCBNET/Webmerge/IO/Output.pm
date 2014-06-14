@@ -6,6 +6,7 @@ package OCBNET::Webmerge::IO::Output;
 ################################################################################
 use base qw(OCBNET::Webmerge::IO::File);
 ################################################################################
+	use lib 'D:\github\OCBNET-SourceMap\lib';
 
 use strict;
 use warnings;
@@ -87,6 +88,8 @@ sub render
 	# get arguments
 	my ($output) = @_;
 
+	# start the source map mayhem
+
 	# get list of all outputs
 	my $parent = $output->parent;
 
@@ -96,21 +99,97 @@ sub render
 	# get some options from attributes
 	my $target = $output->target;
 
-	return \ join "\n",
-		# unwrap references
-		map { ${$_} }
+# every input must also return a source map!
+# use intermediate object to handle both contents
+
+# my $merge = new OCBNET::IO::SMAP;
+# $merge->add($content, $smap);
+# $merge->add($_->contents);
+# $merge->add($_->render($output));
+# $merge->add($content, $smap);
+# $merge->add($content, $smap);
+use OCBNET::SourceMap::V3;
+my $smap = OCBNET::SourceMap::V3->new;
+
+#die $smap;
+
+
+my @files =
 		# only usefull strings
-		grep { ! ${$_} =~ m/^\s*$/ }
+		grep { ! ${$_->[0]} =~ m/^\s*$/ }
 		# only defined strings
-		grep { defined ${$_} }
+		grep { defined ${$_->[0]} }
 		# only defined scalars
-		grep { defined $_ }
-		# collect a list of scalars
-		(\ $output->prefix),
-		(map { $_->contents } @{$inputs[1]}),
-		(map { $_->render($output) } @{$inputs[0]}),
-		(map { $_->contents } @{$inputs[2]}),
-		(\ $output->suffix)
+		grep { defined $_->[0] }
+
+( # collect a list of scalars
+#		( [ \ $output->prefix ] ),
+#		(map { [ $_->contents ] } @{$inputs[1]}),
+		(map { [ $_->render($output) ] } @{$inputs[0]}),
+#		(map { [ $_->contents ] } @{$inputs[2]}),
+#		( [ \ $output->suffix ] )
+);
+
+
+#die $files[0]->[1];
+
+#die $inputs[0]->[0]->render($output);
+
+my $data = '';
+
+foreach (@files)
+{
+	die "missing source map" unless defined $_->[1];
+
+use Data::Dumper;
+
+# also need to mixin to smap!!
+
+my @dmp = @{$_->[1]->{'mappings'}};
+@dmp = grep { $_ && scalar(@{$_}) } @dmp;
+#warn Data::Dumper::Dumper (\@dmp);
+#warn "X" x 80, "\n";
+
+my $nl = [];
+
+
+push @{$nl}, pop @{$_->[1]->{'mappings'}->[-1]};
+
+$nl->[0]->[0] = 0;
+$nl->[0]->[2] ++;
+
+push @{$_->[1]->{'mappings'}}, $nl;
+
+	$smap->add($_->[0], $_->[1]);
+
+	$data .= ${$_->[0]} . "\n";
+
+@dmp = @{$_->[1]->{'mappings'}};
+@dmp = grep { $_ && scalar(@{$_}) } @dmp;
+#warn Data::Dumper::Dumper (\@dmp);
+#warn "X" x 80, "\n";
+
+	my $lcnt = $data =~ tr/\n/\n/;
+	my $mcnt = $#{$smap->{'mappings'}};
+	die "$lcnt $mcnt" if $mcnt ne $lcnt;
+
+}
+
+;
+
+#my $data = join("",
+		# unwrap references
+#		map { ${$_->[0]} }
+
+#@files);
+
+	my $lcnt = $data =~ tr/\n/\n/;
+	my $mcnt = $#{$smap->{'mappings'}};
+	die "$lcnt $mcnt" if $mcnt ne $lcnt;
+
+$smap->{'new'} = 1;
+
+	return (\ $data, $smap);
 
 }
 

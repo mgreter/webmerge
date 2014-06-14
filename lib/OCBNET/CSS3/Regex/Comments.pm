@@ -16,6 +16,9 @@ BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 # define our functions that will be exported
 BEGIN { our @EXPORT = qw($re_comment uncomment comments); }
 
+# define our functions that can be exported
+BEGIN { our @EXPORT_OK = qw($re_sass_comment); }
+
 ####################################################################################################
 # base regular expressions
 ####################################################################################################
@@ -23,6 +26,10 @@ BEGIN { our @EXPORT = qw($re_comment uncomment comments); }
 # regex found on the w3.org's css grammar page
 # ***************************************************************************************
 our $re_comment = qr/\/\*[^*]*\*+([^\/*][^*]*\*+)*\//;
+
+# also allow one line comments (similar to js)
+# ***************************************************************************************
+our $re_sass_comment = qr/(?:\/\/.*(?:\n|\r|\z)|$re_comment)/;
 
 ####################################################################################################
 

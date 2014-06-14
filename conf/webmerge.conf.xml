@@ -1,0 +1,29 @@
+<xml>
+
+	<!-- include default configuration file -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- optimize operations (id needed to overwrite) -->
+	<optimize step="optimize" disabled="false">
+
+		<!-- clean/fix text files -->
+		<txt disabled="false">
+			<!-- clean all js and css files -->
+			<file path="." file="*.sh" recursive="true" type="linux" />
+			<file path="." file="*.js" recursive="true" type="linux" />
+			<file path="." file="*.css" recursive="true" type="linux" />
+			<file path="." file="*.scss" recursive="true" type="linux" />
+			<file path="." file="*.html" recursive="true" type="linux" />
+			<file path="." file="*.md" recursive="true" type="linux" />
+			<file path="." file="*.pm" recursive="true" type="linux" />
+			<file path="." file="*.pl" recursive="true" type="linux" />
+			<file path="." file="*.xml" recursive="true" type="linux" />
+			<file path="." file="*.php" recursive="true" type="linux" />
+			<file path="." file="*.dev" recursive="true" type="linux" />
+			<file path="." file="*.live" recursive="true" type="linux" />
+			<file path="." file="*.bat" recursive="true" type="windows" />
+		</txt>
+
+	</optimize>
+
+</xml>

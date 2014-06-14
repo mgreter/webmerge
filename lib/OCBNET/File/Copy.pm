@@ -125,7 +125,7 @@ sub fcopy
 	}
 	else
 	{
-	# ensure base directory exists
+		# ensure base directory exists
 		# will also fail if not in chroot
 		if (mkpath(dirname($dst), %option))
 		{

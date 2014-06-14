@@ -38,6 +38,9 @@ sub files
 	my $path = $input->attr('path');
 	my $file = $input->attr('file');
 
+	# maybe we have no path and no file given
+	return ($input) unless (defined $path && defined $file);
+
 	# default to workroot if nothing is given
 	$path = $input->workroot unless $path;
 
@@ -49,6 +52,11 @@ sub files
 	{
 		# split into dirname and basename
 		($file, $path) = ($path, '.');
+	}
+
+	unless (defined $path)
+	{
+		die "propably just a single input";
 	}
 
 	# collect paths and files
@@ -108,7 +116,7 @@ sub files
 		# create a new object
 		# use same class name
 		my $file = $input->new($input);
-		# pnly attach the parent
+		# only attach the parent
 		# do not add to children
 		$file->{'parent'} = $input;
 		# set the tag to the same name

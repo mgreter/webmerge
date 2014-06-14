@@ -30,7 +30,7 @@ sub type { 'OPTIMIZE' }
 
 sub classByTag
 {
-	warn ref $_[0];
+	# warn ref $_[0];
 	# only if tag does not match node type
 	uc $_[1] eq $_[0]->type ? ref $_[0]
 	: join '::', __PACKAGE__, 'ANY'

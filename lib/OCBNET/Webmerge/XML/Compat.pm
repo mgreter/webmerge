@@ -32,6 +32,8 @@ $OCBNET::Webmerge::XML::parser{'mng'} =
 $OCBNET::Webmerge::XML::parser{'detect'} =
 $OCBNET::Webmerge::XML::parser{'include'} =
 $OCBNET::Webmerge::XML::parser{'input'} =
+$OCBNET::Webmerge::XML::parser{'append'} =
+$OCBNET::Webmerge::XML::parser{'prepend'} =
 $OCBNET::Webmerge::XML::parser{'output'} =
 'OCBNET::Webmerge::XML::Tree::Node';
 

@@ -54,7 +54,7 @@ our $re_attr = qr/
 				  \' $re_apo \'
 				| \" $re_quot \"
 				  # escape char sequence
-				| (?: [^\)\\]+ | \\. )*
+				| (?: [^\)\\] | \\. )*
 			)
 			# has value
 		)?
