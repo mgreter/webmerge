@@ -1,0 +1,16 @@
+/* simple.scss */
+
+#navbar {
+  width: 80%;
+  height: 23px;
+  background-image: url(assets/play-active.png);
+
+  ul { list-style-type: none; }
+  li {
+    float: left;
+    a { font-weight: bold; }
+  }
+}
+
+@import "import/scss-1";
+@import "import/css-1.css";

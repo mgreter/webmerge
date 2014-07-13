@@ -1,0 +1,120 @@
+<xml>
+
+	<!-- include default configuration file (relative to this file) -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- default configuration -->
+	<config>
+
+		<!-- where is your htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<webroot>{CONF}/../optimize</webroot>
+
+		<!-- define a current working directory -->
+		<!-- you can adjust this also in the xml config -->
+		<directory>{WWW}</directory>
+
+		<!-- disable headers -->
+		<headtmpl></headtmpl>
+
+		<!-- enable optional opimizer -->
+		<optimize-gz>1</optimize-gz>
+		<optimize-png>1</optimize-png>
+		<optimize-jpg>1</optimize-jpg>
+		<optimize-gif>1</optimize-gif>
+		<optimize-mng>1</optimize-mng>
+		<optimize-zip>1</optimize-zip>
+
+		<!-- disable crc file -->
+		<crc-file>0</crc-file>
+
+		<!-- disable comments -->
+		<crc-comment>0</crc-comment>
+		<head-comment>0</head-comment>
+
+	</config>
+
+	<!-- prepare operations - commit right after block -->
+	<prepare step="prepare" disabled="false" commit="after" >
+		<!-- create neccessary paths -->
+		<mkdir path="dst" />
+		<!-- create neccessary paths -->
+		<copy src="src/libmng.mng" dst="dst/libmng.opt.mng" />
+		<copy src="src/creative-commons.png" dst="dst/01-creative-commons.opt.png" />
+		<copy src="src/creative-commons.jpg" dst="dst/02-creative-commons.opt.jpg" />
+		<copy src="src/creative-commons.gif" dst="dst/01-creative-commons.opt.gif" />
+		<copy src="src/creative-commons.zip" dst="dst/02-creative-commons.opt.zip" />
+		<copy src="src/creative-commons.png.gz" dst="dst/01-creative-commons.opt.png.gz" />
+		<copy src="src/creative-commons.jpg.gz" dst="dst/02-creative-commons.opt.jpg.gz" />
+		<copy src="src/creative-commons.gif.gz" dst="dst/01-creative-commons.opt.gif.gz" />
+	</prepare>
+
+	<!-- prepare operations - do not commit these files -->
+	<prepare step="prepare" disabled="false" commit="false" >
+		<!-- create neccessary paths -->
+		<mkdir path="dst" />
+		<!-- create neccessary paths -->
+		<copy src="src/libmng.mng" dst="dst/libmng.org.mng" />
+		<copy src="src/creative-commons.png" dst="dst/01-creative-commons.org.png" />
+		<copy src="src/creative-commons.jpg" dst="dst/02-creative-commons.org.jpg" />
+		<copy src="src/creative-commons.gif" dst="dst/01-creative-commons.org.gif" />
+		<copy src="src/creative-commons.zip" dst="dst/02-creative-commons.org.zip" />
+		<copy src="src/creative-commons.png.gz" dst="dst/01-creative-commons.org.png.gz" />
+		<copy src="src/creative-commons.jpg.gz" dst="dst/02-creative-commons.org.jpg.gz" />
+		<copy src="src/creative-commons.gif.gz" dst="dst/01-creative-commons.org.gif.gz" />
+	</prepare>
+
+	<!-- optimize operations (id needed to overwrite) -->
+	<optimize step="optimize" disabled="false">
+
+		<!-- clean/fix text files -->
+		<txt disabled="false">
+			<!-- clean all js and css files -->
+			<file path="dst" file="*.md" recursive="true" />
+			<file path="dst" file="*.css" recursive="true" />
+			<file path="dst" file="*.txt" recursive="true" />
+			<file path="dst" file="*.html" recursive="true" />
+		</txt>
+
+		<!-- best gif compression -->
+		<gif disabled="false">
+			<!-- recursively improve gif compression -->
+			<file path="dst" file="*.opt.gif" recursive="true" />
+		</gif>
+
+		<!-- best jpg compression -->
+		<jpg disabled="false">
+			<!-- recursively improve jpg compression -->
+			<file path="dst" file="*.opt.jpg" recursive="true" />
+		</jpg>
+
+		<!-- best png compression -->
+		<png disabled="false">
+			<!-- recursively improve png compression -->
+			<file path="dst" file="*.opt.png" recursive="true" />
+		</png>
+
+		<!-- best mng compression -->
+		<mng disabled="false">
+			<!-- recursively improve jpg compression -->
+			<file path="dst" file="*.opt.mng" recursive="true" />
+		</mng>
+
+		<!-- best mng compression -->
+		<zip disabled="false">
+			<!-- recursively improve jpg compression -->
+			<file path="dst" file="*.opt.zip" recursive="true" />
+		</zip>
+
+		<!-- best mng compression -->
+		<gz disabled="false">
+			<!-- recursively improve jpg compression -->
+			<file path="dst" file="*.opt.png.gz" recursive="true" />
+			<file path="dst" file="*.opt.gif.gz" recursive="true" />
+			<file path="dst" file="*.opt.jpg.gz" recursive="true" />
+		</gz>
+
+	</optimize>
+
+</xml>

@@ -1,0 +1,21 @@
+/* libsass base: url(D:\github\webmerge\example\scss\test-02\test.scss.css) */
+
+/* has to be compiled from parent directory */
+/* otherwise ruby sass would not find the file */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+/* partial include ok */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+/* crc: A4BC234465FCDAA22EDDA26BFB6DA766 */
+
+//# sourceMappingCRC=B0B2F8ED5CD5C6018FE1442255FE6005
+//# sourceMappingURL=test.scss.css.map

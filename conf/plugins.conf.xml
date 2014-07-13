@@ -1,0 +1,18 @@
+<xml>
+
+	<config>
+
+		<plugin module="JS::Minify" desc="Perl JavaScript::Minfier" />
+		<plugin module="JS::Compile" desc="Google Closure Compiler" />
+		<plugin module="JS::License" desc="JS license extractor" />
+		<plugin module="CSS::Minify" desc="Perl CSS::Minifier" />
+		<plugin module="CSS::Compile" desc="Webmerge Compiler" />
+		<plugin module="CSS::SASS" desc="Ruby sassgem" />
+		<plugin module="CSS::SCSS" desc="Perl libsass" />
+		<plugin module="CSS::Lint" desc="Perl css linter" />
+		<plugin module="CSS::License" desc="CSS license extractor" />
+		<plugin module="CSS::InlineData" desc="Perl css inliner" />
+
+	</config>
+
+</xml>

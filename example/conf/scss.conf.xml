@@ -1,0 +1,97 @@
+<xml>
+
+	<!-- include default configuration file (relative to this file) -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- default configuration -->
+	<config>
+
+		<!-- where is your htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<webroot>{CONF}/../scss</webroot>
+
+		<!-- define a current working directory -->
+		<!-- you can adjust this also in the xml config -->
+		<directory>{WWW}</directory>
+
+		<crc-file>0</crc-file>
+
+	</config>
+
+	<!-- prepare operations -->
+	<prepare disabled="false" >
+
+		<!-- create neccessary paths -->
+		<mkdir path="dst" />
+
+	</prepare>
+
+	<!-- main merge operations -->
+	<merge disabled="false">
+
+		<!-- css block -->
+		<css id="scss" step="scss" disabled="false" >
+
+			<!-- explicitly set the directory again -->
+			<config><directory>{WWW}/src</directory></config>
+
+			<!-- use generated css as input file -->
+			<input path="simple.scss" process="scss" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="../dst/simple.dev.css" target="dev" />
+			<output path="../dst/simple.join.css" target="join" />
+
+		</css>
+
+		<!-- css block -->
+		<css id="test-01" step="test" disabled="false" >
+
+			<!-- explicitly set the directory again -->
+			<config><directory>{WWW}</directory></config>
+
+			<!-- use generated css as input file -->
+			<input path="test-01/test.in.scss" process="sass" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="test-01/test.out.css" target="join" />
+
+		</css>
+
+		<!-- css block -->
+		<css id="test-02-a" step="test" disabled="false" >
+
+			<!-- explicitly set the directory again -->
+			<config><directory>{WWW}/test-02</directory></config>
+
+			<!-- use generated css as input file -->
+			<input path="test.in.scss" process="scss" />
+			<input path="test.in.scss" process="sass" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="test.out.css" target="join" />
+			<output path="test.out.scss.css" process="scss" target="join" />
+			<output path="test.out.sass.css" process="sass" target="join" />
+
+		</css>
+
+		<!-- css block -->
+		<css id="test-02-b" step="test" disabled="false" >
+
+			<!-- explicitly set the directory again -->
+			<config><directory>{WWW}/test-02</directory></config>
+
+			<!-- use generated css as input file -->
+			<input path="test.in.scss" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="test.scss.css" process="scss" target="join" />
+			<!-- create output css files and the spriteset image -->
+			<output path="test.sass.css" process="sass" target="join" />
+
+		</css>
+
+	</merge>
+
+</xml>

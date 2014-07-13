@@ -1,0 +1,7 @@
+/* has to be compiled from parent directory */
+/* otherwise ruby sass would not find the file */
+
+IMG { background: url(src/assets/play-active.png); }
+IMG { background: url(/src/assets/play-active.png); }
+
+@import "test-01/partial/test";

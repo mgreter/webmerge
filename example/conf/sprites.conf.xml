@@ -1,0 +1,121 @@
+<xml>
+
+	<!-- include default configuration file (relative to this file) -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- default configuration -->
+	<config>
+
+		<!-- where is your htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<webroot>{CONF}/../sprites</webroot>
+
+		<!-- define a current working directory -->
+		<!-- you can adjust this also in the xml config -->
+		<directory>{WWW}</directory>
+
+		<!-- maximum size to inline data -->
+		<inlinedatamax>300KB</inlinedatamax>
+
+		<!-- enable crc check step -->
+		<crc-check>1</crc-check>
+
+	</config>
+
+	<!-- prepare operations -->
+	<prepare step="fam" disabled="false" >
+		<!-- create neccessary paths -->
+		<mkdir path="fam/generated" />
+		<mkdir path="fam/generated/img" />
+	</prepare>
+
+	<!-- prepare operations -->
+	<prepare step="hires" disabled="false" >
+		<!-- create neccessary paths -->
+		<mkdir path="hires/generated" />
+		<mkdir path="hires/generated/img" />
+	</prepare>
+
+	<!-- optimize operations (id needed to overwrite) -->
+	<optimize step="optimize" disabled="false">
+
+		<!-- clean/fix text files -->
+		<txt disabled="false">
+			<!-- clean all js and css files -->
+			<file path="." file="*.md" recursive="true" />
+			<file path="." file="*.css" recursive="true" />
+			<file path="." file="*.txt" recursive="true" />
+			<file path="." file="*.html" recursive="true" />
+		</txt>
+
+		<!-- best gif compression -->
+		<gif disabled="false">
+			<!-- recursively improve gif compression -->
+			<file path="." file="*.gif" recursive="true" />
+		</gif>
+
+		<!-- best jpg compression -->
+		<jpg disabled="false">
+			<!-- recursively improve jpg compression -->
+			<file path="." file="*.jpg" recursive="true" />
+		</jpg>
+
+		<!-- best png compression -->
+		<png disabled="false">
+			<!-- recursively improve png compression -->
+			<file path="." file="*.png" recursive="true" />
+		</png>
+
+	</optimize>
+
+	<!-- main merge operations -->
+	<merge disabled="false">
+
+		<!-- build fam spriteset -->
+		<css id="fam" step="fam" disabled="false" >
+
+			<!-- change directory -->
+			<config><directory>fam</directory></config>
+
+			<!-- use generated css as input file -->
+			<input path="generate/fam.css" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="generated/dev.css" target="dev" />
+			<output path="generated/join.css" target="join" />
+			<output path="generated/pack.css" target="compile" />
+			<output path="generated/inline.join.css" target="join" process="inlinedata" />
+			<output path="generated/inline.pack.css" target="compile" process="inlinedata" />
+			<output path="generated/spritesets.join.css" preprocess="spritesets" target="join" />
+			<output path="generated/spritesets.pack.css" preprocess="spritesets" target="compile" />
+			<output path="generated/spritesets.inline.join.css" preprocess="spritesets" target="join" process="inlinedata" />
+			<output path="generated/spritesets.inline.pack.css" preprocess="spritesets" target="compile" process="inlinedata" />
+
+		</css>
+
+		<!-- build hires spriteset -->
+		<css id="hires" step="hires" disabled="false" >
+
+			<!-- change directory -->
+			<config><directory>hires</directory></config>
+
+			<!-- use sprite styles file -->
+			<input path="css/sprites.css" />
+
+			<!-- create output css files and the spriteset image -->
+			<output path="generated/dev.css" target="dev" />
+			<output path="generated/join.css" target="join" />
+			<output path="generated/pack.css" target="compile" />
+			<output path="generated/inline.join.css" target="join" process="inlinedata" />
+			<output path="generated/inline.pack.css" target="compile" process="inlinedata" />
+			<output path="generated/spritesets.join.css" preprocess="spritesets" target="join" />
+			<output path="generated/spritesets.pack.css" preprocess="spritesets" target="compile" />
+			<output path="generated/spritesets.inline.join.css" preprocess="spritesets" target="join" process="inlinedata" />
+			<output path="generated/spritesets.inline.pack.css" preprocess="spritesets" target="compile" process="inlinedata" />
+
+		</css>
+
+	</merge>
+
+</xml>

@@ -1,0 +1,55 @@
+<xml>
+
+	<!-- include default configuration file (relative to this file) -->
+	<include src="{EXT}/conf/common.conf.xml" />
+
+	<!-- default configuration -->
+	<config>
+
+		<!-- where is your htdocs root directory -->
+		<!-- this is needed to create absolute urls -->
+		<!-- default is relative to the config file -->
+		<webroot>{CONF}/..</webroot>
+
+		<!-- define current working directory -->
+		<directory>{CONF}/..</directory>
+
+	</config>
+
+	<block id="outer">
+		<config><webroot>src/js</webroot></config>
+		<config><directory>src/js</directory></config>
+		<block id="inner">
+			<config><webroot>jquery</webroot></config>
+			<config><directory>jquery</directory></config>
+
+		</block>
+	</block>
+
+	<merge>
+
+		<js id="js">
+
+			<input path="src/js/jquery/jquery-1.11.1.js" />
+
+			<output path="dst/merged/t-01.js" />
+
+		</js>
+
+		<css id="css">
+
+			<input path="src/css/00-reset.css" />
+			<input path="src/css/01-font.css" />
+			<input path="src/css/02-base.scss" />
+			<input path="src/css/03-layout.css" />
+			<input path="src/css/50-widgets.css" />
+
+			<input path="src/css/80-unicode.css" />
+
+			<output path="dst/t-01.css" />
+
+		</css>
+
+	</merge>
+
+</xml>

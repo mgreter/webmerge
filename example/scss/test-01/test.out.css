@@ -1,0 +1,23 @@
+/* ruby sass base: url("test.in.scss") */
+
+/* has to be compiled from parent directory */
+/* otherwise ruby sass would not find the file */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+/* partial include ok */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+
+
+/* crc: BBB7924EC5C067A37D4630EAE3152969 */
+
+//# sourceMappingCRC=664938815DBC389C47BE9CA5C114FFBC
+//# sourceMappingURL=test.out.css.map

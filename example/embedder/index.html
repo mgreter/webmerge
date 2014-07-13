@@ -1,0 +1,87 @@
+<html>
+	<head>
+
+		<title>Webmerge example</title>
+
+		<script src="global/js/lib/head.js"></script>
+		<script src="global/js/lib/ready.js"></script>
+		<script src="admin/webmerge/generated/embedder.js"></script>
+
+		<script>
+
+			// declare path and rootline array
+			var path = ''; var rootline =  [];
+
+			// get the path info from location hash
+			var pathinfo = document.location.search.replace(/^\?/, '');
+
+			/*
+			// alternative method from pathname
+			var pathinfo = document.location.pathname;
+			pathinfo = pathinfo.replace(/\/?[^\/]*$/, '');
+			pathinfo = pathinfo.replace(/^\/[A-Za-z]:/, '');
+			*/
+
+			// split path info into parts
+			var paths = pathinfo.split('\/');
+
+			// process each directory in full path
+			for (var i = 0, l = paths.length; i < l; i++)
+			{
+
+				// prepend full path into our rootline
+				rootline.unshift(path += paths[i] + '/');
+
+			}
+
+			// load the embedder to select and embed includes
+			var domain = webmerge.embed.select(rootline);
+			var include = webmerge.embed('live', domain);
+
+			// print include header
+			document.write(include);
+
+		</script>
+
+	</head>
+	<body>
+
+		<h1>Webmerge example</h1>
+
+		<p>
+			Switch cookie context:
+			<a href="javascript:void((function(){document.cookie='WEBMERGE_CONTEXT=dev; Expires=Tue, 1 Jan 2050 12:00:00 GMT; Path=/;'; location.reload(true)})())">DEV</a>
+			<a href="javascript:void((function(){document.cookie='WEBMERGE_CONTEXT=live; Expires=Tue, 1 Jan 2050 12:00:00 GMT; Path=/;'; location.reload(true)})())">LIVE</a>
+			<a href="javascript:void((function(){document.cookie='WEBMERGE_CONTEXT=clear; Expires=Tue, 1 Jan 1950 12:00:00 GMT; Path=/;'; location.reload(true)})())">CLEAR</a>
+		</p>
+
+		<p>
+			Go to page:
+			<a href="?/sub/page">sub page</a>
+			<a href="?/home/page">home page</a>
+			<a href="?/other/page">other page</a>
+		</p>
+
+		CSS: <ul>
+			<li style="display:none;" class="all">all.css is loaded</li>
+			<li style="display:none;" class="dev">dev.css is loaded</li>
+			<li style="display:none;" class="live">live.css is loaded</li>
+			<li style="display:none;" class="inc">inc.css is loaded</li>
+			<li style="display:none;" class="sub">sub.css is loaded</li>
+		</ul>
+
+		<hr>
+
+		<pre><script>
+				// print include header
+				document.write
+				(
+					// do a cheap "htmlreplace"
+					include.replace(/&/g, '&amp;')
+					       .replace(/</g, '&lt;')
+					       .replace(/>/g, '&gt;')
+				);
+		</script></pre>
+
+	</body>
+</html>

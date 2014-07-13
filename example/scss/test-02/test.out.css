@@ -1,0 +1,41 @@
+/* libsass base: url("test.in.scss") */
+
+/* has to be compiled from parent directory */
+/* otherwise ruby sass would not find the file */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+/* partial include ok */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+
+/* ruby sass base: url("test.in.scss") */
+
+/* has to be compiled from parent directory */
+/* otherwise ruby sass would not find the file */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+/* partial include ok */
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+IMG {
+  background: url("../src/assets/play-active.png"); }
+
+
+
+/* crc: 5DE4E8D39CD7ADD2502B28115D655484 */
+
+//# sourceMappingCRC=41B2CD9F07FD8E20C716A05420D75396
+//# sourceMappingURL=test.out.css.map
