@@ -76,8 +76,8 @@ sub write
 
 		# check if the new data matches the previous commit
 		if (${$data} eq ${${*$atomic}{'io_atomicfile_data'}})
-		{ warn "writing same content more than once"; }
-		else { die "writing different content to the same file"; }
+		{ warn "writing same content more than once\n  $path"; }
+		else { die "writing different content to the same file\n  $path"; }
 
 	}
 	# check if file has been read
@@ -86,8 +86,8 @@ sub write
 
 		# check if the new data matches the previous commit
 		if (${$data} eq ${$file->{'readed'}})
-		{ warn "overwriting same content more than once"; }
-		else { die "overwriting different content to the same file"; }
+		{ warn "overwriting same content more than once\n  $path"; }
+		else { die "overwriting different content to the same file\n  $path"; }
 
 	}
 	# write to the disk

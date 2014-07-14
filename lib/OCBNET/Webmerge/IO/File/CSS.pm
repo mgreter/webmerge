@@ -11,7 +11,7 @@ use base qw(OCBNET::Webmerge::IO::File::CSS::Export);
 ################################################################################
 use base qw(OCBNET::Webmerge::IO::Mixin::SourceMap);
 ################################################################################
-use base qw(OCBNET::Webmerge::IO::File);
+use base qw(OCBNET::Webmerge::IO::File::TXT);
 ################################################################################
 
 use strict;
@@ -85,22 +85,10 @@ sub read
 
 	# get the content from parent class
 	my $content = $_[0]->SUPER::read;
-
+die "whasads" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
 	${$content} .= ";\n" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
 
 	return $content;
-}
-
-sub contents32
-{
-
-	# get the content from parent class
-	my $content = $_[0]->SUPER::contents;
-
-#	${$content} .= ";\n" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
-	# make sure it is comma delimited
-	return $content;
-
 }
 
 ################################################################################

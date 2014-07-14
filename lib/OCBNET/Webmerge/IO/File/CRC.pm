@@ -4,29 +4,11 @@
 ################################################################################
 package OCBNET::Webmerge::IO::File::CRC;
 ################################################################################
-use base qw(OCBNET::Webmerge::IO::File);
+use base qw(OCBNET::Webmerge::IO::File::TXT);
 ################################################################################
 
 use strict;
 use warnings;
-
-################################################################################
-# force newline at the end of the content
-################################################################################
-
-sub contents
-{
-	# get result from parent implementation
-	my $content = shift->SUPER::contents(@_);
-	# return result if content is undefined
-	return $content unless defined $content;
-	# return result if content is empty
-	return $content unless length $content;
-	# return if there is a newline at the end
-	return $content if $content =~ m/^\s*\z/;
-	# add newline to original and return
-	${$content} .= "\n"; return $content;
-}
 
 ################################################################################
 # accessor methods

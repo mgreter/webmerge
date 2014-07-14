@@ -6,7 +6,7 @@ package OCBNET::Webmerge::IO::File::JS;
 ################################################################################
 use base qw(OCBNET::Webmerge::IO::Mixin::SourceMap);
 ################################################################################
-use base qw(OCBNET::Webmerge::IO::File);
+use base qw(OCBNET::Webmerge::IO::File::TXT);
 ################################################################################
 
 use strict;

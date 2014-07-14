@@ -11,25 +11,13 @@ use base qw(OCBNET::Webmerge::File::Input);
 # force newline at the end of the content
 ################################################################################
 
-sub contents
-{
-	# get result from parent implementation
-	my $content = shift->SUPER::contents(@_);
-	# return result if content is undefined
-	return $content unless defined $content;
-	# return result if content is empty
-	return $content unless length $content;
-	# return if there is a newline at the end
-	return $content if $content =~ m/^\s*\z/;
-	# add newline to original and return
-	${$content} .= "\n"; return $content;
-}
-
 sub read
 {
 
 	# get the content from parent class
 	my $content = $_[0]->SUPER::read;
+
+die "whasdas" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
 
 	${$content} .= ";\n" unless (${$content} =~ m/(?:;|\n)\s*\Z/);
 

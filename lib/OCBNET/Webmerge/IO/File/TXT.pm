@@ -21,9 +21,9 @@ sub contents
 	# return result if content is undefined
 	return $content unless defined $content;
 	# return result if content is empty
-	return $content unless length $content;
+	return $content unless length ${$content};
 	# return if there is a newline at the end
-	return $content if $content =~ m/^\s*\z/;
+	return $content if ${$content} =~ m/^(?:\s|;)*\z/m;
 	# add newline to original and return
 	${$content} .= "\n"; return $content;
 }
