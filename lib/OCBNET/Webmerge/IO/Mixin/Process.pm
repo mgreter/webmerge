@@ -7,6 +7,7 @@ package OCBNET::Webmerge::IO::Mixin::Process;
 
 use strict;
 use warnings;
+use File::chdir;
 
 ################################################################################
 # list all processors for this file
@@ -44,7 +45,7 @@ sub process
 		# maybe you forgot to load some plugins
 		die "processor $alt not found" unless $processor;
 		# change working directory
-		chdir $file->workroot;
+		local $CWD = $file->workroot;
 		# execute processor and pass data
 		# processor may returns a source map
 		# can already be decoded from json or scalar

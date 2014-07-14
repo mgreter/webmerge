@@ -547,6 +547,7 @@ sub canRead
 			$ENV{'HOSTNAME'} = $req->header('Host');
 			$ENV{'DOCUMENT_ROOT'} = canonpath($config->webroot);
 			$CGI::SHTML::ROOTDIR = $ENV{'DOCUMENT_ROOT'};
+			# local $CWD = $file->workroot;
 			chdir dirname $file;
 			use Encode qw(encode decode);
 			use IO::HTML qw(html_file_and_encoding);

@@ -56,8 +56,8 @@ sub type { 'EXT' }
 # implement some methods
 ################################################################################
 
-# sub importer { return $_[1] }
-# sub resolve { return $_[1] }
+sub importer { return $_[1] }
+sub resolve { return $_[1] }
 
 # sub exporter { return $_[1] }
 # sub include { return $_[1] }

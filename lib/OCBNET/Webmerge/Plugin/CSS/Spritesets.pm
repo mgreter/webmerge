@@ -8,6 +8,7 @@ package OCBNET::Webmerge::Plugin::CSS::Spritesets;
 use Carp;
 use strict;
 use warnings;
+use File::chdir;
 
 ################################################################################
 
@@ -29,13 +30,11 @@ sub process
 
 require OCBNET::Spritesets;
 
-warn "====" , join("; ", @_), "\n";
-
-	chdir $file->dirname;
+	local $CWD = $file->dirname;
 
 	my $dir; # = RTP::Webmerge::Path->chdir(dirname($output->{'path'}));
 
-my $config = { 'debug' => 1 };
+my $config = { 'debug' => 0 };
 
 	# create a new ocbnet spriteset css parser object
 	my $css = OCBNET::Spritesets::CSS::Parser->new($config);
@@ -80,6 +79,7 @@ my $config = { 'debug' => 1 };
 		# call all possible optimizers
 		foreach my $program (keys %{$written})
 		{
+			print "OPTIMIZE $file\n"; return 1;
 			# check if this program should run or not
 			next unless $config->{'optimize-' . $program};
 			# close file finehandle now to flush out changes

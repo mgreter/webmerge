@@ -9,7 +9,7 @@ use base qw(OCBNET::Webmerge::IO::File);
 
 use strict;
 use warnings;
-
+use File::chdir;
 
 ################################################################################
 # return further inputs
@@ -65,7 +65,7 @@ sub files
 	my (@paths, @files) = ($path);
 
 	# change into workroot
-	chdir $input->workroot;
+	local $CWD = $file->workroot;
 
 	# make them unique
 	@paths = uniq @paths;

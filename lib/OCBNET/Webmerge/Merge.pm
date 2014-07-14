@@ -7,6 +7,7 @@ package OCBNET::Webmerge::Merge;
 
 use strict;
 use warnings;
+use File::chdir;
 
 ################################################################################
 use Cwd qw(getcwd);
@@ -22,11 +23,13 @@ sub execute
 	my $cd_in = OCBNET::Webmerge::dpath($node->workroot, '.');
 	my $cd_out = OCBNET::Webmerge::dpath('.', $node->workroot);
 
-	# print new working directory if it changed
-	warn "chdir ", $cd_in, "\n" if $cd_in ne '.';
-
-	# try to actually change directory here
-	chdir $cd_in or die "chdir error: $!";
+	# change directory
+	if ($cd_in ne '.')
+	{
+		warn "chdir ", $cd_in, "\n";
+		# try to actually change directory here
+		local $CWD = $cd_in or die "chdir error: $!";
+	}
 
 	# process all output targets in merge
 	foreach my $output ($node->find('OUTPUT'))
@@ -49,11 +52,13 @@ sub execute
 		warn " completed ", $output->dpath, "\n";
 	}
 
-	# print new working directory if it changed
-	warn "chdir ", $cd_out, "\n" if $cd_out ne '.';
-
-	# try to actually change directory here
-	chdir $cd_out or die "chdir error: $!";
+	# change directory
+	if ($cd_out ne '.')
+	{
+		warn "chdir ", $cd_out, "\n";
+		# try to actually change directory here
+		local $CWD = $cd_out or die "chdir error: $!";
+	}
 
 }
 

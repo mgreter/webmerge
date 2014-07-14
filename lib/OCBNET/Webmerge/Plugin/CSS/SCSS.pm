@@ -7,6 +7,7 @@ package OCBNET::Webmerge::Plugin::CSS::SCSS;
 
 use strict;
 use warnings;
+use File::chdir;
 
 ################################################################################
 
@@ -55,7 +56,7 @@ sub process
 	# also changes urls in comments (needed for the spriteset feature)
 	# ${$data} =~ s/$re_url/wrapURL(exportURI($+{url}, $directory))/egm;
 
-	chdir $file->workroot;
+	local $CWD = $file->workroot;
 
 	# compile the passed scss data
 	${$data} = $scss->compile(${$data});
