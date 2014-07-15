@@ -65,7 +65,7 @@ sub files
 	my (@paths, @files) = ($path);
 
 	# change into workroot
-	local $CWD = $file->workroot;
+	local $CWD = $input->workroot;
 
 	# make them unique
 	@paths = uniq @paths;
@@ -79,7 +79,7 @@ sub files
 
 		# support multiple files via glob
 		push @files, grep { -f $_ }
-		             map { rel2abs $_ }
+		             map  { rel2abs $_ }
 		             sort ( bsd_glob($pattern) );
 
 		# add better error handling

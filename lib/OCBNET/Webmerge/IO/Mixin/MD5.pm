@@ -12,7 +12,6 @@ use warnings;
 # calculate checksum
 ################################################################################
 use Digest::MD5 qw();
-use Encode qw(encode);
 ################################################################################
 
 sub md5sum
@@ -33,7 +32,7 @@ Carp::confess unless $data;
 	$data = $file->contents unless $data;
 
 	# convert data into encoding if we have no raw data
-	$data = \ encode($file->encoding, ${$data}) unless $raw;
+	$data = $file->encode($data) unless $raw;
 
 	# add raw data and return final digest
 	return uc($md5->add(${$data})->hexdigest);

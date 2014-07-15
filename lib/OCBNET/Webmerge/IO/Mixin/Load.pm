@@ -9,8 +9,6 @@ use strict;
 use warnings;
 
 ################################################################################
-use Encode qw(decode);
-################################################################################
 # read file path into scalar
 ################################################################################
 use OCBNET::Webmerge qw(isset);
@@ -122,7 +120,9 @@ sub load
 	substr(${$data}, 0, $pos) = '';
 
 	# now decode the raw data into our encoding
-	$data = \ decode($file->encoding, ${$data});
+	# $data = \ decode($file->encoding, ${$data});
+	$data = $file->decode($data);
+
 
 	# story a copy to our object
 	# $file->{'readed'} = \ "${$data}";

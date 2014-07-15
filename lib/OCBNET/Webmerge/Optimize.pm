@@ -16,12 +16,42 @@ use strict;
 use warnings;
 
 ################################################################################
+# try to get number of cores
+################################################################################
+
+my $jobs; eval
+{
+	if ($^O eq 'MSWin32')
+	{
+		# try to get number of processors via cmd tool
+		my $cores = `wmic cpu get NumberOfLogicalProcessors`;
+		# remove expected leading text from output
+		$cores =~ s/^NumberOfLogicalProcessors?\s*//;
+		# declare jobs if we found expected result
+		$jobs = $1 + 1 if $cores =~ m/^([0-9]+)\W/;
+		# try again if not successfull
+		unless (defined $jobs)
+		{
+			# try to get number of cores via cmd tool
+			my $cores = `wmic cpu get NumberOfCores`;
+			# remove expected leading text from output
+			$cores =~ s/^NumberOfCores?\s*//;
+			# declare jobs if we found expected result
+			$jobs = $1 + 1 if $cores =~ m/^([0-9]+)\W/;
+		}
+	}
+};
+
+# otherwise use default
+$jobs = 2 unless $jobs;
+
+################################################################################
 use OCBNET::Webmerge qw(options);
 ################################################################################
 
-options('jobs', '|j=i', 2);
+options('jobs', '|j=i', $jobs);
 options('level', '|lvl=f', 2);
-options('optimize', '|opt!', -1);
+options('optimize', '|o!', -1);
 
 ################################################################################
 

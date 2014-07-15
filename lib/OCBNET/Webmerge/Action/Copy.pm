@@ -36,8 +36,8 @@ sub execute
 		'base' => $src,
 		'chroot' => $chroot,
 		'recursive' => $recursive,
-		'read' => sub { warn "read $_[0]\n" },
-		'write' => sub { warn "write $_[0]\n" },
+		# 'read' => sub { warn "read $_[0]\n" },
+		# 'write' => sub { warn "write $_[0]\n" },
 	);
 
 	# copy into dst
@@ -57,6 +57,7 @@ sub execute
 	}
 	else
 	{
+		OCBNET::File::Copy::fcopy($src, $dst, %opts);
 		warn "cp file $src $dst\n";
 	}
 

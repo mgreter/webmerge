@@ -16,6 +16,7 @@ use base qw(OCBNET::Webmerge::IO::Mixin::Load);
 use base qw(OCBNET::Webmerge::IO::Mixin::Write);
 use base qw(OCBNET::Webmerge::IO::Mixin::Atomic);
 use base qw(OCBNET::Webmerge::IO::Mixin::Process);
+use base qw(OCBNET::Webmerge::IO::Mixin::Encoding);
 use base qw(OCBNET::Webmerge::IO::Mixin::Fingerprint);
 ################################################################################
 
@@ -38,7 +39,7 @@ sub initialize
 	# assign path if it has been passed
 	$_[0]->{'attr'}->{'path'} = $_[2];
 	# declare default encoding
-	$_[0]->{'encoding'} = 'utf-8';
+	$_[0]->{'encoding'} = 'raw';
 }
 
 ################################################################################

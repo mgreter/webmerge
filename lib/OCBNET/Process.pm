@@ -131,7 +131,7 @@ sub process
 			# get next process from list
 			my $process = shift @work;
 			# add process to jobs
-warn "job";
+
 			push @jobs, $process;
 			# start processing
 			$process->start;

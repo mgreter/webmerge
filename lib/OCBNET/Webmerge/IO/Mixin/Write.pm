@@ -21,7 +21,6 @@ sub signature {}
 ################################################################################
 # write scalar atomic
 ################################################################################
-use Encode qw(encode);
 use IO::AtomicFile qw();
 ################################################################################
 
@@ -76,8 +75,8 @@ sub write
 
 		# check if the new data matches the previous commit
 		if (${$data} eq ${${*$atomic}{'io_atomicfile_data'}})
-		{ warn "rewriting ", $file->dpath, "\n"; }
-		else { die "rewriting ", $file->dpath, "\n"; }
+		{ warn " rewriting ", $file->dpath, "\n"; }
+		else { die " rewriting ", $file->dpath, "\n"; }
 
 	}
 	# check if file has been read
@@ -124,7 +123,7 @@ sub write
 		$file->{'written'} = $data;
 
 		# encode the data for raw output handle
-		${$data} = encode($file->encoding, ${$data});
+		${$data} = ${$file->encode($data)};
 
 		# update the checksum (have raw data)
 		$file->{'crc'} = $file->md5sum($data, 1);

@@ -8,7 +8,7 @@ package OCBNET::File::Copy;
 use strict;
 use warnings;
 use Carp qw(croak);
-use File::Copy qw(copy);
+use File::Copy qw(cp);
 
 ################################################################################
 
@@ -135,7 +135,7 @@ sub fcopy ($$;%)
 	$option{'mkdir'} = \ &mkpath unless $option{'mkdir'};
 	# make copy function configurable via options
 	unless ( $option{'read'} && $option{'write'} )
-	{ $option{'fcopy'} = \ &copy unless $option{'fcopy'} }
+	{ $option{'fcopy'} = \ &cp unless $option{'fcopy'} }
 
 	# make absolute path of mkpath directory
 	$mkpath = rel2abs($mkpath) if defined $mkpath;

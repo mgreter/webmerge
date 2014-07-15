@@ -15,6 +15,7 @@ use base qw(OCBNET::Webmerge::Tree::Atomic);
 
 use strict;
 use warnings;
+use File::chdir;
 
 ################################################################################
 # object mixin initialisation
@@ -95,6 +96,12 @@ sub config
 sub webdir { $_[0]->{'config'}->{'webroot'} }
 sub basedir { $_[0]->{'config'}->{'directory'} }
 sub workdir { $_[0]->{'config'}->{'directory'} }
+
+################################################################################
+# change directory into workroot for all scope blocks
+################################################################################
+
+sub execute { local $CWD = $_[0]->workroot; shift->SUPER::execute(@_) }
 
 ################################################################################
 ################################################################################

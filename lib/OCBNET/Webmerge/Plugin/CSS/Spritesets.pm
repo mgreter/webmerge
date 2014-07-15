@@ -11,6 +11,12 @@ use warnings;
 use File::chdir;
 
 ################################################################################
+use OCBNET::Webmerge qw(optimizers);
+################################################################################
+use OCBNET::Process qw();
+################################################################################
+use OCBNET::Webmerge::IO::OUT;
+################################################################################
 
 # plugin namespace
 my $ns = 'css::spritesets';
@@ -30,11 +36,12 @@ sub process
 
 require OCBNET::Spritesets;
 
-	local $CWD = $file->dirname;
-
 	my $dir; # = RTP::Webmerge::Path->chdir(dirname($output->{'path'}));
 
 my $config = { 'debug' => 0 };
+
+	# change back into dirname
+	local $CWD = $file->dirname;
 
 	# create a new ocbnet spriteset css parser object
 	my $css = OCBNET::Spritesets::CSS::Parser->new($config);
@@ -42,24 +49,26 @@ my $config = { 'debug' => 0 };
 	# declare writer sub
 	my $writer = sub
 	{
-
 		# get input varibles
-		my ($file, $blob, $written) = @_;
-
-		print "WRITE $file\n"; return 1;
-
-		# get data for atomic file handling
-		my $atomic = $config->{'atomic'};
+		my ($path, $blob, $written) = @_;
+		# create a new output file for spriteset image
+		my $spriteset = OCBNET::Webmerge::IO::OUT->new;
+		# set the path on the attribute
+		$spriteset->{'attr'}->{'path'} = $path;
+		# loosely couple the nodes together
+		$spriteset->{'parent'} = $file;
+		# change back into dirname
+		local $CWD = $file->dirname;
 		# write out the file and get the file handle
-		my $handle = writefile($file, \$blob, $atomic, 1);
+		my $handle = $spriteset->write(\$blob);
 		# assertion for any write errors
 		die "error write $file" unless $handle;
-
 		# create data structure to remember ...
 		unless (exists $written->{'png'})
 		{ $written->{'png'} = []; }
 		# ... which files have been written
-		push(@{$written->{'png'}}, $handle);
+		push(@{$written->{'png'}}, [$handle, $spriteset]);
+
 
 	};
 	# EO sub $writer
@@ -74,22 +83,48 @@ my $config = { 'debug' => 0 };
 	$css->debug if $config->{'debug'};
 
 	# optimize spriteset images
-	if ($config->{'optimize'})
+	if ($config->{'optimize'} || 1)
 	{
 		# call all possible optimizers
 		foreach my $program (keys %{$written})
 		{
-			print "OPTIMIZE $file\n"; return 1;
 			# check if this program should run or not
-			next unless $config->{'optimize-' . $program};
+			# next unless $config->{'optimize-' . $program};
 			# close file finehandle now to flush out changes
-			CORE::close($_) foreach (@{$written->{$program}});
+			CORE::close($_) foreach (map { $_->[0] } @{$written->{$program}});
+
 			# fetch all temporary file paths to be optimized by next step
-			my @files = map { ${*$_}{'io_atomicfile_temp'} } @{$written->{$program}};
+			my @files = map { [ ${*{$_->[0]}}{'io_atomicfile_temp'}, $_->[1] ] } @{$written->{$program}};
+
+
+my @optimizers = optimizers($program . 'opt');
+
+		my @work;
+		# process all file entries in block
+			foreach my $file (@files)
+			{
+				my @chain;
+				foreach my $optimizer (@optimizers)
+				{
+					push @chain, OCBNET::Process->new($optimizer->[0], 'args' => &{$optimizer->[1]}($file->[1])),
+				}
+				push @work, \@chain if scalar @chain;
+			}
+
+		warn "run ", $program, " with ", scalar(@work), " items\n";
+		OCBNET::Process::process \@work, $file->option('jobs') if scalar @work;
+
+
+
+
+
+
+
+
 			# call the external optimizer program on all temporary files
-			runProgram($config, $program . 'opt', \@files, $program . ' sprites');
+	#		runProgram($config, $program . 'opt', [ map { $_->[1]->option('asd'); $_->[1] } @files ], $program . ' sprites');
 			# re-open the file handles after the optimizers have done their work
-			sysopen($_, ${*$_}{'io_atomicfile_temp'}, O_RDWR) foreach (@{$written->{$program}});
+			sysopen($_->[0], ${*{$_->[0]}}{'io_atomicfile_temp'}, O_RDWR) foreach (@{$written->{$program}});
 		}
 		# EO each program
 	}
