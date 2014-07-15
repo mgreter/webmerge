@@ -106,6 +106,10 @@ my @optimizers = optimizers($program . 'opt');
 				my @chain;
 				foreach my $optimizer (@optimizers)
 				{
+					use File::Basename;
+					my $p = dirname $file->[1]->tpath;
+					print `dir $p` unless -e $file->[1]->tpath;
+					warn("not existing [", $file->[1]->tpath, "]") && sleep 10 unless -e $file->[1]->tpath;
 					push @chain, OCBNET::Process->new($optimizer->[0], 'args' => &{$optimizer->[1]}($file->[1])),
 				}
 				push @work, \@chain if scalar @chain;

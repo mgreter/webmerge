@@ -22,7 +22,7 @@ sub workdir { shift->parent->dirname(@_) }
 # outfile may return temporary file for path if written
 ################################################################################
 
-sub path
+sub tpath
 {
 
 	# get resolved path from file node

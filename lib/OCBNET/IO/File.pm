@@ -44,8 +44,39 @@ sub encoding : lvalue
 use Encode qw();
 ################################################################################
 
-# sub encode { \ Encode::encode($_[0]->encoding, ${$_[1]}) }
-# sub decode { \ Encode::decode($_[0]->encoding, ${$_[1]}) }
+# encode internal data into given encoding
+# do not alter data if encoding is raw or bytes
+# ******************************************************************************
+sub encode
+{
+
+	# get arguments
+	my ($file, $data) = @_;
+
+	# skip this step if encoding indicates raw or byte data
+	return $data if $file->encoding =~ m/^\:?(?:raw|bytes)$/i;
+
+	# call decoder to translate from encoding
+	return \ Encode::encode($file->encoding, ${$data});
+
+}
+
+# decode external data from given encoding
+# do not alter data if encoding is raw or bytes
+# ******************************************************************************
+sub decode
+{
+
+	# get arguments
+	my ($file, $data) = @_;
+
+	# skip this step if encoding indicates raw or byte data
+	return $data if $file->encoding =~ m/^\:?(?:raw|bytes)$/i;
+
+	# call decoder to translate from encoding
+	return \ Encode::decode($file->encoding, ${$data});
+
+}
 
 ################################################################################
 ################################################################################

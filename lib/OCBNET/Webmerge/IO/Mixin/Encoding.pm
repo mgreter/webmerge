@@ -13,6 +13,8 @@ use Encode qw();
 ################################################################################
 
 
+# encode internal data into given encoding
+# do not alter data if encoding is raw or bytes
 # ******************************************************************************
 sub encode
 {
@@ -28,6 +30,8 @@ sub encode
 
 }
 
+# decode external data from given encoding
+# do not alter data if encoding is raw or bytes
 # ******************************************************************************
 sub decode
 {
