@@ -27,13 +27,16 @@ sub execute
 	my $chroot = $node->attr('chroot');
 	my $pattern = $node->attr('pattern');
 	my $maxdept = $node->attr('maxdept');
-	my $recursive = ison $node->attr('recursive');
+	my $recursive = $node->attr('recursive');
+	# change to ison(recursive) and use maxdepth
+	# otherwise recursive="1" is only one level
+	# or think of some other smart way for this
 
 	$src = $node->respath($src);
 	$dst = $node->respath($dst);
 
 	my %opts = (
-		'base' => $src,
+		'base' => '.',
 		'chroot' => $chroot,
 		'recursive' => $recursive,
 		# 'read' => sub { warn "read $_[0]\n" },
