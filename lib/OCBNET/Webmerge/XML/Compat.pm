@@ -14,7 +14,6 @@ use warnings;
 
 $OCBNET::Webmerge::XML::parser{'echo'} =
 $OCBNET::Webmerge::XML::parser{'eval'} =
-$OCBNET::Webmerge::XML::parser{'finish'} =
 $OCBNET::Webmerge::XML::parser{'feature'} =
 $OCBNET::Webmerge::XML::parser{'test'} =
 $OCBNET::Webmerge::XML::parser{'enable'} =
@@ -40,6 +39,7 @@ $OCBNET::Webmerge::XML::parser{'headinc'} =
 $OCBNET::Webmerge::XML::parser{'optimize'} =
 $OCBNET::Webmerge::XML::parser{'embedder'} =
 $OCBNET::Webmerge::XML::parser{'prepare'} =
+$OCBNET::Webmerge::XML::parser{'finish'} =
 'OCBNET::Webmerge::XML::Tree::Scope';
 
 

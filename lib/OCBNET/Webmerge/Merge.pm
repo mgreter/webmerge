@@ -31,6 +31,9 @@ sub execute
 		local $CWD = $cd_in or die "chdir error: $!";
 	}
 
+	# execute prepare steps before any other thing
+	$_->execute($context) foreach $node->find('PREPARE');
+
 	# process all output targets in merge
 	foreach my $output ($node->find('OUTPUT'))
 	{
@@ -51,6 +54,9 @@ sub execute
 		# everything was successfully done
 		warn " completed ", $output->dpath, "\n";
 	}
+
+	# execute finish steps after everything is done
+	$_->execute($context) foreach $node->find('FINISH');
 
 	# change directory
 	if ($cd_out ne '.')

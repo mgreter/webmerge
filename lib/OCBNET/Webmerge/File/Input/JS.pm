@@ -11,7 +11,7 @@ use base qw(OCBNET::Webmerge::File::Input);
 # force newline at the end of the content
 ################################################################################
 
-sub read
+sub readXX
 {
 
 	# get the content from parent class
