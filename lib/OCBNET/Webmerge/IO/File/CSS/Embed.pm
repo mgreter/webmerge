@@ -45,6 +45,9 @@ sub resolver
 	# get arguments
 	my ($node, $uri) = @_;
 
+	# implement remote file loading here
+	return $uri if $uri =~ m/^[a-zA-Z]\:\/\//;
+
 	# parse uri into it's parts
 	my ($name, $root) = fileparse($uri);
 
@@ -80,6 +83,8 @@ sub resolve
 	if ($node->ext eq 'sass' || $node->ext eq 'scss')
 	{ $re_comments = $re_sass_comment; }
 
+	my $re_proto = qr/^(?:[a-z]+\:)?\/\//;
+
 	# embed further includes/imports
 	${$data} =~ s/(?:($re_comments)|$re_import)/
 
@@ -95,24 +100,27 @@ sub resolve
 			# store match
 			my $all = $&;
 
-			# is unwrapped uri
+			# get unquoted url
 			if (exists $+{uri})
-			{
-				# load partials by sass order
-				$uri = $node->resolver(unquot($+{uri}));
-				# maybe check for valid file extension?
-			}
-			# or have wrapped url
+			{ $uri = unquot($+{uri}); }
 			elsif (exists $+{url})
+			{ $uri = unquot($+{url}); }
+			# resolve partials only for uri
+			my $resolve = exists $+{uri};
+
+			$uri =~ s|^file\:\/\/\/||;
+
+			# check if we have a tcp protocol
+			if ($uri =~ m|^$re_proto|i)
 			{
-				# just unquote uril
-				$uri = unquot($+{url});
+				return wrapUrl($uri);
 			}
+
+			# resolve the uri if it has been requested
+			$uri = $node->resolver($uri) if $resolve;
 
 			# create template to check for specific option according to import type
 			my $cfg = sprintf '%s-%s', 'css', exists $+{uri} ? 'partials' : 'imports';
-
-			$uri =~ s|^file\:\/\/\/||;
 
 			# check if we should embed this import
 			if ($node->option( $cfg ))

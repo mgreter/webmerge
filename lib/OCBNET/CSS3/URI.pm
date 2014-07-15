@@ -130,6 +130,7 @@ sub importUrl ($;$$)
 	# add root to path if it is already absolute
 	if (File::Spec->file_name_is_absolute($path))
 	{ $path = File::Spec->catfile($root, $path) if $root; }
+	elsif ($path =~ m/^(?:[a-z]+:)?\/\//i) { return $path; }
 
 	# make path absolute from base
 	my $url = rel2abs($path, $base);
@@ -153,8 +154,15 @@ sub exportUrl ($;$$)
 	# remove optional file proto
 	$path =~ s/^file\:\/\/\///i;
 
-	# check if we have a file
-	unless ($path =~ /^\w+\:\/\//)
+	# check for protocol uri
+	if ($path =~ /^(?:\w+\:)?\/\//)
+	{
+
+		# just return
+		return $path;
+
+	}
+	else
 	{
 
 		# make path relative to base
@@ -187,10 +195,6 @@ sub exportUrl ($;$$)
 		# return url
 		return $url;
 
-	}
-	else
-	{
-		die "have proto";
 	}
 
 }
