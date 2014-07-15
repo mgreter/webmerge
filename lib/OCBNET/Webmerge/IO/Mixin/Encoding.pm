@@ -23,7 +23,7 @@ sub encode
 	my ($file, $data) = @_;
 
 	# skip this step if encoding indicates raw or byte data
-	return $data if $file->encoding =~ m/^\:?(?:raw|bytes)$/i;
+	return \ "${$data}" if $file->encoding =~ m/^\:?(?:raw|bytes)$/i;
 
 	# call decoder to translate from encoding
 	return \ Encode::encode($file->encoding, ${$data});
@@ -40,7 +40,7 @@ sub decode
 	my ($file, $data) = @_;
 
 	# skip this step if encoding indicates raw or byte data
-	return $data if $file->encoding =~ m/^\:?(?:raw|bytes)$/i;
+	return \ "${$data}" if $file->encoding =~ m/^\:?(?:raw|bytes)$/i;
 
 	# call decoder to translate from encoding
 	return \ Encode::decode($file->encoding, ${$data});
