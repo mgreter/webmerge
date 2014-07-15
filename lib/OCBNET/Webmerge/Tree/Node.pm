@@ -309,7 +309,7 @@ sub append
 # remove node from parent
 ################################################################################
 
-sub delete
+sub remove
 {
 	# get arguments
 	my ($node) = @_;
