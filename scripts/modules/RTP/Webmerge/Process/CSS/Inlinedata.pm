@@ -153,7 +153,7 @@ sub inline_url
 	my ($dataref, $mimetype);
 
 	# file is an absolute link
-	if ($url =~ m/^[a-z]+:\/\//)
+	if ($url =~ m/^(:?[a-z]+:)?\/\//)
 	{
 
 		# loop all external configurations
@@ -163,7 +163,7 @@ sub inline_url
 			# get configure href
 			my $href = $ext->{'href'};
 
-			# try http protocol if there is no expicit
+			# try http protocol if there is no explicit
 			# protocol given in the link. Maybe this should
 			# be configurable, but IMO this should suffice.
 			$url = 'http:' . $url if $url =~ m/^\/\//;

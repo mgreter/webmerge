@@ -188,8 +188,9 @@ sub dependencies
 		my $prefix = $1; my $postfix = $8;
 
 		# got something with a protocol?
-		if ($import =~ m/([a-z]+\:)?\/\//)
+		if ($import =~ m/([a-z]+\:)?\/\//i)
 		{
+			die "got $import";
 		}
 		# got a regular file
 		else

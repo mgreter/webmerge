@@ -111,8 +111,11 @@ sub importURI
 		return $uri . $suffix if $uri eq '';
 
 		# check if URI is absolute
-		if ($uri =~ m/^\//)
+		if ($uri =~ m/^\// || $uri =~ s/^absolute://)
 		{
+
+			$path =~ s/^absolute://;
+
 			# absolute uris should be loaded from webroot
 			# if you need another webroot, localize it before
 			$path = realpath(join('/', $webroot, $path));
@@ -167,7 +170,7 @@ sub exportURI ($;$$)
 	my $uri = abs2rel($path, $relpath);
 
 	# normalize directory delimiters on win
-	$uri =~ s/\\+/\//g if $^O eq "MSWin32";
+	$uri =~ s/\\/\//g if $^O eq "MSWin32";
 
 	# create absolute URI if set
 	$uri = '/' . $uri if $abs;

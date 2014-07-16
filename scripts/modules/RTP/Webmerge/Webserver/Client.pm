@@ -225,6 +225,7 @@ push @readers, sub
 	{
 		# close connection when not set to keep-alive (HTTP/1.0)
 		$conn->fin unless $fin && $fin =~ /\bkeep-alive\b/i;
+		# Can't locate object method "fin" via package "RTP::Webmerge::Webserver::Client"
 	}
 
 	return 1;
@@ -487,10 +488,14 @@ sub canRead
 			my $content = '<h1>Dump request</h1>';
 
 			$content .= '<STYLE>
+				BODY, TABLE { font-size: 12px; }
 				BODY { font-family: verdana, arial; }
-				TD { padding: 5px 5px; }
+				TD { padding: 2px 4px; }
+				TD { border: 1px solid #333; }
 				TD:first-child { text-align: right; }
 			</STYLE>';
+
+			$content .= '<h3>' . localtime . '</h3>';
 
 			$content .= '<h2>Post params</h2><TABLE border=1>';
 			my %occurence;
