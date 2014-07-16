@@ -32,7 +32,7 @@ sub tpath
 	# attach atomic instance to scope
 	my $atomic = $_[0]->atomic($path);
 	# return atomic temp file name or actual file path
-	return $atomic ? ${*{$atomic}}{'io_atomicfile_temp'} : $path;
+	return $atomic && ${*{$atomic}}{'io_atomicfile_temp'} ? ${*{$atomic}}{'io_atomicfile_temp'} : $path;
 }
 
 ################################################################################

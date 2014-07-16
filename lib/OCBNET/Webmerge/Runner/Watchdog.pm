@@ -254,7 +254,14 @@ sub watchdog
 		foreach my $input ($block->collect('input'))
 		{
 			# read, resolve imports and close
-			$input->read; $input->close;
+			# process would not be needed here
+			my $data = $input->load();
+			# import relative urls
+			$input->importer($data);
+			# resolve all imports
+			$input->resolve($data);
+			# close handle
+			$input->close;
 			# add input file to watched files
 			if (exists $files{$input->path})
 			{ push @{$files{$input->path}}, $block; }
@@ -316,7 +323,7 @@ END
 # register our tool within the main module
 ################################################################################
 
-OCBNET::Webmerge::Runner::register('watchdog', \&watchdog, - 20, 0);
+OCBNET::Webmerge::Runner::register('watchdog|w', \&watchdog, - 20, 0);
 
 ################################################################################
 ################################################################################

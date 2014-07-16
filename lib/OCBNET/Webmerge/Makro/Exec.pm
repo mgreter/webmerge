@@ -2,38 +2,46 @@
 # Copyright 2014 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ################################################################################
-package OCBNET::Webmerge::Runner::Webserver;
+package OCBNET::Webmerge::Makro::Exec;
 ################################################################################
 
 use strict;
 use warnings;
+use File::chdir;
+use Carp qw(croak);
 
 ################################################################################
-# implement webserver
+# accessor methods
 ################################################################################
 
-sub webserver
+# return node type
+sub type { 'MAKRO::EXE' }
+
+################################################################################
+# execute eval
+################################################################################
+
+sub execute
 {
+	# get arguments
+	my ($node) = @_;
+	# execute code
 
-	# create the config
-	my ($context) = @_;
+	my $cmd = $node->attr('cmd');
 
-	# load the webserver modules, instantiate and run
-	require OCBNET::Webmerge::Runner::Webserver::Server;
+	my @args = map { $_->text } ($node->find('arg'));
 
-	OCBNET::Webmerge::Runner::Webserver::Server->new($context)->run();
+	print "executing $cmd ", join(" ", @args), "\n";
 
-	# webserver should never return I guess?
-	die "fatal: webserver should have exited";
+	local $CWD = $node->workroot or die "chdir";
+
+	my $rv = system $cmd, @args;
+
+	croak "exec makro failed" if $?;
 
 }
 
 ################################################################################
-# register our tool within the main module
-################################################################################
-
-OCBNET::Webmerge::Runner::register('webserver|s', \&webserver, - 20, 0);
-
-################################################################################
 ################################################################################
 1;
+

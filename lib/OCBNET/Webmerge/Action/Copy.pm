@@ -27,7 +27,7 @@ sub execute
 	my $chroot = $node->attr('chroot');
 	my $pattern = $node->attr('pattern');
 	my $maxdept = $node->attr('maxdept');
-	my $recursive = $node->attr('recursive');
+	my $recursive = ison $node->attr('recursive');
 	# change to ison(recursive) and use maxdepth
 	# otherwise recursive="1" is only one level
 	# or think of some other smart way for this

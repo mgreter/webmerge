@@ -12,6 +12,7 @@ use warnings;
 # define some tags currently without implementation
 ################################################################################
 
+$OCBNET::Webmerge::XML::parser{'arg'} =
 $OCBNET::Webmerge::XML::parser{'echo'} =
 $OCBNET::Webmerge::XML::parser{'eval'} =
 $OCBNET::Webmerge::XML::parser{'feature'} =
@@ -42,9 +43,12 @@ $OCBNET::Webmerge::XML::parser{'prepare'} =
 $OCBNET::Webmerge::XML::parser{'finish'} =
 'OCBNET::Webmerge::XML::Tree::Scope';
 
-
 $OCBNET::Webmerge::XML::parser{'file'} =
 'OCBNET::Webmerge::XML::IO::Files';
+
+$OCBNET::Webmerge::XML::parser{'prerun'} =
+$OCBNET::Webmerge::XML::parser{'postrun'} =
+'OCBNET::Webmerge::XML::Makro::Exec';
 
 ################################################################################
 ################################################################################

@@ -23,6 +23,9 @@ sub execute
 	my $cd_in = OCBNET::Webmerge::dpath($node->workroot, '.');
 	my $cd_out = OCBNET::Webmerge::dpath('.', $node->workroot);
 
+	# abort the execution if merge is disabled
+	return $node unless $node->setting('merge');
+
 	# change directory
 	if ($cd_in ne '.')
 	{
@@ -67,6 +70,12 @@ sub execute
 	}
 
 }
+
+################################################################################
+use OCBNET::Webmerge qw(options);
+################################################################################
+
+options('merge', '!', 1);
 
 ################################################################################
 ################################################################################

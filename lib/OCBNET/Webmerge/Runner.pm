@@ -22,13 +22,19 @@ sub register
 {
 
 	# get arguments
-	my ($name, $fn, $prio, $default) = @_;
+	my ($opt, $fn, $prio, $default) = @_;
 
 	# enable runners if default is null
 	$default = 1 unless defined $default;
 
-	# create a new option
-	options($name, '!', $default);
+	# split getopt config string (option|o)
+	my ($name, $short) = split /\|/, $opt, 2;
+
+	# create additional option string for actual registration
+	$opt = sprintf(defined $short ? "|%s!" : "%s!", $short || '');
+
+	# create and register new option
+	options($name, $opt, $default);
 
 	# add variables to runners array
 	push @runners, [$name, $fn, $prio, $default];

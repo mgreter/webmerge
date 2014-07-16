@@ -33,16 +33,22 @@ sub parse
 	# load plugins first for more options
 	Getopt::Long::Configure("pass_through");
 
+	# is commandline option defined?
 	if (exists $longopts{'configfile'})
 	{
 		# call options reader only to fetch config file
 		GetOptions ($longopts{'configfile'}, \$values{'configfile'})
 		or die("Strange error while command line argument parsing\n");
+		# try to load our main config file
+		unless (defined $values{'configfile'})
+		{ eval { $config->SUPER::parse; }; }
+		else { $config->SUPER::parse; }
 	}
-
-	# try to load our main config file
-	# this may load additional plugins
-	$config->SUPER::parse;
+	else
+	{
+		# try to load default config file
+		eval { $config->SUPER::parse; };
+	}
 
 	# collect longopts and assign variables to options
 	my %options = (%{$config->{'options'}}, %longopts);

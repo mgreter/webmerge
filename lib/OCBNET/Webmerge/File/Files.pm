@@ -38,8 +38,11 @@ sub files
 	my $path = $input->attr('path');
 	my $file = $input->attr('file');
 
+	# die "no path for files" unless defined $path;
+	# die "no file for files" unless defined $file;
+
 	# maybe we have no path and no file given
-	return ($input) unless (defined $path && defined $file);
+	return ($input) unless (defined $path || defined $file);
 
 	# default to workroot if nothing is given
 	$path = $input->workroot unless $path;

@@ -58,6 +58,7 @@ require OCBNET::Webmerge::XML::File::Output;
 # ******************************************************************************
 require OCBNET::Webmerge::XML::Makro::Eval;
 require OCBNET::Webmerge::XML::Makro::Echo;
+require OCBNET::Webmerge::XML::Makro::Exec;
 
 # load modules for action features
 # ******************************************************************************
