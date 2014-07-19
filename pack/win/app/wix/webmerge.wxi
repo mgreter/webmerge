@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+	<!-- Upgrade code should not change unless you want to install
+	     a new product and have the old product remain installed,
+	     that is, both products existing as separate instances. -->
+	<?define UpgradeCode = "65A7A8BA-C361-4BBF-B71C-29BC33457AFB" ?>
+
+	<!-- Platform specific variables -->
+	<?if $(var.Platform) = x64 ?>
+		<!-- Product name as you want it to appear in Add/Remove Programs-->
+		<?define Win64 = "yes" ?>
+		<?define Executable = "64\webmerge.exe" ?>
+		<?define ProductName = "Webmerge (64 bit)" ?>
+		<?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+	<?else ?>
+		<?define Win64 = "no" ?>
+		<?define Executable = "32\webmerge.exe" ?>
+		<?define ProductName = "Webmerge (32 bit)" ?>
+		<?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+	<?endif ?>
+
+	<!-- Directory name used as default installation location -->
+	<?define InstallName = "Webmerge" ?>
+
+	<!-- Registry key name used to store installation location -->
+	<?define InstallNameKey = "Webmerge" ?>
+
+</Include>

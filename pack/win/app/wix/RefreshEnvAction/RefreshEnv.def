@@ -1,0 +1,5 @@
+LIBRARY "SetupCustomActionsCPP"
+
+EXPORTS
+
+RefreshEnvironmentVariables

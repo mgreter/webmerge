@@ -13,6 +13,11 @@ pushd 32
 pp -B -o webmerge.exe ^
 -I ../../../../lib ^
 -M CSS::Sass ^
+-M Encode::CN ^
+-M Encode::JP ^
+-M Encode::KR ^
+-M Encode::TW ^
+-M Encode::Byte ^
 -M XML::LibXML::SAX ^
 -l "%PERLPATH%/c/bin/zlib1_.dll" ^
 -l "%PERLPATH%/c/bin/liblzma-5_.dll" ^

@@ -21,6 +21,27 @@ BEGIN
 }
 
 ################################################################################
+
+# add path for local installs
+# usefull when packed as an exe
+BEGIN
+{
+	# get OS specific path delimiter
+	my $PDEL = $^O eq 'MSWin32' ? ';' : ':';
+	# extend the executable path for local/portable libs
+	$ENV{'PATH'} = join($PDEL, "$Bin/../im", $ENV{'PATH'}) if -d "$Bin/../im";
+	$ENV{'PATH'} = join($PDEL, "$Bin/../gm", $ENV{'PATH'}) if -d "$Bin/../gm";
+	$ENV{'PATH'} = join($PDEL, "$Bin/../jre7", $ENV{'PATH'}) if -d "$Bin/../jre7";
+	$ENV{'PATH'} = join($PDEL, "$Bin/../utils", $ENV{'PATH'}) if -d "$Bin/../utils";
+	$ENV{'PATH'} = join($PDEL, "$Bin/../google", $ENV{'PATH'}) if -d "$Bin/../google";
+	$ENV{'PATH'} = join($PDEL, "$Bin/../ruby/bin", $ENV{'PATH'}) if -d "$Bin/../ruby";
+	$ENV{'PATH'} = join($PDEL, "$Bin/../perl/bin", $ENV{'PATH'}) if -d "$Bin/../perl";
+	# set path for image magick and/or graphics magick
+	$ENV{'MAGICK_HOME'} = "$Bin/../im" if -d "$Bin/../im";
+	$ENV{'MAGICK_HOME'} = "$Bin/../gm" if -d "$Bin/../gm";
+}
+
+################################################################################
 use OCBNET::Webmerge qw(fixIOenc);
 ################################################################################
 
