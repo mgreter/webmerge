@@ -1,16 +1,16 @@
 @echo off
 
+SET OLDPATH=%PATH%
 SET PERLPATH=%CD%\32\perl
-
 SET PATH=C:\Windows\system32
 
 SET PATH=%PERLPATH%\perl\site\bin;%PATH%
 SET PATH=%PERLPATH%\perl\bin;%PATH%
 SET PATH=%PERLPATH%\c\bin;%PATH%
 
-pushd 32
+cd 32
 
-pp -B -o webmerge.exe ^
+call pp -B -o webmerge.exe ^
 -I ../../../../lib ^
 -M File::chdir ^
 -M CSS::Sass ^
@@ -44,6 +44,7 @@ pp -B -o webmerge.exe ^
 -l "%PERLPATH%/c/bin/libiconv-2_.dll" ^
 ../../../../bin/webmerge.pl
 
-popd
+cd ..
 
-pause
+SET PATH=%OLDPATH%
+echo %PATH%

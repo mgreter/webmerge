@@ -11,19 +11,19 @@
 	     version. For example, if your version 1 uses Version value 1.0.1.0,
 	     then version 2 should have a Version value of 1.0.2.0 or higher
 	     (1.0.1.1 will not work here). -->
-	<?define Version = "0.2.0.0" ?>
+	<?define Version = "$(var.GitVersion)" ?>
 
 	<!-- Platform specific variables -->
 	<?if $(var.Platform) = x64 ?>
 		<!-- Product name as you want it to appear in Add/Remove Programs-->
 		<?define Win64 = "yes" ?>
 		<?define Executable = "64\webmerge.exe" ?>
-		<?define ProductName = "Webmerge (64 bit)" ?>
+		<?define ProductName = "Webmerge $(var.Version) (64 bit)" ?>
 		<?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
 	<?else ?>
 		<?define Win64 = "no" ?>
 		<?define Executable = "32\webmerge.exe" ?>
-		<?define ProductName = "Webmerge (32 bit)" ?>
+		<?define ProductName = "Webmerge $(var.Version) (32 bit)" ?>
 		<?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
 	<?endif ?>
 

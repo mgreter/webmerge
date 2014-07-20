@@ -1,7 +1,7 @@
 @echo off
 
+SET OLDPATH=%PATH%
 SET PERLPATH=%CD%\32\perl
-
 SET PATH=C:\Windows\system32
 
 SET PATH=%PERLPATH%\perl\site\bin;%PATH%
@@ -36,4 +36,4 @@ popd
 attrib -R "%PERL_DIR%\site\lib\PAR\StrippedPARL\Static.pm"
 copy /Y "%PAR_PACKER_SRC%\%workversion%\myldr\Static.pm" "%PERL_DIR%\site\lib\PAR\StrippedPARL\Static.pm"
 
-pause
+SET PATH=%OLDPATH%

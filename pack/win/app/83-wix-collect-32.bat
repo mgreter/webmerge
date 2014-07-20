@@ -12,7 +12,7 @@ if not exist wix mkdir wix
 
 "%WIX%\bin\heat.exe" dir ".\res" -nologo -cg res -nologo -gg -scom -sreg -ke -dr APPLICATIONFOLDER -template fragment -out wix\res.wxs -platform x86
 "%WIX%\bin\heat.exe" dir ".\conf" -nologo -cg conf -nologo -gg -scom -sreg -ke -dr APPLICATIONFOLDER -template fragment -out wix\conf.wxs -platform x86
-"%WIX%\bin\heat.exe" dir ".\example" -nologo -cg example -nologo -gg -scom -sreg -ke -dr APPLICATIONFOLDER -template fragment -out wix\example.wxs -platform x86
+"%WIX%\bin\heat.exe" dir ".\example" -nologo -cg example -nologo -gg -scom -sreg -ke -dr ExampleFolder -srd -template fragment -out wix\example.wxs -platform x86
 "%WIX%\bin\heat.exe" dir ".\vendor\yahoo\yui" -nologo -cg yui -nologo -gg -scom -sreg -ke -dr VendorYahoo -template fragment -out wix\yui.wxs -platform x86
 "%WIX%\bin\heat.exe" dir ".\vendor\google\closure" -nologo -cg closure -nologo -gg -scom -sreg -ke -dr VendorGoogle -template fragment -out wix\closure.wxs -platform x86
 

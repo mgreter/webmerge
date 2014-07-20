@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
- xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+ xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+ xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+>
 
 	<!-- load variables -->
 	<?include webmerge.wxi?>
@@ -18,7 +20,6 @@
 			Keywords="Installer"
 			InstallScope="perMachine"
 			Platform="$(var.Platform)"
-			InstallPrivileges="elevated"
 			Description="$(var.ProductName)"
 			Comments="Frontend Asset Manager"
 			Manufacturer="Marcel Greter"
@@ -38,7 +39,6 @@
 		<Media Id="1" Cabinet="Sample.cab" EmbedCab="yes" DiskPrompt="Media #1" />
 		<Property Id="DiskPrompt" Value="Webmerge Installation [1]" />
 
-
 		<WixVariable Id="WixUISupportPerUser" Value="1" />
 		<WixVariable Id="WixUISupportPerMachine" Value="1" />
 
@@ -55,6 +55,15 @@
 					<File Id="WebmergeBAT" Name="webmerge.bat" Source="..\..\..\..\webmerge.bat"></File>
 					</Component>
 					-->
+
+					<!-- create vendor directories -->
+					<Directory Id="ExampleFolder" Name="example">
+						<Component Id="ExamplePermission" Guid="65A7A8BA-C768-4424-9449-5304E44A702D">
+							<CreateFolder>
+								<util:PermissionEx User="Users" GenericAll="yes" />
+							</CreateFolder>
+						</Component>
+					</Directory>
 
 					<!-- create vendor directories -->
 					<Directory Id="VendorDir" Name="vendor">
@@ -100,7 +109,6 @@
 
 		</Directory>
 		<!-- EO SourceDir -->
-
 
 		<Feature
 			Level="1"
@@ -256,6 +264,7 @@
 			>
 
 				<ComponentGroupRef Id="example" />
+				<ComponentRef Id="ExamplePermission" />
 
 			</Feature>
 

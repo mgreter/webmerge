@@ -11,5 +11,3 @@ msbuild /p:Configuration=release
 
 cd ..
 cd ..
-
-pause

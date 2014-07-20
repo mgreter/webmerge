@@ -83,7 +83,22 @@ SET PATH=%JAVAPATH%\bin;%PATH%
 
 :noLocalJava
 
+IF EXIST "%FOLDER%\bin\webmerge.pl" GOTO script
+IF EXIST "%FOLDER%\bin\webmerge.exe" GOTO executable
+
+:script
+
 perl "%FOLDER%\bin\webmerge.pl" %*
+
+@GOTO finishexec
+
+:executable
+
+"%FOLDER%\bin\webmerge.exe" %*
+
+@GOTO finishexec
+
+:finishexec
 
 @IF ERRORLEVEL 1 GOTO errorHandling
 
