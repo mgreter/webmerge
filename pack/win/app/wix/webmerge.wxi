@@ -5,6 +5,14 @@
 	     that is, both products existing as separate instances. -->
 	<?define UpgradeCode = "65A7A8BA-C361-4BBF-B71C-29BC33457AFB" ?>
 
+	<!-- Windows Installer only uses the first 3 parts of the version in
+	     upgrade scenarios, so make sure to increment your version such
+	     that one of the first 3 parts is higher than any previously shipped
+	     version. For example, if your version 1 uses Version value 1.0.1.0,
+	     then version 2 should have a Version value of 1.0.2.0 or higher
+	     (1.0.1.1 will not work here). -->
+	<?define Version = "0.2.0.0" ?>
+
 	<!-- Platform specific variables -->
 	<?if $(var.Platform) = x64 ?>
 		<!-- Product name as you want it to appear in Add/Remove Programs-->

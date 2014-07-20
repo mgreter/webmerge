@@ -1,15 +1,20 @@
-<?xml version='1.0' encoding='windows-1252'?>
+<?xml version="1.0" encoding="windows-1252"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
  xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
 
+	<!-- load variables -->
 	<?include webmerge.wxi?>
 
-	<!-- 65A7A8BA-ED62-4812-A32A-FF143A61A844 -->
-  <Product Name='$(var.ProductName)' Id='*'
-  	UpgradeCode='65A7A8BA-C361-4BBF-B71C-29BC33457AFB'
-    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Marcel Greter'>
+	<!-- webmerge product -->
+	<Product Id="*"
+		Version="$(var.Version)"
+		Name="$(var.ProductName)"
+		Manufacturer="Marcel Greter"
+		Language="1033" Codepage="1252"
+		UpgradeCode="$(var.UpgradeCode)"
+	>
 
-    <Package Id="*"
+		<Package Id="*"
 			Keywords="Installer"
 			InstallScope="perMachine"
 			Platform="$(var.Platform)"
@@ -18,147 +23,281 @@
 			Comments="Frontend Asset Manager"
 			Manufacturer="Marcel Greter"
 			InstallerVersion="200"
+			SummaryCodepage="1252"
 			Languages="1033"
 			Compressed="yes"
-			SummaryCodepage="1252"
 		/>
 
-    <Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt="Media #1" />
-    <Property Id='DiskPrompt' Value="Webmerge 1.0 Installation [1]" />
+		<MajorUpgrade
+			AllowDowngrades="no"
+			AllowSameVersionUpgrades="yes"
+			Schedule="afterInstallExecute"
+			DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."
+		/>
 
-    <Directory Id='TARGETDIR' Name='SourceDir'>
-      <Directory Id="$(var.PlatformProgramFilesFolder)">
-          <Directory Id='INSTALLDIR' Name='$(var.InstallName)'>
-            <!--
-            <Component Id='HelpExecutable' Guid='65A7A8BA-9AE1-4612-AE74-F4AFE5F5057A'>
-              <File Id='WebmergeCMD' Name='webmerge.cmd' Source='..\..\..\..\webmerge.cmd'></File>
-              <File Id='WebmergeBAT' Name='webmerge.bat' Source='..\..\..\..\webmerge.bat'></File>
-            </Component>
-            -->
-
-          	<Directory Id='VendorDir' Name='vendor'>
-	          	<Directory Id='VendorYahoo' Name='yagoo'></Directory>
-	          	<Directory Id='VendorGoogle' Name='google'></Directory>
-          	</Directory>
-
-          	<Directory Id='BINDIR' Name='bin'>
-            <Component Id='MainExecutable' Guid='65A7A8BA-9AE1-4612-AE74-F4AFE5F5057E'>
-              <Environment Id="PATH" Name="PATH" Value="[BINDIR]" Permanent="yes" Part="last" Action="set" System="yes" />
-              <File Id='WebmergeEXE' Name='webmerge.exe' Source='webmerge.exe' KeyPath='yes'>
-                <!--
-                <Shortcut Id="startmenuWebmerge10" Directory="ProgramMenuDir" Name="Webmerge 1.0" WorkingDirectory='INSTALLDIR' Icon="Webmerge10.exe" IconIndex="0" Advertise="yes" />
-                <Shortcut Id="desktopWebmerge10" Directory="DesktopFolder" Name="Webmerge 1.0" WorkingDirectory='INSTALLDIR' Icon="Webmerge10.exe" IconIndex="0" Advertise="yes" />
-                -->
-              </File>
-            </Component>
-</Directory>
-            <!--
-            <Component Id='HelperLibrary' Guid='65A7A8BA-34CB-4572-950F-182F9195210A'>
-              <File Id='HelperDLL' Name='Helper.dll' DiskId='1' Source='Helper.dll' KeyPath='yes' />
-            </Component>
-            <Component Id='Manual' Guid='65A7A8BA-571B-457E-ACBC-E2DD0037DF97'>
-              <File Id='Manual' Name='Manual.pdf' DiskId='1' Source='Manual.pdf' KeyPath='yes'>
-                <Shortcut Id="startmenuManual" Directory="ProgramMenuDir" Name="Instruction Manual" Advertise="yes" />
-              </File>
-            </Component>
-            -->
-
-          </Directory>
-      </Directory>
-
-      <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="ProgramMenuDir" Name="Webmerge">
-          <Component Id="ProgramMenuDir" Guid="65A7A8BA-0C9D-4F8F-A3E4-F9CCD8D8E445">
-            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
-            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
-          </Component>
-        </Directory>
-      </Directory>
-
-      <Directory Id="DesktopFolder" Name="Desktop" />
-    </Directory>
-
-    <Feature Id='Complete' InstallDefault="local" Title='Webmerge' Description='Webmerge is a Frontend Asset Manager that handles all kind of js and css manipulations.'
-      Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
-      <Feature Id='MainProgram' InstallDefault="followParent" Absent="disallow" Title='Application' Description='The main executable which comes bundled with the perl interpreter and required modules.' Level='1'>
-        <!-- <ComponentRef Id='HelpExecutable' /> -->
-        <ComponentRef Id='MainExecutable' />
-        <!-- <ComponentRef Id='HelperLibrary' /> -->
-      	<ComponentRef Id='ProgramMenuDir' />
-      </Feature>
-	    <Feature Id='Conf' InstallDefault="followParent" Absent="disallow" Title='Configurations' Description='Default configurations that give a reasonable base to inherit from.' Level='1'>
-	    	<!-- maybe split into multiple parts -->
-	      <ComponentGroupRef Id='conf' />
-	    </Feature>
-
-	    <Feature Id='Utils' InstallDefault="local" Absent="allow" Title='Utilities' Description='Additional external utilities (programs) used by various processors.' Level='1'>
-	      <ComponentGroupRef Id='utils' />
-	    </Feature>
-
-	    <Feature Id='Closure' InstallDefault="local" Absent="allow" Title='Closure Compiler' Description="Google's JavaScript compiler is pretty much the best JavaScript compressor/minifier available." Level='1'>
-	      <ComponentGroupRef Id='closure' />
-		    <Feature Id='JRE7' InstallDefault="source" Absent="allow" Title='Java 7 SE' Description='Google closure compiler needs Java 7. If you use another Java version as your system default you may want to install Java 7 locally.' Level='500'>
-		      <ComponentGroupRef Id='jre7' />
-		    </Feature>
-	    </Feature>
-
-	    <Feature Id='GM' InstallDefault="local" Absent="allow" Title='Graphics Magick' Description='GraphicsMagick is a library to read, write, and manipulate images. It is needed to generate spriteset images.' Level='1'>
-	      <ComponentGroupRef Id='gm' />
-	    </Feature>
-
-	    <Feature Id='Perl' InstallDefault="source" Absent="allow" Title='Perl Stack' Description='Install full perl stack. Enable this option if you want to install additional modules or alter the used perl installation.' Level='1000'>
-	      <ComponentGroupRef Id='perl' />
-	    </Feature>
-
-<!--
--->
-	    <Feature Id='Ruby' InstallDefault="source" Absent="allow" Title='Ruby Sass' Description='Install ruby sass and a full ruby stack. Webmerge by default comes with a libsass implementation.' Level='100'>
-	      <ComponentGroupRef Id='ruby' />
-	    </Feature>
-
-	    <Feature Id='YUI' InstallDefault="source" Absent="allow" Title='YUI Utilities' Description='Yahoo compressor utilities.' Level='200'>
-	    	<!-- maybe split into multiple parts -->
-	      <ComponentGroupRef Id='yui' />
-	    </Feature>
-
-	    <Feature Id='Examples' InstallDefault="source" Absent="allow" Title='Examples' Description='Some more real world examples to show case the different features.' Level='100'>
-	    	<!-- maybe split into multiple parts -->
-	      <ComponentGroupRef Id='example' />
-	    </Feature>
+		<Media Id="1" Cabinet="Sample.cab" EmbedCab="yes" DiskPrompt="Media #1" />
+		<Property Id="DiskPrompt" Value="Webmerge Installation [1]" />
 
 
-      <!--
-      <Feature Id='Documentation' Title='Description' Description='The instruction manual.' Level='1000'>
-        <ComponentRef Id='Manual' />
-      </Feature>
-      -->
-    </Feature>
+		<WixVariable Id="WixUISupportPerUser" Value="1" />
+		<WixVariable Id="WixUISupportPerMachine" Value="1" />
+
+		<Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+		<Property Id="ApplicationFolderName" Value="$(var.InstallName)" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="$(var.PlatformProgramFilesFolder)">
+				<Directory Id="APPLICATIONFOLDER" Name="$(var.InstallName)">
+
+					<!--
+					<Component Id="HelpExecutable" Guid="65A7A8BA-9AE1-4612-AE74-F4AFE5F5057A">
+					<File Id="WebmergeCMD" Name="webmerge.cmd" Source="..\..\..\..\webmerge.cmd"></File>
+					<File Id="WebmergeBAT" Name="webmerge.bat" Source="..\..\..\..\webmerge.bat"></File>
+					</Component>
+					-->
+
+					<!-- create vendor directories -->
+					<Directory Id="VendorDir" Name="vendor">
+						<Directory Id="VendorYahoo" Name="yagoo"></Directory>
+						<Directory Id="VendorGoogle" Name="google"></Directory>
+					</Directory>
+
+					<Directory Id="BINDIR" Name="bin">
+						<Component Id="MainExecutable" Guid="65A7A8BA-9AE1-4612-AE74-F4AFE5F5057E">
+							<File Id="WebmergeEXE" Name="webmerge.exe" Source="webmerge.exe" KeyPath="yes">
+								<!--
+								<Shortcut Id="startmenuWebmerge" Directory="ProgramMenuDir" Name="Webmerge" WorkingDirectory="APPLICATIONFOLDER" Icon="Webmerge.exe" IconIndex="0" Advertise="yes" />
+								<Shortcut Id="desktopWebmerge" Directory="DesktopFolder" Name="Webmerge" WorkingDirectory="APPLICATIONFOLDER" Icon="Webmerge.exe" IconIndex="0" Advertise="yes" />
+								-->
+							</File>
+						</Component>
+					</Directory>
+
+					<Component Id="PathPerUser" Guid="65A7A8BA-BB4C-4CC3-88E9-EB35FF7DD2F0" KeyPath="yes">
+						<Condition>ALLUSERS="" OR (ALLUSERS=2 AND (NOT Privileged))</Condition>
+						<Environment Id="PERUSERPATH" Name="PATH" Value="[BINDIR]" Permanent="no" Part="last" Action="set" System="no" />
+					</Component>
+					<Component Id="PathPerMachine" Guid="65A7A8BA-F469-4B8B-9B89-1ED69A97CF02" KeyPath="yes">
+						<Condition>ALLUSERS=1 OR (ALLUSERS=2 AND Privileged)</Condition>
+						<Environment Id="PATH" Name="PATH" Value="[BINDIR]" Permanent="no" Part="last" Action="set" System="yes" />
+						</Component>
+
+				</Directory>
+				<!-- EO InstallDir -->
+			</Directory>
+			<!-- EO ProgramDir -->
+
+			<Directory Id="ProgramMenuFolder" Name="Programs">
+				<Directory Id="ProgramMenuDir" Name="Webmerge">
+					<Component Id="ProgramMenuDir" Guid="65A7A8BA-0C9D-4F8F-A3E4-F9CCD8D8E445">
+						<RemoveFolder Id="ProgramMenuDir" On="uninstall" />
+						<RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" KeyPath="yes" />
+					</Component>
+				</Directory>
+			</Directory>
+
+			<Directory Id="DesktopFolder" Name="Desktop" />
+
+		</Directory>
+		<!-- EO SourceDir -->
 
 
-		<Binary Id="Wget" SourceFile="..\..\gitstall\files\utils\wget.exe" />
-		<CustomAction Id="RunWget" BinaryKey="Wget" ExeCommand="http://webmerge.ocbnet.ch/portable/webmerge-perl-x64.exe" Return="check" Execute="deferred" Impersonate="no" />
+		<Feature
+			Level="1"
+			Id="Complete"
+			Display="expand"
+			Title="Webmerge"
+			InstallDefault="local"
+			ConfigurableDirectory="APPLICATIONFOLDER"
+			Description="Frontend Asset Manager handling all kind of js and css manipulations."
+		>
+
+			<Feature
+				Level="1"
+				Id="MainProgram"
+				Absent="disallow"
+				Title="Application"
+				InstallDefault="followParent"
+				Description="Main executable bundled with perl interpreter and required modules."
+			>
+
+				<ComponentRef Id="MainExecutable" />
+				<ComponentRef Id="ProgramMenuDir" />
+
+			</Feature>
+
+			<Feature
+				Level="1"
+				Id="PathUpdate"
+				Absent="allow"
+				Title="Register Path"
+				InstallDefault="followParent"
+				Description="Add the executable path to the PATH environment variable."
+			>
+
+				<ComponentRef Id="PathPerUser" />
+				<ComponentRef Id="PathPerMachine" />
+
+			</Feature>
+
+			<Feature
+				Level="1"
+				Id="Conf"
+				Absent="disallow"
+				Title="Configurations"
+				InstallDefault="followParent"
+				Description="Default configurations that give a reasonable base to inherit from."
+			>
+
+				<ComponentGroupRef Id="conf" />
+
+			</Feature>
+
+			<Feature
+				Level="1"
+				Id="Utils"
+				Absent="allow"
+				Title="Tools &amp; Utilities"
+				InstallDefault="local"
+				Description="Additional external utilities (programs) used by processors."
+			>
+
+				<ComponentGroupRef Id="utils" />
+
+			</Feature>
+
+			<Feature
+				Level="1"
+				Id="Closure"
+				Absent="allow"
+				Title="Closure Compiler"
+				InstallDefault="local"
+				Description="Google's JavaScript compiler, compressor and minifier."
+			>
+
+				<ComponentGroupRef Id="closure" />
+
+			</Feature>
+
+			<Feature
+				Level="1"
+				Id="GM"
+				Absent="allow"
+				Title="Graphics Magick"
+				InstallDefault="local"
+				Description="GraphicsMagick is a library to read, write, and manipulate images."
+			>
+
+				<ComponentGroupRef Id="gm" />
+
+			</Feature>
+
+			<Feature
+				Level="3"
+				Id="JRE7"
+				Absent="allow"
+				Title="Java 7 SE"
+				InstallDefault="source"
+				Description="Install a local Java 7 SE environment."
+			>
+
+				<ComponentGroupRef Id="jre7" />
+
+			</Feature>
+
+			<!--
+			<Feature
+				Level="5"
+				Id="Perl"
+				Absent="allow"
+				Title="Perl Stack"
+				InstallDefault="source"
+				Description="Install full perl stack. Enable this option if you want to install additional modules or alter the used perl installation."
+			>
+
+				<ComponentGroupRef Id="perl" />
+
+			</Feature>
+			-->
+
+			<Feature
+				Level="5"
+				Id="YUI"
+				Absent="allow"
+				Title="YUI Compressor"
+				InstallDefault="source"
+				Description="Yahoo compressor utilities (for JS and CSS)."
+			>
+
+				<ComponentGroupRef Id="yui" />
+
+			</Feature>
+
+			<Feature
+				Level="5"
+				Id="Ruby"
+				Absent="allow"
+				Title="Ruby Sass"
+				InstallDefault="source"
+				Description="Install ruby sass and a full ruby stack (libsass alternative)."
+			>
+
+				<ComponentGroupRef Id="ruby" />
+
+			</Feature>
+
+			<Feature
+				Level="5"
+				Id="Examples"
+				Absent="allow"
+				Title="Examples"
+				InstallDefault="source"
+				Description="Some real world examples to show case various features."
+			>
+
+				<ComponentGroupRef Id="example" />
+
+			</Feature>
+
+		</Feature>
 
 		<!-- Include the Custom Actions library - currently just to send notification of Environment changes. -->
-    <Binary Id="SetupCustomActionsCPP.dll" SourceFile="..\res\64\SetupCustomActionsCPP.dll" />
+		<Binary Id="SetupCustomActionsCPP.dll" SourceFile="..\..\wix\RefreshEnvAction\bin\release\RefreshEnv.dll" />
 
-    <!-- Define the custom action to Refresh Environment Variables. -->
-    <CustomAction Id="RefreshEnvironmentVariables"
-                     Return="check"
-                     Execute="immediate"
-                     BinaryKey="SetupCustomActionsCPP.dll"
-                     DllEntry="RefreshEnvironmentVariables" />
+		<!-- Define the custom action to Refresh Environment Variables. -->
+		<CustomAction Id="RefreshEnvironmentVariables"
+		              Return="check"
+		              Execute="immediate"
+		              BinaryKey="SetupCustomActionsCPP.dll"
+		              DllEntry="RefreshEnvironmentVariables"
+		/>
 
-    <!-- Now schedule the custom action to happen after InstallFinalize. -->
-    <InstallExecuteSequence>
-        <Custom Action="RefreshEnvironmentVariables" After="InstallFinalize"/>
-    </InstallExecuteSequence>
+		<!-- Now schedule the custom action to happen after InstallFinalize. -->
+		<InstallExecuteSequence>
+			<Custom Action="RefreshEnvironmentVariables" After="InstallFinalize"/>
+		</InstallExecuteSequence>
 
+		<!-- <Icon Id="Webmerge.exe" SourceFile="Webmerge.exe" /> -->
 
-    <UIRef Id="WixUI_Mondo" />
-    <UIRef Id="WixUI_ErrorProgressText" />
+		<!-- load user interface -->
+		<UIRef Id="WixUI_Advanced" />
+		<!-- show custom error messages -->
+		<UIRef Id="WixUI_ErrorProgressText" />
 
+		<!-- add some custom graphics to the installer ui -->
+		<WixVariable Id="WixUIBannerBmp" Value="..\..\wix\theme\banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="..\..\wix\theme\dialog.bmp" />
 
-    <!-- <Icon Id="Webmerge10.exe" SourceFile="Webmerge.exe" /> -->
+		<!-- specify the licence file (use re-formated gpl v3 rtf) -->
+		<WixVariable Id="WixUILicenseRtf" Value="..\..\wix\license\GPLv3.rtf" />
 
-  </Product>
+		<!--
+		<WixVariable Id="WixUIUpIco" Value="..\..\wix\theme\up.ico" />
+		<WixVariable Id="WixUINewIco" Value="..\..\wix\theme\new.ico" />
+		<WixVariable Id="WixUIInfoIco" Value="..\..\wix\theme\information.ico" />
+		<WixVariable Id="WixUIExclamationIco" Value="..\..\wix\theme\exclamation.ico" />
+		-->
+
+	</Product>
+
 </Wix>
