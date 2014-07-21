@@ -52,5 +52,3 @@ goto end
 
 cd ..
 cd ..
-
-pause
