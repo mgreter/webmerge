@@ -115,7 +115,7 @@ sub hasParent { $_[0]->parent eq $_[1] || $_[0]->parent->hasParent($_[1]) }
 # find children by tagname
 ################################################################################
 
-sub find { wa grep { $_[1] eq "*" or lc ($_->tag) eq lc ($_[1]) } $_[0]->children }
+sub find { wa grep { $_[1] eq "*" or lc ($_->tag) =~ m/$_[1]/i } $_[0]->children }
 
 ################################################################################
 # collect children by tagname (recursive)
