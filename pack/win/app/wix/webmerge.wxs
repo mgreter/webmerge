@@ -66,12 +66,10 @@
 			<Directory Id="$(var.PlatformProgramFilesFolder)">
 				<Directory Id="APPLICATIONFOLDER" Name="$(var.InstallName)">
 
-					<!--
 					<Component Id="HelpExecutable" Guid="65A7A8BA-9AE1-4612-AE74-F4AFE5F5057A">
-					<File Id="WebmergeCMD" Name="webmerge.cmd" Source="..\..\..\..\webmerge.cmd"></File>
-					<File Id="WebmergeBAT" Name="webmerge.bat" Source="..\..\..\..\webmerge.bat"></File>
+						<File Id="WebmergeCMD" Name="webmerge.cmd" Source="..\..\..\..\webmerge.cmd"></File>
+						<File Id="WebmergeBAT" Name="webmerge.bat" Source="..\..\..\..\webmerge.bat"></File>
 					</Component>
-					-->
 
 					<!-- create vendor directories -->
 					<Directory Id="ExampleFolder" Name="example">
@@ -148,6 +146,7 @@
 				Description="Main executable bundled with perl interpreter and required modules."
 			>
 
+				<ComponentRef Id="HelpExecutable" />
 				<ComponentRef Id="MainExecutable" />
 				<!-- <ComponentRef Id="ProgramMenuDir" /> -->
 
