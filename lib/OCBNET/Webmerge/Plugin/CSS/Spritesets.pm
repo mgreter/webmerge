@@ -83,7 +83,7 @@ my $config = { 'debug' => 0 };
 	$css->debug if $config->{'debug'};
 
 	# optimize spriteset images
-	if ($config->{'optimize'} || 1)
+	if ($config->{'optimize'})
 	{
 		# call all possible optimizers
 		foreach my $program (keys %{$written})
