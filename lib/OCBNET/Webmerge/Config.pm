@@ -52,7 +52,7 @@ sub incdir { $_[0]->confdir }
 sub type { 'CONFIG' }
 
 ################################################################################
-use base 'OCBNET::Webmerge::Runner';
+# use base 'OCBNET::Webmerge::Runner';
 ################################################################################
 require OCBNET::Webmerge::Runner;
 ################################################################################
@@ -72,7 +72,7 @@ sub run
 	push @blocks, $config unless scalar(@blocks) + scalar(@ARGV);
 
 	# execute to runners (for blocks)
-	$config->SUPER::run(@blocks);
+	OCBNET::Webmerge::Runner::run(@blocks);
 
 	# commit all changes
 	$config->commit(1);
