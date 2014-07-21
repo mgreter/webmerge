@@ -49,9 +49,10 @@ use List::MoreUtils qw(uniq);
 
 sub run
 {
+	# shift if scalar(@_) > 1;
 	# run all runners that are enabled by settings
-	foreach my $runner (sort { $a->[2] - $b->[2] } @runners)
-	{ foreach (uniq @_) { &{$runner->[1]}($_) if $_->setting($runner->[0]) } }
+	foreach my $runner (uniq sort { $a->[2] - $b->[2] } @runners)
+	{ foreach (uniq @_) { &{$runner->[1]}($_) if $_->setting($runner->[0]); } }
 }
 
 ################################################################################
@@ -59,6 +60,7 @@ sub run
 ################################################################################
 
 use OCBNET::Webmerge::Runner::Execute;
+use OCBNET::Webmerge::Runner::Webdump;
 use OCBNET::Webmerge::Runner::Checksum;
 use OCBNET::Webmerge::Runner::Watchdog;
 use OCBNET::Webmerge::Runner::Webserver;
