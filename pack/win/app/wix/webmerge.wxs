@@ -20,9 +20,9 @@
 			Keywords="Installer"
 			InstallScope="perMachine"
 			Platform="$(var.Platform)"
-			Description="$(var.ProductName)"
-			Comments="Frontend Asset Manager"
 			Manufacturer="Marcel Greter"
+			Description="$(var.ProductDescription)"
+			Comments="Installer for Webmerge $(var.Version)"
 			InstallerVersion="200"
 			SummaryCodepage="1252"
 			Languages="1033"
@@ -42,8 +42,25 @@
 		<WixVariable Id="WixUISupportPerUser" Value="1" />
 		<WixVariable Id="WixUISupportPerMachine" Value="1" />
 
+		<Property Id="APPLICATIONFOLDER" Secure="yes">
+			<RegistrySearch Id="FindInstallLocation"
+				Type="raw"
+				Root="HKLM"
+				Win64="$(var.Win64)"
+				Name="InstallLocation"
+				Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[WIX_UPGRADE_DETECTED]"
+			/>
+		</Property>
+
 		<Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 		<Property Id="ApplicationFolderName" Value="$(var.InstallName)" />
+
+		<SetDirectory
+			Id="APPLICATIONFOLDER"
+			Value="[ProgramFiles64Folder][ApplicationFolderName]"
+		>
+			APPLICATIONFOLDER=""
+		</SetDirectory>
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="$(var.PlatformProgramFilesFolder)">
@@ -89,13 +106,14 @@
 					<Component Id="PathPerMachine" Guid="65A7A8BA-F469-4B8B-9B89-1ED69A97CF02" KeyPath="yes">
 						<Condition>ALLUSERS=1 OR (ALLUSERS=2 AND Privileged)</Condition>
 						<Environment Id="PATH" Name="PATH" Value="[BINDIR]" Permanent="no" Part="last" Action="set" System="yes" />
-						</Component>
+					</Component>
 
 				</Directory>
 				<!-- EO InstallDir -->
 			</Directory>
 			<!-- EO ProgramDir -->
 
+			<!--
 			<Directory Id="ProgramMenuFolder" Name="Programs">
 				<Directory Id="ProgramMenuDir" Name="Webmerge">
 					<Component Id="ProgramMenuDir" Guid="65A7A8BA-0C9D-4F8F-A3E4-F9CCD8D8E445">
@@ -106,6 +124,7 @@
 			</Directory>
 
 			<Directory Id="DesktopFolder" Name="Desktop" />
+			-->
 
 		</Directory>
 		<!-- EO SourceDir -->
@@ -130,7 +149,7 @@
 			>
 
 				<ComponentRef Id="MainExecutable" />
-				<ComponentRef Id="ProgramMenuDir" />
+				<!-- <ComponentRef Id="ProgramMenuDir" /> -->
 
 			</Feature>
 
@@ -281,8 +300,30 @@
 		              DllEntry="RefreshEnvironmentVariables"
 		/>
 
-		<!-- Now schedule the custom action to happen after InstallFinalize. -->
+		<!-- fix a bug in advanced install ui -->
+		<!-- http://stackoverflow.com/questions/5479790 -->
+		<CustomAction
+			Id="OverwriteWixSetDefaultPerMachineFolder"
+			Property="WixPerMachineFolder"
+			Value="[APPLICATIONFOLDER]"
+			Execute="immediate"
+		/>
+
+		<CustomAction
+			Id="SetARPINSTALLLOCATION"
+			Property="ARPINSTALLLOCATION"
+			Value="[APPLICATIONFOLDER]"
+		/>
+
+		<!-- Schedule custom actions on ui -->
+		<InstallUISequence>
+			<Custom Action="OverwriteWixSetDefaultPerMachineFolder" After="WixSetDefaultPerMachineFolder" />
+		</InstallUISequence>
+
+		<!-- Schedule custom actions on install -->
 		<InstallExecuteSequence>
+			<Custom Action="OverwriteWixSetDefaultPerMachineFolder" After="WixSetDefaultPerMachineFolder" />
+			<Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"/>
 			<Custom Action="RefreshEnvironmentVariables" After="InstallFinalize"/>
 		</InstallExecuteSequence>
 

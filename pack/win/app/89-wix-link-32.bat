@@ -8,7 +8,24 @@ call set gitversion=%%gitversion:v=%%
 
 cd 32
 
-"%WIX%\bin\light.exe" -nologo -b vendor\yahoo\yui -b vendor\google\closure -b example -b res -b conf -b utils -b gm -b perl -b ruby -b jre7 -ext WixBalExtension -ext WixUIExtension -ext WixUtilExtension -sw1076 -dGitVersion=%gitversion% -o webmerge-x32.msi ^
-                       wix\gm.wixobj wix\perl.wixobj wix\ruby.wixobj wix\jre7.wixobj wix\utils.wixobj wix\res.wixobj wix\conf.wixobj wix\yui.wixobj wix\closure.wixobj wix\example.wixobj wix\webmerge.wixobj
+"%WIX%\bin\light.exe" ^
+-nologo -sw1076 ^
+-dPlatform="x86" ^
+-dGitVersion=%gitversion% ^
+-b gm wix\gm.wixobj ^
+-b res wix\res.wixobj ^
+-b perl wix\perl.wixobj ^
+-b ruby wix\ruby.wixobj ^
+-b jre7 wix\jre7.wixobj ^
+-b conf wix\conf.wixobj ^
+-b utils wix\utils.wixobj ^
+-b example wix\example.wixobj ^
+-b vendor\yahoo\yui wix\yui.wixobj ^
+-b vendor\google\closure wix\closure.wixobj ^
+wix\webmerge.wixobj ^
+-ext WixBalExtension ^
+-ext WixUIExtension ^
+-ext WixUtilExtension ^
+-o webmerge-x32.msi
 
 cd ..

@@ -19,11 +19,13 @@
 		<?define Win64 = "yes" ?>
 		<?define Executable = "64\webmerge.exe" ?>
 		<?define ProductName = "Webmerge $(var.Version) (64 bit)" ?>
+		<?define ProductDescription = "Webmerge $(var.Version) x64" ?>
 		<?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
 	<?else ?>
 		<?define Win64 = "no" ?>
 		<?define Executable = "32\webmerge.exe" ?>
 		<?define ProductName = "Webmerge $(var.Version) (32 bit)" ?>
+		<?define ProductDescription = "Webmerge $(var.Version) x86" ?>
 		<?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
 	<?endif ?>
 
