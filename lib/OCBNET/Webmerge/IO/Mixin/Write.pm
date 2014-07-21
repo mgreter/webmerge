@@ -75,8 +75,8 @@ sub write
 
 		# check if the new data matches the previous commit
 		if (${$data} eq ${${*$atomic}{'io_atomicfile_data'}})
-		{ warn " rewriting ", $file->dpath, "\n"; }
-		else { die " rewriting ", $file->dpath, "\n"; }
+		{ warn "warning: rewriting ", $file->dpath, "\n"; }
+		else { die "error: rewriting ", $file->dpath, "\n"; }
 
 	}
 	# check if file has been read
@@ -85,8 +85,8 @@ sub write
 
 		# check if the new data matches the previous commit
 		if (${$data} eq ${$file->{'readed'}})
-		{ warn "overwriting ", $file->dpath, "\n"; }
-		else { die "overwriting ", $file->dpath, "\n"; }
+		{ warn "warning: overwriting ", $file->dpath, "\n"; }
+		else { die "error: overwriting ", $file->dpath, "\n"; }
 
 	}
 	# write to the disk
