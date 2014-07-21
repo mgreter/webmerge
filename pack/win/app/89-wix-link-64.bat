@@ -26,6 +26,6 @@ wix\webmerge.wixobj ^
 -ext WixBalExtension ^
 -ext WixUIExtension ^
 -ext WixUtilExtension ^
--o webmerge-x64.msi
+-o webmerge-%gitversion%-x64.msi
 
 cd ..

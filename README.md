@@ -2,6 +2,10 @@ Webmerge
 ========
 Asset Manager for Front End Development (JS, CSS, Images)
 
+The code has undergone a major re-factoring and this README
+hasn't been updated yet to reflect all the latest changes
+and features in the master branch!
+
 Features
 ========
 - Merge, join and optimize SCSS, CSS and JavaScript files
@@ -45,12 +49,22 @@ More ideas
 Installer for windows (alpha)
 =======================================
 
+There is a new MSI installer which will probably become the
+default in the future. I did not yet figure out how I want
+to handle additional or user defined plugins.
+
+- http://webmerge.ocbnet.ch/installer/webmerge-master-x86.msi
+- http://webmerge.ocbnet.ch/installer/webmerge-master-x64.msi
+
+Installer for windows (beta)
+=======================================
+
 Should download all dependencies and install it locally
 for Webmerge. Webmerge will be added to the global path.
 This is still experimental and may not work as advertised!
 
-- http://webmerge.ocbnet.ch/installer/webmerge-webserver-x32.exe
-- http://webmerge.ocbnet.ch/installer/webmerge-webserver-x64.exe
+- http://webmerge.ocbnet.ch/installer/webmerge-master-x32.exe
+- http://webmerge.ocbnet.ch/installer/webmerge-master-x64.exe
 
 Installing on Windows
 =====================
