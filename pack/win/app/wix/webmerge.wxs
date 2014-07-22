@@ -289,7 +289,7 @@
 		</Feature>
 
 		<!-- Include the Custom Actions library - currently just to send notification of Environment changes. -->
-		<Binary Id="SetupCustomActionsCPP.dll" SourceFile="..\..\wix\RefreshEnvAction\bin\release\RefreshEnv.dll" />
+		<Binary Id="SetupCustomActionsCPP.dll" SourceFile="..\..\wix\RefreshEnv.dll" />
 
 		<!-- Define the custom action to Refresh Environment Variables. -->
 		<CustomAction Id="RefreshEnvironmentVariables"
