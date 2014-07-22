@@ -21,7 +21,7 @@ sub signature {}
 ################################################################################
 # write scalar atomic
 ################################################################################
-use IO::AtomicFile qw();
+use OCBNET::IO::Atomic qw();
 ################################################################################
 
 sub write
@@ -94,7 +94,7 @@ sub write
 	{
 
 		# create a new atomic instance
-		$atomic = IO::AtomicFile->new;
+		$atomic = OCBNET::IO::Atomic->new;
 
 		# add specific webmerge suffix to temp files
 		${*$atomic}{'io_atomicfile_suffix'} = '.webmerge';

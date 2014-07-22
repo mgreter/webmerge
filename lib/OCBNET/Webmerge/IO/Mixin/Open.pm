@@ -105,7 +105,7 @@ sub close
 	return 0 if tell($file->{'handle'}) == -1;
 
 	# call function to close
-	close($file->{'handle'});
+	$file->{'handle'}->close;
 
 }
 

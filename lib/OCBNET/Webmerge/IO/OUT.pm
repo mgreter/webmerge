@@ -47,10 +47,7 @@ sub parsefile { File::Basename::basename($_[0]->path) }
 # implement additional methods
 ################################################################################
 
-sub commit {}
-sub revert {}
 sub collect {}
-# sub process {}
 sub processors {}
 
 ################################################################################

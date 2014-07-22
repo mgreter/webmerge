@@ -40,8 +40,6 @@ sub sheet { shift->parent->sheet(@_) }
 # implement additional methods
 ################################################################################
 
-sub commit {}
-sub revert {}
 sub collect {}
 sub processors { }
 

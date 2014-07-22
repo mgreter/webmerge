@@ -82,7 +82,7 @@ sub files
 
 		# support multiple files via glob
 		push @files, grep { -f $_ }
-		             map  { rel2abs $_ }
+		             map  { rel2abs ($_, $CWD) }
 		             sort ( bsd_glob($pattern) );
 
 		# add better error handling

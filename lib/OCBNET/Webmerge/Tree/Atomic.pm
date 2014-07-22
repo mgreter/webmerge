@@ -15,8 +15,6 @@ use base qw(OCBNET::Webmerge::Tree::Node);
 
 use strict;
 use warnings;
-1;
-__DATA__
 
 ################################################################################
 # object mixin initialisation

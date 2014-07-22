@@ -164,6 +164,7 @@ print "Hello child\n";
 				my $type = $merge->{'type'};
 
 $merge->execute;
+$merge->commit(1);
 
 				# create new config scope
 #				my $scope = $config->stage;
