@@ -53,8 +53,8 @@ There is a new MSI installer which will probably become the
 default in the future. I did not yet figure out how I want
 to handle additional or user defined plugins.
 
-- http://webmerge.ocbnet.ch/installer/webmerge-master-x86.msi
-- http://webmerge.ocbnet.ch/installer/webmerge-master-x64.msi
+- http://webmerge.ocbnet.ch/installer/webmerge-latest-x86.msi
+- http://webmerge.ocbnet.ch/installer/webmerge-latest-x64.msi
 
 Installer for windows (beta)
 =======================================
