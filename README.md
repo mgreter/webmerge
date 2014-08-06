@@ -4,7 +4,8 @@ Asset Manager for Front End Development (JS, CSS, Images)
 
 The code has undergone a major re-factoring and this README
 hasn't been updated yet to reflect all the latest changes
-and features in the master branch!
+and features in the master branch! The master branch for the
+0.14 release is probably not as stable as the 0.13 releases!
 
 Features
 ========
@@ -19,6 +20,16 @@ Features
 - File watcher to recompile automatically when a source file has changed
 - Create checksums and embedder code to auto embed the best assets for UA
 
+Source-Maps
+===========
+Since version 0.14.0 support for source maps (V3) has been added. Webmerge
+tries to preserve as much information during processing as possible. If
+you join multiple files together and run it through Google Closure compiler,
+the resulting source map should point back to the originaly used files. This
+is also supported if you chain multiple processors. Although only if the
+processors return usefull source mapping information (more tests needed).
+Currently the default internal css minfier does not support source maps!
+
 To Do
 =====
 - Write documentation
@@ -26,13 +37,12 @@ To Do
 - Add sass2scss converter script
 - Prepare code for v1.0.0 release
 - Update installation docs in readme
-- Handle source maps for css and js
 - Implement @license header handling
 - Test more edge cases (specially css parser)
 - Invoke processors according to file extensions
 - Take advantage of the new css parser in OCBNET::CSS3
-- Refactor config XML handling (execute blocks in order)
-- Refactor config scope handling (relation to XML blocks)
+- Implement correct source map generating for css minifier
+- Add  unit testing and code coverage for css and js (prepared)
 
 
 More ideas
