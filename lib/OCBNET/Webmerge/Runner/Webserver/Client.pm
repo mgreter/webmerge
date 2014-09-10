@@ -9,6 +9,8 @@ use Carp;
 use strict;
 use warnings;
 use CGI::SHTML;
+use File::chdir;
+use List::MoreUtils qw(uniq);
 
 ###################################################################################################
 
@@ -41,7 +43,7 @@ use Carp ();
 
 use File::Spec::Functions;
 use File::Basename qw(dirname);
-use File::Spec::Functions qw(rel2abs);
+use File::Spec::Functions qw(rel2abs abs2rel);
 
 my $CRLF = "\015\012";   # "\r\n" is not portable
 my $HTTP_1_0 = _http_version("HTTP/1.0");
@@ -546,7 +548,7 @@ sub canRead
 			$ENV{'SERVER_PORT'} = $sock->sockport;
 			$ENV{'HTTP_HOST'} = $req->header('Host');
 			$ENV{'HOSTNAME'} = $req->header('Host');
-			$ENV{'DOCUMENT_ROOT'} = canonpath($config->webroot);
+			$ENV{'DOCUMENT_ROOT'} = canonpath($root);
 			$CGI::SHTML::ROOTDIR = $ENV{'DOCUMENT_ROOT'};
 			# local $CWD = $file->workroot;
 			chdir dirname $file;
@@ -572,6 +574,9 @@ sub canRead
 			$response->header("Content-Length" => $size) if defined $size;
 			$sock->send_response( $response );
 
+		}
+		elsif (-d $file) {
+			$sock->send_dir(catfile($config->webroot, $path));
 		}
 		elsif (-e $file)
 		{
@@ -792,22 +797,47 @@ $self->stream($fh);
 sub send_dir
 {
     my($self, $dir) = @_;
-    $self->send_error(RC_NOT_FOUND) unless -d $dir;
     # $self->send_error(RC_NOT_IMPLEMENTED);
 
 	my $content = "<!doctype html><html><head><title>Directory Listening</title><style>BODY,UL,LI{ font-family: verdana; }</style></head><body><h1>".$dir."</h1>";
-	opendir(my $dh, $dir);
-	if ($dh)
+
+	my $client = ${*$self}{'io_client'};
+	my $server = ${*$self}{'io_server'};
+
+	# get resource roots from config (too tight coupled!)
+	my $roots = $server->{'config'}->config('webresources');
+
+	# get webroot from config (too tight coupled!)
+	my $webroot = $server->{'config'}->webroot;
+
+	# make sure that we have an array reference
+	$roots = [$roots || '.'] if (ref $roots ne "ARRAY");
+
+my @entries;
+
+	# loop each root until found
+	foreach my $root (@{$roots})
 	{
+		# relative roots are under webroot
+		$root = rel2abs($root, $webroot);
+		# path is always relative to root
+		my $file = rel2abs(abs2rel($dir, $webroot), $root);
+
+		opendir(my $dh, $file);
+		if ($dh)
+		{
+
+			push @entries, readdir($dh)
+		}
+
+	}
+
+	@entries = uniq @entries;
+
 		$content .= "<ul>";
 		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', '..' unless $dir =~ m/^\/*$/;
-		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach map { -d join('/', $dir, $_) ? $_ . '/' : $_  } grep { !m/^\.{1,2}$/ } readdir($dh);
+		$content .= sprintf '<li><a href="%1$s">%1$s</a></li>', $_ foreach map { -d join('/', $dir, $_) ? $_ . '/' : $_  } grep { !m/^\.{1,2}$/ } @entries;
 		$content .= "</ul>";
-	}
-	else
-	{
-		$content .= "error opening directory: $!";
-	}
 
 	$content .= "</body></html>";
 

@@ -143,7 +143,7 @@ sub run
 # resolve a uri to an actual file
 # lookup in various resource dirs
 ###################################################################################################
-use File::Spec::Functions qw(rel2abs);
+use File::Spec::Functions qw(rel2abs catfile);
 ###################################################################################################
 
 sub webresolve
@@ -176,7 +176,7 @@ sub webresolve
 	}
 
 	# return default result
-	return ($webroot, $path);
+	return ($webroot, catfile($webroot, $path));
 
 }
 
