@@ -2,7 +2,7 @@
 # Copyright 2014 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ################################################################################
-package OCBNET::Webmerge::XML::Config::Scalar;
+package OCBNET::Webmerge::XML::Config::Array;
 ################################################################################
 use base qw(OCBNET::Webmerge::XML::Config);
 ################################################################################
@@ -15,13 +15,7 @@ use warnings;
 ################################################################################
 
 # return node type
-sub type { 'CONFVAR' }
-
-################################################################################
-# error messages
-################################################################################
-
-my $err_nested = "config tags do not allow any nested tags\n";
+sub type { 'CONFARR' }
 
 ################################################################################
 # webmerge xml parser implementation
@@ -33,22 +27,11 @@ sub started
 	my ($node, $webmerge) = @_;
 	# push node to the stack array
 	$node->SUPER::started($webmerge);
-	# check for operating modus
-	if (exists $webmerge->{'array'})
-	{
-		# append a new slot on to the array
-		push @{$webmerge->{'array'}}, undef;
-		# connect scalar by key of the connected array to parser
-		$webmerge->{'scalar'} = \ $webmerge->{'array'}->[-1];
-	}
-	else
-	{
-		# nested config tags are not supported
-		die $err_nested if exists $webmerge->{'scalar'};
-		# connect scalar by key of the connected hash to parser
-		$webmerge->{'scalar'} = \ $webmerge->{'config'}->{$node->tag};
-	}
-
+	# create a new empty array for additional scalars
+	unless (exists $webmerge->{'config'}->{$node->tag})
+	{ $webmerge->{'config'}->{$node->tag} = [] }
+	# connect scalar by key of the connected hash to parser
+	$webmerge->{'array'} = $webmerge->{'config'}->{$node->tag};
 }
 
 sub ended
@@ -56,11 +39,17 @@ sub ended
 	# get arguments from parser
 	my ($node, $webmerge) = @_;
 	# store data into the connected scalar
-	${$webmerge->{'scalar'}} = $node->{'data'};
-	# unconnect the config scalar
-	delete $webmerge->{'scalar'};
+	# ${$webmerge->{'scalar'}} = $node->{'data'};
+	# unconnect the config array
+	delete $webmerge->{'array'};
 	# pop node off the stack array
 	$node->SUPER::ended($webmerge);
+}
+
+sub classByTag
+{
+	# only allow scalars inside arrays (so far)
+	'OCBNET::Webmerge::XML::Config::Scalar'
 }
 
 ################################################################################

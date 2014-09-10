@@ -12,6 +12,7 @@ use base qw(OCBNET::Webmerge::Include);
 use base qw(OCBNET::Webmerge::XML::Tree::Node);
 ################################################################################
 require OCBNET::Webmerge::XML::Config::Scalar;
+require OCBNET::Webmerge::XML::Config::Array;
 ################################################################################
 
 use strict;
@@ -88,10 +89,21 @@ sub ended
 }
 
 ################################################################################
-# anything below is a scalar (fills scope config automatically)
+# so far we use hardcoded config tags for anything else than scalars
+# will need to make this configurable to allow plugins to use arrays
 ################################################################################
 
-sub classByTag { 'OCBNET::Webmerge::XML::Config::Scalar' }
+sub classByTag
+{
+	if ($_[1] eq "webresources")
+	{
+		return 'OCBNET::Webmerge::XML::Config::Array'
+	}
+	else
+	{
+		return 'OCBNET::Webmerge::XML::Config::Scalar'
+	}
+}
 
 ################################################################################
 ################################################################################
