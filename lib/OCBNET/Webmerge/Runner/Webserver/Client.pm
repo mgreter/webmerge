@@ -477,10 +477,11 @@ sub canRead
 		my $path = canonpath(uri_unescape($r->uri->path));
 		my $config = $server->{'config'};
 
-		my $root = canonpath($config->webroot);
-		my $file = canonpath(catfile($root, $path));
+		my ($root, $file) = $server->webresolve($path);
+
 		die "hack attempt" unless $file =~ m /^\Q$root\E/;
 		print $r->method, " ", $wwwpath, "\n";
+
 		if ($wwwpath eq '/dump/request')
 		{
 			my $response = HTTP::Response->new( 200 );

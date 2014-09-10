@@ -25,9 +25,9 @@ sub new
 	my ($pkg, $server, $config, @args) = @_;
 
 	# apply default if not specified
-	unless ($config->{'webport'})
+	unless ($config->setting('webport'))
 	{ $config->{'webport'} = 8000; }
-	my $port = $config->{'webport'};
+	my $port = $config->setting('webport');
 
 	# print a debug message to the console
 	print "listening on port ", $port, "\n";

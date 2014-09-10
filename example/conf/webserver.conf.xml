@@ -11,8 +11,17 @@
 		<!-- default is relative to the config file -->
 		<webroot>{CONF}/../webserver</webroot>
 
+		<!-- use multiple resource directories -->
+		<webresources>
+			<root>cgi-bin</root>
+			<root>htdocs</root>
+		</webresources>
+
 		<!-- define a current working directory -->
 		<directory>{WWW}</directory>
+
+		<!-- port to listen to -->
+		<webport>4000</webport>
 
 		<!-- maximum size to inline data -->
 		<inlinedatamax>300KB</inlinedatamax>

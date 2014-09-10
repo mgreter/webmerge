@@ -139,6 +139,46 @@ sub run
 
 }
 
+###################################################################################################
+# resolve a uri to an actual file
+# lookup in various resource dirs
+###################################################################################################
+use File::Spec::Functions qw(rel2abs);
+###################################################################################################
+
+sub webresolve
+{
+
+	# get input arguments
+	my ($server, $path) = @_;
+
+	# get resource roots from config (too tight coupled!)
+	my $roots = $server->{'config'}->config('webresources');
+
+	# get webroot from config (too tight coupled!)
+	my $webroot = $server->{'config'}->webroot;
+
+	# make sure that we have an array reference
+	$roots = [$roots || '.'] if (ref $roots ne "ARRAY");
+
+	# die with a fatal error if the api is not used correctly
+	die "relative path given for webresolve" if ! $path =~ m/^[\/\\]/;
+
+	# loop each root until found
+	foreach my $root (@{$roots})
+	{
+		# relative roots are under webroot
+		$root = rel2abs($root, $webroot);
+		# path is always relative to root
+		my $file = rel2abs('./' . $path, $root);
+		# return if the path actually exists
+		return ($root, $file) if -e $file;
+	}
+
+	# return default result
+	return ($webroot, $path);
+
+}
 
 ###################################################################################################
 ###################################################################################################
