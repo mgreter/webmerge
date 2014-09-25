@@ -14,6 +14,9 @@ use base qw(OCBNET::Webmerge::XML::Tree::Node);
 require OCBNET::Webmerge::XML::Config::Scalar;
 require OCBNET::Webmerge::XML::Config::Array;
 ################################################################################
+require OCBNET::Webmerge::XML::Config::XML::Object;
+require OCBNET::Webmerge::XML::Config::XML::Array;
+################################################################################
 
 use strict;
 use warnings;
@@ -29,6 +32,12 @@ $OCBNET::Webmerge::XML::parser{'config'} = __PACKAGE__;
 ################################################################################
 
 my $ns = 'OCBNET::Webmerge::Plugin';
+
+################################################################################
+# base hook
+################################################################################
+
+our %classes;
 
 ################################################################################
 # accessor methods
@@ -95,14 +104,8 @@ sub ended
 
 sub classByTag
 {
-	if ($_[1] eq "webresources")
-	{
-		return 'OCBNET::Webmerge::XML::Config::Array'
-	}
-	else
-	{
-		return 'OCBNET::Webmerge::XML::Config::Scalar'
-	}
+	return $classes{$_[1]} if exists $classes{$_[1]};
+	return 'OCBNET::Webmerge::XML::Config::Scalar'
 }
 
 ################################################################################

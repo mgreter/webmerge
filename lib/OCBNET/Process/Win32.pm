@@ -41,7 +41,7 @@ sub start
 		my $proc, # container
 		$_[0]->cmd, # appname
 		# fixes a bug (IMO)
-		' ' .  $_[0]->args, # cmdline
+		' ' . $_[0]->args, # cmdline
 		0, # iflags
 		$_[0]->prio, # cflags
 		$_[0]->cwd # curdir

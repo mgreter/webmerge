@@ -12,19 +12,67 @@ use warnings;
 # implement webserver
 ################################################################################
 
+my %apps = (
+	'file' => 'OCBNET::Plack::App::File',
+	'echo' => 'OCBNET::Plack::App::Echo',
+	'proxy' => 'OCBNET::Plack::App::Proxy',
+	'directory' => 'OCBNET::Plack::App::Directory',
+);
+
 sub webserver
 {
-
+use File::chdir;
 	# create the config
 	my ($context) = @_;
+use Data::Dumper;
+	require Plack::Builder;
+	require Plack::App::URLMap;
+	require Plack::App::Proxy;
+	require Plack::App::Directory;
 
-	# load the webserver modules, instantiate and run
-	require OCBNET::Webmerge::Runner::Webserver::Server;
+	require OCBNET::Plack::App::SHTML;
+	require OCBNET::Plack::App::File;
+	require OCBNET::Plack::App::Echo;
+	require OCBNET::Plack::App::Proxy;
+	require OCBNET::Plack::App::Directory;
 
-	OCBNET::Webmerge::Runner::Webserver::Server->new($context)->run();
+	# $CWD = $context->webroot;
 
-	# webserver should never return I guess?
-	die "fatal: webserver should have exited";
+	my $mounts = $context->config('webmounts');
+	my $roots = $context->config('webresources');
+	my $handlers = $context->config('webhandlers');
+
+
+use File::Spec::Functions qw(rel2abs);
+
+	@{$roots} = map {
+
+		rel2abs ($_, $context->webroot)
+
+	} @{$roots};
+
+	my $urlmap = Plack::App::URLMap->new;
+
+	$urlmap->map('/' => OCBNET::Plack::App::Directory->new({ roots => $roots })->to_app);
+
+	foreach my $mount (@{$mounts || []})
+	{
+
+		my $path = $mount->{'data'};
+		my $type = $mount->{'attr'}->{'type'};
+		die "unknow type" unless exists $apps{$type};
+		my $app = $apps{$type}->new($mount->{'attr'});
+		$urlmap->map($path, $app);
+	}
+
+	my $app = $urlmap->to_app;
+
+	require Plack::Runner;
+	my $runner = Plack::Runner->new;
+	# $runner->parse_options('--port', '8000');
+	die $runner->run($app);
+	die "hasd";
+	return;
 
 }
 
@@ -41,6 +89,14 @@ use OCBNET::Webmerge qw(options);
 ################################################################################
 
 options('webport', '=i', my $webport);
+
+################################################################################
+
+my $classes = \ %OCBNET::Webmerge::XML::Config::classes;
+
+$classes->{'webmounts'} = 'OCBNET::Webmerge::XML::Config::XML::Array';
+$classes->{'webhandlers'} = 'OCBNET::Webmerge::XML::Config::XML::Array';
+$classes->{'webresources'} = 'OCBNET::Webmerge::XML::Config::Array';
 
 ################################################################################
 ################################################################################

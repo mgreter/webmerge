@@ -50,16 +50,18 @@ my $HTTP_1_0 = _http_version("HTTP/1.0");
 my $HTTP_1_1 = _http_version("HTTP/1.1");
 
 ###################################################################################################
+# unwrap objects from socket GLOB
+###################################################################################################
 
-sub rbuf : lvalue { my $self = $_[0]; ${*$self}{'httpc_rbuf'} }
-sub wbuf : lvalue { my $self = $_[0]; ${*$self}{'httpc_wbuf'} }
-sub state : lvalue { my $self = $_[0]; ${*$self}{'httpc_state'} }
+sub rbuf : lvalue { ${*{$_[0]}}{'httpc_rbuf'} }
+sub wbuf : lvalue { ${*{$_[0]}}{'httpc_wbuf'} }
+sub state : lvalue { ${*{$_[0]}}{'httpc_state'} }
 
-sub client : lvalue { my $self = $_[0]; ${*$self}{'io_client'} }
-sub server : lvalue { my $self = $_[0]; ${*$self}{'io_server'} }
+sub client : lvalue { ${*{$_[0]}}{'io_client'} }
+sub server : lvalue { ${*{$_[0]}}{'io_server'} }
 
-sub proto : lvalue { my $self = $_[0]; ${*$self}{'io_proto'} }
-sub request : lvalue { my $self = $_[0]; ${*$self}{'io_request'} }
+sub proto : lvalue { ${*{$_[0]}}{'io_proto'} }
+sub request : lvalue { ${*{$_[0]}}{'io_request'} }
 
 ###################################################################################################
 
@@ -403,13 +405,19 @@ print "foobar\n";
 	return 1;
 };
 
+###################################################################################################
+# called from server when something is ready
+###################################################################################################
+
 sub canRead
 {
 
+	# get socket
 	my ($sock) = @_;
 
-	my $client = ${*$sock}{'io_client'};
-	my $server = ${*$sock}{'io_server'};
+	# unwrap objects from socket (GLOB)
+	my $client = $sock->client;
+	my $server = $sock->server;
 
 #	print "client can read now ", length($sock->rbuf), "\n";
 
@@ -537,7 +545,6 @@ sub canRead
 			$url .= ':' . $sock->sockport if ($sock->sockport ne 80);
 			# $url .= ':' . $config->{'webport'} if ($config->{'webport'} ne 80);
 			$sock->send_redirect($url . $r->uri->path.'/');
-
 		}
 		elsif (-d $file && -e join('/', $file, 'index.html'))
 		{ $file = join('/', $file, 'index.html'); }
@@ -713,16 +720,33 @@ sub send_redirect
     my($self, $loc, $status, $content) = @_;
     $status ||= RC_MOVED_PERMANENTLY;
     Carp::croak("Status '$status' is not redirect") unless is_redirect($status);
-    $self->send_basic_header($status);
+#    $self->send_basic_header($status);
     $loc = $HTTP::URI_CLASS->new($loc) unless ref($loc);
-    $self->print("Location: $loc$CRLF");
+
+		my $response = HTTP::Response->new( $status );
+		$response->header("Location" => $loc) if $loc;
+#		$response->header("Content-Encoding" => $ce) if $ce;
+
+
+
+#    $self->print("Location: $loc$CRLF");
     if ($content) {
-	my $ct = $content =~ /^\s*</ ? "text/html" : "text/plain";
-	$self->print("Content-Type: $ct$CRLF");
+				my $ct = $content =~ /^\s*</ ? "text/html" : "text/plain";
+			$response->header("Content-Type" => $ct);
     }
-    $self->print($CRLF);
-    $self->print($content) if $content && !$self->head_request;
-    $self->force_last_request;  # no use keeping the connection open
+
+$content = "wha" unless defined $content;
+
+if($content && !$self->head_request)
+{
+			$response->header("Content-Length" => length($content));
+			$response->content( $content );
+
+#    $self->print($content);
+}
+
+			$self->send_response( $response );
+#    $self->force_last_request;  # no use keeping the connection open
 }
 
 sub send_error

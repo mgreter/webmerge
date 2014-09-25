@@ -126,8 +126,13 @@ printing.  All of the work is actually done by C<ssi()>.
 
 my $rec = 0;
 
+sub parse_shtml_chunk { &parse_shtml }
+
 sub parse_shtml {
   my ($self, @lines) = @_;
+	return if scalar @_ < 2;
+	@lines = grep { defined } @lines;
+	return if scalar @lines == 0;
   map { chomp } @lines; my $line = join("\n", @lines);
   my @parts = split m/(<!--#.*?-->)/s, $line;
 
@@ -319,9 +324,9 @@ sub _vfile {
   if ($filename =~ m%^~(\w+)/(.*)$%) { $newname = "/home/$1/public_html/$2"; }
   elsif ( $filename =~ m%^[^/]% ) {
     my ($directory, $program) = $0 =~ m%^(.*)/(.*)$%;
-    $newname = "$ROOTDIR/$filename"
+    $newname = "$ENV{'DOCUMENT_ROOT'}/$filename"
   }
-  else { $newname = "$ROOTDIR/$filename" }
+  else { $newname = "$ENV{'DOCUMENT_ROOT'}/$filename" }
   $newname =~ s%/+%/%g;  # Remove doubled-up /'s
   $newname;
 }
@@ -368,15 +373,51 @@ sub _file {
 # Run a command and get the information about it out.  This isn't as
 # secure as we'd like it to be...
 sub _execute {
+use File::chdir;
   my ($self, $cmd) = @_;
-  foreach (qw( IFS CDPATH ENV BASH_ENV PATH ) ) { $ENV{$_} = ""; }
-	$ENV{'PATH'} = dirname $ENV{'ComSpec'} if (exists $ENV{'ComSpec'});
+  $cmd =~ s/\//\\/g if $^O eq 'MSWin32';
+  #warn "Hehe $CWD $cmd  ::  ", (-e $CWD."\\".$cmd ? "exists" : "na");
+local %ENV = %ENV;
+  # foreach (qw( IFS CDPATH ENV BASH_ENV PATH ) ) { $ENV{$_} = ""; }
+	# $ENV{'PATH'} = $ENV{'PATH'}.";".dirname $ENV{'ComSpec'} if (exists $ENV{'ComSpec'});
   my ($command) = $cmd =~ /^(.*)$/;	# Not particularly secure
-  open ( COMMAND, "$command |" ) or warn "Couldn't open $command\n";
+
+	use IPC::Run qw( run timeout );
+#	my ($in, $out, $err);
+#	run ["perl", $command], \$in, \$out, \$err, timeout( 10 ) or die "cat: $?";
+
+eval {
+  open ( COMMAND, "\"$command\" |" ) or warn "Couldn't open $command: $!\n";
+};
   my @list = <COMMAND>;
   close (COMMAND);
   map { chomp } @list;
-  return "" unless scalar(@list) > 0;	# Didn't return anything
+#use CGI::Compile;
+#use CGI::Emulate::PSGI;
+#my $sub = CGI::Compile->compile($command);
+#my $app = CGI::Emulate::PSGI->handler($sub);
+
+# use Plack::App::WrapCGI;
+# unless (fork) { exit 0 };
+# warn qx{$command};
+$! = undef;
+#my $app = Plack::App::WrapCGI->new(
+#	script => $command, execute => 1
+#)->to_app;
+
+
+
+#		my $res = $self->{'_self'};
+#		my $cgi = $self->{'_env'};
+
+#my $rv = $app->($self, $cgi);
+#warn "== $rv->[2]";
+#system $command;
+#my $data = join "", <STDIN>;
+#my @list = ("foo");
+#my @list = @{$rv->[2]}; # (qx{$command});
+
+  return undef unless scalar(@list) > 0;	# Didn't return anything
   # Take out the "Content-type:" part, if it's a CGI - note, THIS IS A HACK
   if ( scalar(@list) > 1 && $list[0] =~ /^Content-type: (.*)$/i) {
     shift @list;  shift @list;

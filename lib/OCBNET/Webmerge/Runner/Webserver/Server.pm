@@ -35,7 +35,7 @@ sub new
 	# bless into class
 	bless $server, $pkg;
 
-	# create listener socker for clients to connet
+	# create listener socket for clients to connect
 	# ToDo: Maybe move this out to a generic method
 	my $listener = OCBNET::Webmerge::Runner::Webserver::Listener->new($server, $config);
 
@@ -45,42 +45,51 @@ sub new
 	$server->captureRead($listener);
 	$server->captureError($listener);
 
-	# new server
+	# return object
 	return $server;
 
 }
 
 ###################################################################################################
-
-sub removeHandle
-{
-
-	my ($server, $handle) = @_;
-
-	$server->uncaptureRead($handle);
-	$server->uncaptureWrite($handle);
-	$server->uncaptureError($handle);
-
-	my $fd = $handle->fileno;
-
-	@{$server->{'fds'}} = grep {
-
-		$_->[0] ne $fd
-
-	} @{$server->{'fds'}};
-
-}
+# add a socket object to server
+###################################################################################################
 
 sub addHandle
 {
 
+	# get input arguments
 	my ($server, $handle) = @_;
 
-# print "add handle $handle\n";
-
+	# add handle to array (not sure why i prefetch fileno)
 	push(@{$server->{'fds'}}, [$handle->fileno, $handle]);
 
-	return $handle;
+	# return object
+	return $server;
+
+}
+
+###################################################################################################
+# remove a socket object from server
+###################################################################################################
+
+sub removeHandle
+{
+
+	# get input arguments
+	my ($server, $handle) = @_;
+
+	# revoke all interests
+	$server->uncaptureRead($handle);
+	$server->uncaptureWrite($handle);
+	$server->uncaptureError($handle);
+
+	# fetch file handle nr
+	my $fd = $handle->fileno;
+
+	# remove from array
+	@{$server->{'fds'}} =
+		grep { $_->[0] ne $fd }
+			@{$server->{'fds'}};
 
 }
 
@@ -99,8 +108,10 @@ sub uncaptureError { vec($_[0]->{'ebit'}, $_[1]->fileno, 1) = 0 }
 sub run
 {
 
+	# get arguments
 	my ($server) = @_;
 
+	# event loop
 	while (1)
 	{
 
@@ -109,19 +120,12 @@ sub run
 		my $wbit = $server->{'wbit'};
 		my $ebit = $server->{'ebit'};
 
-		# enable fd in vector table
-		# vec(my $rbit = '', $fileno, 1) = 1;
-
-		# print "going for select call\n";
-
 		# printf "in rbit %0*v8b\n", " ", $rbit;
 		# printf "in wbit %0*v8b\n", " ", $wbit;
 		# printf "in ebit %0*v8b\n", " ", $ebit;
 
 		# wait for handles with action
 		my $rv = select($rbit, $wbit, $ebit, 0.25);
-
-		# print "select returns $rv $!\n";
 
 		# get fd numbers array
 		my $fds = $server->{'fds'};
@@ -136,6 +140,7 @@ sub run
 		foreach (@{$fds}) { $_->[1]->hasError if vec($ebit, $_->[0], 1) }
 
 	}
+	# EO event loop
 
 }
 

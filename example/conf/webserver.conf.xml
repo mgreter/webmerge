@@ -17,6 +17,19 @@
 			<root>htdocs</root>
 		</webresources>
 
+		<!-- enable psgi handlers -->
+		<webhandlers>
+			<pattern handler="SHTML">\.s?html?$</pattern>
+			<pattern handler="PHPCGI">\.php3?$</pattern>
+			<pattern handler="CGIBIN">\.pl$</pattern>
+		</webhandlers>
+
+		<!-- enable psgi handlers -->
+		<webmounts>
+			<mount type="echo">/echo</mount>
+			<mount type="proxy" remote="http://www.ocbnet.ch">/example</mount>
+		</webmounts>
+
 		<!-- define a current working directory -->
 		<directory>{WWW}</directory>
 
