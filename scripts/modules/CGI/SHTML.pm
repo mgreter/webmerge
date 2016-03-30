@@ -347,6 +347,8 @@ sub _file {
 		local $_;
   	use pQuery;
   	my $dom = $hash->{'dom'};
+		# do not discharge unknown tags (HTML5)
+		$pQuery::DOM::options{'ignore_unknown'} = 0;
 		my $pQuery = pQuery(join("\n", @list));
 		return "[pQuery could not parse DOM (error)]" unless $pQuery;
 		return "[pQuery could not parse DOM]" unless $pQuery->length;
