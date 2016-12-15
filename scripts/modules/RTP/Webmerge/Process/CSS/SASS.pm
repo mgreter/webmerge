@@ -50,7 +50,7 @@ sub sass
 	# { $java_bin = join(EOD, $ENV{'JAVA_HOME'}, 'bin', 'java'); }
 
 	# create the command to execute the closure compiler
-	my $command = 'sass -s --scss';
+	my $command = 'sass -I . -s --scss';
 
 	# I should only listen for my own children
 	# IPC::Run3 will spawn it's own children
