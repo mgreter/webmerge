@@ -59,6 +59,8 @@ use RTP::Webmerge::Optimize::GIF qw();
 use RTP::Webmerge::Optimize::JPG qw();
 use RTP::Webmerge::Optimize::PNG qw();
 use RTP::Webmerge::Optimize::MNG qw();
+use RTP::Webmerge::Optimize::WOFF qw();
+use RTP::Webmerge::Optimize::WOFF2 qw();
 use RTP::Webmerge::Optimize::ZIP qw();
 use RTP::Webmerge::Optimize::GZ qw();
 
@@ -150,7 +152,7 @@ $default->apply({
 	'referer' => undef,
 
 	# parallel jobs
-	'jobs' => 2,
+	'jobs' => 6,
 
 	# dump website
 	'webdump' => 0,
@@ -866,6 +868,7 @@ webmerge [options] [steps]
    --optimize-jpg         enable/disable optimizer for jpg images (--jpg)
    --optimize-gif         enable/disable optimizer for gif images (--gif)
    --optimize-png         enable/disable optimizer for png images (--png)
+   --optimize-woff2       enable/disable optimizer for woff2 images (--woff2)
    --optimize-mng         enable/disable optimizer for mng images (--mng)
    --optimize-zip         enable/disable optimizer for zip archives (--zip)
    --optimize-gz          enable/disable optimizer for gz archive files (--gz)

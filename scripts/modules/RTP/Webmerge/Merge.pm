@@ -163,10 +163,16 @@ sub collectInputs
 				push @paths, keys %{$includes};
 
 			}
+			elsif ($input->{'content'})
+			{
+				# could ignore them without big problems?
+				# die "Fatal: unknown input for collection";
+				push(@{$inputs}, ['stdin', $input, \ $input->{'content'}]);
+			}
 			else
 			{
-				# could ignore them without big problems
-				die "Fatal: unknown input for watchdog";
+				# could ignore them without big problems?
+				die "Fatal: unknown input for collection";
 			}
 
 			# now process all inputs
@@ -268,8 +274,8 @@ sub writer
 	return $rv unless $config->{'crc-file'};
 
 	# ... and then write the md5 checksum file
-	return $rv && writefile($checksum_path, \ $crc, $config->{'atomic'}, 1)
-		or die "could not write <$checksum_path>: $!";
+	return $rv && (writefile($checksum_path, \ $crc, $config->{'atomic'}, 1)
+		or (die "could not write <$checksum_path>: $!"));
 
 }
 # EO sub writer
@@ -307,7 +313,8 @@ sub collect
 		# my $deferred = $merge->{'defer'} && lc $merge->{'defer'} eq 'true';
 
 		# process all items for this merge kind
-		foreach my $item (@{$merge->{$kind} || []})
+		my @merges = @{$merge->{$kind} || []};
+		while (defined(my $item = shift @merges)) 
 		{
 
 			unless (ref($item))
@@ -422,7 +429,8 @@ sub collect
 					unless (exists $config->{'ids'}->{$type}->{$id})
 					{ die "Fatal: merge id <$id> is not available\n"; }
 					delete $config->{'ids'}->{$type}->{$id}->{'data'};
-					push(@{$data{$kind}}, $config->{'ids'}->{$type}->{$id});
+					# push(@{$data{$kind}}, $config->{'ids'}->{$type}->{$id});
+					unshift @merges, @{$config->{'ids'}->{$type}->{$id}->{$kind} || []};
 				}
 
 			}
@@ -550,6 +558,7 @@ my $merger; $merger = sub
 		# get different joiner for js or css
 		my $joiner = $joiner{$type} || "\n";
 
+		# no warnings 'redundant';
 		# create a header for joined content (do that for all)
 		my @input = (sprintf($config->{'headtmpl'}, $target));
 		my @prefix = (sprintf($config->{'headtmpl'}, $target));

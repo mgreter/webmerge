@@ -2,10 +2,9 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ###################################################################################################
-# http://optipng.sourceforge.net/pngtech/optipng.html
-# pngrewrite, pngcrush, OptiPNG, AdvanceCOMP (advpng), PNGOut
+# https://github.com/google/woff2
 ###################################################################################################
-package RTP::Webmerge::Optimize::PNG;
+package RTP::Webmerge::Optimize::WOFF2;
 ###################################################################################################
 
 use Carp;
@@ -17,17 +16,14 @@ use warnings;
 # setup some global settings
 BEGIN
 {
-	# enable (or disable) different optimizer executables
-	$ENV{'WEBMERGE_ADVDEF'} = 1 unless exists $ENV{'WEBMERGE_ADVDEF'};
-	$ENV{'WEBMERGE_ADVPNG'} = 1 unless exists $ENV{'WEBMERGE_ADVPNG'};
-	$ENV{'WEBMERGE_OPTIPNG'} = 1 unless exists $ENV{'WEBMERGE_OPTIPNG'};
-	$ENV{'WEBMERGE_ZOPFLIPNG'} = 1 unless exists $ENV{'WEBMERGE_ZOPFLIPNG'};
+	# enable (or disable) main optimizer executables
+	$ENV{'WEBMERGE_WOFF2'} = 1 unless exists $ENV{'WEBMERGE_WOFF2'};
 }
 
 ###################################################################################################
 
 # define our version string
-BEGIN { $RTP::Webmerge::Optimize::PNG::VERSION = "0.9.0" }
+BEGIN { $RTP::Webmerge::Optimize::WOFF2::VERSION = "0.9.0" }
 
 ###################################################################################################
 
@@ -45,10 +41,10 @@ push @initers, sub
 	my ($config) = @_;
 
 	# create config variable to be available
-	$config->{'optimize-png'} = undef;
+	$config->{'optimize-woff2'} = undef;
 
 	# connect each tmpl variable with the getOpt option
-	return ('optimize-png|png!', \ $config->{'cmd_optimize-png'});
+	return ('optimize-woff2|woff2!', \ $config->{'cmd_optimize-woff2'});
 
 };
 # EO push initer
@@ -64,22 +60,17 @@ push @checkers, sub
 
 	# disable if not optimizing
 	unless ($config->{'optimize'})
-	{ $config->{'optimize-png'} = 0; }
+	{ $config->{'optimize-woff2'} = 0; }
 
 	# do nothing if feature is disabled
-	return unless $config->{'optimize-png'};
+	return unless $config->{'optimize-woff2'};
 
-	my $level = $config->{'level'};
 	# get the optimization level (1 to 4/6)
-	my $lvl = '-' . range($level, 1, 5, 4);
-	my $olvl = '-o' . range($level, 0.5, 6.5, 9);
-	my $iter = '--iterations=' . range($level, 0, 150, 150, 2);
+	my $lvl = '-' . range($config->{'level'}, 1, 5, 4);
+	my $olvl = '-o' . range($config->{'level'}, 0.5, 6.5, 9);
 
-	# define executables to optimize pngs
-	$executables{'optipng'} = ['pngopt', "$olvl --quiet \"%s\"", 1] if $ENV{'WEBMERGE_OPTIPNG'};
-	$executables{'advpng'}  = ['pngopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVPNG'};
-	$executables{'advdef[png]'}  = ['pngopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVDEF'};
-	$executables{'zopflipng'}  = ['pngopt', "-y $iter --filters=01234mepb --lossy_8bit --lossy_transparent \"%s\" \"%s\"", 2] if $ENV{'WEBMERGE_ZOPFLIPNG'};
+	# define executables to optimize woff2
+	$executables{'woff2_compress'} = ['woff2opt', "\"%s\"", 1] if $ENV{'WEBMERGE_WOFF2'};
 
 };
 # EO push checker
@@ -87,7 +78,7 @@ push @checkers, sub
 ###################################################################################################
 
 # now create a new file optimizer subroutine and hook it into our optimizers
-$RTP::Webmerge::Optimize::optimizer{'png'} = RTP::Webmerge::Optimize::optimize('png');
+$RTP::Webmerge::Optimize::optimizer{'woff2'} = RTP::Webmerge::Optimize::optimize('woff2');
 
 ###################################################################################################
 ###################################################################################################

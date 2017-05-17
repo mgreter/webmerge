@@ -351,7 +351,14 @@ sub xml
 		my $ids = $config->{'ids'}->{$type};
 
 		# skip if id is already known
-		return if exists $ids->{$id};
+		if (exists $ids->{$id}) {
+			# error if re-assigning ID
+			if ($ids->{$id} != $xml) {
+				die "Duplicate ID: ", $id unless
+					exists $xml->{'template'} &&
+					$xml->{'template'} eq 'true';
+			}
+		}
 
 		# assign our block
 		$ids->{$id} = $xml;

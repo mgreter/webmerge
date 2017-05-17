@@ -285,8 +285,10 @@ sub writefile ($$;$$)
 		$atomic->{$temp} = [$out, $fh] if $atomic;
 	}
 
-	# write the whole file buffer by buffer
-	while($rv = syswrite($fh, ${$data}, 4096)) { substr(${$data}, 0, $rv, ''); }
+	# write the whole file buffer at once if possible
+	while($rv = syswrite($fh, ${$data}, length(${$data}))) {
+		substr(${$data}, 0, $rv, ''); # might be chunked
+	}
 
 	# check for error conditions
 	croak "write error: $!" unless defined $rv;

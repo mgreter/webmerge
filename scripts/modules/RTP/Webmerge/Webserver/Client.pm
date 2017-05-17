@@ -343,7 +343,6 @@ my $DEBUG = 1;
 		$r->push_header($key, $val) if $key;
 	}
 	elsif ($te) {
-print "foobar\n";
 		$self->send_error(501); 	# Unknown transfer encoding
 		$self->reason("Unknown transfer encoding '$te'");
 		return -1;
@@ -570,7 +569,7 @@ sub canRead
 			$content = encode($enc, $content);
 			$response->content( $content );
 			$response->header("Content-Type" => $ct) if $ct;
-			$response->header("Content-Encoding" => $ce) if $ce;
+			# $response->header("Content-Encoding" => $ce) if $ce;
 			$response->header("Content-Length" => $size) if defined $size;
 			$sock->send_response( $response );
 
@@ -769,7 +768,7 @@ my $fh = RTP::Webmerge::Webserver::File->new($client, $server, $self);
 	    $self->send_basic_header;
 	    $self->print("Content-Type: $ct$CRLF");
 	    # $self->print("Connection: Close$CRLF");
-	    $self->print("Content-Encoding: $ce$CRLF") if $ce;
+	    # $self->print("Content-Encoding: $ce$CRLF") if $ce;
 	    $self->print("Content-Length: $size$CRLF") if defined $size;
 	    $self->print("Last-Modified: ", time2str($mtime), "$CRLF") if $mtime;
 	    $self->print($CRLF);

@@ -298,14 +298,18 @@ sub get
 	# return boolean if we are repeating
 	elsif ($name eq 'background-repeat-x')
 	{
-		return (not defined $self->{'_parent'}->style('background-repeat')) ||
-			$self->get('background-repeat') =~ m/repeat-x/i ? 1 : 0;
+		return 0 if not defined $self->{'_parent'}->style('background-repeat');
+		my $prop = $self->get('background-repeat');
+		return 0 if not defined $prop;
+		return $prop =~ m/repeat-x/i ? 1 : 0;
 	}
 	# return boolean if we are repeating
 	elsif ($name eq 'background-repeat-y')
 	{
-		return (not defined $self->{'_parent'}->style('background-repeat')) ||
-			$self->get('background-repeat') =~ m/repeat-y/i ? 1 : 0;
+		return 0 if not defined $self->{'_parent'}->style('background-repeat');
+		my $prop = $self->get('background-repeat');
+		return 0 if not defined $prop;
+		return $prop =~ m/repeat-y/i ? 1 : 0;
 	}
 
 	# return stored value
