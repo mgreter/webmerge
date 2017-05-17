@@ -154,6 +154,8 @@ sub parse_shtml {
   my $final = join("", @return);
   $final =~ s/\A(?:\s*[\n\r])+\s*//g;
   $final =~ s/\s*(?:[\n\r]\s*)+\z//g;
+  # fixup some issues with self-closing tags
+  $final =~ s/<\/(?:br|img)>//gi;
   $rec --;
   $final;
 }
