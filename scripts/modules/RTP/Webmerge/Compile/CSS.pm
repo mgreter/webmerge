@@ -104,8 +104,8 @@ sub compileCSS
 		# we implemented a bugfix below that will re-add quotes in that case
 		my $unwrap = sub
 		{
-			($_[1] =~ m/\s/mg || $_[1] eq "")
-				? $_[0].$_[1].$_[0] : $_[1]
+			($_[1] =~ m/^[a-zA-Z0-9]+$/)
+				? $_[1] : $_[0].$_[1].$_[0];
 		};
 
 		# call the created unwrapper method
