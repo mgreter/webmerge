@@ -117,10 +117,10 @@ sub includeJS
 		{
 
 			# get variables from array
-			my ($path, $block) = @{$include};
+			my ($path, $block, $data) = @{$include};
 
 			# get a unique path with added fingerprint (query or directory)
-			$path = fingerprint($config, 'dev', $path);
+			$path = fingerprint($config, 'dev', $path, $data);
 
 			# return the script include string
 			$data .= sprintf($js_include_tmpl, exportURI($path, $webroot, 1));

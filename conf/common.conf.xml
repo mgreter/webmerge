@@ -46,7 +46,7 @@
 	</config>
 
 	<!-- feature detection for dev context -->
-	<feature id="dev-context" disabled="false" >
+	<feature id="dev-context" disabled="false" template="true">
 
 		<test type="env,server,cookie" key="WEBMERGE_CONTEXT" mode="whitelist" disabled="false" >
 
@@ -61,7 +61,7 @@
 
 
 	<!-- feature detection for private ip -->
-	<feature id="private-ip" disabled="false" >
+	<feature id="private-ip" disabled="false" template="true">
 
 		<!-- check if remote ip address is a private one -->
 		<test type="server" key="REMOTE_ADDR" mode="whitelist" >
@@ -78,7 +78,7 @@
 
 
 	<!-- feature detection for inline data -->
-	<feature id="inline-data" disabled="false" >
+	<feature id="inline-data" disabled="false" template="true">
 
 		<!-- check user agent string if feature is supported -->
 		<test type="server" key="HTTP_USER_AGENT" mode="whitelist" >
