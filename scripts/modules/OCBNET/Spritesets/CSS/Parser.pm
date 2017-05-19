@@ -470,7 +470,7 @@ sub process
 			$styles{'background-repeat'} = 'no-repeat';
 
 			# remove all background styles from selector
-			$selector->clean(qr/background(?:\-[a-z0-9])*/);
+			$selector->clean(qr/background(?!-color)(?:\-[a-z0-9])*/);
 
 		};
 		# EO each selector
@@ -551,7 +551,7 @@ sub process
 				{ $styles{'background-repeat'} = 'repeat-y'; }
 
 				# remove all background styles from selector
-				$selector->clean(qr/background(?:\-[a-z0-9])*/);
+				$selector->clean(qr/background(?!-color)(?:\-[a-z0-9])*/);
 
 			}
 
