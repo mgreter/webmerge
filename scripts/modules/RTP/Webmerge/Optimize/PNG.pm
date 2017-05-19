@@ -21,6 +21,7 @@ BEGIN
 	$ENV{'WEBMERGE_ADVDEF'} = 1 unless exists $ENV{'WEBMERGE_ADVDEF'};
 	$ENV{'WEBMERGE_ADVPNG'} = 1 unless exists $ENV{'WEBMERGE_ADVPNG'};
 	$ENV{'WEBMERGE_OPTIPNG'} = 1 unless exists $ENV{'WEBMERGE_OPTIPNG'};
+	$ENV{'WEBMERGE_ZOPFLIPNG'} = 1 unless exists $ENV{'WEBMERGE_ZOPFLIPNG'};
 }
 
 ###################################################################################################
@@ -68,14 +69,17 @@ push @checkers, sub
 	# do nothing if feature is disabled
 	return unless $config->{'optimize-png'};
 
+	my $level = $config->{'level'};
 	# get the optimization level (1 to 4/6)
-	my $lvl = '-' . range($config->{'level'}, 1, 5, 4);
-	my $olvl = '-o' . range($config->{'level'}, 0.5, 6.5, 9);
+	my $lvl = '-' . range($level, 1, 5, 4);
+	my $olvl = '-o' . range($level, 0.5, 6.5, 9);
+	my $iter = '--iterations=' . range($level, 0, 150, 150, 2);
 
 	# define executables to optimize pngs
 	$executables{'optipng'} = ['pngopt', "$olvl --quiet \"%s\"", 1] if $ENV{'WEBMERGE_OPTIPNG'};
 	$executables{'advpng'}  = ['pngopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVPNG'};
 	$executables{'advdef[png]'}  = ['pngopt', "-z $lvl --quiet \"%s\"", 2] if $ENV{'WEBMERGE_ADVDEF'};
+	$executables{'zopflipng'}  = ['pngopt', "-y $iter --filters=01234mepb --lossy_8bit --lossy_transparent \"%s\" \"%s\"", 2] if $ENV{'WEBMERGE_ZOPFLIPNG'};
 
 };
 # EO push checker

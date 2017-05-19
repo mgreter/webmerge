@@ -11,6 +11,9 @@ use warnings;
 
 ###################################################################################################
 
+# make perl scripts findable by which or bsd_glob
+BEGIN { $ENV{'PATHEXT'} = join(";", $ENV{'PATHEXT'}, ".PL") }
+
 # load 3rd party module
 use File::Which qw(which);
 
@@ -44,9 +47,11 @@ BEGIN { our @EXPORT_OK = qw(%programs %executables %processors @initers @checker
 sub range
 {
 
-	my ($value, $from, $to, $max) = @_;
+	my ($value, $from, $to, $max, $ratio) = @_;
 
 	my $val = int(($_[2] - $_[1]) / 9 * $_[0] + $_[1] + 0.5);
+
+	$val = int(($val / $max) ** $ratio * $max) if ($ratio);
 
 	return $val < $max ? $val : $max;
 
@@ -215,7 +220,8 @@ sub collectExecutables
 			# glob finds the executable
 			my @files = which($exec) || bsd_glob($exec);
 
-			if (scalar(@files) == 1 && -e $files[0] && -x $files[0] && ! -d $files[0])
+			my $canRun = -x $files[0] || $files[0] =~ m/\.pl$/i;
+			if (scalar(@files) == 1 && -e $files[0] && $canRun && ! -d $files[0])
 			{
 				# finally store the info and found absolute path
 				push(@{$programs{$program}}, [$tmpl, $files[0], $prio]);
@@ -404,6 +410,9 @@ sub runProgram ($$$$;$)
 			# process file or all files
 			foreach my $file (@{$files || [$files]})
 			{
+
+				# omit sprintf tmpl warnings
+				# no warnings 'redundant';
 
 				# execute the executable (sprintf filename into commands)
 				my $rv = system $executable, sprintf($tmpl, $file, $file);
