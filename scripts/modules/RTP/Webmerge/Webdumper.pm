@@ -43,6 +43,7 @@ sub webdump
 		{
 			next if $item eq '.';
 			next if $item eq '..';
+			next if $item eq 'node_modules';
 			my $path = join('/', $dir, $item);
 			push @dirs, $path if -d $path;
 			next unless $item =~ m/\.s?html?$/i;
