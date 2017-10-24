@@ -11,8 +11,8 @@ use warnings;
 
 ###################################################################################################
 
-# make perl scripts findable by which or bsd_glob
-BEGIN { $ENV{'PATHEXT'} = join(";", $ENV{'PATHEXT'}, ".PL") }
+# make perl scripts findable by which or bsd_glob (probably only needed for windows)
+BEGIN { $ENV{'PATHEXT'} = join(";", $ENV{'PATHEXT'}, ".PL") if exists $ENV{'PATHEXT'}; }
 
 # load 3rd party module
 use File::Which qw(which);
@@ -351,6 +351,29 @@ sub checkConfig
 
 ###################################################################################################
 
+# helper to split command line for system call
+# on posix we need to pass a list and not a string
+sub splitcmd ($)
+{
+	my @cmds;
+	my ($cmd) = @_;
+	our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
+	our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
+	while ($cmd) {
+		if ($cmd =~ s/^\s+//) {}
+		elsif ($cmd =~ s/^"($re_quot)"//) {
+			push @cmds, $1;
+		}
+		elsif ($cmd =~ s/^'($re_apo)'//) {
+			push @cmds, $1;
+		}
+		elsif ($cmd =~ s/([^\s]+)//) {
+			push @cmds, $1;
+		}
+	}
+	return @cmds;
+}
+
 # call a program with a file
 # also accept files array ref
 sub runProgram ($$$$;$)
@@ -358,6 +381,13 @@ sub runProgram ($$$$;$)
 
 	# get input variables
 	my ($config, $program, $files, $pattern, $options) = @_;
+
+	# ensure that files is an array reference
+	# allows optionally to pass a single filename
+	$files = [$files] unless ref $files eq "ARRAY";
+
+	# exit early if no file is given
+	return unless scalar(@{$files});
 
 	# get the collected executables
 	my $executables = $programs{$program};
@@ -414,8 +444,8 @@ sub runProgram ($$$$;$)
 				# omit sprintf tmpl warnings
 				# no warnings 'redundant';
 
-				# execute the executable (sprintf filename into commands)
-				my $rv = system $executable, sprintf($tmpl, $file, $file);
+				# execute the executable (sprintf filename into commands, then split)
+				my $rv = system $executable, splitcmd sprintf($tmpl, $file, $file);
 
 				# give a warning if the executable returned an error
 				warn "executable execution did not complete successfully\n"
